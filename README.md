@@ -16,7 +16,7 @@ Portfólio pessoal desenvolvido com Vite, React e TypeScript.
 
 ```bash
 # Clone o repositório
-git clone https://github.com/bernardokraczkowski/portfolio.git
+git clone https://github.com/bernardo-kra/portfolio.git
 
 # Entre na pasta
 cd portfolio
