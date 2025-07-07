@@ -11,14 +11,14 @@ import TransitionThemeEffect from '@theme/TransitionThemeEffect';
 createRoot(document.getElementById('root')!).render(
   <ThemeProvider>
     <TransitionThemeEffect />
-    <StrictMode>
+  <StrictMode>
       <BrowserRouter basename="/portfolio">
-        <Routes> 
+      <Routes> 
           <Route path="/" element={<App />} />
-          <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />
-          <Route path="/pomodoro" element={<Pomodoro />} />
-        </Routes>
-      </BrowserRouter>
+        <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />
+        <Route path="/pomodoro" element={<Pomodoro />} />
+      </Routes>
+    </BrowserRouter>
     </StrictMode>
   </ThemeProvider>,
 )
