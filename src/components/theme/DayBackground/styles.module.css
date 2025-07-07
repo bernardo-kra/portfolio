@@ -1,0 +1,22 @@
+.dayBackgroundCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ajuste para garantir contraste dos componentes no modo claro */
+[data-theme='light'] .po__pomodoro,
+[data-theme='light'] .po__container,
+[data-theme='light'] .po__container__content {
+  background: rgba(255,255,255,0.85);
+  color: #23263a;
+  /* Remova o !important para não sobrescrever outros backgrounds */
+  box-shadow: 0 2px 16px 0 #b3e0ff33;
+}
+
+[data-theme='light'] .po__menu__container {
+  background: rgba(255,255,255,0.85) !important;
+}

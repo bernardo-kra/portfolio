@@ -1,0 +1,112 @@
+.po__timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+}
+
+.po__timer__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: column;
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    transition: all 0.3s ease-in-out;
+}
+
+.po__timer__link:hover {
+    filter: drop-shadow(1px 1px 0 var(--color-primary));
+}
+
+.po__timer__link:hover svg {
+    filter: drop-shadow(1px 1px 0 var(--color-primary));
+}
+
+.po__timer__link span {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.timerPointer {
+  transform-origin: 12px 13px;
+  transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform: rotate(var(--pointer-angle, 0deg));
+}
+
+.po__timer__link:hover .timerPointer {
+  transform: rotate(360deg);
+}
+
+/* Efeito de girar só o ponteiro */
+.pointerRoll {
+  transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.po__timer__link:hover .pointerRoll {
+  transform: rotate(calc(var(--pointer-angle, 0deg) + 360deg));
+}
+
+/* Efeito de shake no relógio inteiro */
+.shakingClock {
+  transition: transform 0.1s;
+}
+.po__timer__link:hover .shakingClock {
+  animation: alarmShake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes alarmShake {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(-18deg); }
+  20% { transform: rotate(18deg); }
+  30% { transform: rotate(-16deg); }
+  40% { transform: rotate(16deg); }
+  50% { transform: rotate(-12deg); }
+  60% { transform: rotate(12deg); }
+  70% { transform: rotate(-8deg); }
+  80% { transform: rotate(8deg); }
+  90% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Efeito de bounce no relógio inteiro */
+.clockBounce {
+  transition: transform 0.3s;
+}
+.po__timer__link:hover .clockBounce {
+  animation: bounce 0.5s;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0);}
+  30% { transform: translateY(-10px);}
+  50% { transform: translateY(0);}
+  70% { transform: translateY(-5px);}
+}
+
+/* Efeito de pulse no relógio inteiro */
+.clockPulse {
+  transition: transform 0.3s;
+}
+.po__timer__link:hover .clockPulse {
+  animation: pulse 0.6s;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1);}
+  50% { transform: scale(1.15);}
+}
+
+/* Efeito de wiggle só no ponteiro */
+.pointerWiggle {
+  transition: transform 0.2s;
+}
+.po__timer__link:hover .pointerWiggle {
+  animation: wiggle 0.4s;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(var(--pointer-angle, 0deg)); }
+  20% { transform: rotate(calc(var(--pointer-angle, 0deg) - 25deg)); }
+  40% { transform: rotate(calc(var(--pointer-angle, 0deg) + 20deg)); }
+  60% { transform: rotate(calc(var(--pointer-angle, 0deg) - 15deg)); }
+  80% { transform: rotate(calc(var(--pointer-angle, 0deg) + 10deg)); }
+}

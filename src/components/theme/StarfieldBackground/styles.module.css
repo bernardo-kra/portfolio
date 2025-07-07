@@ -1,0 +1,13 @@
+.starfieldCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  /* background: linear-gradient(to bottom, #181f2e 0%, #23263a 100%); */
+}
+
+.starfieldNoParallax {
+  /* Usada para desativar interação do mouse */
+}

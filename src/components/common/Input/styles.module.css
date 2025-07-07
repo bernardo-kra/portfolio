@@ -1,0 +1,42 @@
+.inputLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+.inputLabelText {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-bottom: 0.2rem;
+}
+
+.inputField {
+  padding: 0.6em 1em;
+  border-radius: 8px;
+  background: var(--gray-800);
+  color: var(--text-default);
+  border: 1px solid var(--gray-700);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+:root[data-theme='light'] .inputField {
+  background: var(--gray-100);
+  /* color: var(--gray-900); */
+  border: 1px solid var(--gray-300);
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary)33;
+}
+
+.inputField::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}

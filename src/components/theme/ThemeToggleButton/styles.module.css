@@ -1,0 +1,21 @@
+.themeToggleButton {
+  border: none;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  background: var(--toggle-bg-dark, rgba(35,38,58,0.7));
+}
+
+:root[data-theme='light'] .themeToggleButton {
+  background: var(--toggle-bg-dark, rgba(255,255,255,0.7));
+}
+
+.themeToggleButtonActive {
+  background: var(--toggle-bg-active, rgba(100, 108, 255, 0.15));
+}
