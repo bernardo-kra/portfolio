@@ -1,0 +1,68 @@
+.transitionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.7;
+  animation-timing-function: cubic-bezier(0.55,0.05,0.35,1);
+}
+
+.toDark {
+  background: radial-gradient(circle, #23263a 60%, #181f2e 100%);
+  animation-name: expandDark;
+  animation-fill-mode: forwards;
+}
+
+.toLight {
+  background: radial-gradient(circle, #b3e0ff 60%, #fff 100%);
+  animation-name: expandLight;
+  animation-fill-mode: forwards;
+}
+
+@keyframes expandDark {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  80% {
+    width: 300vw;
+    height: 300vw;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: 300vw;
+    height: 300vw;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes expandLight {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  80% {
+    width: 300vw;
+    height: 300vw;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: 300vw;
+    height: 300vw;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+} 
