@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
-import { TimerEffect } from './timerEffects';
+import type { TimerEffect } from './timerEffects';
 
 interface CustomTimerIconProps {
   className?: string;

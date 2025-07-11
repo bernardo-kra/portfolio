@@ -7,7 +7,7 @@ import PoMenu from '@components/widgets/PoMenu';
 import StarfieldBackground from '@theme/StarfieldBackground';
 import DayBackground from '@theme/DayBackground';
 import ThemeToggleButton from '@theme/ThemeToggleButton';
-import { useTheme } from '@theme/ThemeContext';
+import { useTheme } from '@theme/ThemeContext/useTheme';
 import styles from './styles.module.css';
 import StarParallaxToggle from '@theme/StarParallaxToggle';
 

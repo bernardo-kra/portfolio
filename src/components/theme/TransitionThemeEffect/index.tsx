@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from '@theme/ThemeContext';
+import { useTheme } from '../ThemeContext/useTheme';
 import styles from './styles.module.css';
 
 const ANIMATION_DURATION = 2800;

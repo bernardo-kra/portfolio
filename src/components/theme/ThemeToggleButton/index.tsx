@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
 import styles from './styles.module.css';
-import { useTheme } from '@theme/ThemeContext';
+import { useTheme } from '../ThemeContext/useTheme';
 
 interface ThemeToggleButtonProps {
   style?: React.CSSProperties;
