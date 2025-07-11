@@ -4,11 +4,10 @@ import styles from './styles.module.css';
 import { useTheme } from '@theme/ThemeContext';
 
 interface ThemeToggleButtonProps {
-  className?: string;
   style?: React.CSSProperties;
 }
 
-const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = React.memo(({ className, style }) => {
+const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = React.memo(({ style }) => {
   const { theme, setThemeWithTransition } = useTheme();
   return (
     <button

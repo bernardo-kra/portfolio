@@ -25,7 +25,7 @@ interface StarfieldBackgroundProps {
 const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ disableParallax = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
-  const stars = useRef<any[]>([]);
+  const stars = useRef<{ x: number; y: number; r: number; speed: number; color: string; depth: number }[]>([]);
   const mouse = useRef({ x: 0.5, y: 0.5 });
 
   // Inicializa estrelas
@@ -78,8 +78,8 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
         // Paralaxe: move as estrelas conforme o mouse
         const parallaxX = (mouse.current.x - 0.5) * 80 * (1 - star.depth);
         const parallaxY = (mouse.current.y - 0.5) * 40 * (1 - star.depth);
-        let x = star.x + (disableParallax ? 0 : parallaxX);
-        let y = star.y + (disableParallax ? 0 : parallaxY);
+        const x = star.x + (disableParallax ? 0 : parallaxX);
+        const y = star.y + (disableParallax ? 0 : parallaxY);
         // Desenha estrela
         ctx.beginPath();
         ctx.arc(x, y, star.r, 0, 2 * Math.PI);

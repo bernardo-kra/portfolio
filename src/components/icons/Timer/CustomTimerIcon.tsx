@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
-
-export type TimerEffect =
-  | 'pointerRoll'
-  | 'shakingClock'
-  | 'clockBounce'
-  | 'clockPulse'
-  | 'pointerWiggle';
-
-export const TIMER_EFFECTS: TimerEffect[] = [
-  'pointerRoll',
-  'shakingClock',
-  'clockBounce',
-  'clockPulse',
-  'pointerWiggle',
-];
+import { TimerEffect } from './timerEffects';
 
 interface CustomTimerIconProps {
   className?: string;
@@ -47,7 +33,6 @@ const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
   const clockEffects = ['shakingClock', 'clockBounce', 'clockPulse'] as const;
   const pointerEffects = ['pointerRoll', 'pointerWiggle'] as const;
 
-  const safeHour = ((clockHour - 1) % 12) + 1;
   const topHour = 12;
   const angle = ((clockHour - topHour) * 30);
 
@@ -64,7 +49,7 @@ const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
       className={[
         styles.timerIcon,
         className,
-        clockEffects.includes(effectClassName as any) ? styles[effectClassName] : ''
+        clockEffects.includes(effectClassName as typeof clockEffects[number]) ? styles[effectClassName] : ''
       ].join(' ')}
     >
       <circle cx="12" cy="13" r="8" />
@@ -76,9 +61,9 @@ const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
         rx="0.5"
         className={[
           styles.timerPointer,
-          pointerEffects.includes(effectClassName as any) ? styles[effectClassName] : ''
+          pointerEffects.includes(effectClassName as typeof pointerEffects[number]) ? styles[effectClassName] : ''
         ].join(' ')}
-        style={{ ['--pointer-angle' as any]: `${angle}deg` }}
+        style={{ ['--pointer-angle']: `${angle}deg` } as React.CSSProperties}
       />
       <line x1="12" y1="1" x2="12" y2="4" />
       <line x1="4.93" y1="7.36" x2="7.36" y2="4.93" />

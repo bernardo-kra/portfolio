@@ -16,7 +16,7 @@ const DayBackground: React.FC = React.memo(() => {
     canvas.height = height;
 
     // Nuvens simples animadas
-    const clouds = Array.from({ length: 6 }, (_, i) => ({
+    const clouds = Array.from({ length: 6 }, (__, idx) => ({
       x: Math.random() * width,
       y: 40 + Math.random() * (height * 0.4),
       speed: 0.2 + Math.random() * 0.15,

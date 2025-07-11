@@ -1,4 +1,3 @@
-import { FormInput } from "lucide-react"
 import Container from '@components/common/Container';
 import Styles from "./styles.module.css"
 import Input from '@components/common/Input';

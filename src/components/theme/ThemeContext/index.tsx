@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
-
-type Theme = 'dark' | 'light';
-const THEME_KEY = 'app-theme';
+import { THEME_KEY, type Theme } from '@theme/themeUtils';
 
 const ThemeContext = createContext<{
   theme: Theme;

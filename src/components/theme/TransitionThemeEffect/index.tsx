@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const ANIMATION_DURATION = 2800;
 
 const TransitionThemeEffect: React.FC = React.memo(() => {
-  const { registerThemeTransitionCallback, theme } = useTheme();
+  const { registerThemeTransitionCallback } = useTheme();
   const [show, setShow] = useState(false);
   const [direction, setDirection] = useState<'to-dark' | 'to-light'>('to-dark');
   const timeoutRef = useRef<number | null>(null);
@@ -18,7 +18,7 @@ const TransitionThemeEffect: React.FC = React.memo(() => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(() => setShow(false), ANIMATION_DURATION);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [registerThemeTransitionCallback]);
 
   return show ? (
