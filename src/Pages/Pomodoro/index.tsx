@@ -10,16 +10,22 @@ import ThemeToggleButton from '@theme/ThemeToggleButton';
 import { useTheme } from '@theme/ThemeContext/useTheme';
 import styles from './styles.module.css';
 import StarParallaxToggle from '@theme/StarParallaxToggle';
+import DarkBackground from '@theme/DarkBackground';
 
 const STORAGE_KEY = 'starfield-disable-parallax';
 
 const Pomodoro = () => {
     const [disableParallax, setDisableParallax] = useState(false);
     const { theme } = useTheme();
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) setDisableParallax(saved === 'true');
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
     useEffect(() => {
@@ -29,7 +35,7 @@ const Pomodoro = () => {
     return (
         <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
             {theme === 'dark' ? (
-                <StarfieldBackground disableParallax={disableParallax} />
+                isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
             ) : (
                 <DayBackground />
             )}
