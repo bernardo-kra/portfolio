@@ -1,7 +1,20 @@
 .po__clock__content{
-    font-size: clamp(8rem, 25vw, 16rem);
+    font-size: clamp(4rem, 20vw, 16rem);
     font-weight: bold;
     text-align: center;
     line-height: 1.3;
     user-select: none;
+    color: var(--text-default);
+}
+
+@media (max-width: 600px) {
+    .po__clock__content {
+        font-size: clamp(3rem, 18vw, 12rem);
+    }
+}
+
+@media (max-width: 400px) {
+    .po__clock__content {
+        font-size: clamp(2rem, 15vw, 8rem);
+    }
 }

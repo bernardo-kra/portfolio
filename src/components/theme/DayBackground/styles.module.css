@@ -1,22 +1,20 @@
-.dayBackgroundCanvas {
+.dayBackground {
   position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0.1;
 }
 
-/* Ajuste para garantir contraste dos componentes no modo claro */
-[data-theme='light'] .po__pomodoro,
-[data-theme='light'] .po__container,
-[data-theme='light'] .po__container__content {
-  background: rgba(255,255,255,0.85);
-  color: #23263a;
-  /* Remova o !important para não sobrescrever outros backgrounds */
-  box-shadow: 0 2px 16px 0 #b3e0ff33;
-}
-
-[data-theme='light'] .po__menu__container {
-  background: rgba(255,255,255,0.85) !important;
+.dayBackgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: rgba(255, 255, 255, 0.05);
 }

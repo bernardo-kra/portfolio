@@ -1,0 +1,153 @@
+/* 📱 Utilitários de Responsividade */
+
+/* Garantir que todos os elementos respeitem o container */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevenir overflow horizontal */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Garantir que todos os elementos respeitem a largura da tela */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevenir overflow em containers principais */
+.container, .po__container, .container-responsive {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Prevenir overflow em seções e cards */
+section, article, aside, main, .card, .section {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Garantir que textos quebrem corretamente */
+h1, h2, h3, h4, h5, h6, p, span, div, a, button {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Imagens responsivas */
+img, video, canvas, audio, iframe, embed, object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Texto responsivo */
+.text-responsive {
+  font-size: var(--font-size-base);
+}
+
+.text-responsive-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-responsive-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-responsive-xl {
+  font-size: var(--font-size-xl);
+}
+
+/* Espaçamentos responsivos */
+.spacing-responsive {
+  padding: var(--spacing-md);
+  margin: var(--spacing-md);
+}
+
+.spacing-responsive-sm {
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm);
+}
+
+.spacing-responsive-lg {
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg);
+}
+
+/* Container responsivo */
+.container-responsive {
+  max-width: var(--container-max-width);
+  padding: 0 var(--container-padding);
+  margin: 0 auto;
+}
+
+/* Grid responsivo */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 300px, 350px), 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Flex responsivo */
+.flex-responsive {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Breakpoints específicos */
+@media (max-width: 1200px) {
+  .container-responsive {
+    max-width: 95vw;
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+@media (max-width: 900px) {
+  .container-responsive {
+    max-width: 98vw;
+    padding: 0 var(--spacing-md);
+  }
+  
+  .grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 250px, 300px), 1fr));
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 600px) {
+  .container-responsive {
+    max-width: 100vw;
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .grid-responsive {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  .flex-responsive {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 400px) {
+  .container-responsive {
+    padding: 0 var(--spacing-xs);
+  }
+  
+  .spacing-responsive {
+    padding: var(--spacing-xs);
+    margin: var(--spacing-xs);
+  }
+  
+  .text-responsive {
+    font-size: var(--font-size-sm);
+  }
+} 

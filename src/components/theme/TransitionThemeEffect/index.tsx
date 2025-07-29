@@ -1,25 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from '../ThemeContext/useTheme';
-import styles from './styles.module.css';
+import React, { useEffect, useRef, useState } from 'react'
+import { useTheme } from '../ThemeContext/useTheme'
+import styles from './styles.module.css'
 
-const ANIMATION_DURATION = 2800;
+const ANIMATION_DURATION = 2800
 
 const TransitionThemeEffect: React.FC = React.memo(() => {
-  const { registerThemeTransitionCallback } = useTheme();
-  const [show, setShow] = useState(false);
-  const [direction, setDirection] = useState<'to-dark' | 'to-light'>('to-dark');
-  const timeoutRef = useRef<number | null>(null);
+  const { registerThemeTransitionCallback } = useTheme()
+  const [show, setShow] = useState(false)
+  const [direction, setDirection] = useState<'to-dark' | 'to-light'>('to-dark')
+  const timeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
-    if (!registerThemeTransitionCallback) return;
+    if (!registerThemeTransitionCallback) return
     registerThemeTransitionCallback((newTheme) => {
-      setDirection(newTheme === 'dark' ? 'to-dark' : 'to-light');
-      setShow(true);
-      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = window.setTimeout(() => setShow(false), ANIMATION_DURATION);
-    });
+      setDirection(newTheme === 'dark' ? 'to-dark' : 'to-light')
+      setShow(true)
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
+      timeoutRef.current = window.setTimeout(() => setShow(false), ANIMATION_DURATION)
+    })
      
-  }, [registerThemeTransitionCallback]);
+  }, [registerThemeTransitionCallback])
 
   return show ? (
     <div
@@ -31,7 +31,7 @@ const TransitionThemeEffect: React.FC = React.memo(() => {
       style={{ animationDuration: ANIMATION_DURATION + 'ms' }}
       aria-hidden="true"
     />
-  ) : null;
-});
+  ) : null
+})
 
-export default TransitionThemeEffect; 
+export default TransitionThemeEffect 

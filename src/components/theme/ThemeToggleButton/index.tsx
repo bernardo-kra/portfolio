@@ -1,14 +1,15 @@
-import React from 'react';
-import { Sun, Moon } from 'lucide-react';
-import styles from './styles.module.css';
-import { useTheme } from '../ThemeContext/useTheme';
+import React from 'react'
+import { Sun, Moon } from 'lucide-react'
+import styles from './styles.module.css'
+import { useTheme } from '../ThemeContext/useTheme'
 
 interface ThemeToggleButtonProps {
-  style?: React.CSSProperties;
+  style?: React.CSSProperties
 }
 
 const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = React.memo(({ style }) => {
-  const { theme, setThemeWithTransition } = useTheme();
+  const { theme, setThemeWithTransition } = useTheme()
+  
   return (
     <button
       className={styles.themeToggleButton}
@@ -22,7 +23,7 @@ const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = React.memo(({ style 
         <Moon size={16} color="var(--gray-900)" />
       )}
     </button>
-  );
-});
+  )
+})
 
-export default ThemeToggleButton; 
+export default ThemeToggleButton 

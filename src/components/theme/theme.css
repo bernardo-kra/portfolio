@@ -1,5 +1,5 @@
 /*
-🎨 Estrutura de cores do projeto
+🎨 Estrutura de cores e responsividade do projeto
 
 🔹 Cores Dinâmicas (mudam entre os temas claro/escuro)
    - Essas cores se adaptam ao tema escolhido pelo usuário.
@@ -8,6 +8,12 @@
 🔸 Cores Fixas (não mudam entre os temas)
    - São usadas para botões, alertas e destaques.
    - Exemplo: `primary`, `success`, `error` sempre terão os mesmos tons.
+
+📱 Sistema de Responsividade
+   - Breakpoints: 400px, 600px, 768px, 900px, 1200px
+   - Container: max-width responsivo com padding adaptativo
+   - Tipografia: escalável com clamp() e rem
+   - Espaçamentos: variáveis CSS para consistência
 
 📝 Estrutura:
    - Fundo geral: `gray-900` (dinâmico)
@@ -26,6 +32,37 @@
               border-color 0.4s cubic-bezier(0.4,0.2,0.2,1),
               box-shadow 0.4s cubic-bezier(0.4,0.2,0.2,1),
               filter 0.4s cubic-bezier(0.4,0.2,0.2,1);
+  
+  /* 📱 Breakpoints e Responsividade */
+  --breakpoint-xs: 400px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 900px;
+  --breakpoint-xl: 1200px;
+  
+  /* 📏 Espaçamentos Responsivos */
+  --spacing-xs: clamp(0.25rem, 1vw, 0.5rem);
+  --spacing-sm: clamp(0.5rem, 2vw, 1rem);
+  --spacing-md: clamp(1rem, 3vw, 1.5rem);
+  --spacing-lg: clamp(1.5rem, 4vw, 2rem);
+  --spacing-xl: clamp(2rem, 5vw, 3rem);
+  --spacing-2xl: clamp(3rem, 6vw, 4rem);
+  
+  /* 📐 Container Responsivo */
+  --container-padding: clamp(1rem, 4vw, 2rem);
+  --container-max-width: min(1200px, 95vw);
+  
+  /* 🔤 Tipografia Responsiva */
+  --font-size-xs: clamp(0.75rem, 2vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 2.5vw, 1rem);
+  --font-size-base: clamp(1rem, 3vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 3.5vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 4vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 5vw, 2rem);
+  --font-size-3xl: clamp(2rem, 6vw, 2.5rem);
+  --font-size-4xl: clamp(2.5rem, 7vw, 3rem);
+  --font-size-5xl: clamp(3rem, 8vw, 4rem);
+  
   /* 🎭 Tons de Cinza (cores dinâmicas que mudam entre claro/escuro) */
   --gray-100: #f4f6fa;
   --gray-200: #e6e9f0;
@@ -94,42 +131,105 @@
   --toggle-bg-dark: rgba(35,38,58,0.7);
   --toggle-bg-light: rgba(255,255,255,0.7);
   --toggle-bg-active: rgba(100, 108, 255, 0.15);
+  --card-bg: var(--gray-800);
+  --avatar-bg: var(--gray-700);
+  --chip-bg: var(--primary-light);
+  --chip-text: #23263a;
+
+  --brand-orange: #FF9900;
+  --brand-orange-light: #FFD699;
 }
 
 :root[data-theme='light'] {
-  --gray-100: #ffffff;
-  --gray-200: #f4f6fa;
-  --gray-300: #e6e9f0;
-  --gray-400: #cdd3e1;
-  --gray-500: #aab3cc;
-  --gray-600: #555f7d;
-  --gray-700: #363d56;
-  --gray-800: #272f43;
-  --gray-900: #f4f6fa;
+  --gray-100: #eaf3fa;
+  --gray-200: #d2e6f7;
+  --gray-300: #b3d4ef;
+  --gray-400: #8fc3e6;
+  --gray-500: #5fa3d0;
+  --gray-600: #3b7bb0;
+  --gray-700: #2a5d8f;
+  --gray-800: #1e3a5c;
+  --gray-900: #eaf3fa;
 
-  --primary: #646cff;
-  --primary-light: #8d92ff;
-  --primary-dark: #4549b3;
+  --primary: #1e90ff;
+  --primary-light: #8fd3f4;
+  --primary-dark: #176dc1;
   --color-primary: var(--primary);
 
-  --text-default: #23263a;
-  --text-muted: #555f7d;
+  --text-default: #1a2233;
+  --text-muted: #5fa3d0;
 
-  --link-color: #535bf2;
-  --link-hover: #646cff;
+  --link-color: #176dc1;
+  --link-hover: #1e90ff;
+
+  --card-bg: rgba(255,255,255,0.75);
+  --avatar-bg: #d2e6f7;
+  --chip-bg: linear-gradient(90deg, #1e90ff 60%, #8fd3f4 100%);
+  --chip-text: #fff;
 
   --toastify-text-color-light: #23263a;
   --toastify-text-color-dark: #23263a;
 
-  /* Extras para backgrounds animados */
-  --star-color-1: #23263a;
-  --star-color-2: #646cff;
-  --star-color-3: #aab3cc;
-  --star-color-4: #e6e9ff;
+  --star-color-1: #1e90ff;
+  --star-color-2: #8fd3f4;
+  --star-color-3: #b3d4ef;
+  --star-color-4: #eaf3fa;
+  --cloud-color: #fff;
+  --cloud-shadow: #b3d4ef;
+  --day-gradient-1: #b3d4ef;
+  --day-gradient-2: #eaf3fa;
+
+  --card-glass-bg: rgba(255,255,255,0.75);
+  --glass-border: 1.5px solid rgba(30,144,255,0.13);
+  --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
+}
+
+:root[data-theme='dark'] {
+  --gray-100: #f4f6fa;
+  --gray-200: #e6e9f0;
+  --gray-300: #cdd3e1;
+  --gray-400: #aab3cc;
+  --gray-500: #555f7d;
+  --gray-600: #363d56;
+  --gray-700: #272f43;
+  --gray-800: #181f2e;
+  --gray-900: #23263a;
+
+  --primary: #646cffaa;
+  --primary-light: #8d92ffcc;
+  --primary-dark: #4549b3;
+  --color-primary: var(--primary);
+
+  --text-default: #f4f6fa;
+  --text-muted: #aab3cc;
+
+  --link-color: #646cff;
+  --link-hover: #535bf2;
+
+  --card-bg: var(--gray-800);
+  --avatar-bg: var(--gray-700);
+  --chip-bg: var(--primary-light);
+  --chip-text: #23263a;
+
+  --toastify-text-color-light: #23263a;
+  --toastify-text-color-dark: #f4f6fa;
+
+  --star-color-1: #fff;
+  --star-color-2: #bfcfff;
+  --star-color-3: #e6e9ff;
+  --star-color-4: #cfd8ff;
   --cloud-color: #fff;
   --cloud-shadow: #fff;
   --day-gradient-1: #b3e0ff;
   --day-gradient-2: #e6f7ff;
+
+  --toggle-bg-dark: rgba(35,38,58,0.7);
+  --toggle-bg-light: rgba(255,255,255,0.7);
+  --toggle-bg-active: rgba(100, 108, 255, 0.15);
+
+  --card-glass-bg: rgba(255,255,255,0.75);
+  --glass-border: 1.5px solid rgba(30,144,255,0.13);
+  --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
 }
 
 /* 🎚️ Scrollbar customizado para o tema */
@@ -150,4 +250,33 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--primary-dark) var(--gray-900);
+}
+
+/* Importar utilitários de responsividade */
+@import './responsive-utils.css';
+
+/* Regras específicas para prevenir overflow horizontal */
+.hero__section,
+.aboutme__section,
+.projects__container,
+.skills__section,
+.portfolio__section {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+/* Garantir que textos não causem overflow */
+.hero__title,
+.hero__subtitle,
+.aboutme__title,
+.aboutme__desc,
+.projects__card h3,
+.projects__card p,
+.skills__title {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  max-width: 100% !important;
 }

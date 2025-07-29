@@ -1,15 +1,14 @@
-import Container from '@components/common/Container';
-import Styles from './styles.module.css';
-import React from 'react';
+import React from 'react'
+import Container from '@components/common/Container'
+import styles from './styles.module.css'
 
 const Clock = React.memo(() => {
-    return (
-        <Container>
-            <div className={Styles.po__clock__content}>
-                {/* Conteúdo do relógio */}
-            </div>
-        </Container>
-    )
-});
+  return (
+    <Container>
+      <div className={styles.po__clock__content}>
+      </div>
+    </Container>
+  )
+})
 
-export default Clock;
+export default Clock

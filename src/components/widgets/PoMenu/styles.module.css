@@ -1,23 +1,27 @@
 .po__menu__container{
     display: flex;
     flex-direction: row;
+    width: 100%;
+    justify-content: center;
 }
 
 .po__menu {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
 }
 
 .po__menu__link {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    font-size: 1.6rem;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xl);
     color: var(--color-primary);
     transition: all 0.3s ease-in-out;
+    padding: var(--spacing-xs);
 }
 
 .po__menu__link:hover {
@@ -31,4 +35,26 @@
 .po__menu__link span {
     font-weight: 700;
     color: var(--color-primary);
+}
+
+@media (max-width: 600px) {
+    .po__menu {
+        gap: var(--spacing-xs);
+    }
+    
+    .po__menu__link {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 400px) {
+    .po__menu {
+        gap: var(--spacing-xs);
+    }
+    
+    .po__menu__link {
+        font-size: var(--font-size-base);
+        padding: var(--spacing-xs);
+    }
 }
