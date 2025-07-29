@@ -1,0 +1,188 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Variants */
+.tag--default {
+  background: var(--gray-100);
+  color: var(--text-default);
+  border-color: var(--gray-200);
+}
+
+:root[data-theme='dark'] .tag--default {
+  background: var(--gray-800);
+  color: var(--text-default);
+  border-color: var(--gray-700);
+}
+
+.tag--brand {
+  background: var(--brand-orange);
+  color: white;
+  border-color: var(--brand-orange);
+}
+
+.tag--success {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+.tag--warning {
+  background: var(--warning);
+  color: white;
+  border-color: var(--warning);
+}
+
+.tag--error {
+  background: var(--error);
+  color: white;
+  border-color: var(--error);
+}
+
+/* Sizes */
+.tag--xs {
+  padding: 0.125rem 0.375rem;
+  font-size: var(--font-size-xs);
+  border-radius: 1rem;
+}
+
+.tag--sm {
+  padding: 0.25rem 0.5rem;
+  font-size: var(--font-size-xs);
+  border-radius: 1.5rem;
+}
+
+.tag--md {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  border-radius: 2rem;
+}
+
+.tag--lg {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+  border-radius: 2.5rem;
+}
+
+/* Clickable */
+.tag--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.tag--clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag--clickable:active {
+  transform: translateY(0);
+}
+
+/* Content */
+.tag__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+}
+
+.tag__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Preserve original colors for technology icons */
+.tag__icon .icon-react {
+  color: #61dafb !important;
+}
+
+.tag__icon .icon-javascript {
+  color: #f7df1e !important;
+}
+
+.tag__icon .icon-html5 {
+  color: #e34f26 !important;
+}
+
+.tag__icon .icon-css3 {
+  color: #1572b6 !important;
+}
+
+.tag__icon .icon-sass {
+  color: #cc6699 !important;
+}
+
+.tag__icon .icon-typescript {
+  color: #3178c6 !important;
+}
+
+.tag__icon .icon-nodejs {
+  color: #339933 !important;
+}
+
+.tag__icon .icon-nextjs {
+  color: #000000 !important;
+}
+
+.tag__icon .icon-vite {
+  color: #646cff !important;
+}
+
+.tag__icon .icon-cssmodules {
+  color: #1572b6 !important;
+}
+
+.tag__icon .icon-insomnia {
+  color: #4000bf !important;
+}
+
+.tag__icon .icon-oracle {
+  color: #f80000 !important;
+}
+
+.tag__icon .icon-git {
+  color: #f05032 !important;
+}
+
+.tag__icon .icon-bitbucket {
+  color: #0052cc !important;
+}
+
+.tag__icon .icon-jira {
+  color: #0052cc !important;
+}
+
+.tag__icon .icon-postman {
+  color: #ff6c37 !important;
+}
+
+.tag__icon .icon-figma {
+  color: #f24e1e !important;
+}
+
+.tag__icon .icon-jest {
+  color: #c21325 !important;
+}
+
+.tag__text {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .tag--lg {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+} 

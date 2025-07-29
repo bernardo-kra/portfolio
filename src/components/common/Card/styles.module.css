@@ -1,0 +1,122 @@
+.card {
+  background: var(--gray-100);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-theme='dark'] .card {
+  background: var(--gray-900);
+}
+
+/* Variants */
+.card--default {
+  border: 1px solid var(--gray-200);
+}
+
+:root[data-theme='dark'] .card--default {
+  border: 1px solid var(--gray-700);
+}
+
+.card--elevated {
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='dark'] .card--elevated {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card--outlined {
+  background: transparent;
+  border: 2px solid var(--gray-300);
+}
+
+:root[data-theme='dark'] .card--outlined {
+  border: 2px solid var(--gray-600);
+}
+
+.card--filled {
+  background: var(--gray-200);
+  border: none;
+}
+
+:root[data-theme='dark'] .card--filled {
+  background: var(--gray-800);
+}
+
+/* Sizes */
+.card--sm {
+  border-radius: 8px;
+}
+
+.card--md {
+  border-radius: 12px;
+}
+
+.card--lg {
+  border-radius: 16px;
+}
+
+/* Padding */
+.card--padding {
+  padding: var(--spacing-lg);
+}
+
+.card--sm.card--padding {
+  padding: var(--spacing-md);
+}
+
+.card--lg.card--padding {
+  padding: var(--spacing-xl);
+}
+
+/* Interactive states */
+.card--hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+:root[data-theme='dark'] .card--hover:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.card--clickable {
+  cursor: pointer;
+}
+
+.card--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme='dark'] .card--clickable:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Focus states - removido outline para evitar tracejado */
+.card--clickable:focus-visible {
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .card--padding {
+    padding: var(--spacing-md);
+  }
+  
+  .card--lg.card--padding {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 400px) {
+  .card--padding {
+    padding: var(--spacing-sm);
+  }
+  
+  .card--lg.card--padding {
+    padding: var(--spacing-md);
+  }
+} 

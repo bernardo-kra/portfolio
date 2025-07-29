@@ -1,25 +1,25 @@
 .inputLabel {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 1rem;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-base);
   color: var(--color-primary);
 }
 
 .inputLabelText {
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--color-primary);
-  margin-bottom: 0.2rem;
+  margin-bottom: var(--spacing-xs);
 }
 
 .inputField {
-  padding: 0.6em 1em;
+  padding: var(--spacing-sm) var(--spacing-sm);
   border-radius: 8px;
   background: var(--gray-800);
   color: var(--text-default);
   border: 1px solid var(--gray-700);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-family: inherit;
   transition: border-color 0.2s, box-shadow 0.2s;
 }

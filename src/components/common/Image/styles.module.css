@@ -1,0 +1,92 @@
+.image {
+  display: block;
+  transition: all 0.3s ease;
+}
+
+/* Variants */
+.image--default {
+  border-radius: 8px;
+}
+
+.image--rounded {
+  border-radius: 12px;
+}
+
+.image--circle {
+  border-radius: 50%;
+}
+
+.image--avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gray-200);
+}
+
+:root[data-theme='dark'] .image--avatar {
+  border-color: var(--gray-700);
+}
+
+/* Sizes */
+.image--xs {
+  width: 24px;
+  height: 24px;
+}
+
+.image--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.image--md {
+  width: 48px;
+  height: 48px;
+}
+
+.image--lg {
+  width: 64px;
+  height: 64px;
+}
+
+.image--xl {
+  width: 96px;
+  height: 96px;
+}
+
+/* Responsive */
+.image--responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hover effects */
+.image:hover {
+  transform: scale(1.02);
+}
+
+.image--avatar:hover {
+  border-color: var(--brand-orange);
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+/* Loading state */
+.image[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .image--xl {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .image--lg {
+    width: 56px;
+    height: 56px;
+  }
+} 

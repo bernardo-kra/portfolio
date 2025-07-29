@@ -1,0 +1,141 @@
+.section {
+  position: relative;
+  width: 100%;
+}
+
+.section__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Variants */
+.section--default {
+  background: transparent;
+}
+
+.section--hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section--content {
+  padding: var(--spacing-2xl) 0;
+}
+
+.section--footer {
+  border-top: 1px solid var(--gray-200);
+}
+
+:root[data-theme='dark'] .section--footer {
+  border-top: 1px solid var(--gray-700);
+}
+
+/* Spacing */
+.section--none {
+  padding: 0;
+}
+
+.section--sm {
+  padding: var(--spacing-md) 0;
+}
+
+.section--md {
+  padding: var(--spacing-lg) 0;
+}
+
+.section--lg {
+  padding: var(--spacing-xl) 0;
+}
+
+.section--xl {
+  padding: var(--spacing-2xl) 0;
+}
+
+.section--2xl {
+  padding: calc(var(--spacing-2xl) * 2) 0;
+}
+
+/* Backgrounds */
+.section--default {
+  background: transparent;
+}
+
+.section--muted {
+  background: var(--gray-50);
+}
+
+:root[data-theme='dark'] .section--muted {
+  background: var(--gray-900);
+}
+
+.section--brand {
+  background: var(--brand-orange);
+  color: white;
+}
+
+.section--gradient {
+  background: linear-gradient(135deg, var(--brand-orange) 0%, #ffb366 100%);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .section__container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .section--lg {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .section--xl {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .section--2xl {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .section__container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .section--md {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .section--lg {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .section--xl {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .section--2xl {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .section__container {
+    padding: 0 var(--spacing-xs);
+  }
+  
+  .section--sm {
+    padding: var(--spacing-sm) 0;
+  }
+  
+  .section--md {
+    padding: var(--spacing-sm) 0;
+  }
+  
+  .section--lg {
+    padding: var(--spacing-sm) 0;
+  }
+} 

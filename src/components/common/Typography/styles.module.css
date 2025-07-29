@@ -1,0 +1,268 @@
+.typography {
+  margin: 0;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+/* Variants */
+.typography--h1 {
+  font-size: var(--font-size-5xl);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.typography--h2 {
+  font-size: var(--font-size-4xl);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.typography--h3 {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+
+.typography--h4 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+}
+
+.typography--h5 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.typography--h6 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.typography--body1 {
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.typography--body2 {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.typography--caption {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.typography--overline {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.typography--button {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.typography--link {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Colors */
+.typography--primary {
+  color: var(--text-default);
+}
+
+.typography--secondary {
+  color: var(--text-muted);
+}
+
+.typography--muted {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.typography--brand {
+  color: var(--brand-orange);
+}
+
+.typography--success {
+  color: var(--success);
+}
+
+.typography--warning {
+  color: var(--warning);
+}
+
+.typography--error {
+  color: var(--error);
+}
+
+/* Alignment */
+.typography--left {
+  text-align: left;
+}
+
+.typography--center {
+  text-align: center;
+}
+
+.typography--right {
+  text-align: right;
+}
+
+.typography--justify {
+  text-align: justify;
+}
+
+/* Font Weights */
+.typography--normal {
+  font-weight: 400;
+}
+
+.typography--medium {
+  font-weight: 500;
+}
+
+.typography--semibold {
+  font-weight: 600;
+}
+
+.typography--bold {
+  font-weight: 700;
+}
+
+.typography--extrabold {
+  font-weight: 800;
+}
+
+.typography--black {
+  font-weight: 900;
+}
+
+/* Sizes */
+.typography--xs {
+  font-size: var(--font-size-xs);
+}
+
+.typography--sm {
+  font-size: var(--font-size-sm);
+}
+
+.typography--base {
+  font-size: var(--font-size-base);
+}
+
+.typography--lg {
+  font-size: var(--font-size-lg);
+}
+
+.typography--xl {
+  font-size: var(--font-size-xl);
+}
+
+.typography--2xl {
+  font-size: var(--font-size-2xl);
+}
+
+.typography--3xl {
+  font-size: var(--font-size-3xl);
+}
+
+.typography--4xl {
+  font-size: var(--font-size-4xl);
+}
+
+.typography--5xl {
+  font-size: var(--font-size-5xl);
+}
+
+/* Utilities */
+.typography--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.typography--nowrap {
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .typography--h1 {
+    font-size: var(--font-size-4xl);
+  }
+  
+  .typography--h2 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .typography--h3 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .typography--h4 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .typography--h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .typography--h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .typography--h3 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .typography--h4 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .typography--body1 {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 400px) {
+  .typography--h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .typography--h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .typography--h3 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .typography--body1 {
+    font-size: var(--font-size-xs);
+  }
+} 

@@ -1,0 +1,208 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Variants */
+.button--primary {
+  background: var(--brand-orange);
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
+}
+
+.button--primary:hover:not(:disabled) {
+  background: #e68a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 153, 0, 0.4);
+}
+
+.button--secondary {
+  background: var(--gray-200);
+  color: var(--text-default);
+  border: 1px solid var(--gray-300);
+}
+
+:root[data-theme='dark'] .button--secondary {
+  background: var(--gray-700);
+  color: var(--text-default);
+  border: 1px solid var(--gray-600);
+}
+
+.button--secondary:hover:not(:disabled) {
+  background: var(--gray-300);
+  transform: translateY(-1px);
+}
+
+:root[data-theme='dark'] .button--secondary:hover:not(:disabled) {
+  background: var(--gray-600);
+}
+
+.button--outline {
+  background: transparent;
+  color: var(--brand-orange);
+  border: 2px solid var(--brand-orange);
+}
+
+.button--outline:hover:not(:disabled) {
+  background: var(--brand-orange);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.button--ghost {
+  background: transparent;
+  color: var(--text-default);
+}
+
+.button--ghost:hover:not(:disabled) {
+  background: var(--gray-100);
+  color: var(--text-default);
+}
+
+:root[data-theme='dark'] .button--ghost:hover:not(:disabled) {
+  background: var(--gray-800);
+}
+
+.button--link {
+  background: transparent;
+  color: var(--brand-orange);
+  text-decoration: underline;
+  padding: 0;
+  border-radius: 0;
+}
+
+.button--link:hover:not(:disabled) {
+  color: #e68a00;
+  text-decoration: none;
+}
+
+/* Sizes */
+.button--xs {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  min-height: 28px;
+}
+
+.button--sm {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  min-height: 32px;
+}
+
+.button--md {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+  min-height: 40px;
+}
+
+.button--lg {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  min-height: 48px;
+}
+
+.button--xl {
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  font-size: var(--font-size-xl);
+  min-height: 56px;
+}
+
+/* States */
+.button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.button--loading {
+  cursor: wait;
+}
+
+.button--fullWidth {
+  width: 100%;
+}
+
+/* Content */
+.button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.button__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Focus states - removido outline para evitar tracejado */
+.button:focus-visible {
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .button--lg {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    min-height: 44px;
+  }
+  
+  .button--xl {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 400px) {
+  .button--md {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    min-height: 36px;
+  }
+  
+  .button--lg {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    min-height: 40px;
+  }
+} 
