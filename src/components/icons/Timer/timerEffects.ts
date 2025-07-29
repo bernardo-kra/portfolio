@@ -3,7 +3,7 @@ export type TimerEffect =
   | 'shakingClock'
   | 'clockBounce'
   | 'clockPulse'
-  | 'pointerWiggle';
+  | 'pointerWiggle'
 
 export const TIMER_EFFECTS: TimerEffect[] = [
   'pointerRoll',
@@ -11,4 +11,4 @@ export const TIMER_EFFECTS: TimerEffect[] = [
   'clockBounce',
   'clockPulse',
   'pointerWiggle',
-]; 
+] 

@@ -2,19 +2,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-
+    gap: var(--spacing-sm);
 }
 
 .po__timer__link {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--spacing-sm);
     flex-direction: column;
-    font-size: 1.6rem;
+    font-size: var(--font-size-xl);
     color: var(--color-primary);
     transition: all 0.3s ease-in-out;
+    padding: var(--spacing-sm);
 }
 
 .po__timer__link:hover {
@@ -28,6 +28,30 @@
 .po__timer__link span {
     font-weight: 700;
     color: var(--color-primary);
+}
+
+@media (max-width: 600px) {
+    .po__timer {
+        gap: var(--spacing-xs);
+    }
+    
+    .po__timer__link {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 400px) {
+    .po__timer {
+        gap: var(--spacing-xs);
+    }
+    
+    .po__timer__link {
+        font-size: var(--font-size-base);
+        padding: var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
 }
 
 .timerPointer {

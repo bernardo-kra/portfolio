@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import styles from './styles.module.css';
-import type { TimerEffect } from './timerEffects';
+import React, { useEffect, useState } from 'react'
+import styles from './styles.module.css'
+import type { TimerEffect } from './timerEffects'
 
 interface CustomTimerIconProps {
-  className?: string;
-  size?: number;
-  color?: string;
-  effectClassName?: TimerEffect;
-  clockHour?: number;
+  className?: string
+  size?: number
+  color?: string
+  effectClassName?: TimerEffect
+  clockHour?: number
 }
 
 const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
@@ -17,24 +17,24 @@ const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
   effectClassName = 'pointerRoll',
   clockHour = 1,
 }) => {
-  const [iconColor, setIconColor] = useState('var(--color-primary)');
+  const [iconColor, setIconColor] = useState('var(--color-primary)')
 
   useEffect(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
+    const theme = document.documentElement.getAttribute('data-theme')
     if (color) {
-      setIconColor(color);
+      setIconColor(color)
     } else if (theme === 'light') {
-      setIconColor('var(--primary-dark)');
+      setIconColor('var(--primary-dark)')
     } else {
-      setIconColor('var(--color-primary)');
+      setIconColor('var(--color-primary)')
     }
-  }, [color]);
+  }, [color])
 
-  const clockEffects = ['shakingClock', 'clockBounce', 'clockPulse'] as const;
-  const pointerEffects = ['pointerRoll', 'pointerWiggle'] as const;
+  const clockEffects = ['shakingClock', 'clockBounce', 'clockPulse'] as const
+  const pointerEffects = ['pointerRoll', 'pointerWiggle'] as const
 
-  const topHour = 12;
-  const angle = ((clockHour - topHour) * 30);
+  const topHour = 12
+  const angle = ((clockHour - topHour) * 30)
 
   return (
     <svg
@@ -69,7 +69,7 @@ const CustomTimerIcon: React.FC<CustomTimerIconProps> = React.memo(({
       <line x1="4.93" y1="7.36" x2="7.36" y2="4.93" />
       <line x1="19.07" y1="7.36" x2="16.64" y2="4.93" />
     </svg>
-  );
-});
+  )
+})
 
-export default CustomTimerIcon; 
+export default CustomTimerIcon 
