@@ -184,13 +184,13 @@
 
 @media (max-width: 600px) {
   .contactWrapper {
-    gap: var(--spacing-xl);
+    gap: var(--spacing-lg);
     padding: var(--spacing-lg) 0;
   }
   
   .contactGrid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
   }
   
   .contactCard {
@@ -217,7 +217,7 @@
 
 @media (max-width: 400px) {
   .contactWrapper {
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
     padding: var(--spacing-md) 0;
   }
   
@@ -248,6 +248,6 @@
   }
   
   .contactMessage {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
   }
 }

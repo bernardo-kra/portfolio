@@ -100,13 +100,11 @@
   }
   
   .aboutmeTitle {
-    font-size: var(--font-size-2xl);
-    padding: 0 var(--spacing-xs);
+    font-size: var(--font-size-3xl);
   }
   
   .aboutmeDesc {
     font-size: var(--font-size-base);
-    padding: 0 var(--spacing-xs);
   }
   
   .aboutmeSkills {
@@ -115,11 +113,10 @@
   
   .aboutmeSkill {
     font-size: var(--font-size-sm);
-    padding: var(--spacing-xs) var(--spacing-sm);
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .aboutmeSection {
     padding: var(--spacing-md) var(--spacing-sm);
     border-radius: 8px;
@@ -128,21 +125,53 @@
   }
   
   .aboutmeTitle {
-    font-size: var(--font-size-xl);
-    padding: 0 var(--spacing-xs);
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-xs);
   }
   
   .aboutmeDesc {
     font-size: var(--font-size-sm);
-    padding: 0 var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
   }
   
   .aboutmeSkills {
     gap: var(--spacing-xs);
+    justify-content: center;
   }
   
   .aboutmeSkill {
     font-size: var(--font-size-xs);
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .aboutmeSection {
+    padding: var(--spacing-sm) var(--spacing-xs);
+    border-radius: 6px;
+    max-width: 100%;
+    margin: var(--spacing-sm) auto;
+  }
+  
+  .aboutmeTitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .aboutmeDesc {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .aboutmeSkills {
+    gap: var(--spacing-xs);
+    justify-content: center;
+  }
+  
+  .aboutmeSkill {
+    font-size: var(--font-size-xs);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
   }
 }

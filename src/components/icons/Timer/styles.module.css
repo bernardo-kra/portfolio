@@ -52,6 +52,10 @@
         padding: var(--spacing-xs);
         gap: var(--spacing-xs);
     }
+    
+    .po__timer__link span {
+        font-size: var(--font-size-sm);
+    }
 }
 
 .timerPointer {

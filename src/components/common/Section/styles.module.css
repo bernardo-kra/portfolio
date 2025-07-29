@@ -138,4 +138,12 @@
   .section--lg {
     padding: var(--spacing-sm) 0;
   }
+  
+  .section--xl {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .section--2xl {
+    padding: var(--spacing-lg) 0;
+  }
 } 

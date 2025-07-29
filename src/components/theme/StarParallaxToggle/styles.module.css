@@ -15,9 +15,28 @@
 .starParallaxToggle:hover {
   background: rgba(100, 108, 255, 0.15);
 }
+
 :root[data-theme='light'] .starParallaxToggle {
   background: var(--toggle-bg-light, rgba(255,255,255,0.7));
 }
+
 .starParallaxToggleActive {
   background: var(--toggle-bg-active, rgba(100, 108, 255, 0.15));
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .starParallaxToggle {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+  }
+}
+
+@media (max-width: 400px) {
+  .starParallaxToggle {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+  }
 } 

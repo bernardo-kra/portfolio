@@ -109,6 +109,10 @@
   .card--lg.card--padding {
     padding: var(--spacing-lg);
   }
+  
+  .card--sm.card--padding {
+    padding: var(--spacing-sm);
+  }
 }
 
 @media (max-width: 400px) {
@@ -118,5 +122,9 @@
   
   .card--lg.card--padding {
     padding: var(--spacing-md);
+  }
+  
+  .card--sm.card--padding {
+    padding: var(--spacing-xs);
   }
 } 

@@ -271,27 +271,66 @@
   }
 }
 
+@media (max-width: 600px) {
+  .heroSection {
+    min-height: 20vh;
+    padding: var(--spacing-md) 0;
+  }
+  
+  .heroContent {
+    padding: var(--spacing-sm);
+    max-width: 95vw;
+  }
+  
+  .heroTitle {
+    font-size: var(--font-size-lg);
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .heroSubtitle {
+    font-size: var(--font-size-sm);
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .heroActions {
+    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .heroButton, .heroButtonOutline {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    max-width: 90vw;
+    width: 100%;
+  }
+}
+
 @media (max-width: 400px) {
   .heroSection {
     min-height: 15vh;
     padding: var(--spacing-xs) 0;
   }
+  
   .heroContent {
     padding: var(--spacing-xs);
     max-width: 100vw;
   }
+  
   .heroTitle {
     font-size: var(--font-size-base);
     padding: 0 var(--spacing-xs);
   }
+  
   .heroSubtitle {
     font-size: var(--font-size-xs);
     padding: 0 var(--spacing-xs);
   }
+  
   .heroActions {
     gap: var(--spacing-xs);
     padding: 0 var(--spacing-xs);
   }
+  
   .heroButton, .heroButtonOutline {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs) var(--spacing-sm);

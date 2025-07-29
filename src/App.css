@@ -376,7 +376,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .app {
     width: 100%;
     min-height: 100vh;
@@ -410,5 +410,47 @@
   
   .counterNumber {
     font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  .appHeader {
+    padding: 1.5rem 0.5rem 1rem;
+  }
+  
+  .logo {
+    height: 3rem;
+    width: 3rem;
+    padding: 0.5rem;
+  }
+  
+  .logoPlus {
+    font-size: 1rem;
+  }
+  
+  .navigationCards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .navCard {
+    padding: 1rem 0.75rem;
+  }
+  
+  .navCardIcon {
+    font-size: 2rem;
+  }
+  
+  .counterCard {
+    padding: 1rem 0.75rem;
+  }
+  
+  .counterNumber {
+    font-size: 2rem;
   }
 }

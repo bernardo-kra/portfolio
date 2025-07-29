@@ -406,6 +406,11 @@
 }
 
 @media (max-width: 400px) {
+  .projectsContainer {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
   .projectsCard {
     padding: var(--spacing-sm);
   }
@@ -433,6 +438,7 @@
   
   .skillItem {
     font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
   }
   
   .skillsTitle {

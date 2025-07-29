@@ -142,11 +142,96 @@
   
   .courseMeta {
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--spacing-xs);
   }
   
   .academicCard {
     padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 600px) {
+  .educationTitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .educationContainer {
+    gap: var(--spacing-2xl);
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .academicCard {
+    padding: var(--spacing-md);
+  }
+  
+  .courseCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .degreeTitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .institution {
+    font-size: var(--font-size-sm);
+  }
+  
+  .period {
+    font-size: var(--font-size-xs);
+  }
+  
+  .courseTitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .courseDescription {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 400px) {
+  .educationTitle {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .educationContainer {
+    gap: var(--spacing-xl);
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .academicCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .courseCard {
+    padding: var(--spacing-xs);
+  }
+  
+  .degreeTitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .institution {
+    font-size: var(--font-size-xs);
+  }
+  
+  .period {
+    font-size: var(--font-size-xs);
+  }
+  
+  .courseTitle {
+    font-size: var(--font-size-xs);
+  }
+  
+  .courseDescription {
+    font-size: var(--font-size-xs);
   }
 } 

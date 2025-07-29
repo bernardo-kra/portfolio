@@ -352,10 +352,11 @@
   .clockDemoSection {
     padding: var(--spacing-xl) var(--spacing-md);
     border-radius: 12px;
+    max-width: 95%;
   }
   
   .clockDemoTitle {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
   }
   
   .clockDemoDescription {
@@ -364,38 +365,81 @@
   
   .clockDemoControls {
     flex-direction: column;
-    align-items: center;
+    gap: var(--spacing-sm);
   }
   
   .clockDemoToggleBtn,
   .clockDemoCodeTypeBtn {
     width: 100%;
-    max-width: 280px;
+    justify-content: center;
   }
   
   .clock {
-    min-width: 250px;
-    padding: var(--spacing-lg);
+    width: 200px;
+    height: 200px;
   }
   
   .clockTime {
-    font-size: var(--font-size-3xl);
+    font-size: 2rem;
   }
   
   .clockDate {
-    font-size: var(--font-size-base);
+    font-size: 0.875rem;
   }
   
   .clockDemoCode {
     font-size: var(--font-size-xs);
-    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 600px) {
+  .clockDemoSection {
+    padding: var(--spacing-lg) var(--spacing-sm);
+    border-radius: 8px;
+    max-width: 98%;
+  }
+  
+  .clockDemoTitle {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .clockDemoDescription {
+    font-size: var(--font-size-sm);
+  }
+  
+  .clockDemoControls {
+    gap: var(--spacing-xs);
+  }
+  
+  .clockDemoToggleBtn,
+  .clockDemoCodeTypeBtn {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+  
+  .clock {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .clockTime {
+    font-size: 1.5rem;
+  }
+  
+  .clockDate {
+    font-size: 0.75rem;
+  }
+  
+  .clockDemoCode {
+    font-size: var(--font-size-xs);
   }
 }
 
 @media (max-width: 480px) {
   .clockDemoSection {
-    padding: var(--spacing-lg) var(--spacing-sm);
-    border-radius: 8px;
+    padding: var(--spacing-md) var(--spacing-xs);
+    border-radius: 6px;
+    max-width: 100%;
   }
   
   .clockDemoTitle {
@@ -403,24 +447,35 @@
   }
   
   .clockDemoDescription {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
   }
   
   .clock {
-    min-width: 200px;
-    padding: var(--spacing-md);
+    width: 120px;
+    height: 120px;
   }
   
   .clockTime {
-    font-size: var(--font-size-2xl);
+    font-size: 1.25rem;
   }
   
   .clockDate {
-    font-size: var(--font-size-sm);
+    font-size: 0.625rem;
   }
   
   .clockDemoCode {
     font-size: var(--font-size-xs);
-    padding: var(--spacing-sm);
+  }
+  
+  .clockDemoCodeHeader {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .clockDemoFilename {
+    font-size: var(--font-size-xs);
+  }
+  
+  .clockDemoCodeContent {
+    font-size: var(--font-size-xs);
   }
 } 

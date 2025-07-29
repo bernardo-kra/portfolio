@@ -125,6 +125,11 @@
   .portfolioNavActions {
     gap: var(--spacing-xs);
   }
+  
+  .langToggle {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
 }
 
 @media (max-width: 400px) {
@@ -141,5 +146,16 @@
   .portfolioNavLink {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);
+  }
+  
+  .portfolioNavActions {
+    gap: var(--spacing-xs);
+  }
+  
+  .langToggle {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+    min-width: 24px;
+    height: 24px;
   }
 }

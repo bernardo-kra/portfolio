@@ -19,3 +19,20 @@
 .themeToggleButtonActive {
   background: var(--toggle-bg-active, rgba(100, 108, 255, 0.15));
 }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .themeToggleButton {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+  }
+}
+
+@media (max-width: 400px) {
+  .themeToggleButton {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+  }
+}

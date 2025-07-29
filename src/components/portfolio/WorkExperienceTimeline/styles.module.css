@@ -571,8 +571,29 @@
 }
 
 @media (max-width: 600px) {
+  .timelineSection {
+    padding: var(--spacing-lg) var(--spacing-sm);
+    margin: var(--spacing-lg) 0;
+    border-radius: 12px;
+  }
+  
   .timelineTitle {
     font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .timelineContainer {
+    max-width: 100%;
+  }
+  
+  .timelineRow {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .timelineRow.expanded {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-2xl);
   }
   
   .timelineCompany {
@@ -595,16 +616,44 @@
   
   .technologiesList {
     justify-content: center;
+    gap: var(--spacing-xs);
   }
   
   .achievementItem {
     padding-left: var(--spacing-md);
   }
+  
+  .expandedContent.expanded {
+    padding-top: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+  }
+  
+  .fullDescription {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
 }
 
 @media (max-width: 400px) {
+  .timelineSection {
+    padding: var(--spacing-md) var(--spacing-xs);
+    margin: var(--spacing-md) 0;
+    border-radius: 8px;
+  }
+  
   .timelineTitle {
     font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .timelineRow {
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .timelineRow.expanded {
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xl);
   }
   
   .timelineCompany {
@@ -636,5 +685,40 @@
   .technologyTag {
     font-size: var(--font-size-xs);
     padding: 0.25rem 0.5rem;
+  }
+  
+  .expandedContent.expanded {
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+  }
+  
+  .fullDescription {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+  }
+  
+  .sectionTitle {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .technologiesSection,
+  .achievementsSection {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .expandedGrid {
+    gap: var(--spacing-sm);
+  }
+  
+  .achievementItem {
+    padding-left: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .expandButton {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
   }
 }

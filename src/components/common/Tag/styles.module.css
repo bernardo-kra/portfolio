@@ -185,4 +185,26 @@
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: var(--font-size-sm);
   }
+  
+  .tag--md {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 400px) {
+  .tag--lg {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
+  
+  .tag--md {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
+  
+  .tag--sm {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
 } 
