@@ -1,60 +1,62 @@
-import { useState, useEffect } from "react";
-import Container from '@components/common/Container';
-import Timer from '@components/icons/Timer';
-import Clock from '@components/widgets/Clock';
-import ClockForm from '@components/widgets/ClockForm';
-import PoMenu from '@components/widgets/PoMenu';
-import StarfieldBackground from '@theme/StarfieldBackground';
-import DayBackground from '@theme/DayBackground';
-import ThemeToggleButton from '@theme/ThemeToggleButton';
-import { useTheme } from '@theme/ThemeContext/useTheme';
-import styles from './styles.module.css';
-import StarParallaxToggle from '@theme/StarParallaxToggle';
-import DarkBackground from '@theme/DarkBackground';
+import { useState, useEffect } from 'react'
+import Container from '@components/common/Container'
+import Timer from '@components/icons/Timer'
+import Clock from '@components/widgets/Clock'
+import ClockForm from '@components/widgets/ClockForm'
+import PoMenu from '@components/widgets/PoMenu'
+import StarfieldBackground from '@theme/StarfieldBackground'
+import DayBackground from '@theme/DayBackground'
+import ThemeToggleButton from '@theme/ThemeToggleButton'
+import { useTheme } from '@theme/ThemeContext/useTheme'
+import styles from './styles.module.css'
+import StarParallaxToggle from '@theme/StarParallaxToggle'
+import DarkBackground from '@theme/DarkBackground'
 
-const STORAGE_KEY = 'starfield-disable-parallax';
+const STORAGE_KEY = 'starfield-disable-parallax'
 
 const Pomodoro = () => {
-    const [disableParallax, setDisableParallax] = useState(false);
-    const { theme } = useTheme();
-    const [isMobile, setIsMobile] = useState(false);
+  const [disableParallax, setDisableParallax] = useState(false)
+  const { theme } = useTheme()
+  const [isMobile, setIsMobile] = useState(false)
 
-    useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) setDisableParallax(saved === 'true');
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) setDisableParallax(saved === 'true')
+    
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
-    useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, String(disableParallax));
-    }, [disableParallax]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, String(disableParallax))
+  }, [disableParallax])
 
-    return (
-        <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
-            {theme === 'dark' ? (
-                isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
-            ) : (
-                <DayBackground />
-            )}
-            <StarParallaxToggle
-                value={disableParallax}
-                onChange={setDisableParallax}
-                style={{ position: 'fixed', top: 10, left: 10, zIndex: 10 }}
-            />
-            <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 10 }} />
-            <Container>
-                <div className={styles.po__pomodoro}>
-                    <Timer />
-                    <PoMenu></PoMenu>
-                    <Clock></Clock>
-                    <ClockForm></ClockForm>
-                </div>
-            </Container>
+  return (
+    <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+      {theme === 'dark' ? (
+        isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
+      ) : (
+        <DayBackground />
+      )}
+      <StarParallaxToggle
+        value={disableParallax}
+        onChange={setDisableParallax}
+        style={{ position: 'fixed', top: 10, left: 10, zIndex: 10 }}
+      />
+      <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 10 }} />
+      <Container>
+        <div className={styles.po__pomodoro}>
+          <Timer />
+          <PoMenu />
+          <Clock />
+          <ClockForm />
         </div>
-    );
-};
+      </Container>
+    </div>
+  )
+}
 
-export default Pomodoro;
+export default Pomodoro

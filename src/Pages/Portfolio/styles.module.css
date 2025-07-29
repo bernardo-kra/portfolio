@@ -1,0 +1,124 @@
+.portfolio__wrapper {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.portfolio__main {
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.portfolio__section {
+  padding: var(--spacing-2xl) 0;
+}
+
+.portfolio__section--hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.portfolio__section--about {
+  background: var(--gray-50);
+}
+
+.portfolio__section--projects {
+  background: var(--white);
+}
+
+.portfolio__section--contact {
+  background: var(--gray-50);
+}
+
+.portfolio__title {
+  font-size: var(--font-size-4xl);
+  font-weight: 900;
+  color: var(--text-default);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.portfolio__subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+}
+
+.portfolio__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.portfolio__card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.portfolio__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio__card__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-default);
+  margin-bottom: var(--spacing-sm);
+}
+
+.portfolio__card__description {
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.portfolio__fadeIn {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio__title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .portfolio__subtitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .portfolio__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .portfolio__card {
+    padding: var(--spacing-lg);
+  }
+}
