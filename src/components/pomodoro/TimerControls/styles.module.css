@@ -1,0 +1,85 @@
+.timerControls {
+  margin-top: var(--spacing-xl);
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.controlsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.controlButton {
+  min-height: 48px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controlButton:hover {
+  transform: translateY(-2px);
+}
+
+.controlButton:active {
+  transform: translateY(0);
+}
+
+.keyboardShortcuts {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--gray-100);
+  border-radius: 8px;
+  opacity: 0.8;
+}
+
+:root[data-theme='dark'] .keyboardShortcuts {
+  background: var(--gray-700);
+}
+
+.keyboardShortcuts small {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .controlsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+  
+  .controlButton {
+    min-height: 44px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 600px) {
+  .controlsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  .controlButton {
+    min-height: 40px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 400px) {
+  .timerControls {
+    margin-top: var(--spacing-lg);
+  }
+  
+  .controlButton {
+    min-height: 36px;
+    font-size: var(--font-size-xs);
+  }
+}

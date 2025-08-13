@@ -1,0 +1,202 @@
+.timerSettings {
+  position: relative;
+  margin-top: var(--spacing-lg);
+}
+
+.settingsButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalContainer {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+.settingsCard {
+  width: 100%;
+  padding: var(--spacing-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+}
+
+:root[data-theme='dark'] .settingsCard {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.settingsTitle {
+  margin: 0;
+  color: var(--text-default);
+  font-size: var(--font-size-2xl);
+}
+
+.closeButton {
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  min-width: auto;
+  width: 40px;
+  height: 40px;
+}
+
+.settingsGrid {
+  display: grid;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.settingHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settingIcon {
+  color: var(--brand-orange);
+}
+
+.settingInput {
+  width: 100%;
+}
+
+.settingsActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.resetButton {
+  font-size: var(--font-size-sm);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--spacing-sm);
+  }
+  
+  .settingsCard {
+    padding: var(--spacing-lg);
+  }
+  
+  .settingsGrid {
+    gap: var(--spacing-lg);
+  }
+  
+  .modalHeader {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .settingsTitle {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .settingsCard {
+    padding: var(--spacing-md);
+  }
+  
+  .settingsGrid {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .settingsActions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .actionButtons {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .closeButton {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 400px) {
+  .modalOverlay {
+    padding: var(--spacing-xs);
+  }
+  
+  .settingsCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .settingsGrid {
+    gap: var(--spacing-sm);
+  }
+  
+  .settingsTitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .closeButton {
+    width: 32px;
+    height: 32px;
+  }
+}

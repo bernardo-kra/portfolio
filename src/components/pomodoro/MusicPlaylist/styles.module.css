@@ -1,0 +1,335 @@
+.musicPlaylist {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--gray-200);
+  margin-top: var(--spacing-lg);
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+:root[data-theme='dark'] .musicPlaylist {
+  border-color: var(--gray-700);
+}
+
+.playlistHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.playlistTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.playlistIcon {
+  color: var(--brand-orange);
+}
+
+.currentTrackCard {
+  margin-bottom: var(--spacing-lg);
+  background: var(--brand-light);
+  border: 1px solid var(--brand-orange);
+}
+
+:root[data-theme='dark'] .currentTrackCard {
+  background: rgba(255, 165, 0, 0.1);
+  border-color: var(--brand-orange);
+}
+
+.currentTrackInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.trackDetails {
+  flex: 1;
+}
+
+.trackName {
+  margin: 0;
+  color: var(--text-default);
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.trackControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.controlButton {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.playButton {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--brand-orange);
+  color: white;
+  border-color: var(--brand-orange);
+}
+
+.playButton:hover {
+  background: var(--brand-orange-dark);
+  border-color: var(--brand-orange-dark);
+}
+
+.trackSettings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settingGroup {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.settingButton {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.settingButton.active {
+  color: var(--brand-orange);
+  background: var(--brand-light);
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.addTrackCard {
+  margin-bottom: var(--spacing-lg);
+}
+
+.addTrackForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.trackInput,
+.artistInput,
+.urlInput {
+  width: 100%;
+}
+
+.urlPreview {
+  padding: var(--spacing-xs);
+  background: var(--gray-100);
+  border-radius: 8px;
+  text-align: center;
+}
+
+:root[data-theme='dark'] .urlPreview {
+  background: var(--gray-700);
+}
+
+.addTrackActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.tracksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.emptyPlaylist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--gray-400);
+  opacity: 0.6;
+}
+
+.trackCard {
+  transition: all 0.3s ease;
+}
+
+.trackCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='dark'] .trackCard:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.activeTrack {
+  background: var(--brand-light);
+  border-color: var(--brand-orange);
+}
+
+:root[data-theme='dark'] .activeTrack {
+  background: rgba(255, 165, 0, 0.1);
+  border-color: var(--brand-orange);
+}
+
+.trackContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.trackInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.trackNameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.playTrackButton {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--brand-orange);
+}
+
+.trackActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.removeButton {
+  color: var(--error);
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs);
+}
+
+.removeButton:hover {
+  background: var(--error-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .musicPlaylist {
+    padding: var(--spacing-md);
+  }
+  
+  .playlistHeader {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+  
+  .currentTrackInfo {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+  
+  .trackControls {
+    justify-content: center;
+  }
+  
+  .trackSettings {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .settingGroup {
+    justify-content: center;
+  }
+  
+  .trackInfo {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .trackNameRow {
+    justify-content: center;
+  }
+  
+  .trackActions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .musicPlaylist {
+    max-width: 100%;
+    padding: var(--spacing-sm);
+  }
+  
+  .currentTrackCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .trackName {
+    font-size: var(--font-size-lg);
+  }
+  
+  .controlButton {
+    min-width: 32px;
+    height: 32px;
+  }
+  
+  .playButton {
+    min-width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .musicPlaylist {
+    padding: var(--spacing-xs);
+  }
+  
+  .currentTrackCard {
+    padding: var(--spacing-xs);
+  }
+  
+  .trackControls {
+    gap: var(--spacing-xs);
+  }
+  
+  .controlButton {
+    min-width: 28px;
+    height: 28px;
+  }
+  
+  .playButton {
+    min-width: 36px;
+    height: 36px;
+  }
+}
