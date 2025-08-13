@@ -1,0 +1,311 @@
+.settingsButton {
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalContainer {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+.settingsCard {
+  width: 100%;
+  padding: var(--spacing-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+}
+
+:root[data-theme='dark'] .settingsCard {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.musicIcon {
+  color: var(--brand-orange);
+}
+
+.settingsTitle {
+  margin: 0;
+  color: var(--text-default);
+  font-size: var(--font-size-2xl);
+}
+
+.closeButton {
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  min-width: auto;
+  width: 40px;
+  height: 40px;
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.settingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.groupTitle {
+  margin: 0;
+  color: var(--text-default);
+  font-size: var(--font-size-lg);
+}
+
+.urlInput {
+  width: 100%;
+}
+
+.urlPreview {
+  padding: var(--spacing-xs);
+  background: var(--gray-100);
+  border-radius: 8px;
+  text-align: center;
+}
+
+:root[data-theme='dark'] .urlPreview {
+  background: var(--gray-700);
+}
+
+.currentTrackInfo {
+  padding: var(--spacing-sm);
+  background: var(--brand-light);
+  border-radius: 8px;
+  text-align: center;
+  margin-top: var(--spacing-sm);
+}
+
+:root[data-theme='dark'] .currentTrackInfo {
+  background: rgba(255, 165, 0, 0.1);
+}
+
+.urlHelp {
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background: var(--gray-50);
+  border-radius: 4px;
+  text-align: center;
+}
+
+:root[data-theme='dark'] .urlHelp {
+  background: var(--gray-800);
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.volumeSlider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--gray-300);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+:root[data-theme='dark'] .volumeSlider {
+  background: var(--gray-600);
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand-orange);
+  cursor: pointer;
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand-orange);
+  cursor: pointer;
+  border: none;
+}
+
+.previewContainer {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='dark'] .previewContainer {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.previewIframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+  border-radius: 12px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.resetButton {
+  font-size: var(--font-size-sm);
+}
+
+.actionButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--spacing-sm);
+  }
+  
+  .settingsCard {
+    padding: var(--spacing-lg);
+  }
+  
+  .settingsContent {
+    gap: var(--spacing-lg);
+  }
+  
+  .modalHeader {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .settingsTitle {
+    font-size: var(--font-size-xl);
+  }
+  
+  .previewIframe {
+    height: 150px;
+  }
+}
+
+@media (max-width: 600px) {
+  .settingsCard {
+    padding: var(--spacing-md);
+  }
+  
+  .settingsContent {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .modalActions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .actionButtons {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .closeButton {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .previewIframe {
+    height: 120px;
+  }
+}
+
+@media (max-width: 400px) {
+  .modalOverlay {
+    padding: var(--spacing-xs);
+  }
+  
+  .settingsCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .settingsContent {
+    gap: var(--spacing-sm);
+  }
+  
+  .settingsTitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .closeButton {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .previewIframe {
+    height: 100px;
+  }
+}

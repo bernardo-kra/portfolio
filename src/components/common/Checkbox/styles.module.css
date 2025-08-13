@@ -1,0 +1,116 @@
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-sm);
+  color: var(--text-default);
+}
+
+.checkboxInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--gray-400);
+  border-radius: 4px;
+  background: var(--card-bg);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+:root[data-theme='dark'] .checkbox {
+  border-color: var(--gray-600);
+  background: var(--gray-800);
+}
+
+.checkboxContainer:hover .checkbox {
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.1);
+}
+
+.checkbox.checked {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: white;
+}
+
+.checkbox.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--gray-200);
+  border-color: var(--gray-300);
+}
+
+:root[data-theme='dark'] .checkbox.disabled {
+  background: var(--gray-700);
+  border-color: var(--gray-600);
+}
+
+.checkIcon {
+  width: 12px;
+  height: 12px;
+  color: white;
+  stroke: currentColor;
+}
+
+.label {
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-default);
+}
+
+.label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus styles for accessibility */
+.checkboxInput:focus + .checkbox {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkboxContainer {
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-xs);
+  }
+  
+  .checkbox {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .checkIcon {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkboxContainer {
+    gap: var(--spacing-xs);
+  }
+  
+  .checkbox {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .checkIcon {
+    width: 8px;
+    height: 8px;
+  }
+}
