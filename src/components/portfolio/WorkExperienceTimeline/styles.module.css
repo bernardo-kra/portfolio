@@ -23,7 +23,7 @@
 }
 
 .highlight {
-  color: var(--brand-orange) !important;
+  color: var(--brand-orange);
 }
 
 .timelineContainer {
