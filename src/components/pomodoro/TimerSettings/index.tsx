@@ -93,6 +93,7 @@ const TimerSettings: React.FC = () => {
                   onClick={handleCancel}
                   className={styles.closeButton}
                   icon={<X size={20} />}
+                  children={null}
                 />
               </div>
               
@@ -110,7 +111,7 @@ const TimerSettings: React.FC = () => {
                     min="1"
                     max="120"
                     value={focusMinutes}
-                    onChange={(e) => setFocusMinutes(Number(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFocusMinutes(Number(e.target.value))}
                     className={styles.settingInput}
                   />
                 </div>
@@ -128,7 +129,7 @@ const TimerSettings: React.FC = () => {
                     min="1"
                     max="60"
                     value={breakMinutes}
-                    onChange={(e) => setBreakMinutes(Number(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBreakMinutes(Number(e.target.value))}
                     className={styles.settingInput}
                   />
                 </div>

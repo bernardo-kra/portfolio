@@ -3,7 +3,10 @@ import { Typography, Container, Section } from '@components/common'
 import StarfieldBackground from '@theme/StarfieldBackground'
 import DayBackground from '@theme/DayBackground'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
+import BackgroundTransparencyToggle from '@theme/BackgroundTransparencyToggle'
+import ScrollAnimation from '@theme/ScrollAnimation'
 import { useTheme } from '@theme/ThemeContext/useTheme'
+import { useBackgroundTransparency } from '@theme/BackgroundTransparencyContext'
 import { PomodoroProvider } from '@components/context/PomodoroContext'
 import {
   TimerDisplay,
@@ -27,6 +30,7 @@ const STORAGE_KEY = 'starfield-disable-parallax'
 const PomodoroContent: React.FC = () => {
   const [disableParallax, setDisableParallax] = useState(false)
   const { theme } = useTheme()
+  const { isTransparent, toggleTransparency } = useBackgroundTransparency()
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -52,40 +56,53 @@ const PomodoroContent: React.FC = () => {
         <DayBackground />
       )}
       
-      <StarParallaxToggle
-        value={disableParallax}
-        onChange={setDisableParallax}
-        style={{ position: 'fixed', top: 10, left: 10, zIndex: 10 }}
-      />
+      <div style={{ position: 'fixed', top: 10, left: 10, zIndex: 10, display: 'flex', gap: '8px' }}>
+        <StarParallaxToggle
+          value={disableParallax}
+          onChange={setDisableParallax}
+        />
+        <BackgroundTransparencyToggle
+          value={isTransparent}
+          onChange={toggleTransparency}
+        />
+
+      </div>
+      
       <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 10 }} />
       
-      <Container>
+      <Container style={{ background: 'transparent', position: 'relative', zIndex: 2 }}>
         <div className={styles.pomodoroPage}>
-          <Section spacing="xl" className={styles.pomodoroHeader}>
-            <Typography variant="h1" align="center" className={styles.pageTitle}>
-              Pomodoro Timer
-            </Typography>
-            <Typography variant="body1" color="muted" align="center" className={styles.pageSubtitle}>
-              Técnica de produtividade para gerenciar seu tempo de forma eficiente
-            </Typography>
-          </Section>
+          <ScrollAnimation animation="fade-in" delay={200}>
+            <Section spacing="xl" className={styles.pomodoroHeader}>
+              <Typography variant="h1" align="center" className={styles.pageTitle}>
+                Pomodoro Timer
+              </Typography>
+              <Typography variant="body1" color="muted" align="center" className={styles.pageSubtitle}>
+                Técnica de produtividade para gerenciar seu tempo de forma eficiente
+              </Typography>
+            </Section>
+          </ScrollAnimation>
 
-          <Section spacing="xl" className={styles.pomodoroMain}>
-            <div className={styles.timerSection}>
-              <TimerDisplay />
-              <ActiveTaskDisplay />
-              <TimerControls />
-              <LofiPlayer />
-              <MusicPlaylist />
-              <TimerSettings />
-            </div>
-          </Section>
+          <ScrollAnimation animation="scale" delay={400}>
+            <Section spacing="xl" className={styles.pomodoroMain}>
+              <div className={styles.timerSection}>
+                <TimerDisplay />
+                <TimerControls />
+                <LofiPlayer />
+                <MusicPlaylist />
+                <ActiveTaskDisplay />
+                <TimerSettings />
+              </div>
+            </Section>
+          </ScrollAnimation>
 
-          <Section spacing="xl" className={styles.pomodoroHistory}>
-            <TaskList />
-            <TimerStats />
-            <CyclesHistory />
-          </Section>
+          <ScrollAnimation animation="slide-right" delay={600}>
+            <Section spacing="xl" className={styles.pomodoroHistory}>
+              <TaskList />
+              <TimerStats />
+              <CyclesHistory />
+            </Section>
+          </ScrollAnimation>
         </div>
       </Container>
       
