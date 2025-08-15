@@ -1,0 +1,20 @@
+:root[data-background-transparent="true"] [class*="_timerDisplay_"],
+:root[data-background-transparent="true"] [class*="_lofiPlayer_"],
+:root[data-background-transparent="true"] [class*="_musicPlaylist_"],
+:root[data-background-transparent="true"] [class*="_timerSettings_"],
+:root[data-background-transparent="true"] [class*="_activeTaskDisplay_"],
+:root[data-background-transparent="true"] [class*="_activeTaskContainer_"],
+:root[data-background-transparent="true"] [class*="_taskList_"],
+:root[data-background-transparent="true"] [class*="_timerStats_"],
+:root[data-background-transparent="true"] [class*="_cyclesHistory_"],
+:root[data-background-transparent="true"] [class*="_musicSettings_"],
+:root[data-background-transparent="true"] [class*="_timerControls_"],
+:root[data-background-transparent="true"] [class*="_modalContainer_"],
+:root[data-background-transparent="true"] [class*="_settingsCard_"],
+:root[data-background-transparent="true"] [class*="_modalHeader_"],
+:root[data-background-transparent="true"] [class*="_settingsGrid_"],
+:root[data-background-transparent="true"] [class*="_settingItem_"],
+:root[data-background-transparent="true"] [class*="_settingsActions_"],
+:root[data-background-transparent="true"] [class*="_compactPlayer_"] {
+  background: transparent;
+}
