@@ -1,0 +1,41 @@
+.focusModeToggle {
+  background: var(--toggle-bg-dark, rgba(35,38,58,0.7));
+  border: none;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.focusModeToggle:hover {
+  background: rgba(100, 108, 255, 0.15);
+}
+
+:root[data-theme='light'] .focusModeToggle {
+  background: var(--toggle-bg-light, rgba(255,255,255,0.7));
+}
+
+.focusModeToggleActive {
+  background: var(--toggle-bg-active, rgba(100, 108, 255, 0.15));
+}
+
+@media (max-width: 600px) {
+  .focusModeToggle {
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+  }
+}
+
+@media (max-width: 400px) {
+  .focusModeToggle {
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+  }
+}
