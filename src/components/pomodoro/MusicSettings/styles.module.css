@@ -12,7 +12,6 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: var(--spacing-md);
@@ -62,11 +61,31 @@
 }
 
 .closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--spacing-xs);
   border-radius: 50%;
   min-width: auto;
   width: 40px;
   height: 40px;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: var(--gray-100);
+  transform: scale(1.05);
+}
+
+:root[data-theme='dark'] .closeButton:hover {
+  background: var(--gray-700);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
 }
 
 .settingsContent {
@@ -276,6 +295,7 @@
   .closeButton {
     width: 36px;
     height: 36px;
+    padding: calc(var(--spacing-xs) * 0.75);
   }
   
   .previewIframe {
@@ -303,6 +323,7 @@
   .closeButton {
     width: 32px;
     height: 32px;
+    padding: calc(var(--spacing-xs) * 0.5);
   }
   
   .previewIframe {
