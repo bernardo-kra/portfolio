@@ -59,6 +59,16 @@ function App() {
                   Ferramenta de produtividade para gerenciar seu tempo
                 </Typography>
               </div>
+
+              <div className="navCard tertiary" onClick={() => navigate('/generative')}>
+                <div className="navCardIcon">🎨</div>
+                <Typography variant="h3" className="navCardTitle">
+                  Generative Art
+                </Typography>
+                <Typography variant="body2" color="muted" className="navCardDescription">
+                  Crie padrões únicos com algoritmos procedurais e matemática
+                </Typography>
+              </div>
             </Container>
           </Section>
         </Container>

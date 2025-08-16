@@ -10,7 +10,6 @@ import PortfolioNav from '@components/portfolio/PortfolioNav'
 import type { Lang } from '@src/i18n'
 import WorkExperienceTimeline from '@components/portfolio/WorkExperienceTimeline'
 import Education from '@components/portfolio/Education'
-import ClockDemo from '@components/portfolio/ClockDemo'
 import Footer from '@components/portfolio/Footer'
 
 const Portfolio: React.FC = () => {
@@ -25,9 +24,6 @@ const Portfolio: React.FC = () => {
         <AboutMe />
         <WorkExperienceTimeline />
         <Education />
-        <Section id="demo" spacing="xl">
-          <ClockDemo />
-        </Section>
         <Contact />
       </main>
       <Footer />

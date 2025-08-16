@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, Button, Card, Section, Tag, Image } from '@components/common'
 import { useI18n } from '@src/i18n'
+import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
 import { 
   SiReact, 
@@ -40,6 +41,15 @@ interface Project {
 }
 
 const projects: Project[] = [
+  {
+    title: 'Generative Pattern Studio',
+    description: 'Aplicação de arte generativa com algoritmos procedurais para criar padrões geométricos, fractais e simulações em tempo real.',
+    link: '/portfolio/generative',
+    img: '/programming.png',
+    tech: ['React', 'TypeScript', 'Canvas API', 'Algoritmos Procedurais'],
+    category: 'Arte Generativa',
+    date: '2024'
+  },
   {
     title: 'E-commerce OCC',
     description: 'Desenvolvimento de componentes React para Oracle Commerce Cloud com foco em performance e usabilidade.',
@@ -98,14 +108,23 @@ const skills = [
 
 const Projects: React.FC = () => {
   const { t } = useI18n()
+  const navigate = useNavigate()
   
   const handleProjectClick = (link: string) => {
-    window.open(link, '_blank')
+    if (link.startsWith('/')) {
+      navigate(link)
+    } else {
+      window.open(link, '_blank')
+    }
   }
   
   const handleButtonClick = (e: React.MouseEvent, link: string) => {
     e.stopPropagation()
-    window.open(link, '_blank')
+    if (link.startsWith('/')) {
+      navigate(link)
+    } else {
+      window.open(link, '_blank')
+    }
   }
   
   return (

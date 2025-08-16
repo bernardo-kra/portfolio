@@ -60,12 +60,6 @@ const Footer: React.FC = () => {
             <Typography variant="caption" color="muted" className={styles.footerBuiltWith}>
               {t.footerBuiltWith}
             </Typography>
-            <div className={styles.footerTechStack}>
-              <span className={styles.techItem}>React</span>
-              <span className={styles.techItem}>TypeScript</span>
-              <span className={styles.techItem}>Vite</span>
-              <span className={styles.techItem}>CSS Modules</span>
-            </div>
           </div>
         </div>
       </div>

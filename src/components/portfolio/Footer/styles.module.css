@@ -134,6 +134,18 @@
   flex-wrap: wrap;
 }
 
+.footerBuiltWith {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+  background: linear-gradient(135deg, var(--brand-orange), #ffb366);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-align: right;
+}
+
 .footerTechLabel {
   font-size: var(--font-size-sm);
   color: var(--text-muted);

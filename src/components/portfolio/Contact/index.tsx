@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
   }
 
   return (
-    <Section id="contato" spacing="xl">
+    <Section id="contato" spacing="lg">
       <div className={styles.contactWrapper}>
         <div className={styles.contactHeader}>
           <Typography variant="h3" align="center" className={styles.contactTitle}>

@@ -50,7 +50,7 @@ const courses: Course[] = [
   {
     title: 'Java Completo: Spring Boot, MongoDB, Hibernate, JPA, JavaFX',
     platform: 'Cod3r',
-    duration: 'Em andamento',
+    duration: '90h',
     lessons: 'Curso completo',
     description: 'Java, Spring Boot e tecnologias relacionadas.'
   }
@@ -60,7 +60,7 @@ const Education: React.FC = () => {
   const { t } = useI18n()
 
   return (
-    <Section id="educacao" spacing="xl">
+    <Section id="educacao" spacing="lg">
       <Typography variant="h2" className={styles.educationTitle}>
         Formação <Typography as="span" color="brand" className={styles.highlight}>Acadêmica</Typography>
       </Typography>

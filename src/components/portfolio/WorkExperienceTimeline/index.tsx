@@ -31,7 +31,7 @@ const WorkExperienceTimeline: React.FC = () => {
   }))
 
   return (
-    <Section id="experiencia" spacing="xl">
+    <Section id="experiencia" spacing="lg">
       <Typography variant="h2" className={styles.timelineTitle}>
         {t.workExperience.title.split(' ').map((word, index) => 
           index === 1 ? (

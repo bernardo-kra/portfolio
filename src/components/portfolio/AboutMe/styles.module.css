@@ -1,15 +1,10 @@
 .aboutmeSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background: var(--gray-100);
-  color: var(--text-default);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(35,38,58,0.10), 0 1.5px 8px 0 rgba(35,38,58,0.06);
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  margin: var(--spacing-xl) auto;
-  max-width: 700px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(35, 38, 58, 0.08);
+  padding: var(--spacing-2xl);
+  margin: var(--spacing-lg) auto;
+  max-width: 1200px;
   border: 1px solid var(--gray-200);
   box-sizing: border-box;
   width: 100%;
@@ -18,8 +13,13 @@
 
 :root[data-theme='dark'] .aboutmeSection {
   background: var(--gray-900);
-  color: var(--text-default);
   border: 1px solid var(--gray-700);
+  box-shadow: 0 12px 40px rgba(35, 38, 58, 0.15);
+}
+
+.aboutmeHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .aboutmeTitle {
@@ -27,151 +27,401 @@
   font-weight: 900;
   color: var(--text-default);
   margin-bottom: var(--spacing-sm);
-  text-align: center;
   letter-spacing: -1px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  width: 100%;
 }
 
-.aboutmeTitle .highlight {
-  color: var(--brand-orange);
-}
-
-.aboutmeDesc {
+.aboutmeSubtitle {
   font-size: var(--font-size-lg);
-  color: var(--text-default);
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
-  max-width: 600px;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
   font-weight: 500;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  width: 100%;
 }
 
-.aboutmeSkills {
+.aboutmeLocation {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 100%;
+  gap: var(--spacing-xs);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
-.aboutmeSkill {
-  background: var(--gray-200);
-  color: var(--text-default);
-  font-weight: 700;
-  font-size: var(--font-size-base);
-  border-radius: 2rem;
-  padding: var(--spacing-xs) var(--spacing-md);
-  box-shadow: 0 1px 8px rgba(0,0,0,0.1);
-  letter-spacing: 0.01em;
-  transition: background 0.18s, color 0.18s, transform 0.16s, box-shadow 0.18s;
-  border: 1px solid var(--gray-300);
-  white-space: nowrap;
+.aboutmeMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.metricCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
-:root[data-theme='dark'] .aboutmeSkill {
-  background: var(--gray-700);
-  color: var(--text-default);
+:root[data-theme='dark'] .metricCard {
+  background: var(--gray-800);
   border: 1px solid var(--gray-600);
 }
 
-.aboutmeSkill:hover {
-  background: var(--brand-orange);
-  color: white;
-  transform: scale(1.09) translateY(-2px);
-  box-shadow: 0 4px 16px rgba(255, 153, 0, 0.3);
+.metricCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--brand-orange);
 }
 
-@media (max-width: 700px) {
+:root[data-theme='dark'] .metricCard:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-orange), #ffb366);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.metricCard:hover::before {
+  opacity: 1;
+}
+
+.metricIcon {
+  background: linear-gradient(135deg, var(--brand-orange), #ffb366);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md) auto;
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.metricContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.metricValue {
+  font-size: var(--font-size-3xl);
+  font-weight: 900;
+  color: var(--text-default);
+  margin: 0;
+  line-height: 1;
+}
+
+.metricLabel {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-default);
+  margin: 0;
+}
+
+.metricDescription {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.aboutmeContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+.columnTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-default);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.specializationsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.achievementsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.specializationTag {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  transition: all 0.3s ease;
+}
+
+:root[data-theme='dark'] .specializationTag {
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+}
+
+.specializationTag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--brand-orange);
+}
+
+:root[data-theme='dark'] .specializationTag:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.specializationColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.specializationName {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-default);
+  margin: 0;
+}
+
+
+.achievementCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: all 0.3s ease;
+}
+
+:root[data-theme='dark'] .achievementCard {
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+}
+
+.achievementCard:hover {
+  transform: translateX(4px);
+  border-color: var(--brand-orange);
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.1);
+}
+
+.achievementIcon {
+  background: var(--brand-orange);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
+}
+
+.achievementContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.achievementTitle {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-default);
+  margin: 0;
+}
+
+.achievementDescription {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
   .aboutmeSection {
-    padding: var(--spacing-lg) var(--spacing-md);
-    border-radius: 12px;
-    max-width: 95%;
-    margin: var(--spacing-lg) auto;
+    padding: var(--spacing-xl);
+    border-radius: 16px;
+  }
+  
+  .aboutmeMetrics {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  .aboutmeContent {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  .specializationsList {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .achievementsList {
+    gap: var(--spacing-sm);
   }
   
   .aboutmeTitle {
     font-size: var(--font-size-3xl);
   }
   
-  .aboutmeDesc {
+  .aboutmeSubtitle {
     font-size: var(--font-size-base);
-  }
-  
-  .aboutmeSkills {
-    gap: var(--spacing-xs);
-  }
-  
-  .aboutmeSkill {
-    font-size: var(--font-size-sm);
   }
 }
 
 @media (max-width: 600px) {
   .aboutmeSection {
-    padding: var(--spacing-md) var(--spacing-sm);
-    border-radius: 8px;
-    max-width: 98%;
+    padding: var(--spacing-lg);
+    border-radius: 12px;
     margin: var(--spacing-md) auto;
   }
   
-  .aboutmeTitle {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-xs);
+  .aboutmeHeader {
+    margin-bottom: var(--spacing-xl);
   }
   
-  .aboutmeDesc {
+  .aboutmeMetrics {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .metricCard {
+    padding: var(--spacing-md);
+  }
+  
+  .metricIcon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .metricValue {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .metricLabel {
     font-size: var(--font-size-sm);
+  }
+  
+  .metricDescription {
+    font-size: var(--font-size-xs);
+  }
+  
+  .columnTitle {
+    font-size: var(--font-size-lg);
     margin-bottom: var(--spacing-md);
   }
   
-  .aboutmeSkills {
-    gap: var(--spacing-xs);
-    justify-content: center;
+  .specializationsList {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
   }
   
-  .aboutmeSkill {
+  .achievementsList {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .achievementCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .achievementIcon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .achievementTitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .achievementDescription {
     font-size: var(--font-size-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: 1.5rem;
   }
 }
 
 @media (max-width: 400px) {
   .aboutmeSection {
-    padding: var(--spacing-sm) var(--spacing-xs);
-    border-radius: 6px;
-    max-width: 100%;
-    margin: var(--spacing-sm) auto;
+    padding: var(--spacing-md);
+    border-radius: 8px;
   }
   
   .aboutmeTitle {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-2xl);
   }
   
-  .aboutmeDesc {
+  .aboutmeSubtitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .aboutmeLocation {
     font-size: var(--font-size-xs);
-    margin-bottom: var(--spacing-sm);
   }
   
-  .aboutmeSkills {
+  .aboutmeMetrics {
+    grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xs);
-    justify-content: center;
   }
   
-  .aboutmeSkill {
+  .metricCard {
+    padding: var(--spacing-sm);
+  }
+  
+  .metricIcon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .metricValue {
+    font-size: var(--font-size-xl);
+  }
+  
+  .metricLabel {
     font-size: var(--font-size-xs);
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
+  }
+  
+  .metricDescription {
+    font-size: var(--font-size-xs);
+  }
+  
+  .columnTitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .achievementCard {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-sm);
+  }
+  
+  .achievementIcon {
+    width: 32px;
+    height: 32px;
   }
 }

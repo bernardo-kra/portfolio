@@ -1,0 +1,522 @@
+.generativeArt {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at center, #0a0a0f 0%, #000000 70%);
+  overflow: hidden;
+}
+
+
+
+.backgroundPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 60% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+  animation: backgroundFloat 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes backgroundFloat {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  33% { 
+    transform: translate(-10px, -10px) scale(1.02);
+    opacity: 1;
+  }
+  66% { 
+    transform: translate(10px, 5px) scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.header {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(15px);
+  padding: 1.5rem 3rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 200;
+  background: linear-gradient(45deg, #fff, #a855f7, #06b6d4, #10b981);
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease-in-out infinite;
+  margin: 0 0 0.8rem 0;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.5px;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.infoButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.8), rgba(42, 67, 101, 0.9));
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(100, 149, 237, 0.4);
+  border-radius: 18px;
+  padding: 14px 24px;
+  color: #e6f3ff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 15;
+  box-shadow: 0 8px 32px rgba(30, 144, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.infoButton:hover {
+  background: linear-gradient(135deg, rgba(65, 105, 225, 0.9), rgba(72, 61, 139, 0.95));
+  border-color: rgba(135, 206, 250, 0.6);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(30, 144, 255, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+}
+
+.hideUIButton {
+  position: absolute;
+  top: 20px;
+  right: 170px;
+  background: linear-gradient(135deg, rgba(25, 25, 112, 0.8), rgba(75, 0, 130, 0.9));
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(147, 112, 219, 0.4);
+  border-radius: 18px;
+  padding: 14px 24px;
+  color: #e6e6fa;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 15;
+  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pauseButton {
+  position: absolute;
+  top: 20px;
+  right: 350px;
+  background: linear-gradient(135deg, rgba(72, 61, 139, 0.8), rgba(106, 90, 205, 0.9));
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(123, 104, 238, 0.4);
+  border-radius: 18px;
+  padding: 14px 24px;
+  color: #f0f8ff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 15;
+  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hideUIButton:hover {
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(148, 0, 211, 0.95));
+  border-color: rgba(186, 85, 211, 0.6);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+}
+
+.pauseButton:hover {
+  background: linear-gradient(135deg, rgba(106, 90, 205, 0.9), rgba(147, 112, 219, 0.95));
+  border-color: rgba(176, 196, 222, 0.6);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+}
+
+.showUIButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.showUIButton:hover {
+  background: rgba(245, 158, 11, 0.4);
+  border-color: rgba(245, 158, 11, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(245, 158, 11, 0.4);
+  opacity: 1;
+}
+
+.infoModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modalContent {
+  background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(20, 20, 30, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 2.5rem;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: slideIn 0.4s ease-out;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background: rgba(255, 100, 100, 0.3);
+  border-color: rgba(255, 100, 100, 0.5);
+  transform: scale(1.1);
+}
+
+.modalTitle {
+  font-size: 2.2rem;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 2rem;
+  background: linear-gradient(45deg, #fff, #a855f7, #06b6d4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.infoSection {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: #a855f7;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eventList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.eventList li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.eventList li:last-child {
+  border-bottom: none;
+}
+
+.eventList strong {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.dnaDisplay {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border-radius: 15px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  margin-top: 1.5rem;
+}
+
+.dnaDisplay code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+/* Scrollbar personalizada para o modal */
+.modalContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-weight: 300;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.canvasSection {
+  width: 100%;
+  height: 100%;
+}
+
+.info {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 1.5rem;
+  z-index: 10;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.info:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.infoText {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .header {
+    top: 40px;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    max-width: 90vw;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .info {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+  
+  .infoText {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .infoButton {
+    top: 15px;
+    right: 15px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .hideUIButton {
+    top: 15px;
+    right: 150px;
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+  .pauseButton {
+    top: 15px;
+    right: 280px;
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+
+  .showUIButton {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+
+  .modalContent {
+    padding: 2rem 1.5rem;
+    max-width: 95vw;
+    max-height: 90vh;
+    margin: 1rem;
+  }
+
+  .modalTitle {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+
+  .infoSection {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .eventList li {
+    padding: 0.6rem 0;
+    font-size: 0.9rem;
+  }
+
+  .dnaDisplay {
+    padding: 1rem;
+  }
+
+  .dnaDisplay code {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.footerText {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.authorName {
+  color: rgba(135, 206, 250, 0.9);
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(135, 206, 250, 0.3);
+}
+
+@media (max-width: 768px) {
+  .footer {
+    bottom: 15px;
+  }
+  
+  .footerText {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}

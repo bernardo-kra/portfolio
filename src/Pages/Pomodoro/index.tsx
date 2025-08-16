@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Typography, Container, Section } from '@components/common'
+import { Typography, Container, Section, BackButton } from '@components/common'
 import StarfieldBackground from '@theme/StarfieldBackground'
 import DayBackground from '@theme/DayBackground'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
@@ -50,13 +50,22 @@ const PomodoroContent: React.FC = () => {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+      <BackButton to="/portfolio" />
+      
       {theme === 'dark' ? (
         isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
       ) : (
         <DayBackground />
       )}
       
-      <div style={{ position: 'fixed', top: 10, left: 10, zIndex: 10, display: 'flex', gap: '8px' }}>
+      <div style={{ 
+        position: 'fixed', 
+        top: 10, 
+        left: window.innerWidth > 768 ? 120 : 60, 
+        zIndex: 10, 
+        display: 'flex', 
+        gap: '8px' 
+      }}>
         <StarParallaxToggle
           value={disableParallax}
           onChange={setDisableParallax}

@@ -166,6 +166,10 @@
   background: linear-gradient(90deg, #4ecdc4, #44a08d);
 }
 
+.navCard.tertiary::before {
+  background: linear-gradient(90deg, #ff00ff, #00f5ff);
+}
+
 .navCard:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
@@ -178,6 +182,10 @@
 
 .navCard.secondary:hover {
   border-color: #4ecdc4;
+}
+
+.navCard.tertiary:hover {
+  border-color: #ff00ff;
 }
 
 .navCard:hover::before {
