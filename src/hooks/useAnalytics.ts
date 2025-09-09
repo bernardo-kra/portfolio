@@ -31,7 +31,7 @@ export const trackEvent = (action: string, category: string, label?: string, val
 
 export const trackPageView = (pagePath: string, pageTitle: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    const GA_MEASUREMENT_ID = 'G-TTSRG7HEGS' // Hardcoded for GitHub Pages
+    const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-TTSRG7HEGS'
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: pagePath,
       page_title: pageTitle,
