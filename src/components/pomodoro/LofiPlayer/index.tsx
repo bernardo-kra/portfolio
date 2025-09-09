@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Typography } from '@components/common'
 import { Volume2, Music, ExternalLink, Settings, Play, Pause, SkipForward, SkipBack } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import MusicSettings from '../MusicSettings'
 import styles from './styles.module.css'
 

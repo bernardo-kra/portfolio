@@ -10,14 +10,16 @@ interface PortfolioNavProps {
 }
 
 const navItems = [
-  { id: 'sobre', labelKey: 'aboutTitle' },
-  { id: 'projetos', labelKey: 'projectsTitle' },
-  { id: 'demo', labelKey: 'demoTitle' },
-  { id: 'contato', labelKey: 'contactTitle' },
+  { id: 'sobre', labelKey: 'aboutTitle', icon: '👤' },
+  { id: 'experiencia', labelKey: 'experienceTitle', icon: '💼' },
+  { id: 'educacao', labelKey: 'educationTitle', icon: '🎓' },
+  { id: 'contato', labelKey: 'contactTitle', icon: '📧' },
 ]
 
 const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   const [active, setActive] = useState('sobre')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +32,12 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
         }
       }
       setActive(found)
+
+      // Calculate scroll progress
+      const scrollTop = window.pageYOffset
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const progress = (scrollTop / docHeight) * 100
+      setScrollProgress(progress)
     }
     
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -40,34 +48,91 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
-    if (section) section.scrollIntoView({ behavior: 'smooth' })
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' })
+      setIsMobileMenuOpen(false)
+    }
   }
 
   return (
-    <nav className={styles.portfolioNav}>
-      <ul className={styles.portfolioNavList}>
-        {navItems.map((item) => (
-          <li key={item.id}>
+    <>
+      <nav className={styles.portfolioNav}>
+        <div className={styles.progressBar}>
+          <div 
+            className={styles.progressFill} 
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+        
+        <div className={styles.navContent}>
+          <ul className={styles.portfolioNavList}>
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`${styles.portfolioNavLink} ${active === item.id ? styles.active : ''}`}
+                  onClick={() => scrollToSection(item.id)}
+                >
+                  <span className={styles.navIcon}>{item.icon}</span>
+                  <span className={styles.navLabel}>{t[item.labelKey] || item.id}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          
+          <div className={styles.portfolioNavActions}>
             <button
-              className={styles.portfolioNavLink + (active === item.id ? ' ' + styles.active : '')}
-              onClick={() => scrollToSection(item.id)}
+              className={styles.langToggle}
+              onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+              aria-label={t.langToggle}
             >
-              {t[item.labelKey] || item.id}
+              {lang === 'pt' ? 'EN' : 'PT'}
             </button>
-          </li>
-        ))}
-      </ul>
-      <div className={styles.portfolioNavActions}>
-        <button
-          className={styles.langToggle}
-          onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-          aria-label={t.langToggle}
+            <ThemeToggleButton />
+          </div>
+        </div>
+        
+        <button 
+          className={styles.mobileMenuToggle}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
-          {t.langToggle}
+          <span className={`${styles.hamburger} ${isMobileMenuOpen ? styles.open : ''}`}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
         </button>
-        <ThemeToggleButton />
-      </div>
-    </nav>
+      </nav>
+      
+      {isMobileMenuOpen && (
+        <div className={styles.mobileMenuOverlay} onClick={() => setIsMobileMenuOpen(false)}>
+          <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
+            <ul className={styles.mobileNavList}>
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <button
+                    className={`${styles.mobileNavLink} ${active === item.id ? styles.active : ''}`}
+                    onClick={() => scrollToSection(item.id)}
+                  >
+                    <span className={styles.navIcon}>{item.icon}</span>
+                    <span className={styles.navLabel}>{t[item.labelKey] || item.id}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.mobileActions}>
+              <button
+                className={styles.mobileLangToggle}
+                onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+              >
+                {lang === 'pt' ? 'English' : 'Português'}
+              </button>
+              <ThemeToggleButton />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

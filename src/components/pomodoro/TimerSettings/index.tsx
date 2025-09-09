@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Typography, Button, Input, Card } from '@components/common'
 import { Settings, Target, Coffee, X } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
 const TimerSettings: React.FC = () => {

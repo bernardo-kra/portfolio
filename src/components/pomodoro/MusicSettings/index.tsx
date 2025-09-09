@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Card, Checkbox } from '@components/common'
 import { Music, Settings, X } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
 const MusicSettings: React.FC = () => {

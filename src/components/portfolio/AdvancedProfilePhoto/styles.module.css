@@ -1,0 +1,269 @@
+.profileContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.photoWrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.photoFrame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 6px solid transparent;
+  background: linear-gradient(45deg, var(--brand-orange), #ffb366, var(--brand-orange)) border-box;
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 20px 60px rgba(255, 153, 0, 0.4),
+    0 0 0 1px rgba(255, 153, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 2;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.4s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 153, 0, 0.1) 0%,
+    rgba(255, 153, 0, 0.05) 50%,
+    rgba(255, 153, 0, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glowEffect {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 153, 0, 0.3) 0%,
+    rgba(255, 153, 0, 0.1) 50%,
+    transparent 70%
+  );
+  animation: glowPulse 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+.ringEffect {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  right: -30px;
+  bottom: -30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 153, 0, 0.2);
+  animation: ringRotate 8s linear infinite;
+  z-index: 0;
+}
+
+.floatingElement {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 153, 0, 0.1);
+  border: 2px solid rgba(255, 153, 0, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-orange);
+  animation: float 4s ease-in-out infinite;
+  backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+.mouseFollower {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 153, 0, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transition: all 0.1s ease;
+  z-index: 1;
+}
+
+
+.placeholder {
+  width: 280px;
+  height: 280px;
+  background: linear-gradient(135deg, var(--brand-orange), #ffb366);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(255, 153, 0, 0.4);
+}
+
+.placeholderIcon {
+  font-size: 4rem;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Hover Effects */
+.profileContainer:hover .photoFrame {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.2),
+    0 25px 80px rgba(255, 153, 0, 0.5),
+    0 0 0 1px rgba(255, 153, 0, 0.3);
+}
+
+.profileContainer:hover .photoOverlay {
+  opacity: 1;
+}
+
+.profileContainer:hover .glowEffect {
+  animation-duration: 1.5s;
+}
+
+.profileContainer:hover .ringEffect {
+  animation-duration: 4s;
+}
+
+.profileContainer:hover .floatingElement {
+  animation-duration: 2s;
+}
+
+/* Animations */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+
+/* Dark theme adjustments */
+:root[data-theme='dark'] .photoFrame {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.05),
+    0 20px 60px rgba(255, 153, 0, 0.5),
+    0 0 0 1px rgba(255, 153, 0, 0.3);
+}
+
+:root[data-theme='dark'] .profileContainer:hover .photoFrame {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 25px 80px rgba(255, 153, 0, 0.6),
+    0 0 0 1px rgba(255, 153, 0, 0.4);
+}
+
+:root[data-theme='dark'] .floatingElement {
+  background: rgba(255, 153, 0, 0.15);
+  border-color: rgba(255, 153, 0, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .photoWrapper {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .placeholder {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .floatingElement {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .floatingElement svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .photoWrapper {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .placeholder {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .floatingElement {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .floatingElement svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glowEffect,
+  .ringEffect,
+  .floatingElement {
+    animation: none;
+  }
+  
+  .profileContainer:hover .photoFrame {
+    transform: none;
+  }
+}

@@ -1,0 +1,329 @@
+.profilePhoto {
+  position: relative;
+  display: inline-block;
+  animation: fadeInScale 0.8s ease-out;
+}
+
+.photoContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.photoFrame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--brand-orange);
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(255, 153, 0, 0.3),
+    0 0 0 1px rgba(255, 153, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photoImage.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 153, 0, 0.1) 0%,
+    rgba(255, 153, 0, 0.05) 50%,
+    rgba(255, 153, 0, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photoGlow {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  background: linear-gradient(
+    45deg,
+    var(--brand-orange),
+    #ffb366,
+    var(--brand-orange)
+  );
+  opacity: 0;
+  animation: glowPulse 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+.photoParticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--brand-orange);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 4s ease-in-out infinite;
+}
+
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  right: 15%;
+  animation-delay: 1s;
+}
+
+.particle:nth-child(3) {
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 2s;
+}
+
+.particle:nth-child(4) {
+  top: 40%;
+  right: 5%;
+  animation-delay: 3s;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--brand-orange), #ffb366);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.placeholderIcon {
+  font-size: 2rem;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Size variants */
+.sm {
+  width: 60px;
+  height: 60px;
+}
+
+.md {
+  width: 80px;
+  height: 80px;
+}
+
+.lg {
+  width: 120px;
+  height: 120px;
+}
+
+.xl {
+  width: 160px;
+  height: 160px;
+}
+
+/* Style variants */
+.default .photoFrame {
+  border-width: 3px;
+}
+
+.hero .photoFrame {
+  border-width: 4px;
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 12px 40px rgba(255, 153, 0, 0.4),
+    0 0 0 1px rgba(255, 153, 0, 0.2);
+}
+
+.hero .photoGlow {
+  opacity: 0.3;
+}
+
+.hero:hover .photoFrame {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.2),
+    0 16px 48px rgba(255, 153, 0, 0.5),
+    0 0 0 1px rgba(255, 153, 0, 0.3);
+}
+
+.hero:hover .photoOverlay {
+  opacity: 1;
+}
+
+.hero:hover .photoGlow {
+  opacity: 0.5;
+}
+
+.card .photoFrame {
+  border-width: 2px;
+  box-shadow: 
+    0 4px 16px rgba(255, 153, 0, 0.2),
+    0 0 0 1px rgba(255, 153, 0, 0.1);
+}
+
+.card:hover .photoFrame {
+  transform: scale(1.02);
+  box-shadow: 
+    0 6px 20px rgba(255, 153, 0, 0.3),
+    0 0 0 1px rgba(255, 153, 0, 0.2);
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-20px) scale(1);
+  }
+}
+
+/* Dark theme adjustments */
+:root[data-theme='dark'] .photoFrame {
+  border-color: var(--brand-orange);
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.05),
+    0 8px 32px rgba(255, 153, 0, 0.4),
+    0 0 0 1px rgba(255, 153, 0, 0.2);
+}
+
+:root[data-theme='dark'] .hero .photoFrame {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.05),
+    0 12px 40px rgba(255, 153, 0, 0.5),
+    0 0 0 1px rgba(255, 153, 0, 0.3);
+}
+
+:root[data-theme='dark'] .hero:hover .photoFrame {
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 16px 48px rgba(255, 153, 0, 0.6),
+    0 0 0 1px rgba(255, 153, 0, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lg {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .xl {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .hero .photoFrame {
+    border-width: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lg {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .xl {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .hero .photoFrame {
+    border-width: 2px;
+  }
+  
+  .particle {
+    width: 3px;
+    height: 3px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .photoFrame {
+    border-width: 3px;
+    box-shadow: 
+      0 0 0 2px var(--text-default),
+      0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .hero .photoFrame {
+    border-width: 4px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .profilePhoto,
+  .photoImage,
+  .photoFrame,
+  .photoGlow,
+  .particle {
+    animation: none;
+    transition: none;
+  }
+  
+  .hero:hover .photoFrame {
+    transform: none;
+  }
+}

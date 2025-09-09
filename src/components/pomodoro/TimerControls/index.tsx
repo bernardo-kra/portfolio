@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Button } from '@components/common'
 import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import { toast } from 'react-toastify'
 import styles from './styles.module.css'
 

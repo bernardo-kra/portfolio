@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography, Card } from '@components/common'
 import { Clock, Target, Coffee, TrendingUp } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
 const TimerStats: React.FC = () => {

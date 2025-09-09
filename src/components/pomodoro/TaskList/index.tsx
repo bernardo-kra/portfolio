@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Input, Card, Tag } from '@components/common'
 import { Plus, Check, Trash2, Target, Play } from 'lucide-react'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
 interface Task {

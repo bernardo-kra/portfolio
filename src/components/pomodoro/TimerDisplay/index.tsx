@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@components/common'
-import { usePomodoro } from '@components/context/PomodoroContext'
+import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
 const TimerDisplay: React.FC = () => {

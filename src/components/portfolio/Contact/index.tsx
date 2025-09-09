@@ -1,7 +1,8 @@
 import React from 'react'
-import { Mail, Linkedin, Github, MessageCircle, Phone } from 'lucide-react'
+import { Mail, Linkedin, Github, MessageCircle } from 'lucide-react'
 import { Typography, Card, Section } from '@components/common'
 import { useI18n } from '@src/i18n'
+import { trackEvent } from '@hooks/useAnalytics'
 import styles from './styles.module.css'
 
 const Contact: React.FC = () => {
@@ -16,11 +17,11 @@ const Contact: React.FC = () => {
       icon: Mail
     },
     {
-      type: 'phone',
-      label: 'Telefone',
+      type: 'whatsapp',
+      label: t.whatsappLabel,
       value: '+55 (54) 9 96206-8111',
-      href: 'tel:+5549962068111',
-      icon: Phone
+      href: 'https://wa.me/5549962068111',
+      icon: MessageCircle
     },
     {
       type: 'github',
@@ -39,6 +40,8 @@ const Contact: React.FC = () => {
   ]
 
   const handleContactClick = (type: string, href: string) => {
+    trackEvent('contact_click', 'engagement', type)
+    
     if (type === 'email') {
       window.location.href = href
     } else {

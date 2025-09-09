@@ -7,7 +7,7 @@ import BackgroundTransparencyToggle from '@theme/BackgroundTransparencyToggle'
 import ScrollAnimation from '@theme/ScrollAnimation'
 import { useTheme } from '@theme/ThemeContext/useTheme'
 import { useBackgroundTransparency } from '@theme/BackgroundTransparencyContext'
-import { PomodoroProvider } from '@components/context/PomodoroContext'
+import { PomodoroProvider } from '@src/context/PomodoroContext'
 import {
   TimerDisplay,
   TimerControls,

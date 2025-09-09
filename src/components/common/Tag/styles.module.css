@@ -9,7 +9,6 @@
   border: 1px solid transparent;
 }
 
-/* Variants */
 .tag--default {
   background: var(--gray-100);
   color: var(--text-default);
@@ -71,7 +70,6 @@
   border-radius: 2.5rem;
 }
 
-/* Clickable */
 .tag--clickable {
   cursor: pointer;
   user-select: none;
@@ -86,7 +84,6 @@
   transform: translateY(0);
 }
 
-/* Content */
 .tag__icon {
   display: flex;
   align-items: center;
@@ -101,7 +98,6 @@
   height: 100%;
 }
 
-/* Preserve original colors for technology icons */
 .tag__icon .icon-react {
   color: #61dafb !important;
 }
@@ -179,7 +175,6 @@
   white-space: nowrap;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .tag--lg {
     padding: var(--spacing-xs) var(--spacing-sm);

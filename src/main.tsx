@@ -16,6 +16,7 @@ import { BackgroundTransparencyProvider } from '@theme/BackgroundTransparencyCon
 
 import TransitionThemeEffect from '@theme/TransitionThemeEffect'
 import { I18nProvider } from '@src/i18n'
+import Analytics from '@components/Analytics'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
         <TransitionThemeEffect />
         <I18nProvider>
           <BrowserRouter basename="/portfolio">
+            <Analytics />
             <Routes> 
               <Route path="/" element={<App />} />
               <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />

@@ -12,6 +12,7 @@ export default defineConfig({
       '@assets': resolve(__dirname, 'src/assets'),
       '@pages': resolve(__dirname, 'src/Pages'),
       '@theme': resolve(__dirname, 'src/components/theme'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
     },
   },
 });

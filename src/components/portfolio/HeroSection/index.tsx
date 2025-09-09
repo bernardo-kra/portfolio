@@ -1,7 +1,10 @@
 import React from 'react'
-import { Typography, Image } from '@components/common'
+import { Typography } from '@components/common'
+import AdvancedProfilePhoto from '../AdvancedProfilePhoto'
+import CodeBackground from '../CodeBackground'
 import styles from './styles.module.css'
 import Container from '@components/common/Container'
+import bernardoPhoto from '/bernardo-kra.jpg'
 
 interface HeroSectionProps {
   t: {
@@ -16,22 +19,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({ t }) => {
   return (
     <Container className={styles.heroContainer}>
       <section className={styles.heroSection}>
+        <CodeBackground className={styles.codeBackground} />
         <div className={styles.heroContent}>
-          <div className={styles.heroAvatarWrapper}>
-            <Image 
-              src="/my.png" 
-              alt="Avatar" 
-              variant="avatar"
-              size="xl"
-              className={styles.heroAvatarImg}
+          <div className={styles.heroLeft}>
+            <AdvancedProfilePhoto 
+              src={bernardoPhoto} 
+              alt="Bernardo Kraczkowski - Desenvolvedor Frontend" 
             />
           </div>
-          <Typography variant="h1" className={styles.heroTitle}>
-            {t.heroTitle || t.name}
-          </Typography>
-          <Typography variant="body1" color="muted" className={styles.heroSubtitle}>
-            {t.heroSubtitle || t.role}
-          </Typography>
+          <div className={styles.heroRight}>
+            <Typography variant="h1" className={styles.heroTitle}>
+              {t.heroTitle || t.name}
+            </Typography>
+            <Typography variant="body1" color="muted" className={styles.heroSubtitle}>
+              {t.heroSubtitle || t.role}
+            </Typography>
+          </div>
         </div>
       </section>
     </Container>
