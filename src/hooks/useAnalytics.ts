@@ -9,8 +9,6 @@ declare global {
 
 export const useAnalytics = () => {
   useEffect(() => {
-    // O script do Google Analytics já está carregado no HTML
-    // Apenas inicializa o gtag se ainda não estiver disponível
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || []
       function gtag(...args: any[]) {
@@ -33,7 +31,7 @@ export const trackEvent = (action: string, category: string, label?: string, val
 
 export const trackPageView = (pagePath: string, pageTitle: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-TTSRG7HEGS'
+    const GA_MEASUREMENT_ID = 'G-TTSRG7HEGS' // Hardcoded for GitHub Pages
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_path: pagePath,
       page_title: pageTitle,
