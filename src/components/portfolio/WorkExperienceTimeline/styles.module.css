@@ -1,8 +1,8 @@
 .timelineSection {
   background: var(--gray-100);
   border-radius: 16px;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  margin: var(--spacing-xl) 0;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-sm) 0;
   border: 1px solid var(--gray-200);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }

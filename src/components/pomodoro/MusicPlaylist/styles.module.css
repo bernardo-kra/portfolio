@@ -1,13 +1,13 @@
 .musicPlaylist {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: var(--spacing-lg);
-  border: 1px solid var(--gray-200);
-  margin-top: var(--spacing-lg);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  margin: 0;
   width: 100%;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
 :root[data-theme='dark'] .musicPlaylist {
@@ -156,7 +156,40 @@
 .tracksContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+
+.tracksContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tracksContainer::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 2px;
+}
+
+:root[data-theme='dark'] .tracksContainer::-webkit-scrollbar-track {
+  background: var(--gray-800);
+}
+
+.tracksContainer::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 2px;
+}
+
+:root[data-theme='dark'] .tracksContainer::-webkit-scrollbar-thumb {
+  background: var(--gray-600);
+}
+
+.tracksContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+:root[data-theme='dark'] .tracksContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
 }
 
 .emptyPlaylist {

@@ -8,4 +8,5 @@ export { default as MusicSettings } from './MusicSettings'
 export { default as TaskList } from './TaskList'
 export { default as TimerStats } from './TimerStats'
 export { default as CyclesHistory } from './CyclesHistory'
+export { default as ControlsPanel } from './ControlsPanel'
 

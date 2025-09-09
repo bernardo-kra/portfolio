@@ -1,12 +1,13 @@
 import React, { useRef, useEffect } from 'react'
 import styles from './styles.module.css'
-import { InfiniteGenerator } from './InfiniteGenerator'
+import { InfiniteGenerator, CosmicSettings } from './InfiniteGenerator'
 
 interface PatternCanvasProps {
   pauseGeneration?: boolean
+  settings?: CosmicSettings
 }
 
-const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false }) => {
+const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false, settings }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | undefined>(undefined)
   const generatorRef = useRef<InfiniteGenerator | undefined>(undefined)
@@ -30,12 +31,12 @@ const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false }
 
     generatorRef.current = new InfiniteGenerator(ctx, canvas.width, canvas.height)
 
-                const animate = (timestamp: number) => {
-              if (generatorRef.current) {
-                generatorRef.current.render(timestamp, pauseGeneration)
-              }
-              animationRef.current = requestAnimationFrame(animate)
-            }
+    const animate = (timestamp: number) => {
+      if (generatorRef.current) {
+        generatorRef.current.render(timestamp, pauseGeneration)
+      }
+      animationRef.current = requestAnimationFrame(animate)
+    }
 
     animationRef.current = requestAnimationFrame(animate)
 
@@ -46,6 +47,12 @@ const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false }
       }
     }
   }, [pauseGeneration])
+
+  useEffect(() => {
+    if (generatorRef.current && settings) {
+      generatorRef.current.updateSettings(settings)
+    }
+  }, [settings])
 
   return (
     <div className={styles.canvasContainer}>

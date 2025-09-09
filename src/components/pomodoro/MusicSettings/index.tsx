@@ -29,7 +29,7 @@ const MusicSettings: React.FC = () => {
 
   const handleReset = () => {
     const defaultSettings = {
-      isEnabled: false,
+      isEnabled: true,
       tracks: state.musicSettings.tracks,
       currentTrackId: state.musicSettings.currentTrackId,
       autoStopOnTimerEnd: true,

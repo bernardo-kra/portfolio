@@ -1,12 +1,27 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
 import PatternCanvas from '../../components/generative/PatternCanvas'
-import { BackButton } from '../../components/common'
+import CosmicControlPanel from '../../components/generative/CosmicControlPanel'
+import { HomeButton } from '../../components/common'
+import { useScrollToTop } from '@hooks/useScrollToTop'
+import type { CosmicSettings } from '../../components/generative/PatternCanvas/InfiniteGenerator'
 
 const GenerativeArt: React.FC = () => {
   const [showInfo, setShowInfo] = useState(false)
   const [hideUI, setHideUI] = useState(false)
   const [pauseGeneration, setPauseGeneration] = useState(true)
+  const [showControlPanel, setShowControlPanel] = useState(false)
+  const [cosmicSettings, setCosmicSettings] = useState<CosmicSettings>({
+    starDensity: 0.8,
+    nebulaDensity: 0.3,
+    dustDensity: 0.4,
+    asteroidDensity: 0.6,
+    cometDensity: 0.4,
+    timeSpeed: 1.0,
+    colorPalette: 'nebula'
+  })
+
+  useScrollToTop()
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -20,35 +35,43 @@ const GenerativeArt: React.FC = () => {
 
       {!hideUI && (
         <>
-          <BackButton to="/portfolio" />
+          <HomeButton />
 
-                             <button
-                     className={styles.infoButton}
-                     onClick={() => setShowInfo(!showInfo)}
-                     title="Explorar os mistérios do cosmos digital"
-                   >
-                     🔭 Observar
-                   </button>
+          <button
+            className={styles.infoButton}
+            onClick={() => setShowInfo(!showInfo)}
+            title="Explorar os mistérios do cosmos digital"
+          >
+            🔭 Observar
+          </button>
 
-                   <button
-                     className={styles.hideUIButton}
-                     onClick={() => setHideUI(true)}
-                     title="Modo observação profunda do espaço"
-                   >
-                     🌌 Deep Space
-                   </button>
+          <button
+            className={styles.hideUIButton}
+            onClick={() => setHideUI(true)}
+            title="Modo observação profunda do espaço"
+          >
+            🌌 Deep Space
+          </button>
 
-                   <button
-                     className={styles.pauseButton}
-                     onClick={() => setPauseGeneration(!pauseGeneration)}
-                     title={pauseGeneration ? "Ativar geração de formas cósmicas" : "Mostrar apenas eventos espaciais"}
-                   >
-                     {pauseGeneration ? '🌌 Formas' : '🌠 Espaço'}
-                   </button>
+          <button
+            className={styles.pauseButton}
+            onClick={() => setPauseGeneration(!pauseGeneration)}
+            title={pauseGeneration ? "Ativar geração de formas cósmicas" : "Mostrar apenas eventos espaciais"}
+          >
+            {pauseGeneration ? '🌌 Formas' : '🌠 Espaço'}
+          </button>
+
+          <button
+            className={styles.controlButton}
+            onClick={() => setShowControlPanel(!showControlPanel)}
+            title="Abrir painel de controle cósmico"
+          >
+            ⚙️ Controles
+          </button>
         </>
       )}
 
-            {hideUI && (
+      {hideUI && (
         <button
           className={styles.showUIButton}
           onClick={() => setHideUI(false)}
@@ -67,22 +90,29 @@ const GenerativeArt: React.FC = () => {
         </div>
       )}
 
-                     <div className={styles.canvasSection}>
-                 <PatternCanvas pauseGeneration={pauseGeneration} />
-               </div>
+      <div className={styles.canvasSection}>
+        <PatternCanvas pauseGeneration={pauseGeneration} settings={cosmicSettings} />
+      </div>
+
+      <CosmicControlPanel
+        settings={cosmicSettings}
+        onSettingsChange={setCosmicSettings}
+        isVisible={showControlPanel}
+        onToggle={() => setShowControlPanel(!showControlPanel)}
+      />
 
       {showInfo && (
         <div className={styles.infoModal} onClick={handleModalClick}>
           <div className={styles.modalContent}>
-            <button 
+            <button
               className={styles.closeButton}
               onClick={() => setShowInfo(false)}
             >
               ✕
             </button>
-            
+
             <h2 className={styles.modalTitle}>🔭 Observatório Cósmico Digital</h2>
-            
+
             <div className={styles.infoSection}>
               <h3 className={styles.sectionTitle}>🌌 Fenômenos Astronômicos</h3>
               <ul className={styles.eventList}>
@@ -95,15 +125,6 @@ const GenerativeArt: React.FC = () => {
               </ul>
             </div>
 
-            <div className={styles.infoSection}>
-              <h3 className={styles.sectionTitle}>⭐ Classificação Estelar</h3>
-              <ul className={styles.eventList}>
-                <li><strong>🔴 Anãs Vermelhas (70%)</strong> - estrelas frias de longa duração</li>
-                <li><strong>🟡 Estrelas Tipo Solar (20%)</strong> - como nosso Sol (Classe G)</li>
-                <li><strong>🔵 Gigantes Azuis (7%)</strong> - estrelas quentes e massivas</li>
-                <li><strong>⚫ Pulsares (3%)</strong> - estrelas de nêutrons com feixes de radiação</li>
-              </ul>
-            </div>
 
             <div className={styles.infoSection}>
               <h3 className={styles.sectionTitle}>🌊 Ondas Gravitacionais</h3>

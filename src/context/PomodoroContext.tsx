@@ -73,7 +73,7 @@ const initialState: PomodoroState = {
   focusDuration: 25 * 60,
   breakDuration: 5 * 60,
   musicSettings: {
-    isEnabled: false,
+    isEnabled: true,
     tracks: [
       {
         id: 'default',
@@ -84,12 +84,12 @@ const initialState: PomodoroState = {
       }
     ],
     currentTrackId: 'default',
-         autoStopOnTimerEnd: true,
-     autoPlayOnTimerStart: true,
-     syncManualControls: true,
-     changeMusicOnTimerEnd: false,
-     backgroundMode: false,
-     volume: 0.3,
+    autoStopOnTimerEnd: true,
+    autoPlayOnTimerStart: true,
+    syncManualControls: true,
+    changeMusicOnTimerEnd: false,
+    backgroundMode: false,
+    volume: 0.3,
     shuffleMode: false,
     repeatMode: 'none'
   }

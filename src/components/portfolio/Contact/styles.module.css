@@ -1,8 +1,8 @@
 .contactWrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-lg) 0;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-sm) 0;
 }
 
 .contactHeader {

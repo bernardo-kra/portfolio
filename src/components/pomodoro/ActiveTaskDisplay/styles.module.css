@@ -1,13 +1,10 @@
 .activeTaskContainer {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: var(--spacing-md);
-  border: 1px solid var(--gray-200);
-  margin-top: var(--spacing-lg);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  margin: 0;
   width: 100%;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
   transition: all 0.3s ease;
 }
 

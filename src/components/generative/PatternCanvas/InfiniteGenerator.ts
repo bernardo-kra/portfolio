@@ -1,8 +1,27 @@
+export interface CosmicSettings {
+  starDensity: number
+  nebulaDensity: number
+  dustDensity: number
+  asteroidDensity: number
+  cometDensity: number
+  timeSpeed: number
+  colorPalette: string
+}
+
 export class InfiniteGenerator {
   private ctx: CanvasRenderingContext2D
   private width: number
   private height: number
   private time: number = 0
+  private settings: CosmicSettings = {
+    starDensity: 0.8,
+    nebulaDensity: 0.3,
+    dustDensity: 0.4,
+    asteroidDensity: 0.6,
+    cometDensity: 0.4,
+    timeSpeed: 1.0,
+    colorPalette: 'nebula'
+  }
 
   private paletteTransitionTime: number = 0
   private cosmicDust: Array<{
@@ -55,7 +74,7 @@ export class InfiniteGenerator {
   private meteorShowerIntensity: number = 0
   private radiant: {x: number, y: number} = {x: 0, y: 0}
   private spaceEvents: Array<{
-    type: 'supernova' | 'solar_flare' | 'comet' | 'aurora' | 'satellite' | 'space_debris'
+    type: 'supernova' | 'solar_flare' | 'comet' | 'aurora' | 'satellite' | 'space_debris' | 'pulsar' | 'quasar' | 'gamma_ray_burst' | 'stellar_collision' | 'black_hole_formation' | 'neutron_star_merger' | 'stellar_wind' | 'magnetar_flare' | 'nova' | 'white_dwarf_ignition'
     x: number
     y: number
     life: number
@@ -64,6 +83,42 @@ export class InfiniteGenerator {
     size: number
     color: {r: number, g: number, b: number}
     data?: any
+  }> = []
+
+  private asteroids: Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    size: number
+    rotation: number
+    rotationSpeed: number
+    type: 'rocky' | 'metallic' | 'carbonaceous' | 'icy'
+    brightness: number
+    color: {r: number, g: number, b: number}
+    trail: Array<{x: number, y: number, opacity: number}>
+    life: number
+    maxLife: number
+  }> = []
+
+  private comets: Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    size: number
+    nucleusSize: number
+    tailLength: number
+    tailAngle: number
+    brightness: number
+    color: {r: number, g: number, b: number}
+    tail: Array<{x: number, y: number, opacity: number, size: number}>
+    life: number
+    maxLife: number
+    orbitCenter: {x: number, y: number}
+    orbitRadius: number
+    orbitAngle: number
+    orbitSpeed: number
   }> = []
 
   private stellarNurseries: Array<{
@@ -180,10 +235,45 @@ export class InfiniteGenerator {
     this.initializeAmbientParticles()
     this.initElements()
     this.initializeAdvancedAstronomicalElements()
+    this.initializeAsteroids()
+    this.initializeComets()
   }
 
+  updateSettings(newSettings: Partial<CosmicSettings>) {
+    this.settings = { ...this.settings, ...newSettings }
+    this.regenerateElements()
+  }
+
+  private regenerateElements() {
+    this.cosmicDust = []
+    this.nebulae = []
+    this.stars = []
+    this.constellations = []
+    this.asteroids = []
+    this.comets = []
+    this.initializeAmbientParticles()
+    this.initElements()
+    this.initializeAdvancedAstronomicalElements()
+    this.initializeAsteroids()
+    this.initializeComets()
+  }
+
+  private getColorPalette() {
+    const palettes = {
+      nebula: ['#ff6b9d', '#c44569', '#f8b500', '#4ecdc4'],
+      aurora: ['#00d4aa', '#00a8cc', '#ff6b6b', '#4ecdc4'],
+      supernova: ['#ff4757', '#ffa502', '#ff6348', '#ff7675'],
+      cosmic: ['#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'],
+      galaxy: ['#2d3436', '#636e72', '#74b9ff', '#0984e3'],
+      stellar: ['#ffffff', '#f1c40f', '#e74c3c', '#9b59b6']
+    }
+    return palettes[this.settings.colorPalette as keyof typeof palettes] || palettes.nebula
+  }
+
+
   private initializeAmbientParticles() {
-    for (let i = 0; i < 80; i++) {
+    const dustCount = Math.floor(80 * this.settings.dustDensity)
+    for (let i = 0; i < dustCount; i++) {
       this.cosmicDust.push({
         x: Math.random() * this.width,
         y: Math.random() * this.height,
@@ -195,7 +285,8 @@ export class InfiniteGenerator {
       })
     }
 
-    for (let i = 0; i < 3; i++) {
+    const nebulaCount = Math.floor(3 * this.settings.nebulaDensity)
+    for (let i = 0; i < nebulaCount; i++) {
       this.nebulae.push({
         x: Math.random() * this.width,
         y: Math.random() * this.height,
@@ -208,7 +299,8 @@ export class InfiniteGenerator {
       })
     }
 
-    for (let i = 0; i < 15; i++) {
+    const starCount = Math.floor(50 * this.settings.starDensity)
+    for (let i = 0; i < starCount; i++) {
       const starType = this.getRandomStarType()
       const temperature = this.getStarTemperature(starType)
       const color = this.temperatureToColor(temperature)
@@ -226,6 +318,76 @@ export class InfiniteGenerator {
         color: color,
         distance: distance,
         depth: distance * 100
+      })
+    }
+  }
+
+  private initializeAsteroids() {
+    const asteroidCount = Math.floor(20 * this.settings.asteroidDensity)
+    for (let i = 0; i < asteroidCount; i++) {
+      const types = ['rocky', 'metallic', 'carbonaceous', 'icy'] as const
+      const type = types[Math.floor(Math.random() * types.length)]
+      
+      let color = {r: 100, g: 100, b: 100}
+      switch (type) {
+        case 'rocky':
+          color = {r: 120, g: 100, b: 80}
+          break
+        case 'metallic':
+          color = {r: 150, g: 150, b: 160}
+          break
+        case 'carbonaceous':
+          color = {r: 80, g: 60, b: 40}
+          break
+        case 'icy':
+          color = {r: 200, g: 220, b: 240}
+          break
+      }
+      
+      this.asteroids.push({
+        x: Math.random() * this.width,
+        y: Math.random() * this.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: 2 + Math.random() * 6,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.1,
+        type: type,
+        brightness: 0.3 + Math.random() * 0.4,
+        color: color,
+        trail: [],
+        life: 0,
+        maxLife: 3000 + Math.random() * 2000
+      })
+    }
+  }
+
+  private initializeComets() {
+    const cometCount = Math.floor(3 * this.settings.cometDensity)
+    for (let i = 0; i < cometCount; i++) {
+      const orbitCenter = {
+        x: this.width * 0.5 + (Math.random() - 0.5) * this.width * 0.3,
+        y: this.height * 0.5 + (Math.random() - 0.5) * this.height * 0.3
+      }
+      
+      this.comets.push({
+        x: orbitCenter.x + (Math.random() - 0.5) * 200,
+        y: orbitCenter.y + (Math.random() - 0.5) * 200,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: 3 + Math.random() * 4,
+        nucleusSize: 1 + Math.random() * 2,
+        tailLength: 50 + Math.random() * 100,
+        tailAngle: Math.random() * Math.PI * 2,
+        brightness: 0.4 + Math.random() * 0.4,
+        color: {r: 200, g: 220, b: 255},
+        tail: [],
+        life: 0,
+        maxLife: 5000 + Math.random() * 3000,
+        orbitCenter: orbitCenter,
+        orbitRadius: 100 + Math.random() * 200,
+        orbitAngle: Math.random() * Math.PI * 2,
+        orbitSpeed: 0.01 + Math.random() * 0.02
       })
     }
   }
@@ -443,30 +605,15 @@ export class InfiniteGenerator {
   }
 
   private getRandomStarType(): 'dwarf' | 'giant' | 'supergiant' | 'neutron' {
-    const rand = Math.random()
-    if (rand < 0.4) return 'dwarf'
-    if (rand < 0.65) return 'giant'  
-    if (rand < 0.85) return 'supergiant'
-    return 'neutron'
+    return 'giant'
   }
 
   private getStarTemperature(type: string): number {
-    switch (type) {
-      case 'dwarf': return 3000 + Math.random() * 4000
-      case 'giant': return 3500 + Math.random() * 2500
-      case 'supergiant': return 3000 + Math.random() * 7000
-      case 'neutron': return 10000 + Math.random() * 20000
-      default: return 5778
-    }
+    return 5000 + Math.random() * 1000
   }
 
   private temperatureToColor(temp: number): {r: number, g: number, b: number} {
-    if (temp < 3700) return {r: 255, g: 180, b: 107}
-    if (temp < 5200) return {r: 255, g: 220, b: 180}
-    if (temp < 6000) return {r: 255, g: 255, b: 255}
-    if (temp < 7500) return {r: 202, g: 215, b: 255}
-    if (temp < 10000) return {r: 170, g: 191, b: 255}
-    return {r: 155, g: 176, b: 255}
+    return {r: 255, g: 255, b: 255}
   }
 
   private getStarSize(type: string, distance: number): number {
@@ -502,54 +649,15 @@ export class InfiniteGenerator {
   }
 
   private renderAmbientParticles() {
-    this.renderNebulae()
     this.renderStars()
-    this.renderCosmicDust()
   }
 
   private renderAdvancedAstronomicalElements() {
-    this.updateAndRenderStellarNurseries()
     this.renderConstellations()
-    this.updateAndRenderPlanetarySystems()
-    this.updateAndRenderDarkMatter()
-    this.renderBlackHoles()
-    this.updateAndRenderGalaxies()
-    this.renderQuasars()
-    this.renderMagnetars()
   }
 
   private renderNebulae() {
-    this.ctx.save()
-    this.ctx.globalCompositeOperation = 'screen'
-    
-    this.nebulae.forEach(nebula => {
-      nebula.x += nebula.vx
-      nebula.y += nebula.vy
-      nebula.pulsePhase += 0.01
-      
-      if (nebula.x < -nebula.size) nebula.x = this.width + nebula.size
-      if (nebula.x > this.width + nebula.size) nebula.x = -nebula.size
-      if (nebula.y < -nebula.size) nebula.y = this.height + nebula.size
-      if (nebula.y > this.height + nebula.size) nebula.y = -nebula.size
-      
-      const pulseFactor = 0.8 + Math.sin(nebula.pulsePhase) * 0.2
-      const currentOpacity = nebula.opacity * pulseFactor
-      
-      const gradient = this.ctx.createRadialGradient(
-        nebula.x, nebula.y, 0,
-        nebula.x, nebula.y, nebula.size
-      )
-      gradient.addColorStop(0, `hsla(${nebula.hue}, 70%, 60%, ${currentOpacity})`)
-      gradient.addColorStop(0.3, `hsla(${nebula.hue + 30}, 60%, 50%, ${currentOpacity * 0.7})`)
-      gradient.addColorStop(1, 'transparent')
-      
-      this.ctx.fillStyle = gradient
-      this.ctx.beginPath()
-      this.ctx.arc(nebula.x, nebula.y, nebula.size * pulseFactor, 0, Math.PI * 2)
-      this.ctx.fill()
-    })
-    
-    this.ctx.restore()
+    // Removido - não renderizar nebulosas
   }
 
   private renderStars() {
@@ -564,78 +672,26 @@ export class InfiniteGenerator {
       
       const intensity = Math.min(1, currentBrightness)
       
-      if (star.starType === 'neutron' && Math.random() < 0.02) {
-        this.renderPulsar(star, intensity)
-      } else {
-        this.renderRegularStar(star, intensity)
-      }
+      this.renderConstellationStar(star, intensity)
     })
     
     this.ctx.restore()
   }
 
-  private renderRegularStar(star: any, intensity: number) {
+  private renderConstellationStar(star: any, intensity: number) {
     const {r, g, b} = star.color
     const alpha = intensity * (0.4 + star.distance * 0.6)
     
-    if (star.starType === 'supergiant' && intensity > 0.8) {
-      const glowGradient = this.ctx.createRadialGradient(
-        star.x, star.y, 0,
-        star.x, star.y, star.size * 3
-      )
-      glowGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`)
-      glowGradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.3})`)
-      glowGradient.addColorStop(1, 'transparent')
-      
-      this.ctx.fillStyle = glowGradient
-      this.ctx.beginPath()
-      this.ctx.arc(star.x, star.y, star.size * 3, 0, Math.PI * 2)
-      this.ctx.fill()
-    }
-    
     this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
     this.ctx.beginPath()
-    this.ctx.arc(star.x, star.y, star.size * (0.8 + intensity * 0.2), 0, Math.PI * 2)
+    this.ctx.arc(star.x, star.y, 1.5, 0, Math.PI * 2)
     this.ctx.fill()
-    
-    if (intensity > 0.7 && star.distance < 0.3) {
-      this.ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.4})`
-      this.ctx.lineWidth = 0.3
-      this.ctx.beginPath()
-      const spikeLength = star.size * 2.5
-      this.ctx.moveTo(star.x - spikeLength, star.y)
-      this.ctx.lineTo(star.x + spikeLength, star.y)
-      this.ctx.moveTo(star.x, star.y - spikeLength)
-      this.ctx.lineTo(star.x, star.y + spikeLength)
-      this.ctx.stroke()
-    }
   }
 
-  private renderPulsar(star: any, intensity: number) {
-    const pulseIntensity = Math.sin(star.twinklePhase * 15) > 0.8 ? 1 : 0.1
-    const {r, g, b} = star.color
-    const alpha = intensity * pulseIntensity
-    
-    if (pulseIntensity > 0.5) {
-      const beamGradient = this.ctx.createRadialGradient(
-        star.x, star.y, 0,
-        star.x, star.y, star.size * 8
-      )
-      beamGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`)
-      beamGradient.addColorStop(0.3, `rgba(${r}, ${g}, ${b}, ${alpha * 0.5})`)
-      beamGradient.addColorStop(1, 'transparent')
-      
-      this.ctx.fillStyle = beamGradient
-      this.ctx.beginPath()
-      this.ctx.arc(star.x, star.y, star.size * 8, 0, Math.PI * 2)
-      this.ctx.fill()
-    }
-    
-    this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${Math.min(1, alpha * 2)})`
-    this.ctx.beginPath()
-    this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
-    this.ctx.fill()
+  private renderRegularStar(star: any, intensity: number) {
+    // Removido - não renderizar estrelas individuais
   }
+
 
   private handleMeteorEvents() {
     if (!this.meteorShowerActive) {
@@ -786,28 +842,7 @@ export class InfiniteGenerator {
   }
 
     private renderCosmicDust() {
-    this.ctx.save()
-    
-    this.cosmicDust.forEach(dust => {
-      dust.x += dust.vx
-      dust.y += dust.vy
-      dust.twinkle += 0.01
-
-      if (dust.x < 0) dust.x = this.width
-      if (dust.x > this.width) dust.x = 0
-      if (dust.y < 0) dust.y = this.height
-      if (dust.y > this.height) dust.y = 0
-
-      const twinkleFactor = 0.3 + Math.sin(dust.twinkle) * 0.3
-      const currentOpacity = dust.opacity * twinkleFactor
-
-      this.ctx.fillStyle = `rgba(180, 180, 220, ${currentOpacity})`
-      this.ctx.beginPath()
-      this.ctx.arc(dust.x, dust.y, dust.size, 0, Math.PI * 2)
-      this.ctx.fill()
-    })
-    
-    this.ctx.restore()
+    // Removido - não renderizar poeira cósmica
   }
 
   private updateMeteors() {
@@ -941,6 +976,36 @@ export class InfiniteGenerator {
     if (Math.random() < 0.0008) {
       this.createSpaceDebris()
     }
+    if (Math.random() < 0.0001) {
+      this.createPulsar()
+    }
+    if (Math.random() < 0.00005) {
+      this.createQuasar()
+    }
+    if (Math.random() < 0.00002) {
+      this.createGammaRayBurst()
+    }
+    if (Math.random() < 0.0001) {
+      this.createStellarCollision()
+    }
+    if (Math.random() < 0.00005) {
+      this.createBlackHoleFormation()
+    }
+    if (Math.random() < 0.00008) {
+      this.createNeutronStarMerger()
+    }
+    if (Math.random() < 0.0003) {
+      this.createStellarWind()
+    }
+    if (Math.random() < 0.0001) {
+      this.createMagnetarFlare()
+    }
+    if (Math.random() < 0.0002) {
+      this.createNova()
+    }
+    if (Math.random() < 0.0001) {
+      this.createWhiteDwarfIgnition()
+    }
   }
 
   private createSupernova() {
@@ -1057,6 +1122,228 @@ export class InfiniteGenerator {
         vy: 2 + Math.random() * 3,
         rotation: 0,
         rotationSpeed: (Math.random() - 0.5) * 0.3
+      }
+    })
+  }
+
+  private createPulsar() {
+    this.spaceEvents.push({
+      type: 'pulsar',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 600,
+      intensity: 0.8,
+      size: 3 + Math.random() * 2,
+      color: {r: 0, g: 255, b: 255},
+      data: {
+        pulsePhase: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.1 + Math.random() * 0.2,
+        beamAngle: Math.random() * Math.PI * 2,
+        beamLength: 50 + Math.random() * 100
+      }
+    })
+  }
+
+  private createQuasar() {
+    this.spaceEvents.push({
+      type: 'quasar',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 1200,
+      intensity: 1.0,
+      size: 8 + Math.random() * 4,
+      color: {r: 255, g: 100, b: 0},
+      data: {
+        jetAngle: Math.random() * Math.PI * 2,
+        jetLength: 100 + Math.random() * 200,
+        accretionDisk: {
+          innerRadius: 10,
+          outerRadius: 30 + Math.random() * 20,
+          rotation: 0
+        }
+      }
+    })
+  }
+
+  private createGammaRayBurst() {
+    this.spaceEvents.push({
+      type: 'gamma_ray_burst',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 300,
+      intensity: 1.0,
+      size: 2 + Math.random() * 2,
+      color: {r: 255, g: 255, b: 0},
+      data: {
+        beamAngle: Math.random() * Math.PI * 2,
+        beamWidth: 0.1 + Math.random() * 0.2,
+        beamLength: 200 + Math.random() * 300,
+        energy: 0.8 + Math.random() * 0.2
+      }
+    })
+  }
+
+  private createStellarCollision() {
+    this.spaceEvents.push({
+      type: 'stellar_collision',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 900,
+      intensity: 0.9,
+      size: 15 + Math.random() * 10,
+      color: {r: 255, g: 200, b: 0},
+      data: {
+        explosionRadius: 0,
+        shockwaveRadius: 0,
+        debris: Array.from({length: 20}, () => ({
+          angle: Math.random() * Math.PI * 2,
+          distance: Math.random() * 100,
+          speed: 1 + Math.random() * 3
+        }))
+      }
+    })
+  }
+
+  private createBlackHoleFormation() {
+    this.spaceEvents.push({
+      type: 'black_hole_formation',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 1800,
+      intensity: 0.7,
+      size: 5 + Math.random() * 3,
+      color: {r: 0, g: 0, b: 0},
+      data: {
+        eventHorizon: 0,
+        accretionDisk: {
+          innerRadius: 0,
+          outerRadius: 0,
+          rotation: 0
+        },
+        jets: {
+          angle1: Math.random() * Math.PI * 2,
+          angle2: Math.random() * Math.PI * 2,
+          length: 0
+        }
+      }
+    })
+  }
+
+  private createNeutronStarMerger() {
+    this.spaceEvents.push({
+      type: 'neutron_star_merger',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 600,
+      intensity: 0.95,
+      size: 8 + Math.random() * 4,
+      color: {r: 255, g: 100, b: 255},
+      data: {
+        mergerRadius: 0,
+        gravitationalWaves: Array.from({length: 10}, () => ({
+          angle: Math.random() * Math.PI * 2,
+          amplitude: Math.random() * 50,
+          frequency: 0.1 + Math.random() * 0.3
+        }))
+      }
+    })
+  }
+
+  private createStellarWind() {
+    this.spaceEvents.push({
+      type: 'stellar_wind',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 480,
+      intensity: 0.6,
+      size: 20 + Math.random() * 15,
+      color: {r: 100, g: 200, b: 255},
+      data: {
+        windDirection: Math.random() * Math.PI * 2,
+        windSpeed: 2 + Math.random() * 3,
+        particles: Array.from({length: 30}, () => ({
+          angle: Math.random() * Math.PI * 2,
+          distance: Math.random() * 50,
+          speed: 1 + Math.random() * 2
+        }))
+      }
+    })
+  }
+
+  private createMagnetarFlare() {
+    this.spaceEvents.push({
+      type: 'magnetar_flare',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 180,
+      intensity: 0.9,
+      size: 4 + Math.random() * 2,
+      color: {r: 255, g: 0, b: 255},
+      data: {
+        magneticField: {
+          strength: 0.5 + Math.random() * 0.5,
+          angle: Math.random() * Math.PI * 2
+        },
+        flareIntensity: 0,
+        particleStreams: Array.from({length: 8}, () => ({
+          angle: Math.random() * Math.PI * 2,
+          length: 0,
+          speed: 3 + Math.random() * 2
+        }))
+      }
+    })
+  }
+
+  private createNova() {
+    this.spaceEvents.push({
+      type: 'nova',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 360,
+      intensity: 0.8,
+      size: 6 + Math.random() * 3,
+      color: {r: 255, g: 150, b: 0},
+      data: {
+        explosionRadius: 0,
+        brightness: 0,
+        shell: {
+          innerRadius: 0,
+          outerRadius: 0
+        }
+      }
+    })
+  }
+
+  private createWhiteDwarfIgnition() {
+    this.spaceEvents.push({
+      type: 'white_dwarf_ignition',
+      x: Math.random() * this.width,
+      y: Math.random() * this.height,
+      life: 0,
+      maxLife: 720,
+      intensity: 0.7,
+      size: 3 + Math.random() * 2,
+      color: {r: 255, g: 255, b: 200},
+      data: {
+        ignitionRadius: 0,
+        temperature: 0,
+        fusion: {
+          intensity: 0,
+          particles: Array.from({length: 15}, () => ({
+            angle: Math.random() * Math.PI * 2,
+            distance: Math.random() * 30,
+            energy: Math.random()
+          }))
+        }
       }
     })
   }
@@ -1906,6 +2193,26 @@ export class InfiniteGenerator {
     for (const event of this.spaceEvents) {
       if (event.type === 'supernova') {
         this.renderSupernova(event)
+      } else if (event.type === 'pulsar') {
+        this.renderPulsar(event)
+      } else if (event.type === 'quasar') {
+        this.renderQuasar(event)
+      } else if (event.type === 'gamma_ray_burst') {
+        this.renderGammaRayBurst(event)
+      } else if (event.type === 'stellar_collision') {
+        this.renderStellarCollision(event)
+      } else if (event.type === 'black_hole_formation') {
+        this.renderBlackHoleFormation(event)
+      } else if (event.type === 'neutron_star_merger') {
+        this.renderNeutronStarMerger(event)
+      } else if (event.type === 'stellar_wind') {
+        this.renderStellarWind(event)
+      } else if (event.type === 'magnetar_flare') {
+        this.renderMagnetarFlare(event)
+      } else if (event.type === 'nova') {
+        this.renderNova(event)
+      } else if (event.type === 'white_dwarf_ignition') {
+        this.renderWhiteDwarfIgnition(event)
       }
     }
   }
@@ -2006,6 +2313,590 @@ export class InfiniteGenerator {
     this.ctx.restore()
   }
 
+  private renderPulsar(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.pulsePhase += event.data.pulseSpeed
+    const pulse = Math.sin(event.data.pulsePhase) * 0.5 + 0.5
+    
+    this.ctx.fillStyle = `rgba(0, 255, 255, ${intensity * pulse})`
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    const beamLength = event.data.beamLength * pulse
+    const beamWidth = 2 + pulse * 3
+    
+    this.ctx.strokeStyle = `rgba(0, 255, 255, ${intensity * 0.8})`
+    this.ctx.lineWidth = beamWidth
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, 0)
+    this.ctx.lineTo(
+      Math.cos(event.data.beamAngle) * beamLength,
+      Math.sin(event.data.beamAngle) * beamLength
+    )
+    this.ctx.stroke()
+    
+    this.ctx.restore()
+  }
+
+  private renderQuasar(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.accretionDisk.rotation += 0.02
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 100, 0, ${intensity})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 150, 50, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    const diskGradient = this.ctx.createRadialGradient(0, 0, event.data.accretionDisk.innerRadius, 0, 0, event.data.accretionDisk.outerRadius)
+    diskGradient.addColorStop(0, `rgba(255, 200, 100, ${intensity * 0.6})`)
+    diskGradient.addColorStop(0.5, `rgba(255, 150, 50, ${intensity * 0.4})`)
+    diskGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.save()
+    this.ctx.rotate(event.data.accretionDisk.rotation)
+    this.ctx.fillStyle = diskGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.accretionDisk.outerRadius, 0, Math.PI * 2)
+    this.ctx.fill()
+    this.ctx.restore()
+    
+    const jetLength = event.data.jetLength * (0.5 + progress * 0.5)
+    this.ctx.strokeStyle = `rgba(255, 100, 0, ${intensity * 0.8})`
+    this.ctx.lineWidth = 3
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, 0)
+    this.ctx.lineTo(
+      Math.cos(event.data.jetAngle) * jetLength,
+      Math.sin(event.data.jetAngle) * jetLength
+    )
+    this.ctx.stroke()
+    
+    this.ctx.restore()
+  }
+
+  private renderGammaRayBurst(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    const beamLength = event.data.beamLength * (0.5 + progress * 0.5)
+    const beamWidth = event.data.beamWidth * 100
+    
+    this.ctx.strokeStyle = `rgba(255, 255, 0, ${intensity})`
+    this.ctx.lineWidth = beamWidth
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, 0)
+    this.ctx.lineTo(
+      Math.cos(event.data.beamAngle) * beamLength,
+      Math.sin(event.data.beamAngle) * beamLength
+    )
+    this.ctx.stroke()
+    
+    this.ctx.fillStyle = `rgba(255, 255, 0, ${intensity * 0.6})`
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.restore()
+  }
+
+  private renderStellarCollision(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.explosionRadius += 2
+    event.data.shockwaveRadius += 1.5
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 200, 0, ${intensity})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 150, 0, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.strokeStyle = `rgba(255, 200, 0, ${intensity * 0.6})`
+    this.ctx.lineWidth = 3
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.explosionRadius, 0, Math.PI * 2)
+    this.ctx.stroke()
+    
+    this.ctx.strokeStyle = `rgba(255, 100, 0, ${intensity * 0.4})`
+    this.ctx.lineWidth = 2
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.shockwaveRadius, 0, Math.PI * 2)
+    this.ctx.stroke()
+    
+    event.data.debris.forEach((debris: any) => {
+      debris.distance += debris.speed
+      const x = Math.cos(debris.angle) * debris.distance
+      const y = Math.sin(debris.angle) * debris.distance
+      
+      this.ctx.fillStyle = `rgba(255, 150, 0, ${intensity * 0.8})`
+      this.ctx.beginPath()
+      this.ctx.arc(x, y, 1 + Math.random() * 2, 0, Math.PI * 2)
+      this.ctx.fill()
+    })
+    
+    this.ctx.restore()
+  }
+
+  private renderBlackHoleFormation(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.eventHorizon += 0.5
+    event.data.accretionDisk.innerRadius += 0.3
+    event.data.accretionDisk.outerRadius += 0.8
+    event.data.accretionDisk.rotation += 0.05
+    event.data.jets.length += 2
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(0, 0, 0, ${intensity})`)
+    coreGradient.addColorStop(0.8, `rgba(50, 0, 50, ${intensity * 0.6})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    const diskGradient = this.ctx.createRadialGradient(0, 0, event.data.accretionDisk.innerRadius, 0, 0, event.data.accretionDisk.outerRadius)
+    diskGradient.addColorStop(0, `rgba(255, 100, 255, ${intensity * 0.8})`)
+    diskGradient.addColorStop(0.5, `rgba(255, 50, 255, ${intensity * 0.6})`)
+    diskGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.save()
+    this.ctx.rotate(event.data.accretionDisk.rotation)
+    this.ctx.fillStyle = diskGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.accretionDisk.outerRadius, 0, Math.PI * 2)
+    this.ctx.fill()
+    this.ctx.restore()
+    
+    this.ctx.strokeStyle = `rgba(255, 100, 255, ${intensity * 0.8})`
+    this.ctx.lineWidth = 2
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, 0)
+    this.ctx.lineTo(
+      Math.cos(event.data.jets.angle1) * event.data.jets.length,
+      Math.sin(event.data.jets.angle1) * event.data.jets.length
+    )
+    this.ctx.moveTo(0, 0)
+    this.ctx.lineTo(
+      Math.cos(event.data.jets.angle2) * event.data.jets.length,
+      Math.sin(event.data.jets.angle2) * event.data.jets.length
+    )
+    this.ctx.stroke()
+    
+    this.ctx.restore()
+  }
+
+  private renderNeutronStarMerger(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.mergerRadius += 1.2
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 100, 255, ${intensity})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 50, 255, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.strokeStyle = `rgba(255, 100, 255, ${intensity * 0.6})`
+    this.ctx.lineWidth = 2
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.mergerRadius, 0, Math.PI * 2)
+    this.ctx.stroke()
+    
+    event.data.gravitationalWaves.forEach((wave: any) => {
+      wave.angle += 0.1
+      const x = Math.cos(wave.angle) * wave.amplitude
+      const y = Math.sin(wave.angle) * wave.amplitude
+      
+      this.ctx.strokeStyle = `rgba(255, 100, 255, ${intensity * 0.4})`
+      this.ctx.lineWidth = 1
+      this.ctx.beginPath()
+      this.ctx.arc(x, y, 5 + Math.sin(wave.frequency * this.time) * 3, 0, Math.PI * 2)
+      this.ctx.stroke()
+    })
+    
+    this.ctx.restore()
+  }
+
+  private renderStellarWind(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(100, 200, 255, ${intensity})`)
+    coreGradient.addColorStop(0.5, `rgba(150, 200, 255, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    event.data.particles.forEach((particle: any) => {
+      particle.distance += particle.speed
+      const x = Math.cos(particle.angle) * particle.distance
+      const y = Math.sin(particle.angle) * particle.distance
+      
+      this.ctx.fillStyle = `rgba(100, 200, 255, ${intensity * 0.6})`
+      this.ctx.beginPath()
+      this.ctx.arc(x, y, 1 + Math.random(), 0, Math.PI * 2)
+      this.ctx.fill()
+    })
+    
+    this.ctx.restore()
+  }
+
+  private renderMagnetarFlare(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.flareIntensity += 0.1
+    event.data.particleStreams.forEach((stream: any) => {
+      stream.length += stream.speed
+    })
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 0, 255, ${intensity})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 50, 255, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    event.data.particleStreams.forEach((stream: any) => {
+      this.ctx.strokeStyle = `rgba(255, 0, 255, ${intensity * 0.8})`
+      this.ctx.lineWidth = 2
+      this.ctx.beginPath()
+      this.ctx.moveTo(0, 0)
+      this.ctx.lineTo(
+        Math.cos(stream.angle) * stream.length,
+        Math.sin(stream.angle) * stream.length
+      )
+      this.ctx.stroke()
+    })
+    
+    this.ctx.restore()
+  }
+
+  private renderNova(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.explosionRadius += 1.5
+    event.data.brightness += 0.02
+    event.data.shell.innerRadius += 0.8
+    event.data.shell.outerRadius += 1.2
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 150, 0, ${intensity * event.data.brightness})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 100, 0, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.strokeStyle = `rgba(255, 150, 0, ${intensity * 0.6})`
+    this.ctx.lineWidth = 2
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.explosionRadius, 0, Math.PI * 2)
+    this.ctx.stroke()
+    
+    const shellGradient = this.ctx.createRadialGradient(0, 0, event.data.shell.innerRadius, 0, 0, event.data.shell.outerRadius)
+    shellGradient.addColorStop(0, `rgba(255, 200, 100, ${intensity * 0.4})`)
+    shellGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = shellGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.shell.outerRadius, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.restore()
+  }
+
+  private renderWhiteDwarfIgnition(event: any) {
+    this.ctx.save()
+    this.ctx.translate(event.x, event.y)
+    this.ctx.globalCompositeOperation = 'screen'
+    
+    const progress = event.life / event.maxLife
+    const intensity = event.intensity * (1 - progress)
+    
+    event.data.ignitionRadius += 0.8
+    event.data.temperature += 0.01
+    event.data.fusion.intensity += 0.005
+    
+    const coreGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, event.size)
+    coreGradient.addColorStop(0, `rgba(255, 255, 200, ${intensity * event.data.temperature})`)
+    coreGradient.addColorStop(0.5, `rgba(255, 255, 150, ${intensity * 0.8})`)
+    coreGradient.addColorStop(1, 'transparent')
+    
+    this.ctx.fillStyle = coreGradient
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.size, 0, Math.PI * 2)
+    this.ctx.fill()
+    
+    this.ctx.strokeStyle = `rgba(255, 255, 200, ${intensity * 0.6})`
+    this.ctx.lineWidth = 2
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, event.data.ignitionRadius, 0, Math.PI * 2)
+    this.ctx.stroke()
+    
+    event.data.fusion.particles.forEach((particle: any) => {
+      particle.distance += particle.energy * 0.5
+      const x = Math.cos(particle.angle) * particle.distance
+      const y = Math.sin(particle.angle) * particle.distance
+      
+      this.ctx.fillStyle = `rgba(255, 255, 200, ${intensity * particle.energy * event.data.fusion.intensity})`
+      this.ctx.beginPath()
+      this.ctx.arc(x, y, 1 + particle.energy, 0, Math.PI * 2)
+      this.ctx.fill()
+    })
+    
+    this.ctx.restore()
+  }
+
+  private updateAsteroids() {
+    for (let i = this.asteroids.length - 1; i >= 0; i--) {
+      const asteroid = this.asteroids[i]
+      asteroid.life++
+      
+      if (asteroid.life >= asteroid.maxLife) {
+        this.asteroids.splice(i, 1)
+        continue
+      }
+      
+      asteroid.x += asteroid.vx
+      asteroid.y += asteroid.vy
+      asteroid.rotation += asteroid.rotationSpeed
+      
+      if (asteroid.x < -50 || asteroid.x > this.width + 50 || 
+          asteroid.y < -50 || asteroid.y > this.height + 50) {
+        asteroid.x = Math.random() * this.width
+        asteroid.y = Math.random() * this.height
+        asteroid.vx = (Math.random() - 0.5) * 0.5
+        asteroid.vy = (Math.random() - 0.5) * 0.5
+      }
+      
+      asteroid.trail.push({
+        x: asteroid.x,
+        y: asteroid.y,
+        opacity: 1
+      })
+      
+      if (asteroid.trail.length > 10) {
+        asteroid.trail.shift()
+      }
+      
+      asteroid.trail.forEach(point => {
+        point.opacity *= 0.9
+      })
+    }
+  }
+
+  private updateComets() {
+    for (let i = this.comets.length - 1; i >= 0; i--) {
+      const comet = this.comets[i]
+      comet.life++
+      
+      if (comet.life >= comet.maxLife) {
+        this.comets.splice(i, 1)
+        continue
+      }
+      
+      comet.orbitAngle += comet.orbitSpeed
+      
+      const orbitX = comet.orbitCenter.x + Math.cos(comet.orbitAngle) * comet.orbitRadius
+      const orbitY = comet.orbitCenter.y + Math.sin(comet.orbitAngle) * comet.orbitRadius
+      
+      comet.x += (orbitX - comet.x) * 0.02
+      comet.y += (orbitY - comet.y) * 0.02
+      
+      comet.vx = (orbitX - comet.x) * 0.1
+      comet.vy = (orbitY - comet.y) * 0.1
+      
+      comet.tailAngle = Math.atan2(comet.vy, comet.vx) + Math.PI
+      
+      comet.tail.push({
+        x: comet.x,
+        y: comet.y,
+        opacity: 1,
+        size: comet.nucleusSize * (0.5 + Math.random() * 0.5)
+      })
+      
+      if (comet.tail.length > 20) {
+        comet.tail.shift()
+      }
+      
+      comet.tail.forEach((point, index) => {
+        point.opacity *= 0.95
+        point.size *= 0.98
+      })
+    }
+  }
+
+  private renderAsteroids() {
+    this.asteroids.forEach(asteroid => {
+      this.ctx.save()
+      this.ctx.translate(asteroid.x, asteroid.y)
+      this.ctx.rotate(asteroid.rotation)
+      
+      const {r, g, b} = asteroid.color
+      const alpha = asteroid.brightness * (1 - asteroid.life / asteroid.maxLife)
+      
+      this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
+      this.ctx.strokeStyle = `rgba(${r * 0.7}, ${g * 0.7}, ${b * 0.7}, ${alpha * 0.8})`
+      this.ctx.lineWidth = 1
+      
+      this.ctx.beginPath()
+      this.ctx.moveTo(-asteroid.size, -asteroid.size * 0.5)
+      this.ctx.lineTo(asteroid.size * 0.5, -asteroid.size)
+      this.ctx.lineTo(asteroid.size, asteroid.size * 0.3)
+      this.ctx.lineTo(asteroid.size * 0.3, asteroid.size)
+      this.ctx.lineTo(-asteroid.size * 0.5, asteroid.size * 0.7)
+      this.ctx.lineTo(-asteroid.size, asteroid.size * 0.2)
+      this.ctx.closePath()
+      this.ctx.fill()
+      this.ctx.stroke()
+      
+      this.ctx.restore()
+      
+      if (asteroid.trail.length > 1) {
+        this.ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.3})`
+        this.ctx.lineWidth = 1
+        this.ctx.beginPath()
+        
+        for (let i = 0; i < asteroid.trail.length - 1; i++) {
+          const point = asteroid.trail[i]
+          const nextPoint = asteroid.trail[i + 1]
+          
+          if (point.opacity > 0.1) {
+            this.ctx.globalAlpha = point.opacity * alpha * 0.3
+            this.ctx.moveTo(point.x, point.y)
+            this.ctx.lineTo(nextPoint.x, nextPoint.y)
+          }
+        }
+        
+        this.ctx.stroke()
+        this.ctx.globalAlpha = 1
+      }
+    })
+  }
+
+  private renderComets() {
+    this.comets.forEach(comet => {
+      this.ctx.save()
+      this.ctx.translate(comet.x, comet.y)
+      
+      const {r, g, b} = comet.color
+      const alpha = comet.brightness * (1 - comet.life / comet.maxLife)
+      
+      const nucleusGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, comet.nucleusSize)
+      nucleusGradient.addColorStop(0, `rgba(255, 255, 255, ${alpha})`)
+      nucleusGradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`)
+      nucleusGradient.addColorStop(1, `rgba(${r * 0.5}, ${g * 0.5}, ${b * 0.5}, ${alpha * 0.4})`)
+      
+      this.ctx.fillStyle = nucleusGradient
+      this.ctx.beginPath()
+      this.ctx.arc(0, 0, comet.nucleusSize, 0, Math.PI * 2)
+      this.ctx.fill()
+      
+      if (comet.tail.length > 1) {
+        this.ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.6})`
+        this.ctx.lineWidth = 2
+        this.ctx.beginPath()
+        
+        for (let i = 0; i < comet.tail.length - 1; i++) {
+          const point = comet.tail[i]
+          const nextPoint = comet.tail[i + 1]
+          
+          if (point.opacity > 0.1) {
+            this.ctx.globalAlpha = point.opacity * alpha * 0.6
+            this.ctx.lineWidth = point.size
+            this.ctx.moveTo(point.x - comet.x, point.y - comet.y)
+            this.ctx.lineTo(nextPoint.x - comet.x, nextPoint.y - comet.y)
+          }
+        }
+        
+        this.ctx.stroke()
+        this.ctx.globalAlpha = 1
+      }
+      
+      const comaGradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, comet.size)
+      comaGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.3})`)
+      comaGradient.addColorStop(0.5, `rgba(${r * 0.7}, ${g * 0.7}, ${b * 0.7}, ${alpha * 0.2})`)
+      comaGradient.addColorStop(1, 'transparent')
+      
+      this.ctx.fillStyle = comaGradient
+      this.ctx.beginPath()
+      this.ctx.arc(0, 0, comet.size, 0, Math.PI * 2)
+      this.ctx.fill()
+      
+      this.ctx.restore()
+    })
+  }
+
   private generateDNA(): string {
     const bases = ['A', 'T', 'G', 'C', '∞', '◊', '※', '⚡']
     return Array.from({length: 12}, () => bases[Math.floor(Math.random() * bases.length)]).join('')
@@ -2045,7 +2936,7 @@ export class InfiniteGenerator {
   }
 
   render(timestamp: number, pauseGeneration: boolean = false) {
-    this.time = timestamp * 0.001
+    this.time += (timestamp * 0.001 - this.time) * this.settings.timeSpeed
 
     if (this.blackHoleCooldown > 0) {
       this.blackHoleCooldown -= 1
@@ -2057,21 +2948,13 @@ export class InfiniteGenerator {
     this.renderAmbientParticles()
     this.renderAdvancedAstronomicalElements()
 
-    this.updateMeteors()
-    this.renderMeteors()
-
-    if (!pauseGeneration) {
-      this.updateElements()
-      this.checkCollisions()
-      this.renderElements()
-
-      if (Math.random() < 0.01 && this.elements.length < 15) {
-        this.addRandomElement()
-      }
-    }
-
     this.handleMeteorEvents()
     this.handleSpaceEvents()
+    
+    this.updateAsteroids()
+    this.updateComets()
+    this.renderAsteroids()
+    this.renderComets()
     
     this.updateSpaceEvents()
     this.renderSpaceEvents()

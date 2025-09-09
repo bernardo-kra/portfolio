@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Typography, Section, Container } from '@components/common'
 import reactLogo from '@assets/react.svg'
@@ -6,7 +5,6 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
   const navigate = useNavigate()
 
   return (
@@ -33,7 +31,7 @@ function App() {
         <Container className="mainContent">
           <Section spacing="lg" className="navigationSection">
             <Typography variant="h2" align="center" className="navigationTitle">
-              Navegue pelo Portfolio
+              Bem-vindo ao meu Portfolio
             </Typography>
             <Typography variant="body1" color="muted" align="center" className="navigationSubtitle">
               Explore as diferentes seções do meu trabalho

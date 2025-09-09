@@ -70,7 +70,7 @@ const TimerSettings: React.FC = () => {
   return (
     <>
       <Button
-        variant="ghost"
+        variant="outline"
         size="sm"
         onClick={() => setIsOpen(true)}
         className={styles.settingsButton}

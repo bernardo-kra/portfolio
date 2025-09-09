@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Typography, Container, Section, BackButton } from '@components/common'
+import { Typography, Container, Section, HomeButton } from '@components/common'
+import { useScrollToTop } from '@hooks/useScrollToTop'
 import StarfieldBackground from '@theme/StarfieldBackground'
 import DayBackground from '@theme/DayBackground'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
@@ -11,10 +12,7 @@ import { PomodoroProvider } from '@src/context/PomodoroContext'
 import {
   TimerDisplay,
   TimerControls,
-  TimerSettings,
-  ActiveTaskDisplay,
-  LofiPlayer,
-  MusicPlaylist,
+  ControlsPanel,
   TaskList,
   TimerStats,
   CyclesHistory
@@ -32,6 +30,8 @@ const PomodoroContent: React.FC = () => {
   const { theme } = useTheme()
   const { isTransparent, toggleTransparency } = useBackgroundTransparency()
   const [isMobile, setIsMobile] = useState(false)
+  
+  useScrollToTop()
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
@@ -50,7 +50,7 @@ const PomodoroContent: React.FC = () => {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
-      <BackButton to="/portfolio" />
+      <HomeButton />
       
       {theme === 'dark' ? (
         isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
@@ -61,7 +61,7 @@ const PomodoroContent: React.FC = () => {
       <div style={{ 
         position: 'fixed', 
         top: 10, 
-        left: window.innerWidth > 768 ? 120 : 60, 
+        left: window.innerWidth > 768 ? 200 : 80, 
         zIndex: 10, 
         display: 'flex', 
         gap: '8px' 
@@ -82,7 +82,7 @@ const PomodoroContent: React.FC = () => {
       <Container style={{ background: 'transparent', position: 'relative', zIndex: 2 }}>
         <div className={styles.pomodoroPage}>
           <ScrollAnimation animation="fade-in" delay={200}>
-            <Section spacing="xl" className={styles.pomodoroHeader}>
+            <Section spacing="lg" className={styles.pomodoroHeader}>
               <Typography variant="h1" align="center" className={styles.pageTitle}>
                 Pomodoro Timer
               </Typography>
@@ -92,26 +92,53 @@ const PomodoroContent: React.FC = () => {
             </Section>
           </ScrollAnimation>
 
-          <ScrollAnimation animation="scale" delay={400}>
-            <Section spacing="xl" className={styles.pomodoroMain}>
-              <div className={styles.timerSection}>
-                <TimerDisplay />
-                <TimerControls />
-                <LofiPlayer />
-                <MusicPlaylist />
-                <ActiveTaskDisplay />
-                <TimerSettings />
+          <div className={styles.pomodoroGrid}>
+            <ScrollAnimation animation="fade-in" delay={400}>
+              <div className={styles.timerColumn}>
+                <div className={styles.timerCard}>
+                  <div className={styles.cardHeader}>
+                    <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                      ⏱️ Timer Pomodoro
+                    </Typography>
+                  </div>
+                  <TimerDisplay />
+                  <TimerControls />
+                </div>
               </div>
-            </Section>
-          </ScrollAnimation>
+            </ScrollAnimation>
 
-          <ScrollAnimation animation="slide-right" delay={600}>
-            <Section spacing="xl" className={styles.pomodoroHistory}>
-              <TaskList />
-              <TimerStats />
-              <CyclesHistory />
-            </Section>
-          </ScrollAnimation>
+            <div className={styles.controlsCard}>
+              <div className={styles.cardHeader}>
+                <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                  ⚙️ Controles
+                </Typography>
+              </div>
+              <ControlsPanel />
+            </div>
+
+            <ScrollAnimation animation="slide-left" delay={500}>
+              <div className={styles.tasksColumn}>
+                <div className={styles.cardHeader}>
+                  <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                    📋 Tarefas
+                  </Typography>
+                </div>
+                <TaskList />
+              </div>
+            </ScrollAnimation>
+
+            <ScrollAnimation animation="slide-right" delay={600}>
+              <div className={styles.statsColumn}>
+                <div className={styles.cardHeader}>
+                  <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                    📊 Estatísticas
+                  </Typography>
+                </div>
+                <TimerStats />
+                <CyclesHistory />
+              </div>
+            </ScrollAnimation>
+          </div>
         </div>
       </Container>
       

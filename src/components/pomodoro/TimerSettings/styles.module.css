@@ -1,13 +1,10 @@
 .timerSettings {
-  position: relative;
-  margin-top: var(--spacing-lg);
+  width: 100%;
 }
 
 .settingsButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
+  width: 100%;
+  justify-content: center;
 }
 
 .modalOverlay {

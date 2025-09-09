@@ -6,14 +6,14 @@
 
 .heroSection {
   position: relative;
-  min-height: 60vh;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   background: none;
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-lg) 0;
 }
 
 .heroBg {

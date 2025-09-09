@@ -24,13 +24,13 @@ createRoot(document.getElementById('root')!).render(
       <BackgroundTransparencyProvider>
         <TransitionThemeEffect />
         <I18nProvider>
-          <BrowserRouter basename="/portfolio">
+          <BrowserRouter>
             <Analytics />
             <Routes> 
               <Route path="/" element={<App />} />
+              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />
               <Route path="/pomodoro" element={<Pomodoro />} />
-              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/generative" element={<GenerativeArt />} />
             </Routes>
           </BrowserRouter>
