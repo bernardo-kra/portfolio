@@ -9,24 +9,15 @@ declare global {
 
 export const useAnalytics = () => {
   useEffect(() => {
-    const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-TTSRG7HEGS'
-    
-    const script = document.createElement('script')
-    script.async = true
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
-    document.head.appendChild(script)
-
-    window.dataLayer = window.dataLayer || []
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args)
+    // O script do Google Analytics já está carregado no HTML
+    // Apenas inicializa o gtag se ainda não estiver disponível
+    if (typeof window !== 'undefined' && !window.gtag) {
+      window.dataLayer = window.dataLayer || []
+      function gtag(...args: any[]) {
+        window.dataLayer.push(args)
+      }
+      window.gtag = gtag
     }
-    window.gtag = gtag
-
-    gtag('js', new Date())
-    gtag('config', GA_MEASUREMENT_ID, {
-      page_title: document.title,
-      page_location: window.location.href,
-    })
   }, [])
 }
 
