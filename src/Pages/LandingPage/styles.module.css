@@ -1,0 +1,368 @@
+.landing__wrapper {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.landing__scrollIndicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform-origin: left;
+  z-index: 1000;
+  transition: transform 0.1s ease-out;
+}
+
+.landing__main {
+  position: relative;
+  z-index: 1;
+}
+
+.landing__hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing__hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.landing__heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.landing__heroTitle {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing__heroSubtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: #666666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.landing__ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.landing__benefits {
+  padding: 5rem 1rem;
+  background: #ffffff;
+}
+
+.landing__benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.landing__benefitCard {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.landing__benefitCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.landing__benefitIcon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.landing__benefitTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+.landing__benefitDescription {
+  color: #666666;
+  line-height: 1.6;
+}
+
+.landing__socialProof {
+  padding: 5rem 1rem;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.landing__testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.landing__testimonial {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.landing__testimonialText {
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  color: #333333;
+  line-height: 1.6;
+}
+
+.landing__testimonialAuthor {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.landing__faq {
+  padding: 5rem 1rem;
+  background: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.landing__faqItem {
+  margin-bottom: 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.landing__faqQuestion {
+  width: 100%;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: none;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.landing__faqQuestion:hover {
+  background: #f8f9fa;
+}
+
+.landing__faqAnswer {
+  padding: 0 1.5rem 1.5rem;
+  color: #666666;
+  line-height: 1.6;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.landing__faqAnswer.active {
+  max-height: 200px;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.landing__faqIcon {
+  transition: transform 0.3s ease;
+}
+
+.landing__faqIcon.active {
+  transform: rotate(180deg);
+}
+
+.landing__contact {
+  padding: 5rem 1rem;
+  background: #f8f9fa;
+}
+
+.landing__contactForm {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.landing__formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.landing__formLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.landing__formInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #ffffff;
+  color: #333333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing__formInput:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.landing__formTextarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.landing__formCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.landing__formCheckbox input {
+  margin-top: 0.25rem;
+}
+
+.landing__formCheckbox label {
+  font-size: 0.9rem;
+  color: #666666;
+  line-height: 1.4;
+}
+
+.landing__formButton {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing__formButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.landing__formButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.landing__formMessage {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.landing__formMessage.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.landing__formMessage.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+@media (max-width: 768px) {
+  .landing__hero {
+    padding: 1rem;
+  }
+  
+  .landing__ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .landing__benefitsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .landing__testimonials {
+    grid-template-columns: 1fr;
+  }
+  
+  .landing__contactForm {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing__heroTitle {
+    font-size: 2rem;
+  }
+  
+  .landing__heroSubtitle {
+    font-size: 1rem;
+  }
+  
+  .landing__benefitCard,
+  .landing__testimonial {
+    padding: 1.5rem;
+  }
+}

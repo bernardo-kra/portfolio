@@ -67,6 +67,16 @@ function App() {
                   Crie padrões únicos com algoritmos procedurais e matemática
                 </Typography>
               </div>
+
+              <div className="navCard quaternary" onClick={() => navigate('/landing')}>
+                <div className="navCardIcon">🚀</div>
+                <Typography variant="h3" className="navCardTitle">
+                  Landing Page
+                </Typography>
+                <Typography variant="body2" color="muted" className="navCardDescription">
+                  Página de alta conversão com design moderno e otimizado
+                </Typography>
+              </div>
             </Container>
           </Section>
         </Container>
