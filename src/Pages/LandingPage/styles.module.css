@@ -2,6 +2,14 @@
   min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.landing__wrapper * {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .landing__scrollIndicator {
