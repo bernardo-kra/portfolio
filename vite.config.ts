@@ -4,7 +4,16 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/portfolio/',
+  base: '/',
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      },
+    },
+  },
   resolve: {
     alias: {
       '@src': resolve(__dirname, 'src'),

@@ -1,5 +1,5 @@
-/*    /portfolio/index.html   200
+/*    /index.html   200
 
-# Cache headers for assets
-/portfolio/assets/*.js    /portfolio/assets/:splat    200    Cache-Control: public, max-age=31536000, immutable
-/portfolio/assets/*.css   /portfolio/assets/:splat    200    Cache-Control: public, max-age=31536000, immutable
+# Force correct MIME types and cache headers for assets
+/assets/*.js    /assets/:splat    200    Content-Type: application/javascript; charset=utf-8    Cache-Control: public, max-age=31536000, immutable
+/assets/*.css   /assets/:splat    200    Content-Type: text/css; charset=utf-8    Cache-Control: public, max-age=31536000, immutable
