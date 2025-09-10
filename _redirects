@@ -1,1 +1,5 @@
 /*    /index.html   200
+
+# Cache headers for assets
+/assets/*.js    /assets/:splat    200    Cache-Control: public, max-age=31536000, immutable
+/assets/*.css   /assets/:splat    200    Cache-Control: public, max-age=31536000, immutable
