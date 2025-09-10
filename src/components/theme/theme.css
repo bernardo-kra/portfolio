@@ -176,8 +176,9 @@
   --star-color-4: #eaf3fa;
   --cloud-color: #fff;
   --cloud-shadow: #b3d4ef;
-  --day-gradient-1: #b3d4ef;
-  --day-gradient-2: #eaf3fa;
+  --day-gradient-1: #4A90E2;
+  --day-gradient-2: #87CEEB;
+  --day-gradient-3: #E0F6FF;
 
   --card-glass-bg: rgba(255,255,255,0.75);
   --glass-border: 1.5px solid rgba(30,144,255,0.13);

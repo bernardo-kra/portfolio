@@ -326,7 +326,13 @@ export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) 
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('pomodoro-state', JSON.stringify(state))
+    const stateToSave = {
+      ...state,
+      musicSettings: {
+        ...state.musicSettings
+      }
+    }
+    localStorage.setItem('pomodoro-state', JSON.stringify(stateToSave))
   }, [state])
 
   const startTimer = () => dispatch({ type: 'START' })

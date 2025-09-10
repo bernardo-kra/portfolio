@@ -61,8 +61,8 @@ const PomodoroContent: React.FC = () => {
       <div style={{ 
         position: 'fixed', 
         top: 10, 
-        left: window.innerWidth > 768 ? 200 : 80, 
-        zIndex: 10, 
+        left: isMobile ? 80 : 200, 
+        zIndex: 20, 
         display: 'flex', 
         gap: '8px' 
       }}>
@@ -77,7 +77,7 @@ const PomodoroContent: React.FC = () => {
 
       </div>
       
-      <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 10 }} />
+      <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 20 }} />
       
       <Container style={{ background: 'transparent', position: 'relative', zIndex: 2 }}>
         <div className={styles.pomodoroPage}>

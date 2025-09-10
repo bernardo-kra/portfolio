@@ -1,3 +1,4 @@
+/* Background Transparency Toggle Styles */
 :root[data-background-transparent="true"] [class*="_timerDisplay_"],
 :root[data-background-transparent="true"] [class*="_lofiPlayer_"],
 :root[data-background-transparent="true"] [class*="_musicPlaylist_"],
@@ -15,6 +16,35 @@
 :root[data-background-transparent="true"] [class*="_settingsGrid_"],
 :root[data-background-transparent="true"] [class*="_settingItem_"],
 :root[data-background-transparent="true"] [class*="_settingsActions_"],
-:root[data-background-transparent="true"] [class*="_compactPlayer_"] {
-  background: transparent;
+:root[data-background-transparent="true"] [class*="_compactPlayer_"],
+:root[data-background-transparent="true"] [class*="_timerCard_"],
+:root[data-background-transparent="true"] [class*="_controlsCard_"],
+:root[data-background-transparent="true"] [class*="_controlsPanel_"],
+:root[data-background-transparent="true"] [class*="_card_"],
+:root[data-background-transparent="true"] [class*="_cardHeader_"],
+:root[data-background-transparent="true"] [class*="_emptyTasks_"],
+:root[data-background-transparent="true"] [class*="_emptyState_"],
+:root[data-background-transparent="true"] [class*="_tabs_"],
+:root[data-background-transparent="true"] [class*="_tab_"],
+:root[data-background-transparent="true"] [class*="_tabContent_"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+:root[data-background-transparent="true"] [class*="_cardTitle_"] {
+  color: var(--text-default) !important;
+}
+
+:root[data-background-transparent="true"] [class*="_cardHeader_"] {
+  border-bottom: none !important;
+}
+
+/* Debug styles to verify toggle is working */
+:root[data-background-transparent="true"] {
+  --debug-transparency: 1;
+}
+
+:root[data-background-transparent="false"] {
+  --debug-transparency: 0;
 }
