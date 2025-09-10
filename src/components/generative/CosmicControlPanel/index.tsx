@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
-
-interface CosmicSettings {
-  starDensity: number
-  nebulaDensity: number
-  dustDensity: number
-  asteroidDensity: number
-  cometDensity: number
-  timeSpeed: number
-  colorPalette: string
-}
+import { CosmicSettings } from '../PatternCanvas/InfiniteGenerator'
 
 interface CosmicControlPanelProps {
   settings: CosmicSettings

@@ -4,7 +4,7 @@ import PatternCanvas from '../../components/generative/PatternCanvas'
 import CosmicControlPanel from '../../components/generative/CosmicControlPanel'
 import { HomeButton } from '../../components/common'
 import { useScrollToTop } from '@hooks/useScrollToTop'
-import type { CosmicSettings } from '../../components/generative/PatternCanvas/InfiniteGenerator'
+import type { CosmicSettings } from '../../components/generative/PatternCanvas/types'
 
 const GenerativeArt: React.FC = () => {
   const [showInfo, setShowInfo] = useState(false)
