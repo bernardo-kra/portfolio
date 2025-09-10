@@ -24,7 +24,7 @@ createRoot(document.getElementById('root')!).render(
       <BackgroundTransparencyProvider>
         <TransitionThemeEffect />
         <I18nProvider>
-          <BrowserRouter>
+          <BrowserRouter basename="/portfolio">
             <Analytics />
             <Routes> 
               <Route path="/" element={<App />} />
