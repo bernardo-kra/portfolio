@@ -2,9 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
 
+const isProduction = process.env.NODE_ENV === 'production' || process.env.GITHUB_ACTIONS;
+
 export default defineConfig({
   plugins: [react()],
-  base: '/portfolio/',
+  base: isProduction ? '/portfolio/' : '/',
   build: {
     rollupOptions: {
       output: {
@@ -22,6 +24,7 @@ export default defineConfig({
       '@pages': resolve(__dirname, 'src/Pages'),
       '@theme': resolve(__dirname, 'src/components/theme'),
       '@hooks': resolve(__dirname, 'src/hooks'),
+      '@context': resolve(__dirname, 'src/context'),
     },
   },
 });

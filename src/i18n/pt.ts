@@ -1,7 +1,7 @@
 const pt = {
   name: 'Bernardo Kraczkowski',
   role: 'Desenvolvedor Frontend | React | TypeScript | Soluções Digitais',
-  heroTitle: 'Desenvolvedor Frontend especializado em React e TypeScript.',
+  heroTitle: 'Desenvolvedor Frontend especializado em React.',
   heroSubtitle: 'Desenvolvimento de interfaces modernas e soluções digitais eficientes.',
   heroCTA: 'Ver Projetos',
   aboutTitle: 'Sobre Mim',
@@ -52,7 +52,7 @@ const pt = {
   themeToggle: 'Alternar tema',
   langToggle: 'EN',
   footer: '© {year} Bernardo Kraczkowski',
-  footerTagline: 'Desenvolvedor Frontend especializado em React e TypeScript',
+  footerTagline: 'Desenvolvedor Frontend especializado em React',
   footerQuickLinks: 'Links Rápidos',
   footerConnect: 'Conecte-se',
   footerBuiltWith: 'Desenvolvido com React + TypeScript + Vite + CSS Modules',

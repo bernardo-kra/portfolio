@@ -12,6 +12,11 @@
 *.backup
 # local env files
 .env
+.env.local
+.env.development
+.env.production
+config.env
+backend/config.env
 
 # logs
 npm-debug.log*

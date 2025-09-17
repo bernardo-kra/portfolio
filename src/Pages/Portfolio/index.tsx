@@ -4,12 +4,14 @@ import styles from './styles.module.css'
 import AboutMe from '@components/portfolio/AboutMe'
 import Contact from '@components/portfolio/Contact'
 import { useI18n } from '@src/i18n'
-import HeroSection from '@components/portfolio/HeroSection'
+import InteractiveHeroSection from '@components/portfolio/InteractiveHeroSection'
 import PortfolioNav from '@components/portfolio/PortfolioNav'
 import type { Lang } from '@src/i18n'
 import WorkExperienceTimeline from '@components/portfolio/WorkExperienceTimeline'
 import Education from '@components/portfolio/Education'
 import Footer from '@components/portfolio/Footer'
+import QuickNavigation from '@components/portfolio/QuickNavigation'
+import FloatingCTA from '@components/portfolio/FloatingCTA'
 import { useScrollToTop } from '@hooks/useScrollToTop'
 
 const Portfolio: React.FC = () => {
@@ -40,7 +42,7 @@ const Portfolio: React.FC = () => {
       <HomeButton />
       <PortfolioNav t={t} lang={lang} setLang={handleSetLang} />
       <section className={`${styles.portfolio__section} ${styles['portfolio__section--hero']}`}>
-        <HeroSection t={t} />
+        <InteractiveHeroSection t={t} />
       </section>
       <main className={styles.portfolio__main}>
         <section className={`${styles.portfolio__section} ${styles['portfolio__section--about']}`}>
@@ -65,6 +67,8 @@ const Portfolio: React.FC = () => {
         </section>
       </main>
       <Footer />
+      <QuickNavigation />
+      <FloatingCTA />
     </div>
   )
 }

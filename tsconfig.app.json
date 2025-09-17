@@ -13,7 +13,8 @@
       "@assets/*": ["assets/*"],
       "@pages/*": ["Pages/*"],
       "@theme/*": ["components/theme/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@context": ["./context"]
     },
 
     /* Bundler mode */
