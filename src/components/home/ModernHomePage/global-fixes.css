@@ -1,0 +1,72 @@
+/* Global fixes for layout issues */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Fix for double scrollbars */
+.app {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ensure proper centering */
+.homePage {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Fix container centering */
+.heroContainer,
+.projectsContainer,
+.statsContainer,
+.ctaContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Responsive container adjustments */
+@media (max-width: 768px) {
+  .heroContainer,
+  .projectsContainer,
+  .statsContainer,
+  .ctaContainer {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContainer,
+  .projectsContainer,
+  .statsContainer,
+  .ctaContainer {
+    padding: 0 var(--spacing-xs);
+  }
+}
+
+
+
+

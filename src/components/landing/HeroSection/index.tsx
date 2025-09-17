@@ -105,7 +105,7 @@ const result = await buildYourDream(
   { quality: 'premium', speed: 'fast' }
 )
 
-console.log('Sucesso! 🚀')`}
+Sucesso! 🚀`}
               </pre>
             </div>
           </div>

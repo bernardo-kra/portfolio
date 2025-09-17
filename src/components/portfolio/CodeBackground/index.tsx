@@ -27,7 +27,7 @@ const CodeBackground: React.FC<CodeBackgroundProps> = ({ className = '' }) => {
       'const developer = {',
       '  name: "Bernardo",',
       '  skills: ["React", "TypeScript"],',
-      '  experience: "4+ years",',
+      '  experience: "5+ years",',
       '  passion: "Frontend"',
       '};',
       '',

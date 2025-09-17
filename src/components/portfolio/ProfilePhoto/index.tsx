@@ -19,17 +19,12 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
 
-  console.log('ProfilePhoto - src:', src)
-  console.log('ProfilePhoto - isLoaded:', isLoaded)
-  console.log('ProfilePhoto - hasError:', hasError)
 
   const handleLoad = () => {
-    console.log('Image loaded successfully')
     setIsLoaded(true)
   }
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    console.error('Image failed to load:', e)
     setHasError(true)
   }
 

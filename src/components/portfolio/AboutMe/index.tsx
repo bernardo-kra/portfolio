@@ -10,7 +10,7 @@ const AboutMe: React.FC = () => {
   const metrics = [
     {
       icon: Calendar,
-      value: '4+',
+      value: '5+',
       label: t.aboutMeMetrics.experience,
       description: t.aboutMeMetrics.experienceDesc
     },

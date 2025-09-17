@@ -34,7 +34,6 @@ const ContactForm: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // Aqui você integraria com seu serviço de e-mail (Mailchimp, Sendinblue, etc.)
-      console.log('Dados do formulário:', formData)
       
       setSubmitStatus('success')
       setFormData({

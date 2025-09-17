@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
+import { useAuth } from '@src/hooks/useAuth'
+import { useAppConfig } from '@context'
+import { SimpleAuthModal } from '@components/auth/SimpleAuthModal'
+import { FloatingChatButton } from '@components/chat'
+import { NotificationCenter } from '@components/notifications'
 import type { Lang } from '@src/i18n'
 
 interface PortfolioNavProps {
@@ -17,9 +23,14 @@ const navItems = [
 ]
 
 const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
+  const navigate = useNavigate()
   const [active, setActive] = useState('sobre')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
+  const { user, login, logout, isAuthenticated } = useAuth()
+  const { isFeatureEnabled, config } = useAppConfig()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,11 +44,14 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
       }
       setActive(found)
 
-      // Calculate scroll progress
       const scrollTop = window.pageYOffset
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       const progress = (scrollTop / docHeight) * 100
       setScrollProgress(progress)
+
+      if (scrollTop > 100) {
+        setShowUserDropdown(false)
+      }
     }
     
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -45,6 +59,23 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
     
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (!target.closest(`.${styles.userDropdown}`) && !target.closest(`.${styles.userInfo}`)) {
+        setShowUserDropdown(false)
+      }
+    }
+
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserDropdown])
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
@@ -80,14 +111,101 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
           </ul>
           
           <div className={styles.portfolioNavActions}>
-            <button
-              className={styles.langToggle}
-              onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-              aria-label={t.langToggle}
-            >
-              {lang === 'pt' ? 'EN' : 'PT'}
-            </button>
-            <ThemeToggleButton />
+            {!isAuthenticated && isFeatureEnabled('authentication') && config.ui.showAuthButton && (
+              <button
+                className={styles.loginBtn}
+                onClick={() => setIsAuthModalOpen(true)}
+              >
+                Login
+              </button>
+            )}
+            {isAuthenticated && (
+              <div className={styles.userInfo}>
+                <button 
+                  className={styles.userButton}
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                >
+                  <span className={styles.userName}>Olá, {user?.firstName}</span>
+                  <span className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}>▼</span>
+                </button>
+                
+                {showUserDropdown && (
+                  <div className={styles.userDropdown}>
+                    <div className={styles.dropdownHeader}>
+                      <div className={styles.dropdownUserInfo}>
+                        <div className={styles.dropdownDetails}>
+                          <span className={styles.dropdownName}>
+                            {user?.firstName} {user?.lastName}
+                          </span>
+                          <span className={styles.dropdownEmail}>
+                            {user?.email}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.dropdownDivider}></div>
+                    
+                    <div className={styles.dropdownMenu}>
+                      <button 
+                        className={styles.dropdownItem}
+                        onClick={() => {
+                          setShowUserDropdown(false)
+                        }}
+                      >
+                        <span className={styles.dropdownIcon}>👤</span>
+                        Meu Perfil
+                      </button>
+                      
+                 <button
+                   className={styles.dropdownItem}
+                   onClick={() => {
+                     setShowUserDropdown(false)
+                   }}
+                 >
+                   <span className={styles.dropdownIcon}>⚙️</span>
+                   Configurações
+                 </button>
+
+                 {user?.role === 'admin' && (
+                   <button
+                     className={styles.dropdownItem}
+                     onClick={() => {
+                       setShowUserDropdown(false)
+                       navigate('/admin/chat')
+                     }}
+                   >
+                     <span className={styles.dropdownIcon}>💬</span>
+                     Admin Chat
+                   </button>
+                 )}
+                      
+                      <div className={styles.dropdownDivider}></div>
+                      
+                      <button 
+                        className={styles.dropdownItem}
+                        onClick={() => {
+                          logout()
+                          setShowUserDropdown(false)
+                        }}
+                      >
+                        <span className={styles.dropdownIcon}>🚪</span>
+                        Sair
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+                        {isAuthenticated && <NotificationCenter />}
+                        <button
+                          className={styles.langToggle}
+                          onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+                          aria-label={t.langToggle}
+                        >
+                          {lang === 'pt' ? 'EN' : 'PT'}
+                        </button>
+                        <ThemeToggleButton />
           </div>
         </div>
         
@@ -132,6 +250,17 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
           </div>
         </div>
       )}
+
+      <SimpleAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={(userData) => {
+          login(userData);
+          setIsAuthModalOpen(false);
+        }}
+      />
+
+      <FloatingChatButton />
     </>
   )
 }
