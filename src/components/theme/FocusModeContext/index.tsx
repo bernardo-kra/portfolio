@@ -19,18 +19,15 @@ export const FocusModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, [])
 
   useEffect(() => {
-    console.log('FocusMode - Estado alterado para:', isFocusMode)
     localStorage.setItem(STORAGE_KEY, String(isFocusMode))
     document.documentElement.setAttribute('data-focus-mode', String(isFocusMode))
   }, [isFocusMode])
 
   const toggleFocusMode = () => {
-    console.log('FocusMode - toggleFocusMode chamado, estado atual:', isFocusMode)
     setIsFocusMode(!isFocusMode)
   }
   
   const setFocusMode = (value: boolean) => {
-    console.log('FocusMode - setFocusMode chamado com:', value)
     setIsFocusMode(value)
   }
 
