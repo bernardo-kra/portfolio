@@ -1,0 +1,145 @@
+.floatingButton {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--brand-orange);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  max-width: 200px;
+}
+
+.floatingButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  background: #e67e22;
+}
+
+.chatIcon {
+  font-size: 20px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.chatText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.chatModal {
+  background: var(--card-background);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.chatHeader {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-secondary);
+}
+
+.chatHeader h3 {
+  margin: 0;
+  color: var(--text-default);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.closeButton {
+  background: var(--bg-default);
+  border: 1px solid var(--border-default);
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.closeButton:hover {
+  background: var(--brand-orange);
+  color: white;
+  border-color: var(--brand-orange);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .floatingButton {
+    bottom: 16px;
+    right: 16px;
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+  }
+  
+  .chatText {
+    display: none;
+  }
+  
+  .chatModal {
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+}
+

@@ -1,0 +1,207 @@
+.container {
+  min-height: 100vh;
+  background: var(--bg-default);
+  padding: var(--spacing-lg);
+}
+
+.header {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--card-background) 0%, var(--bg-secondary) 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--brand-orange);
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.headerText {
+  text-align: center;
+  flex: 1;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.backButton {
+  background: var(--brand-orange);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.backButton:hover {
+  background: #e67e22;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.header h1 {
+  color: var(--text-default);
+  font-size: var(--font-size-xxl);
+  margin: 0 0 var(--spacing-sm) 0;
+  font-weight: 700;
+}
+
+.header p {
+  color: var(--text-muted);
+  font-size: var(--font-size-md);
+  margin: 0;
+}
+
+.adminPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.statCard {
+  background: var(--card-background);
+  padding: var(--spacing-lg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-default);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-color: var(--brand-orange);
+}
+
+.statCard h3 {
+  color: var(--text-default);
+  font-size: var(--font-size-md);
+  margin: 0 0 var(--spacing-sm) 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.statCard p {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--spacing-xs) 0;
+  line-height: 1.4;
+}
+
+.role {
+  display: inline-block;
+  background: var(--brand-orange);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin-top: var(--spacing-xs);
+}
+
+.chatContainer {
+  background: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--brand-orange);
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.loginRequired,
+.accessDenied,
+.serviceUnavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  background: var(--card-background);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-default);
+}
+
+.loginRequired h2,
+.accessDenied h2,
+.serviceUnavailable h2 {
+  color: var(--text-default);
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--spacing-md) 0;
+  font-weight: 600;
+}
+
+.loginRequired p,
+.accessDenied p,
+.serviceUnavailable p {
+  color: var(--text-muted);
+  font-size: var(--font-size-md);
+  margin: 0 0 var(--spacing-sm) 0;
+  line-height: 1.5;
+}
+
+.accessDenied strong {
+  color: var(--brand-orange);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .header {
+    padding: var(--spacing-md);
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .headerText {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .chatContainer {
+    min-height: 500px;
+  }
+  
+  .backButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
