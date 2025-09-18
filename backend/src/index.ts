@@ -19,6 +19,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(suspiciousActivityDetector);
 app.use(securityLoggerMiddleware);
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Rate limiting geral para todas as APIs
 app.use('/api', generalRateLimit);
 app.use('/api', routes);

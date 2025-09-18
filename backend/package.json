@@ -10,7 +10,8 @@
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
-    "set-admin": "node set-admin.js"
+    "set-admin": "node set-admin.js",
+    "setup-admin": "node setup-admin.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
