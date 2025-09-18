@@ -17,6 +17,10 @@
     "setup-admin": "node setup-admin.js"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
     "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -24,16 +28,12 @@
     "express": "^4.21.1",
     "express-rate-limit": "^8.1.0",
     "firebase-admin": "^12.7.0",
-    "helmet": "^8.0.0"
+    "helmet": "^8.0.0",
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.2",
     "eslint": "^9.21.0",
     "prettier": "^3.2.5",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "tsx": "^4.19.2"
   }
 }
