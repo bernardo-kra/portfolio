@@ -2,11 +2,18 @@ import React from 'react'
 import { Mail, Linkedin, Github, MessageCircle } from 'lucide-react'
 import { Typography, Card, Section } from '@components/common'
 import { useI18n } from '@src/i18n'
+import { useAppConfig } from '@context/AppConfigContext'
 import { trackEvent } from '@hooks/useAnalytics'
+import ContactDisabled from '../ContactDisabled'
 import styles from './styles.module.css'
 
 const Contact: React.FC = () => {
   const { t } = useI18n()
+  const { config } = useAppConfig()
+
+  if (!config.ui.showContactMethods) {
+    return <ContactDisabled />
+  }
 
   const contactMethods = [
     {

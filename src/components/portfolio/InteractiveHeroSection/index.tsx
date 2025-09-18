@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Button } from '@components/common';
 import AdvancedProfilePhoto from '../AdvancedProfilePhoto';
 import CodeBackground from '../CodeBackground';
+import { useAppConfig } from '@context/AppConfigContext';
 import styles from './styles.module.css';
 import Container from '@components/common/Container';
 import bernardoPhoto from '/bernardo-kra.jpg';
@@ -21,6 +22,7 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
   const [currentRole, setCurrentRole] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollText, setShowScrollText] = useState(true);
+  const { config } = useAppConfig();
   
   const roles = [
     'Desenvolvedor Frontend',
@@ -128,20 +130,22 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
               </Button>
             </div>
             
-            <div className={styles.socialLinks}>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <span className={styles.socialIcon}>📱</span>
-                GitHub
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <span className={styles.socialIcon}>💼</span>
-                LinkedIn
-              </a>
-              <a href="mailto:contato@email.com" className={styles.socialLink}>
-                <span className={styles.socialIcon}>✉️</span>
-                Email
-              </a>
-            </div>
+            {config.ui.showContactMethods && (
+              <div className={styles.socialLinks}>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                  <span className={styles.socialIcon}>📱</span>
+                  GitHub
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+                  <span className={styles.socialIcon}>💼</span>
+                  LinkedIn
+                </a>
+                <a href="mailto:contato@email.com" className={styles.socialLink}>
+                  <span className={styles.socialIcon}>✉️</span>
+                  Email
+                </a>
+              </div>
+            )}
           </div>
         </div>
         

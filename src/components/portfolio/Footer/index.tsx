@@ -1,10 +1,12 @@
 import React from 'react'
 import { Typography, Section } from '@components/common'
 import { useI18n } from '@src/i18n'
+import { useAppConfig } from '@context/AppConfigContext'
 import styles from './styles.module.css'
 
 const Footer: React.FC = () => {
   const { t } = useI18n()
+  const { config } = useAppConfig()
   const currentYear = new Date().getFullYear()
 
   return (
@@ -33,22 +35,24 @@ const Footer: React.FC = () => {
               </ul>
             </div>
 
-            <div className={styles.footerSection}>
-              <Typography variant="h4" size="sm" className={styles.footerTitle}>
-                {t.footerConnect}
-              </Typography>
-              <ul className={styles.footerList}>
-                <li>
-                  <a href="https://github.com/bernardo-kra" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>GitHub</a>
-                </li>
-                <li>
-                  <a href="https://www.linkedin.com/in/bernardo-chimoka-853709170/" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
-                </li>
-                <li>
-                  <a href="mailto:bernardo_kra@hotmail.com" className={styles.footerLink}>Email</a>
-                </li>
-              </ul>
-            </div>
+            {config.ui.showContactMethods && (
+              <div className={styles.footerSection}>
+                <Typography variant="h4" size="sm" className={styles.footerTitle}>
+                  {t.footerConnect}
+                </Typography>
+                <ul className={styles.footerList}>
+                  <li>
+                    <a href="https://github.com/bernardo-kra" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>GitHub</a>
+                  </li>
+                  <li>
+                    <a href="https://www.linkedin.com/in/bernardo-chimoka-853709170/" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
+                  </li>
+                  <li>
+                    <a href="mailto:bernardo_kra@hotmail.com" className={styles.footerLink}>Email</a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 

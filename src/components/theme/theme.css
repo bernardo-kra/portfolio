@@ -138,6 +138,11 @@
 
   --brand-orange: #FF9900;
   --brand-orange-light: #FFD699;
+
+  /* Background variables */
+  --bg-default: var(--gray-900);
+  --bg-secondary: var(--gray-800);
+  --white: var(--gray-100);
 }
 
 :root[data-theme='light'] {
@@ -183,6 +188,11 @@
   --card-glass-bg: rgba(255,255,255,0.75);
   --glass-border: 1.5px solid rgba(30,144,255,0.13);
   --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
+
+  /* Background variables for light theme */
+  --bg-default: var(--gray-100);
+  --bg-secondary: var(--gray-200);
+  --white: #ffffff;
 }
 
 :root[data-theme='dark'] {
@@ -231,6 +241,11 @@
   --card-glass-bg: rgba(255,255,255,0.75);
   --glass-border: 1.5px solid rgba(30,144,255,0.13);
   --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
+
+  /* Background variables for dark theme */
+  --bg-default: var(--gray-900);
+  --bg-secondary: var(--gray-800);
+  --white: var(--gray-100);
 }
 
 /* 🎚️ Scrollbar customizado para o tema */

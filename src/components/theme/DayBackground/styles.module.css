@@ -8,4 +8,25 @@
   background: linear-gradient(135deg, #4A90E2 0%, #87CEEB 50%, #E0F6FF 100%);
   opacity: 1;
   pointer-events: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: auto;
+}
+
+.dayBackgroundCanvas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 10%,
+    transparent 90%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
 }

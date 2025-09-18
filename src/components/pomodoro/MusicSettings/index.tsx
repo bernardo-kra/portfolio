@@ -13,7 +13,11 @@ const MusicSettings: React.FC = () => {
     if (savedSettings) {
       try {
         const parsedSettings = JSON.parse(savedSettings)
-        setLocalSettings(prev => ({ ...prev, ...parsedSettings }))
+        setLocalSettings(prev => ({ 
+          ...prev, 
+          ...parsedSettings,
+          isEnabled: parsedSettings.isEnabled !== undefined ? parsedSettings.isEnabled : true
+        }))
       } catch (error) {
         console.error('Error loading music settings:', error)
       }

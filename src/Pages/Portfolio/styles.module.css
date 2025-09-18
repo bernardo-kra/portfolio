@@ -55,15 +55,48 @@
 }
 
 .portfolio__section--about {
-  background: var(--gray-50);
+  background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.portfolio__section--about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__section--projects {
-  background: var(--white);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-default) 100%);
+  position: relative;
+}
+
+.portfolio__section--projects::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__section--contact {
-  background: var(--gray-50);
+  background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.portfolio__section--contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__container {
@@ -85,15 +118,48 @@
 }
 
 .portfolio__section--about {
-  background: var(--gray-50);
+  background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.portfolio__section--about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__section--projects {
-  background: var(--white);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-default) 100%);
+  position: relative;
+}
+
+.portfolio__section--projects::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__section--contact {
-  background: var(--gray-50);
+  background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.portfolio__section--contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 50%, transparent 100%);
 }
 
 .portfolio__title {

@@ -34,7 +34,13 @@ const DayBackground: React.FC = React.memo(() => {
   }, [])
 
   const animate = useCallback((ctx: CanvasRenderingContext2D, width: number, height: number, clouds: Array<{x: number, y: number, speed: number, size: number, opacity: number}>) => {
-    ctx.clearRect(0, 0, width, height)
+    // Enable smooth rendering
+    ctx.imageSmoothingEnabled = true
+    ctx.imageSmoothingQuality = 'high'
+    
+    // Clear with smooth background
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
+    ctx.fillRect(0, 0, width, height)
     
     const grad = ctx.createLinearGradient(0, 0, 0, height)
     const grad1 = getComputedStyle(document.documentElement).getPropertyValue('--day-gradient-1').trim() || '#87CEEB'
@@ -67,9 +73,12 @@ const DayBackground: React.FC = React.memo(() => {
     ctx.restore()
 
     for (const cloud of clouds) {
-      drawCloud(ctx, cloud.x, cloud.y, cloud.size, cloud.opacity)
+      // Only render clouds that are visible or close to viewport
+      if (cloud.x > -cloud.size && cloud.x < width + cloud.size && cloud.y > -cloud.size && cloud.y < height + cloud.size) {
+        drawCloud(ctx, cloud.x, cloud.y, cloud.size, cloud.opacity)
+      }
       cloud.x += cloud.speed
-      if (cloud.x - cloud.size > width) cloud.x = -cloud.size
+      if (cloud.x - cloud.size > width + 50) cloud.x = -cloud.size - 50
     }
 
     ctx.save()
@@ -81,12 +90,15 @@ const DayBackground: React.FC = React.memo(() => {
       const birdX = (width * 0.1) + (i * width * 0.3) + (Date.now() * 0.0001) % (width * 0.3)
       const birdY = height * 0.3 + Math.sin(Date.now() * 0.001 + i) * 20
       
-      ctx.beginPath()
-      ctx.moveTo(birdX, birdY)
-      ctx.lineTo(birdX + 10, birdY - 5)
-      ctx.moveTo(birdX, birdY)
-      ctx.lineTo(birdX + 10, birdY + 5)
-      ctx.stroke()
+      // Only render birds that are visible
+      if (birdX >= 0 && birdX <= width && birdY >= 0 && birdY <= height) {
+        ctx.beginPath()
+        ctx.moveTo(birdX, birdY)
+        ctx.lineTo(birdX + 10, birdY - 5)
+        ctx.moveTo(birdX, birdY)
+        ctx.lineTo(birdX + 10, birdY + 5)
+        ctx.stroke()
+      }
     }
     ctx.restore()
   }, [drawCloud])

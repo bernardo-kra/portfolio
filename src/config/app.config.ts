@@ -12,6 +12,7 @@ export interface AppConfig {
   ui: {
     showChatButton: boolean;
     showAuthButton: boolean;
+    showContactMethods: boolean;
   };
 }
 
@@ -30,7 +31,8 @@ const defaultConfig: AppConfig = {
   },
   ui: {
     showChatButton: import.meta.env.VITE_SHOW_CHAT_BUTTON !== 'false',
-    showAuthButton: import.meta.env.VITE_SHOW_AUTH_BUTTON !== 'false'
+    showAuthButton: import.meta.env.VITE_SHOW_AUTH_BUTTON !== 'false',
+    showContactMethods: import.meta.env.VITE_SHOW_CONTACT_METHODS !== 'false'
   }
 };
 

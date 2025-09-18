@@ -7,6 +7,10 @@
   z-index: -1;
   pointer-events: none;
   background: transparent;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: auto;
 }
 
 .starfieldNoParallax {

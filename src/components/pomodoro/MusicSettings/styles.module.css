@@ -215,6 +215,16 @@
   gap: var(--spacing-md);
 }
 
+.settingsActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-default);
+}
+
 .resetButton {
   font-size: var(--font-size-sm);
 }
@@ -285,6 +295,12 @@
   .modalActions {
     flex-direction: column;
     gap: var(--spacing-sm);
+  }
+  
+  .settingsActions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
   }
   
   .actionButtons {
