@@ -10,8 +10,11 @@ import './config/firebase.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(helmet());
 app.use(corsMiddleware);
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false,
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
