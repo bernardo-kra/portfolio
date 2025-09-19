@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@components/common/Button';
 import Input from '@components/common/Input';
+import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
 
 interface RegisterFormProps {
@@ -39,7 +40,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/register', {
+      const response = await fetch(`${appConfig.backend.baseUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,6 +72,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
           <Input
             type="text"
             name="firstName"
+            label="Nome"
             placeholder="Nome"
             value={formData.firstName}
             onChange={handleChange}
@@ -79,6 +81,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
           <Input
             type="text"
             name="lastName"
+            label="Sobrenome"
             placeholder="Sobrenome"
             value={formData.lastName}
             onChange={handleChange}
@@ -88,6 +91,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
         <Input
           type="email"
           name="email"
+          label="Email"
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
@@ -96,6 +100,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
         <Input
           type="password"
           name="password"
+          label="Senha"
           placeholder="Senha"
           value={formData.password}
           onChange={handleChange}
@@ -104,6 +109,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
         <Input
           type="password"
           name="confirmPassword"
+          label="Confirmar Senha"
           placeholder="Confirmar Senha"
           value={formData.confirmPassword}
           onChange={handleChange}
@@ -112,6 +118,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
         <Input
           type="tel"
           name="phone"
+          label="Telefone (opcional)"
           placeholder="Telefone (opcional)"
           value={formData.phone}
           onChange={handleChange}

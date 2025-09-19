@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
 
 interface SimpleAuthModalProps {
@@ -34,8 +35,8 @@ export const SimpleAuthModal: React.FC<SimpleAuthModalProps> = ({ isOpen, onClos
 
     try {
       const url = isLogin 
-        ? 'http://localhost:3001/api/auth/login'
-        : 'http://localhost:3001/api/auth/register';
+        ? `${appConfig.backend.baseUrl}/api/auth/login`
+        : `${appConfig.backend.baseUrl}/api/auth/register`;
 
       const body = isLogin 
         ? { email: formData.email, password: formData.password }

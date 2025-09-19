@@ -20,7 +20,7 @@ const defaultConfig: AppConfig = {
   backend: {
     enabled: import.meta.env.VITE_BACKEND_ENABLED !== 'false',
     baseUrl: import.meta.env.VITE_BACKEND_URL || (import.meta.env.NODE_ENV === 'production' 
-      ? 'https://portfolio-backend-vercel.vercel.app' 
+      ? 'https://portfolio-08my.onrender.com' 
       : 'http://localhost:3001')
   },
   features: {

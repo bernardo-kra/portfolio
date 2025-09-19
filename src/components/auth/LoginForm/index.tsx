@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@components/common/Button';
 import Input from '@components/common/Input';
+import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
 
 interface LoginFormProps {
@@ -29,7 +30,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/login', {
+      const response = await fetch(`${appConfig.backend.baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,6 +61,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
         <Input
           type="email"
           name="email"
+          label="Email"
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
@@ -68,6 +70,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
         <Input
           type="password"
           name="password"
+          label="Senha"
           placeholder="Senha"
           value={formData.password}
           onChange={handleChange}
