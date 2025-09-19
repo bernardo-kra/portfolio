@@ -1,26 +1,30 @@
 .messageInputContainer {
-  background: var(--card-background);
-  border-top: 1px solid var(--border-default);
-  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
   position: sticky;
   bottom: 0;
   z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .inputWrapper {
   display: flex;
   align-items: flex-end;
-  gap: var(--spacing-sm);
-  background: var(--background-primary);
-  border: 1px solid var(--border-default);
-  border-radius: 24px;
-  padding: var(--spacing-sm);
-  transition: all 0.2s ease;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 25px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .inputWrapper:focus-within {
-  border-color: var(--brand-orange);
-  box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.1);
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 6px 20px rgba(102, 126, 234, 0.15);
+  transform: translateY(-1px);
 }
 
 .messageTextarea {
@@ -51,20 +55,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border: none;
   border-radius: 50%;
-  background: var(--brand-orange);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  font-size: 1.1rem;
 }
 
 .sendButton:hover:not(:disabled) {
-  background: #e68a00;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .sendButton:disabled {
