@@ -1,23 +1,5 @@
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  limit, 
-  where,
-  getDocs,
-  serverTimestamp,
-  updateDoc,
-  setDoc
-} from 'firebase/firestore';
-import { db } from '../config/firebase';
-
-// Check if Firebase is properly configured
-if (!db) {
-  console.warn('Firebase not configured. Chat functionality will be limited.');
-}
+// Chat service using backend API instead of Firebase
+import { appConfig } from '../config/app.config';
 
 export interface ChatMessage {
   id: string;
@@ -43,6 +25,7 @@ class ChatService {
   private readonly MESSAGE_LIMIT = 500;
   private readonly COOLDOWN_TIME = 3000;
   private lastMessageTime = 0;
+  private messageListeners: Map<string, () => void> = new Map();
 
   canSendMessage(): boolean {
     const now = Date.now();
@@ -67,10 +50,6 @@ class ChatService {
     isAdmin: boolean = false
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      if (!db) {
-        return { success: false, error: 'Firebase não configurado' };
-      }
-
       if (!this.canSendMessage()) {
         return { success: false, error: 'Aguarde alguns segundos antes de enviar outra mensagem' };
       }
@@ -80,15 +59,23 @@ class ChatService {
         return { success: false, error: validation.error };
       }
 
-      const messagesRef = collection(db, 'chats', userId, 'messages');
-      await addDoc(messagesRef, {
-        message: message.trim(),
-        senderEmail: userEmail,
-        senderName: userName,
-        timestamp: serverTimestamp(),
-        isAdmin,
-        isRead: false,
+      const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          userEmail,
+          userName,
+          message: message.trim(),
+          isAdmin,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error('Erro ao enviar mensagem');
+      }
 
       this.lastMessageTime = Date.now();
       return { success: true };
@@ -102,65 +89,44 @@ class ChatService {
     userId: string, 
     callback: (messages: ChatMessage[]) => void
   ): () => void {
-    if (!db) {
-      console.warn('Firebase not configured');
-      return () => {};
-    }
+    // Polling-based approach since we're not using Firebase
+    const pollMessages = async () => {
+      try {
+        const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/user/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          callback(data.messages || []);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar mensagens:', error);
+      }
+    };
 
-    const messagesRef = collection(db, 'chats', userId, 'messages');
-    const q = query(messagesRef, orderBy('timestamp', 'asc'));
+    // Initial load
+    pollMessages();
 
-    return onSnapshot(q, (snapshot) => {
-      const messages: ChatMessage[] = [];
-      snapshot.forEach((doc) => {
-        messages.push({
-          id: doc.id,
-          ...doc.data(),
-        } as ChatMessage);
-      });
-      callback(messages);
-    });
+    // Poll every 2 seconds
+    const interval = setInterval(pollMessages, 2000);
+
+    // Store cleanup function
+    const cleanup = () => {
+      clearInterval(interval);
+      this.messageListeners.delete(userId);
+    };
+
+    this.messageListeners.set(userId, cleanup);
+    return cleanup;
   }
 
   async getAllConversations(): Promise<ChatConversation[]> {
     try {
-      if (!db) {
-        console.warn('Firebase not configured');
-        return [];
-      }
-
-      const chatsRef = collection(db, 'chats');
-      const chatsSnapshot = await getDocs(chatsRef);
-      
-      const conversations: ChatConversation[] = [];
-      
-      for (const chatDoc of chatsSnapshot.docs) {
-        const userId = chatDoc.id;
-        const messagesRef = collection(db, 'chats', userId, 'messages');
-        const messagesQuery = query(messagesRef, orderBy('timestamp', 'desc'), limit(1));
-        const messagesSnapshot = await getDocs(messagesQuery);
-        
-        if (!messagesSnapshot.empty) {
-          const lastMessage = messagesSnapshot.docs[0].data();
-          const allMessagesQuery = query(messagesRef, where('isRead', '==', false));
-          const unreadSnapshot = await getDocs(allMessagesQuery);
-          
-          conversations.push({
-            userId,
-            userEmail: lastMessage.senderEmail,
-            userName: lastMessage.senderName,
-            lastMessage: lastMessage.message,
-            lastMessageTime: lastMessage.timestamp,
-            unreadCount: unreadSnapshot.size,
-            isOnline: false,
-          });
-        }
+      const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/all`);
+      if (!response.ok) {
+        throw new Error('Erro ao buscar conversas');
       }
       
-      return conversations.sort((a, b) => 
-        b.lastMessageTime?.toDate?.()?.getTime() || 0 - 
-        a.lastMessageTime?.toDate?.()?.getTime() || 0
-      );
+      const data = await response.json();
+      return data.conversations || [];
     } catch (error) {
       console.error('Erro ao obter conversas:', error);
       return [];
@@ -169,20 +135,13 @@ class ChatService {
 
   async markMessagesAsRead(userId: string): Promise<void> {
     try {
-      if (!db) {
-        console.warn('Firebase not configured');
-        return;
-      }
-
-      const messagesRef = collection(db, 'chats', userId, 'messages');
-      const unreadQuery = query(messagesRef, where('isRead', '==', false));
-      const unreadSnapshot = await getDocs(unreadQuery);
-      
-      const updatePromises = unreadSnapshot.docs.map(doc => 
-        updateDoc(doc.ref, { isRead: true })
-      );
-      
-      await Promise.all(updatePromises);
+      await fetch(`${appConfig.backend.baseUrl}/api/chat/mark-read`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      });
     } catch (error) {
       console.error('Erro ao marcar mensagens como lidas:', error);
     }
@@ -190,17 +149,16 @@ class ChatService {
 
   async createUserChat(userId: string, userEmail: string, userName: string): Promise<void> {
     try {
-      if (!db) {
-        console.warn('Firebase not configured');
-        return;
-      }
-
-      const chatRef = doc(db, 'chats', userId);
-      await setDoc(chatRef, {
-        userId,
-        userEmail,
-        userName,
-        createdAt: serverTimestamp(),
+      await fetch(`${appConfig.backend.baseUrl}/api/chat/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          userEmail,
+          userName,
+        }),
       });
     } catch (error) {
       console.error('Erro ao criar chat do usuário:', error);
