@@ -5,9 +5,34 @@
 O frontend está configurado para usar o backend hospedado no Render. A URL padrão é:
 `https://portfolio-08my.onrender.com`
 
-## Configuração via Variáveis de Ambiente
+## Variáveis de Ambiente Configuradas no GitHub
 
-Para personalizar a URL do backend, crie um arquivo `.env` na raiz do projeto com:
+As seguintes variáveis já estão configuradas no GitHub para deploy automático:
+
+### Backend
+- `VITE_BACKEND_URL` - URL do backend (https://portfolio-08my.onrender.com)
+- `VITE_BACKEND_ENABLED` - Habilitar/desabilitar backend
+
+### Features
+- `VITE_AUTH_ENABLED` - Sistema de autenticação
+- `VITE_CHAT_ENABLED` - Sistema de chat
+- `VITE_ANALYTICS_ENABLED` - Analytics
+- `VITE_PORTFOLIO_ENABLED` - Seção portfolio
+
+### UI
+- `VITE_SHOW_CHAT_BUTTON` - Mostrar botão de chat
+- `VITE_SHOW_AUTH_BUTTON` - Mostrar botão de autenticação
+- `VITE_SHOW_CONTACT_METHODS` - Mostrar métodos de contato
+
+### Firebase (Backend)
+- `FIREBASE_CLIENT_EMAIL` - Email do cliente Firebase
+- `FIREBASE_PRIVATE_KEY` - Chave privada Firebase
+- `FIREBASE_PROJECT_ID` - ID do projeto Firebase
+- `FIREBASE_WEB_API_KEY` - API Key do Firebase
+
+## Configuração Local (Desenvolvimento)
+
+Para desenvolvimento local, crie um arquivo `.env` na raiz do projeto com:
 
 ```env
 # Backend Configuration
