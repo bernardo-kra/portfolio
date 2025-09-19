@@ -10,7 +10,6 @@ const FloatingChatButton: React.FC = () => {
   const { isFeatureEnabled, config } = useAppConfig();
   const [showChat, setShowChat] = useState(false);
 
-  // Hook para bloquear scroll quando modal está aberto
   useScrollLock(showChat);
 
   useEffect(() => {

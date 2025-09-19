@@ -19,9 +19,8 @@ export interface AppConfig {
 const defaultConfig: AppConfig = {
   backend: {
     enabled: import.meta.env.VITE_BACKEND_ENABLED !== 'false',
-    baseUrl: import.meta.env.VITE_BACKEND_URL || (import.meta.env.NODE_ENV === 'production' 
-      ? 'https://portfolio-08my.onrender.com' 
-      : 'http://localhost:3001')
+    baseUrl: import.meta.env.VITE_BACKEND_URL || 
+      (import.meta.env.DEV ? 'http://localhost:3001' : 'https://portfolio-08my.onrender.com')
   },
   features: {
     authentication: import.meta.env.VITE_AUTH_ENABLED !== 'false',
@@ -37,7 +36,14 @@ const defaultConfig: AppConfig = {
 };
 
 const getConfig = (): AppConfig => {
-  return { ...defaultConfig };
+  const config = { ...defaultConfig };
+  
+  if (window.location.hostname === 'bernardo-kra.github.io') {
+    config.backend.baseUrl = 'https://portfolio-08my.onrender.com';
+  }
+  
+  console.log('App Config:', config);
+  return config;
 };
 
 export const appConfig = getConfig();

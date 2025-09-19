@@ -1,4 +1,3 @@
-// Chat service using backend API instead of Firebase
 import { appConfig } from '../config/app.config';
 
 export interface ChatMessage {
@@ -26,6 +25,7 @@ class ChatService {
   private readonly COOLDOWN_TIME = 3000;
   private lastMessageTime = 0;
   private messageListeners: Map<string, () => void> = new Map();
+  private isPageVisible = true;
 
   canSendMessage(): boolean {
     const now = Date.now();
@@ -59,22 +59,26 @@ class ChatService {
         return { success: false, error: validation.error };
       }
 
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        return { success: false, error: 'Usuário não autenticado' };
+      }
+
       const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId,
-          userEmail,
-          userName,
           message: message.trim(),
-          isAdmin,
+          recipientEmail: isAdmin ? userId : undefined,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao enviar mensagem');
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || 'Erro ao enviar mensagem');
       }
 
       this.lastMessageTime = Date.now();
@@ -89,28 +93,73 @@ class ChatService {
     userId: string, 
     callback: (messages: ChatMessage[]) => void
   ): () => void {
-    // Polling-based approach since we're not using Firebase
+    let lastMessageCount = 0;
+    let pollInterval = 10000;
+    let consecutiveEmptyResponses = 0;
+    let intervalId: NodeJS.Timeout;
+
     const pollMessages = async () => {
+      if (!this.isPageVisible) return;
+
       try {
-        const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/user/${userId}`);
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/user/${userId}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        
         if (response.ok) {
           const data = await response.json();
-          callback(data.messages || []);
+          const messages = (data.data || []).map((msg: any) => ({
+            id: msg.id,
+            message: msg.message,
+            senderEmail: msg.senderEmail,
+            senderName: msg.senderName,
+            timestamp: msg.timestamp,
+            isAdmin: msg.isAdmin,
+            isRead: msg.read,
+          }));
+
+          if (messages.length !== lastMessageCount) {
+            pollInterval = 2000;
+            consecutiveEmptyResponses = 0;
+            lastMessageCount = messages.length;
+          } else {
+            consecutiveEmptyResponses++;
+            if (consecutiveEmptyResponses > 3) {
+              pollInterval = Math.min(pollInterval * 1.2, 30000);
+            }
+          }
+
+          callback(messages);
         }
       } catch (error) {
         console.error('Erro ao buscar mensagens:', error);
+        pollInterval = 5000;
       }
     };
 
-    // Initial load
-    pollMessages();
+    const startPolling = () => {
+      pollMessages();
+      intervalId = setInterval(pollMessages, pollInterval);
+    };
 
-    // Poll every 2 seconds
-    const interval = setInterval(pollMessages, 2000);
+    const handleVisibilityChange = () => {
+      this.isPageVisible = !document.hidden;
+      if (this.isPageVisible) {
+        startPolling();
+      } else {
+        clearInterval(intervalId);
+      }
+    };
 
-    // Store cleanup function
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    startPolling();
+
     const cleanup = () => {
-      clearInterval(interval);
+      clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       this.messageListeners.delete(userId);
     };
 
@@ -120,50 +169,58 @@ class ChatService {
 
   async getAllConversations(): Promise<ChatConversation[]> {
     try {
-      const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/all`);
-      if (!response.ok) {
-        throw new Error('Erro ao buscar conversas');
-      }
+      const token = localStorage.getItem('authToken');
+      if (!token) return [];
+
+      const response = await fetch(`${appConfig.backend.baseUrl}/api/chat/all`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      
+      if (!response.ok) return [];
       
       const data = await response.json();
-      return data.conversations || [];
+      const conversations: ChatConversation[] = [];
+      
+      if (data.data?.messagesByUser) {
+        Object.entries(data.data.messagesByUser).forEach(([email, messages]: [string, any]) => {
+          if (messages.length > 0) {
+            const lastMessage = messages[0];
+            conversations.push({
+              userId: email,
+              userEmail: email,
+              userName: lastMessage.senderName,
+              lastMessage: lastMessage.message,
+              lastMessageTime: lastMessage.timestamp,
+              unreadCount: messages.filter((msg: any) => !msg.read && !msg.isAdmin).length,
+              isOnline: false,
+            });
+          }
+        });
+      }
+      
+      return conversations.sort((a, b) => 
+        new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+      );
     } catch (error) {
       console.error('Erro ao obter conversas:', error);
       return [];
     }
   }
 
-  async markMessagesAsRead(userId: string): Promise<void> {
+  async markMessagesAsRead(messageId: string): Promise<void> {
     try {
-      await fetch(`${appConfig.backend.baseUrl}/api/chat/mark-read`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId }),
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      await fetch(`${appConfig.backend.baseUrl}/api/chat/mark-read/${messageId}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` },
       });
     } catch (error) {
       console.error('Erro ao marcar mensagens como lidas:', error);
     }
   }
 
-  async createUserChat(userId: string, userEmail: string, userName: string): Promise<void> {
-    try {
-      await fetch(`${appConfig.backend.baseUrl}/api/chat/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          userEmail,
-          userName,
-        }),
-      });
-    } catch (error) {
-      console.error('Erro ao criar chat do usuário:', error);
-    }
-  }
 }
 
 export const chatService = new ChatService();
