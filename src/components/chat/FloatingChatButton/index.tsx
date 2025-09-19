@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useAppConfig } from '@context';
 import { useScrollLock } from '@hooks/useScrollLock';
-import { ChatInterface } from '@components/chat';
+import { ModernChat } from '@components/chat';
 import styles from './styles.module.css';
 
 const FloatingChatButton: React.FC = () => {
@@ -62,7 +62,7 @@ const FloatingChatButton: React.FC = () => {
                 ✕
               </button>
             </div>
-            <ChatInterface />
+            <ModernChat />
           </div>
         </div>
       )}

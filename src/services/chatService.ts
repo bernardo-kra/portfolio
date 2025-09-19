@@ -14,6 +14,11 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
+// Check if Firebase is properly configured
+if (!db) {
+  console.warn('Firebase not configured. Chat functionality will be limited.');
+}
+
 export interface ChatMessage {
   id: string;
   message: string;
@@ -62,6 +67,10 @@ class ChatService {
     isAdmin: boolean = false
   ): Promise<{ success: boolean; error?: string }> {
     try {
+      if (!db) {
+        return { success: false, error: 'Firebase não configurado' };
+      }
+
       if (!this.canSendMessage()) {
         return { success: false, error: 'Aguarde alguns segundos antes de enviar outra mensagem' };
       }
@@ -93,6 +102,11 @@ class ChatService {
     userId: string, 
     callback: (messages: ChatMessage[]) => void
   ): () => void {
+    if (!db) {
+      console.warn('Firebase not configured');
+      return () => {};
+    }
+
     const messagesRef = collection(db, 'chats', userId, 'messages');
     const q = query(messagesRef, orderBy('timestamp', 'asc'));
 
@@ -110,6 +124,11 @@ class ChatService {
 
   async getAllConversations(): Promise<ChatConversation[]> {
     try {
+      if (!db) {
+        console.warn('Firebase not configured');
+        return [];
+      }
+
       const chatsRef = collection(db, 'chats');
       const chatsSnapshot = await getDocs(chatsRef);
       
@@ -150,6 +169,11 @@ class ChatService {
 
   async markMessagesAsRead(userId: string): Promise<void> {
     try {
+      if (!db) {
+        console.warn('Firebase not configured');
+        return;
+      }
+
       const messagesRef = collection(db, 'chats', userId, 'messages');
       const unreadQuery = query(messagesRef, where('isRead', '==', false));
       const unreadSnapshot = await getDocs(unreadQuery);
@@ -166,6 +190,11 @@ class ChatService {
 
   async createUserChat(userId: string, userEmail: string, userName: string): Promise<void> {
     try {
+      if (!db) {
+        console.warn('Firebase not configured');
+        return;
+      }
+
       const chatRef = doc(db, 'chats', userId);
       await setDoc(chatRef, {
         userId,

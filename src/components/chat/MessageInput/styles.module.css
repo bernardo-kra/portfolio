@@ -1,0 +1,127 @@
+.messageInputContainer {
+  background: var(--card-background);
+  border-top: 1px solid var(--border-default);
+  padding: var(--spacing-md);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  background: var(--background-primary);
+  border: 1px solid var(--border-default);
+  border-radius: 24px;
+  padding: var(--spacing-sm);
+  transition: all 0.2s ease;
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.1);
+}
+
+.messageTextarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-primary);
+  min-height: 20px;
+  max-height: 120px;
+  padding: var(--spacing-xs) 0;
+}
+
+.messageTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.messageTextarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sendButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: var(--brand-orange);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #e68a00;
+  transform: scale(1.05);
+}
+
+.sendButton:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.inputFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-xs);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.characterCount {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nearLimit {
+  color: var(--brand-orange);
+  font-weight: 600;
+}
+
+.separator {
+  opacity: 0.5;
+}
+
+.cooldownIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--brand-orange);
+  font-weight: 500;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@media (max-width: 768px) {
+  .messageInputContainer {
+    padding: var(--spacing-sm);
+  }
+  
+  .inputWrapper {
+    padding: var(--spacing-xs);
+  }
+  
+  .sendButton {
+    width: 36px;
+    height: 36px;
+  }
+}
