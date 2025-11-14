@@ -4,7 +4,6 @@
 }
 
 html {
-  overflow-x: hidden;
   scroll-behavior: smooth;
   width: 100%;
 }
@@ -12,7 +11,6 @@ html {
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   width: 100%;
   min-height: 100vh;
 }
@@ -20,14 +18,12 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* Remove any conflicting styles from App.css */
 .app {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
   position: relative;
 }
 

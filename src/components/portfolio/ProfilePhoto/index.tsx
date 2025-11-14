@@ -45,6 +45,8 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
           <img
             src={src}
             alt={alt}
+            loading="lazy"
+            decoding="async"
             onLoad={handleLoad}
             onError={handleError}
             className={`${styles.photoImage} ${isLoaded ? styles.loaded : ''}`}
