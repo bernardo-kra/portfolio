@@ -96,12 +96,11 @@ const ModernHomePage: React.FC = () => {
               </Typography>
               
               <Typography variant="h2" className={styles.heroSubtitle}>
-                Desenvolvedor React
+                Desenvolvedor React focado em interfaces rápidas e envolventes
               </Typography>
               
               <Typography variant="body1" className={styles.heroDescription}>
-                Especialista em React e desenvolvimento web moderno. 
-                Criando experiências digitais incríveis com foco em performance e usabilidade.
+                Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.
               </Typography>
               
               <div className={styles.timeDisplay}>
@@ -200,7 +199,6 @@ const ModernHomePage: React.FC = () => {
         </Container>
       </section>
 
-      {/* CTA Section */}
       <section className={styles.ctaSection}>
         <Container className={styles.ctaContainer}>
           <FadeInOnScroll delay={1000}>
@@ -209,22 +207,48 @@ const ModernHomePage: React.FC = () => {
                 Pronto para começar?
               </Typography>
               <Typography variant="body1" color="muted" className={styles.ctaDescription}>
-                Vamos trabalhar juntos e criar algo incrível
+                Aceitando novos projetos • resposta média < 24h
               </Typography>
               <div className={styles.ctaButtons}>
                 <button 
                   className={styles.primaryButton}
                   onClick={() => navigate('/portfolio')}
+                  aria-label="Explorar portfólio"
                 >
-                  Ver Portfolio
+                  Explorar portfólio
                 </button>
                 <button 
                   className={styles.secondaryButton}
                   onClick={() => navigate('/landing')}
+                  aria-label="Ver landing page"
                 >
-                  Landing Page
+                  Ver landing
                 </button>
+                <a
+                  className={styles.secondaryButton}
+                  href="/bernardo-kra.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Baixar currículo em PDF"
+                >
+                  Baixar CV
+                </a>
               </div>
+            </div>
+          </FadeInOnScroll>
+        </Container>
+      </section>
+
+      <section className={styles.statsSection}>
+        <Container className={styles.statsContainer}>
+          <FadeInOnScroll delay={1100}>
+            <div className={styles.techChips}>
+              <span className={styles.featureTag}>React</span>
+              <span className={styles.featureTag}>Vite</span>
+              <span className={styles.featureTag}>TypeScript</span>
+              <span className={styles.featureTag}>Firebase</span>
+              <span className={styles.featureTag}>Tailwind/CSS Modules</span>
+              <span className={styles.featureTag}>CI/CD</span>
             </div>
           </FadeInOnScroll>
         </Container>

@@ -42,7 +42,9 @@ const getConfig = (): AppConfig => {
     config.backend.baseUrl = 'https://portfolio-08my.onrender.com';
   }
   
-  console.log('App Config:', config);
+  if (import.meta.env.DEV) {
+    console.log('App Config:', config);
+  }
   return config;
 };
 

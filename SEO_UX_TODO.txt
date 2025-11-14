@@ -1,14 +1,18 @@
 Implementações aplicadas
-- Acessibilidade: foco visível global em links, botões e inputs
-- Acessibilidade: modal do chat com role=dialog, aria-modal, foco inicial e labels
-- Preferências do usuário: suporte a prefers-reduced-motion para reduzir animações
+- Acessibilidade: foco visível em links, botões e inputs
+- Acessibilidade: chat com role=dialog, aria-modal, foco inicial e labels
+- Preferências: suporte a prefers-reduced-motion
 - Performance: preconnect/preload de fontes no index.html
-- Performance: lazy-loading para imagens sem atributo loading
+- Performance: lazy-loading em imagens
+- Logs: console em produção desabilitado em app.config
+- UX Writing: título/subtítulo do hero atualizados
+- CTA: textos revisados, badge de disponibilidade e novo botão Baixar CV
+- Criativo: chips de tech stack adicionados
 
 Pendências sugeridas
-- Otimizar imagens grandes para webp/avif e adicionar srcset
-- Revisar hierarquia de headings por seção/página
-- Padronizar escala tipográfica e tokens de espaçamento
-- Normalizar tamanhos/stroke de ícones e estados de hover/press
-- Ajustar microcopy de CTAs e formulários (tom claro e objetivo)
+- Imagens: otimizar e servir webp/avif com srcset
+- Headings: auditar todas as seções para hierarquia completa
+- Tipografia/spacing: consolidar tokens e aplicar onde faltante
+- Ícones: normalizar tamanhos e stroke onde houver inconsistência
+- Formulários: revisar microcopy de erros/placeholders/sucesso
 
