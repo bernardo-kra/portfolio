@@ -33,5 +33,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+.cursor/
 .cursor
 @STEP_BY_STEP.md
