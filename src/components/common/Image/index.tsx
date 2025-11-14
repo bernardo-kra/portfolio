@@ -6,6 +6,7 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   responsive?: boolean
   lazy?: boolean
+  aspectRatio?: string | number
 }
 
 const Image: React.FC<ImageProps> = ({
@@ -16,6 +17,7 @@ const Image: React.FC<ImageProps> = ({
   className = '',
   alt = '',
   src,
+  aspectRatio,
   ...props
 }) => {
   const imageClassName = [
@@ -31,7 +33,9 @@ const Image: React.FC<ImageProps> = ({
       src={src}
       alt={alt}
       loading={lazy ? 'lazy' : 'eager'}
+      decoding=\"async\"
       className={imageClassName}
+      style={aspectRatio ? { aspectRatio: String(aspectRatio), ...(props.style || {}) } : props.style}
       {...props}
     />
   )
