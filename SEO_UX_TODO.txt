@@ -1,0 +1,14 @@
+Implementações aplicadas
+- Acessibilidade: foco visível global em links, botões e inputs
+- Acessibilidade: modal do chat com role=dialog, aria-modal, foco inicial e labels
+- Preferências do usuário: suporte a prefers-reduced-motion para reduzir animações
+- Performance: preconnect/preload de fontes no index.html
+- Performance: lazy-loading para imagens sem atributo loading
+
+Pendências sugeridas
+- Otimizar imagens grandes para webp/avif e adicionar srcset
+- Revisar hierarquia de headings por seção/página
+- Padronizar escala tipográfica e tokens de espaçamento
+- Normalizar tamanhos/stroke de ícones e estados de hover/press
+- Ajustar microcopy de CTAs e formulários (tom claro e objetivo)
+

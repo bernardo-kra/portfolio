@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useAppConfig } from '@context';
 import { useScrollLock } from '@hooks/useScrollLock';
@@ -9,6 +9,7 @@ const FloatingChatButton: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const { isFeatureEnabled, config } = useAppConfig();
   const [showChat, setShowChat] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   useScrollLock(showChat);
 
@@ -21,6 +22,9 @@ const FloatingChatButton: React.FC = () => {
 
     if (showChat) {
       document.addEventListener('keydown', handleEscape);
+      setTimeout(() => {
+        if (modalRef.current) modalRef.current.focus();
+      }, 0);
     }
 
     return () => {
@@ -37,6 +41,7 @@ const FloatingChatButton: React.FC = () => {
       <button
         className={styles.floatingButton}
         onClick={() => setShowChat(!showChat)}
+        aria-label="Abrir chat"
         title="Fale comigo por chat"
       >
         <div className={styles.chatIcon}>💬</div>
@@ -50,13 +55,19 @@ const FloatingChatButton: React.FC = () => {
         >
           <div 
             className={styles.chatModal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="chat-title"
+            ref={modalRef}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.chatHeader}>
-              <h3>Chat</h3>
+              <h3 id="chat-title">Chat</h3>
               <button 
                 className={styles.closeButton}
                 onClick={() => setShowChat(false)}
+                aria-label="Fechar chat"
               >
                 ✕
               </button>
