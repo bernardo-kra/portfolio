@@ -8,6 +8,8 @@ dist/
 .vscode/
 .idea/
 
+config.env
+
 
 
 
