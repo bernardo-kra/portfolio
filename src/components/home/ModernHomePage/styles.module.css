@@ -179,6 +179,7 @@
   gap: var(--spacing-xl);
   width: 100%;
   overflow: visible; /* evita scroll interno */
+  align-items: stretch;
 }
 
 .projectCard {
@@ -193,6 +194,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 320px;
 }
 
 .projectCard::before {
@@ -235,13 +237,15 @@
 
 .cardBadge {
   background: var(--project-color);
-  color: white;
+  color: #fff;
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 20px;
   font-size: var(--font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+  filter: saturate(120%) brightness(0.85);
 }
 
 .cardContent {
@@ -416,6 +420,10 @@
   .projectsGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
+  }
+  
+  .projectCard {
+    min-height: 280px;
   }
   
   .statsGrid {
