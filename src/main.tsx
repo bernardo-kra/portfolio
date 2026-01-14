@@ -13,6 +13,7 @@ import Portfolio from '@pages/Portfolio'
 import GenerativeArt from '@pages/GenerativeArt'
 import LandingPage from '@pages/LandingPage'
 import AdminChat from '@pages/AdminChat'
+import Curriculo from '@pages/Curriculo'
 import { ThemeProvider } from '@theme/ThemeContext'
 import { BackgroundTransparencyProvider } from '@theme/BackgroundTransparencyContext'
 import { AppConfigProvider } from '@context'
@@ -30,7 +31,7 @@ createRoot(document.getElementById('root')!).render(
           <I18nProvider>
             <BrowserRouter basename="/portfolio">
               <Analytics />
-              <Routes> 
+              <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/portfolio" element={<Portfolio />} />
                 <Route path="/landing" element={<LandingPage />} />
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/pomodoro" element={<Pomodoro />} />
                 <Route path="/generative" element={<GenerativeArt />} />
                 <Route path="/admin/chat" element={<AdminChat />} />
+                <Route path="/curriculo" element={<Curriculo />} />
               </Routes>
             </BrowserRouter>
           </I18nProvider>

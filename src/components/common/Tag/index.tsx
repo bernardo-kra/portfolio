@@ -10,6 +10,7 @@ interface TagProps {
   clickable?: boolean
   onClick?: () => void
   className?: string
+  style?: React.CSSProperties
 }
 
 const Tag: React.FC<TagProps> = ({
@@ -19,7 +20,8 @@ const Tag: React.FC<TagProps> = ({
   icon,
   clickable = false,
   onClick,
-  className = ''
+  className = '',
+  style
 }) => {
   const tagClassName = [
     styles.tag,
@@ -36,11 +38,12 @@ const Tag: React.FC<TagProps> = ({
   }
 
   return (
-    <div 
+    <div
       className={tagClassName}
       onClick={handleClick}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
+      style={style}
     >
       {icon && <span className={styles.tag__icon}>{icon}</span>}
       <Typography variant="caption" className={styles.tag__text}>
