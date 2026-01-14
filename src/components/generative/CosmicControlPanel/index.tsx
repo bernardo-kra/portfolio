@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
-import { CosmicSettings } from '../PatternCanvas/InfiniteGenerator'
+import type { CosmicSettings } from '../PatternCanvas/InfiniteGenerator'
 
 interface CosmicControlPanelProps {
   settings: CosmicSettings

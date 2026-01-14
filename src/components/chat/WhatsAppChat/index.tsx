@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { chatService, ChatMessage } from '../../../services/chatService';
+import { chatService } from '../../../services/chatService';
+import type { ChatMessage } from '../../../services/chatService';
 import { useChatPermissions } from '../../../hooks/useChatPermissions';
 import MessageBubble from '../MessageBubble';
 import MessageInput from '../MessageInput';

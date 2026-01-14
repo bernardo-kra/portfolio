@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppConfig, appConfig, updateConfig, resetConfig } from '@src/config/app.config';
+import type { AppConfig } from '@src/config/app.config';
+import { appConfig, updateConfig, resetConfig } from '@src/config/app.config';
 
 interface AppConfigContextType {
   config: AppConfig;

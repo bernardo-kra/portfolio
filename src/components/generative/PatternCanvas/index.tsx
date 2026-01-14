@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import styles from './styles.module.css'
-import { InfiniteGenerator, CosmicSettings } from './InfiniteGenerator'
+import { InfiniteGenerator } from './InfiniteGenerator'
+import type { CosmicSettings } from './InfiniteGenerator'
 
 interface PatternCanvasProps {
   pauseGeneration?: boolean
