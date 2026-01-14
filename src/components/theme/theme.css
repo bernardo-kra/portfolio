@@ -1,3 +1,5 @@
+@import './responsive-utils.css';
+
 /*
 🎨 Estrutura de cores e responsividade do projeto
 
@@ -268,8 +270,7 @@
   scrollbar-color: var(--primary-dark) var(--gray-900);
 }
 
-/* Importar utilitários de responsividade */
-@import './responsive-utils.css';
+/* Importar utilitários de responsividade: movido para o topo para evitar avisos do PostCSS */
 
 /* Regras específicas para prevenir overflow horizontal */
 .hero__section,
