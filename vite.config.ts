@@ -6,7 +6,7 @@ const isProduction = process.env.NODE_ENV === 'production' || process.env.GITHUB
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/portfolio/',
   build: {
     rollupOptions: {
       output: {

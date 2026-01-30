@@ -29,15 +29,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to bernardo-kra.github.io
+      - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          external_repository: bernardo-kra/bernardo-kra.github.io
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: main
           user_name: github-actions
           user_email: actions@github.com
           keep_files: false
-          enable_jekyll: true
-          disable_nojekyll: true
