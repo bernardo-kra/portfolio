@@ -15,7 +15,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--bg-default);
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 153, 0, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
   padding: var(--spacing-2xl) 0;
 }
 
@@ -30,29 +32,11 @@
   z-index: 1;
 }
 
-.heroBackground {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255, 153, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
-  animation: backgroundFloat 20s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes backgroundFloat {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(5deg); }
-}
-
 .heroContainer {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 800px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
@@ -60,12 +44,39 @@
 
 .heroContent {
   padding: var(--spacing-2xl) 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4xl);
+  border-radius: 16px;
+}
+
+.heroText {
+  flex: 3;
+  text-align: left;
+  min-width: 400px;
+}
+
+.heroImage {
+  flex: 2;
+  height: 400px;
+  background-image: url('/mini (1).png');
+  background-size: contain;
+  background-position: center right;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  animation: floatImage 6s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
 
 .greeting {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-sm);
   font-size: var(--font-size-lg);
   color: var(--text-muted);
@@ -88,6 +99,7 @@
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 900;
   margin: 0 0 var(--spacing-md) 0;
+  position: relative;
   background: linear-gradient(135deg, var(--text-default) 0%, var(--brand-orange) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -111,37 +123,23 @@
   animation: slideInUp 0.8s ease-out 0.6s both;
 }
 
-.timeDisplay {
-  background: var(--card-background);
-  border: 1px solid var(--border-default);
-  border-radius: 16px;
-  padding: var(--spacing-lg);
-  display: inline-block;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  animation: slideInUp 0.8s ease-out 0.8s both;
-}
-
-.time {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  color: var(--brand-orange);
-  font-family: 'Courier New', monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-.date {
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-  margin-top: var(--spacing-xs);
-}
-
 /* Projects Section */
 .projectsSection {
   padding: var(--spacing-4xl) 0;
   background: var(--bg-secondary);
   position: relative;
   border-top: 1px solid var(--border-default);
+}
+
+.projectsSection::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg-default) 100%);
+  z-index: 1;
 }
 
 .projectsSection::before { display: none; }
@@ -369,8 +367,6 @@
   font-weight: 500;
 }
 
-/* CTA Section removida */
-
 /* Animations */
 @keyframes slideInDown {
   from {
@@ -429,13 +425,23 @@
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* CTA removida */
 }
 .footerSection {
   background: var(--bg-default);
   border-top: 1px solid var(--border-default);
   padding: var(--spacing-xl) 0;
+  position: relative;
+}
+
+.footerSection::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg-default) 100%);
+  z-index: 1;
 }
 
 .footerContainer {
@@ -476,14 +482,6 @@
   
   .heroContent {
     padding: var(--spacing-lg) 0;
-  }
-  
-  .timeDisplay {
-    padding: var(--spacing-md);
-  }
-  
-  .time {
-    font-size: var(--font-size-xl);
   }
   
   .projectCard {
