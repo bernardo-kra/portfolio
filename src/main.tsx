@@ -39,6 +39,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/pomodoro" element={<Pomodoro />} />
                 <Route path="/generative" element={<GenerativeArt />} />
                 <Route path="/admin/chat" element={<AdminChat />} />
+                <Route path="*" element={<App />} />
               </Routes>
             </BrowserRouter>
           </I18nProvider>
