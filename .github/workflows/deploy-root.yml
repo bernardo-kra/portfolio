@@ -32,7 +32,7 @@ jobs:
       - name: Publish to bernardo-kra.github.io
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
           external_repository: bernardo-kra/bernardo-kra.github.io
           publish_dir: ./dist
           publish_branch: main
