@@ -3,16 +3,5 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
-  "framework": "vite",
-  "functions": {
-    "api/health.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/test.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/chat.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  "framework": "vite"
 }
