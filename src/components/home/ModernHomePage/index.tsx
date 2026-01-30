@@ -172,7 +172,45 @@ const ModernHomePage: React.FC = () => {
         </Container>
       </section>
 
-      {/* CTA section removida conforme solicitado */}
+      <section className={styles.ctaSection}>
+        <Container className={styles.ctaContainer}>
+          <FadeInOnScroll delay={1000}>
+            <div className={styles.ctaContent}>
+              <Typography variant="h2" className={styles.ctaTitle}>
+                Pronto para começar?
+              </Typography>
+              <Typography variant="body1" color="muted" className={styles.ctaDescription}>
+                Aceitando novos projetos • resposta média &lt; 24h
+              </Typography>
+              <div className={styles.ctaButtons}>
+                <button 
+                  className={styles.primaryButton}
+                  onClick={() => navigate('/portfolio')}
+                  aria-label="Explorar portfólio"
+                >
+                  Explorar portfólio
+                </button>
+                <button 
+                  className={styles.secondaryButton}
+                  onClick={() => navigate('/landing')}
+                  aria-label="Ver landing page"
+                >
+                  Ver landing
+                </button>
+                <a
+                  className={styles.secondaryButton}
+                  href="/bernardo-kra.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Baixar currículo em PDF"
+                >
+                  Baixar CV
+                </a>
+              </div>
+            </div>
+          </FadeInOnScroll>
+        </Container>
+      </section>
 
       <section className={styles.statsSection}>
         <Container className={styles.statsContainer}>
@@ -190,19 +228,6 @@ const ModernHomePage: React.FC = () => {
       </section>
 
       <FloatingChatButton />
-
-      {/* Footer Section */}
-      <section className={styles.footerSection}>
-        <Container className={styles.footerContainer}>
-          <div className={styles.footerContent}>
-            <span>© {new Date().getFullYear()} Bernardo Kraczkowski</span>
-            <span className={styles.footerLinks}>
-              <a href="https://github.com/bernardo-kra" target="_blank" rel="noopener noreferrer">GitHub</a>
-              <a href="https://linkedin.com/in/bernardo-chimoka-853709170" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            </span>
-          </div>
-        </Container>
-      </section>
     </div>
   );
 };

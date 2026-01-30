@@ -7,7 +7,6 @@
 
 /* Prevenir overflow horizontal */
 html, body {
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
 }
@@ -19,14 +18,12 @@ html, body {
 
 /* Prevenir overflow em containers principais */
 .container, .po__container, .container-responsive {
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
 }
 
 /* Prevenir overflow em seções e cards */
 section, article, aside, main, .card, .section {
-  overflow-x: hidden;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
