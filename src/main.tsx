@@ -32,7 +32,8 @@ createRoot(document.getElementById('root')!).render(
               <Analytics />
               <Routes> 
                 <Route path="/" element={<App />} />
-                <Route path="/portfolio" element={<Portfolio />} />
+                <Route path="/portfolio" element={<App />} />
+                <Route path="/portfolio/*" element={<App />} />
                 <Route path="/landing" element={<LandingPage />} />
                 <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />
                 <Route path="/pomodoro" element={<Pomodoro />} />

@@ -6,25 +6,30 @@
 html {
   scroll-behavior: smooth;
   width: 100%;
+  height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
+  overflow-x: hidden;
 }
 
 #root {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
+  overflow-x: hidden;
 }
 
 /* Remove any conflicting styles from App.css */
 .app {
   width: 100%;
+  height: 100%;
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Ensure proper container behavior */
