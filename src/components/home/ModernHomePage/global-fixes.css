@@ -40,8 +40,7 @@ body {
 /* Fix container centering */
 .heroContainer,
 .projectsContainer,
-.statsContainer,
-.ctaContainer {
+.statsContainer {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -52,8 +51,7 @@ body {
 @media (max-width: 768px) {
   .heroContainer,
   .projectsContainer,
-  .statsContainer,
-  .ctaContainer {
+  .statsContainer {
     padding: 0 var(--spacing-sm);
   }
 }
@@ -61,8 +59,7 @@ body {
 @media (max-width: 480px) {
   .heroContainer,
   .projectsContainer,
-  .statsContainer,
-  .ctaContainer {
+  .statsContainer {
     padding: 0 var(--spacing-xs);
   }
 }
