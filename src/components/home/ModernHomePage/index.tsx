@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Container, FadeInOnScroll } from '@components/common';
 import { FloatingChatButton } from '@components/chat';
@@ -7,16 +7,7 @@ import './global-fixes.css';
 
 const ModernHomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   const projects = [
     {
@@ -61,23 +52,6 @@ const ModernHomePage: React.FC = () => {
     }
   ];
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('pt-BR', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   return (
     <div className={styles.homePage}>
       {/* Hero Section */}
@@ -86,27 +60,26 @@ const ModernHomePage: React.FC = () => {
         <Container className={styles.heroContainer}>
           <FadeInOnScroll delay={100}>
             <div className={styles.heroContent}>
-              <div className={styles.greeting}>
-                <span className={styles.wave}>👋</span>
-                <span>Olá, eu sou</span>
+              <div className={styles.heroText}>
+                <div className={styles.greeting}>
+                  <span className={styles.wave}>👋</span>
+                  <span>Olá, eu sou</span>
+                </div>
+                
+                <Typography variant="h1" className={styles.heroTitle}>
+                  Bernardo Kraczkowski
+                </Typography>
+                
+                <Typography variant="h2" className={styles.heroSubtitle}>
+                  Desenvolvedor React focado em interfaces rápidas e envolventes
+                </Typography>
+                
+                <Typography variant="body1" className={styles.heroDescription}>
+                  Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.
+                </Typography>
               </div>
               
-              <Typography variant="h1" className={styles.heroTitle}>
-                Bernardo Kraczkowski
-              </Typography>
-              
-              <Typography variant="h2" className={styles.heroSubtitle}>
-                Desenvolvedor React focado em interfaces rápidas e envolventes
-              </Typography>
-              
-              <Typography variant="body1" className={styles.heroDescription}>
-                Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.
-              </Typography>
-              
-              <div className={styles.timeDisplay}>
-                <div className={styles.time}>{formatTime(currentTime)}</div>
-                <div className={styles.date}>{formatDate(currentTime)}</div>
-              </div>
+              <div className={styles.heroImage}></div>
             </div>
           </FadeInOnScroll>
         </Container>
