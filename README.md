@@ -56,7 +56,9 @@ Este projeto segue o padrão [Conventional Commits](https://www.conventionalcomm
 
 ## 🌐 Deploy
 
-O projeto está configurado para deploy automático no GitHub Pages através do GitHub Actions. Cada push para a branch `main` irá disparar o workflow de deploy.
+Deploy automático configurado via GitHub Actions. Veja [DEPLOYMENT.md](./DEPLOYMENT.md) para documentação completa.
+
+**URL de Produção:** https://bernardo-kra.github.io/
 
 ## 📁 Estrutura do Projeto
 
