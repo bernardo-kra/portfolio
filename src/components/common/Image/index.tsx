@@ -33,7 +33,7 @@ const Image: React.FC<ImageProps> = ({
       src={src}
       alt={alt}
       loading={lazy ? 'lazy' : 'eager'}
-      decoding=\"async\"
+      decoding="async"
       className={imageClassName}
       style={aspectRatio ? { aspectRatio: String(aspectRatio), ...(props.style || {}) } : props.style}
       {...props}

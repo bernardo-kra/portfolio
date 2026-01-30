@@ -207,7 +207,7 @@ const ModernHomePage: React.FC = () => {
                 Pronto para começar?
               </Typography>
               <Typography variant="body1" color="muted" className={styles.ctaDescription}>
-                Aceitando novos projetos • resposta média < 24h
+                Aceitando novos projetos • resposta média &lt; 24h
               </Typography>
               <div className={styles.ctaButtons}>
                 <button 
