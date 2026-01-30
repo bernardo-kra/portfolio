@@ -6,7 +6,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -30,7 +32,7 @@ jobs:
       - name: Publish to bernardo-kra.github.io
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GH_PAGES_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           external_repository: bernardo-kra/bernardo-kra.github.io
           publish_dir: ./dist
           publish_branch: main
