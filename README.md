@@ -58,7 +58,11 @@ Este projeto segue o padrão [Conventional Commits](https://www.conventionalcomm
 
 Deploy automático configurado via GitHub Actions. Veja [DEPLOYMENT.md](./DEPLOYMENT.md) para documentação completa.
 
-**URL de Produção:** https://bernardo-kra.github.io/
+**URLs de Produção:**
+- **GitHub Pages:** https://bernardo-kra.github.io/portfolio/
+- **Vercel:** https://portfolio-bernardokras-projects.vercel.app/
+
+**⚠️ IMPORTANTE:** Veja [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) antes de fazer qualquer mudança no deploy.
 
 ## 📁 Estrutura do Projeto
 
