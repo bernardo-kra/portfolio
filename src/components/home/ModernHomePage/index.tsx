@@ -152,11 +152,11 @@ const ModernHomePage: React.FC = () => {
           <FadeInOnScroll delay={800}>
             <div className={styles.statsGrid}>
               <div className={styles.statItem}>
-                <div className={styles.statNumber}>3+</div>
+                <div className={styles.statNumber}>5+</div>
                 <div className={styles.statLabel}>Anos de Experiência</div>
               </div>
               <div className={styles.statItem}>
-                <div className={styles.statNumber}>50+</div>
+                <div className={styles.statNumber}>8+</div>
                 <div className={styles.statLabel}>Projetos Concluídos</div>
               </div>
               <div className={styles.statItem}>
