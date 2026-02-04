@@ -1,8 +1,6 @@
 const en = {
   name: 'Bernardo Kraczkowski',
   role: 'Frontend Developer | React | TypeScript | Digital Solutions',
-  heroTitle: 'Frontend Developer specialized in React and TypeScript.',
-  heroSubtitle: 'Modern interface development and efficient digital solutions.',
   heroCTA: 'View Projects',
   aboutTitle: 'About Me',
   experienceTitle: 'Experience',
@@ -151,7 +149,115 @@ const en = {
         ]
       }
     ]
-  }
+  },
+  // Home page specific translations
+  greeting: 'Hello, I am',
+  scrollDown: 'Scroll down',
+  heroTitle: 'Bernardo Kraczkowski',
+  heroSubtitle: 'React Developer focused on fast and engaging interfaces',
+  heroDescription: 'I transform ideas into performative, accessible and easy-to-use digital products.',
+  heroRoles: [
+    'Frontend Developer',
+    'React Specialist',
+    'TypeScript in practice',
+    'UI/UX Enthusiast',
+    'Full Stack Developer'
+  ],
+  heroBadgeSets: [
+    ['React', 'TypeScript', 'Node.js'],
+    ['Next.js', 'UI', 'Performance'],
+    ['Design Systems', 'A11y', 'DX'],
+    ['Testing', 'State', 'SEO']
+  ],
+  myProjects: 'My Projects',
+  projectsSubtitle: 'Explore the different areas of my work',
+  portfolioTitle: 'Portfolio',
+  portfolioSubtitle: 'My work',
+  portfolioDescription: 'Meet my projects, skills and professional experience',
+  pomodoroTitle: 'Pomodoro Timer',
+  pomodoroSubtitle: 'Productivity',
+  pomodoroDescription: 'Productivity tool to manage your time',
+  generativeTitle: 'Generative Art',
+  generativeSubtitle: 'Creativity',
+  generativeDescription: 'Create unique patterns with procedural algorithms',
+  landingTitle: 'Landing Page',
+  landingSubtitle: 'Conversion',
+  landingDescription: 'High conversion page with modern design',
+  experience: 'Years of Experience',
+  projectsCompleted: 'Completed Projects',
+  technologies: 'Technologies',
+  satisfaction: 'Satisfaction',
+  letsCreate: 'Let\'s create something amazing together?',
+  acceptingProjects: 'Accepting new projects • average response < 24h',
+  explorePortfolio: 'Explore portfolio',
+  viewLanding: 'View landing',
+  downloadCV: 'Download CV'
+  ,
+  experimental3dCards: {
+    runway: {
+      title: 'Guidance floor',
+      text: 'Yellow and red light sequence to guide entry.',
+      foot: 'Channel 01'
+    },
+    terminal: {
+      title: 'Retro terminal',
+      text: 'Control station with green glow and compact interface.',
+      foot: 'Console 4B'
+    },
+    alerts: {
+      title: 'Active alerts',
+      text: 'Red tubes and blinking signals indicate risk.',
+      foot: 'Medium level'
+    }
+  },
+  experimental3d: {
+    brandText: 'NEON BAY / DOCK 07',
+    status: {
+      hangarActive: 'Hangar active',
+      portalOpen: 'Portal open'
+    },
+    hero: {
+      title: 'Access control for the luminous floor.',
+      copy: 'A panel inspired by the industrial bay: floor guidance lights, cold metal, and real-time status. Use the controls to power on, switch modes, and test dock signals.'
+    },
+    buttons: {
+      openPortal: 'Open portal',
+      closePortal: 'Close portal',
+      modeInspect: 'Inspect mode',
+      modeLive: 'Live mode'
+    },
+    tags: ['Neon lights', 'Dark metal', 'Underground bay'],
+    panel: {
+      title: 'Bay status',
+      live: 'Operational',
+      inspect: 'Inspection'
+    },
+    stats: {
+      energy: 'Energy',
+      door: 'Door',
+      doorOpen: 'Open',
+      doorLocked: 'Locked',
+      signals: 'Signals',
+      signalOk: 'OK',
+      signalAlert: 'Alert',
+      signalRisk: 'Risk',
+      control: 'Control',
+      controlManual: 'Manual',
+      controlAudit: 'Audit'
+    },
+    controls: {
+      energy: 'Energy',
+      signal: 'Signal'
+    }
+  },
+  experimental3dRibbon: [
+    'ACTIVE FLOOR •',
+    'GUIDANCE LIGHTS •',
+    'DOCK 07 CLEARED •',
+    'INDUSTRIAL METAL •',
+    'PORTAL ON STANDBY •',
+    'CONTROLLED ACCESS •'
+  ]
 }
 
-export default en; 
+export default en;

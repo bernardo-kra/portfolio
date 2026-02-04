@@ -1,8 +1,6 @@
 const pt = {
   name: 'Bernardo Kraczkowski',
   role: 'Desenvolvedor Frontend | React | TypeScript | Soluções Digitais',
-  heroTitle: 'Desenvolvedor Frontend especializado em React.',
-  heroSubtitle: 'Desenvolvimento de interfaces modernas e soluções digitais eficientes.',
   heroCTA: 'Ver Projetos',
   aboutTitle: 'Sobre Mim',
   experienceTitle: 'Experiência',
@@ -157,7 +155,114 @@ const pt = {
         ]
       }
     ]
-  }
+  },
+  greeting: 'Olá, eu sou',
+  scrollDown: 'Role para baixo',
+  heroTitle: 'Bernardo Kraczkowski',
+  heroSubtitle: 'Desenvolvedor React focado em interfaces rápidas e envolventes',
+  heroDescription: 'Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.',
+  heroRoles: [
+    'Desenvolvedor Frontend',
+    'Especialista em React',
+    'TypeScript na prática',
+    'UI/UX Enthusiast',
+    'Full Stack Developer'
+  ],
+  heroBadgeSets: [
+    ['React', 'TypeScript', 'Node.js'],
+    ['Next.js', 'UI', 'Performance'],
+    ['Design Systems', 'A11y', 'DX'],
+    ['Testes', 'Estado', 'SEO']
+  ],
+  myProjects: 'Meus Projetos',
+  projectsSubtitle: 'Explore as diferentes áreas do meu trabalho',
+  portfolioTitle: 'Portfolio',
+  portfolioSubtitle: 'Meu trabalho',
+  portfolioDescription: 'Conheça meus projetos, habilidades e experiência profissional',
+  pomodoroTitle: 'Pomodoro Timer',
+  pomodoroSubtitle: 'Produtividade',
+  pomodoroDescription: 'Ferramenta de produtividade para gerenciar seu tempo',
+  generativeTitle: 'Generative Art',
+  generativeSubtitle: 'Criatividade',
+  generativeDescription: 'Crie padrões únicos com algoritmos procedurais',
+  landingTitle: 'Landing Page',
+  landingSubtitle: 'Conversão',
+  landingDescription: 'Página de alta conversão com design moderno',
+  experience: 'Anos de Experiência',
+  projectsCompleted: 'Projetos Concluídos',
+  technologies: 'Tecnologias',
+  satisfaction: 'Satisfação',
+  letsCreate: 'Vamos criar algo incrível juntos?',
+  acceptingProjects: 'Aceitando novos projetos • resposta média < 24h',
+  explorePortfolio: 'Explorar portfólio',
+  viewLanding: 'Ver landing',
+  downloadCV: 'Baixar CV'
+  ,
+  experimental3dCards: {
+    runway: {
+      title: 'Pista luminosa',
+      text: 'Sequencia de luzes amarelas e vermelhas para guiar a entrada.',
+      foot: 'Canal 01'
+    },
+    terminal: {
+      title: 'Terminal retro',
+      text: 'Estacao de controle com brilho verde e interface compacta.',
+      foot: 'Console 4B'
+    },
+    alerts: {
+      title: 'Alertas ativos',
+      text: 'Tubos vermelhos e sinais piscando para indicar riscos.',
+      foot: 'Nivel medio'
+    }
+  },
+  experimental3d: {
+    brandText: 'NEON BAY / DOCK 07',
+    status: {
+      hangarActive: 'Hangar ativo',
+      portalOpen: 'Portal aberto'
+    },
+    hero: {
+      title: 'Controle de acesso para o piso luminoso.',
+      copy: 'Um painel inspirado na baia industrial do video: luzes de sinalizacao no chao, metal frio e anuncios de status em tempo real. Clique nos controles para energizar, alternar modo e testar sinais do dock.'
+    },
+    buttons: {
+      openPortal: 'Abrir portal',
+      closePortal: 'Fechar portal',
+      modeInspect: 'Modo inspecao',
+      modeLive: 'Modo live'
+    },
+    tags: ['Luzes neon', 'Metal escuro', 'Ambiente subterraneo'],
+    panel: {
+      title: 'Status da baia',
+      live: 'Operacional',
+      inspect: 'Inspecao'
+    },
+    stats: {
+      energy: 'Energia',
+      door: 'Porta',
+      doorOpen: 'Aberta',
+      doorLocked: 'Travada',
+      signals: 'Sinais',
+      signalOk: 'OK',
+      signalAlert: 'Alerta',
+      signalRisk: 'Risco',
+      control: 'Controle',
+      controlManual: 'Manual',
+      controlAudit: 'Auditoria'
+    },
+    controls: {
+      energy: 'Energia',
+      signal: 'Sinal'
+    }
+  },
+  experimental3dRibbon: [
+    'PISO ATIVO •',
+    'LUZES DE GUIA •',
+    'DOCK 07 LIBERADO •',
+    'METAL INDUSTRIAL •',
+    'PORTAL EM ESPERA •',
+    'ACESSO CONTROLADO •'
+  ]
 }
 
-export default pt; 
+export default pt;

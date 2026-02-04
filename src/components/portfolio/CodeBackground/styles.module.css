@@ -23,9 +23,9 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(255, 153, 0, 0.05) 0%,
-    rgba(255, 153, 0, 0.02) 50%,
-    rgba(255, 153, 0, 0.05) 100%
+    rgba(255, 153, 0, 0.03) 0%,
+    rgba(255, 153, 0, 0.015) 50%,
+    rgba(255, 153, 0, 0.03) 100%
   );
   animation: overlayPulse 4s ease-in-out infinite;
 }
@@ -36,8 +36,8 @@
 }
 
 @keyframes overlayPulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+  0%, 100% { opacity: 0.22; }
+  50% { opacity: 0.45; }
 }
 
 :root[data-theme='dark'] .codeCanvas {
@@ -47,9 +47,9 @@
 :root[data-theme='dark'] .codeOverlay {
   background: linear-gradient(
     135deg,
-    rgba(255, 153, 0, 0.08) 0%,
-    rgba(255, 153, 0, 0.03) 50%,
-    rgba(255, 153, 0, 0.08) 100%
+    rgba(255, 153, 0, 0.05) 0%,
+    rgba(255, 153, 0, 0.02) 50%,
+    rgba(255, 153, 0, 0.05) 100%
   );
 }
 

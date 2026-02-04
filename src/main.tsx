@@ -13,6 +13,7 @@ import Portfolio from '@pages/Portfolio'
 import GenerativeArt from '@pages/GenerativeArt'
 import LandingPage from '@pages/LandingPage'
 import AdminChat from '@pages/AdminChat'
+import Experimental3D from '@pages/Experimental3D'
 import { ThemeProvider } from '@theme/ThemeContext'
 import { BackgroundTransparencyProvider } from '@theme/BackgroundTransparencyContext'
 import { AppConfigProvider } from '@context'
@@ -37,6 +38,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/custom" element={<Container>Conteúdo customizado!</Container>} />
                 <Route path="/pomodoro" element={<Pomodoro />} />
                 <Route path="/generative" element={<GenerativeArt />} />
+                <Route path="/experimental3d" element={<Experimental3D />} />
                 <Route path="/admin/chat" element={<AdminChat />} />
                 <Route path="*" element={<App />} />
               </Routes>
