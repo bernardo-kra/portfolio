@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-secondary) 100%);
   padding: var(--spacing-lg) 0;
 }
@@ -38,6 +38,7 @@
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s ease-out;
+  overflow: visible;
 }
 
 .heroContent.visible {
@@ -56,6 +57,39 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 32px;
+  overflow: visible;
+}
+
+.profileContainer::before {
+  content: '';
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 153, 0, 0.35), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(99, 102, 241, 0.28), transparent 60%),
+    linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(99, 102, 241, 0.2));
+  filter: blur(18px);
+  opacity: 0.9;
+  z-index: 0;
+  animation: haloPulse 6s ease-in-out infinite;
+}
+
+.profileContainer::after {
+  content: '';
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 153, 0, 0.35),
+    inset 0 0 20px rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  z-index: 1;
+  animation: haloSweep 8s linear infinite;
 }
 
 .profilePhoto {
@@ -69,6 +103,35 @@
   50% { transform: translateY(-20px); }
 }
 
+@keyframes haloPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes haloSweep {
+  0% {
+    box-shadow:
+      0 0 0 1px rgba(255, 153, 0, 0.2),
+      inset 0 0 20px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(99, 102, 241, 0.35),
+      inset 0 0 24px rgba(255, 255, 255, 0.12);
+  }
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 153, 0, 0.2),
+      inset 0 0 20px rgba(255, 255, 255, 0.08);
+  }
+}
+
 .floatingBadges {
   position: absolute;
   top: 0;
@@ -77,6 +140,7 @@
   bottom: 0;
   pointer-events: none;
 }
+
 
 .badge {
   position: absolute;
@@ -88,6 +152,18 @@
   font-weight: 600;
   animation: orbit 8s linear infinite;
   box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.badgeText {
+  display: inline-block;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.badgeFading {
+  opacity: 0;
+  transform: translateY(4px);
 }
 
 .badge:nth-child(1) {
@@ -174,10 +250,11 @@
   font-weight: 600;
   color: var(--brand-orange);
   min-height: 2rem;
+  gap: 2px;
 }
 
 .typingText {
-  animation: fadeIn 0.5s ease-in-out;
+  min-width: 1px;
 }
 
 .cursor {
@@ -335,9 +412,9 @@
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.typingSuffix {
+  min-width: 0.5rem;
+  color: var(--brand-orange);
 }
 
 /* Responsive Design */
@@ -389,6 +466,7 @@
   .socialLinks {
     justify-content: center;
   }
+
 }
 
 @media (max-width: 480px) {
