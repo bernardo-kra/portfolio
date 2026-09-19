@@ -10,11 +10,29 @@ O site principal é publicado na raiz de `https://bernardo-kra.github.io/`.
 - Workflow: `.github/workflows/deploy-root.yml`.
 - Destino: repositório `bernardo-kra/bernardo-kra.github.io`.
 - Base do Vite: `/`.
-- Secret necessário: `GH_PAGES_TOKEN`, com permissão para gravar no repositório de destino.
+- Branch publicada: `gh-pages` no repositório de destino.
+- Secret necessário: `ACTIONS_DEPLOY_KEY`, contendo a chave SSH privada de deploy.
 
 Todo push em `main` executa `npm ci`, `npm run build` e publica `dist`. O arquivo `public/.nojekyll` impede o processamento por Jekyll.
 
 O workflow usa Node.js 22 LTS.
+
+### Configuração da chave de deploy
+
+Crie um par de chaves exclusivo para o deploy, sem senha:
+
+```bash
+ssh-keygen -t ed25519 -C "portfolio-github-pages" -f ~/.ssh/portfolio_pages_deploy_key -N ""
+```
+
+Configure as chaves nos repositórios:
+
+1. No repositório `bernardo-kra/bernardo-kra.github.io`, abra **Settings > Deploy keys**, adicione o conteúdo de `~/.ssh/portfolio_pages_deploy_key.pub` e habilite **Allow write access**.
+2. No repositório deste projeto, abra **Settings > Secrets and variables > Actions**, crie o secret `ACTIONS_DEPLOY_KEY` e cole o conteúdo completo de `~/.ssh/portfolio_pages_deploy_key`.
+3. No repositório de destino, configure o GitHub Pages para publicar a branch `gh-pages` a partir da raiz (`/`).
+4. Exclua os dois arquivos locais depois de cadastrar as chaves.
+
+A chave privada não deve ser adicionada ao Git. Para revogar o deploy, remova a deploy key do repositório de destino e o secret do repositório de origem.
 
 ## Frontend na Vercel
 
