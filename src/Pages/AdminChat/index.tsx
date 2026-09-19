@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
 import { useAppConfig } from '@context';
-import { ChatInterface } from '@components/chat';
+import { ModernChat } from '@components/chat';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.css';
 
@@ -85,7 +85,7 @@ const AdminChat: React.FC = () => {
         </div>
 
         <div className={styles.chatContainer}>
-          <ChatInterface />
+          <ModernChat />
         </div>
       </div>
     </div>

@@ -65,7 +65,7 @@ router.get('/messages', async (req: Request, res: Response) => {
 
 router.patch('/messages/:id/read', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     
     await db.collection('messages').doc(id).update({
       read: true,

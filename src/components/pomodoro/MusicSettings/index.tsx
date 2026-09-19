@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Card, Checkbox } from '@components/common'
-import { Music, Settings, X } from 'lucide-react'
+import { Music } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
 
@@ -48,7 +48,7 @@ const MusicSettings: React.FC = () => {
     setLocalSettings(defaultSettings)
   }
 
-  const updateLocalSetting = (key: keyof typeof localSettings, value: any) => {
+  const updateLocalSetting = <K extends keyof typeof localSettings>(key: K, value: typeof localSettings[K]) => {
     setLocalSettings(prev => ({ ...prev, [key]: value }))
   }
 
@@ -64,7 +64,6 @@ const MusicSettings: React.FC = () => {
       </div>
 
       <div className={styles.settingsContent}>
-        {/* Current Track Info */}
         {currentTrack && (
           <div className={styles.currentTrackInfo}>
             <Typography variant="body2" weight="semibold">
@@ -73,7 +72,6 @@ const MusicSettings: React.FC = () => {
           </div>
         )}
 
-        {/* Behavior Settings */}
         <div className={styles.settingGroup}>
           <Typography variant="body2" weight="semibold" className={styles.groupTitle}>
             Comportamento

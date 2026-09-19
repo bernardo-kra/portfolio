@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Code, Zap, Star, Award } from 'lucide-react'
 import styles from './styles.module.css'
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Typography, Section, Card } from '@components/common'
-import { useI18n } from '@src/i18n'
 import styles from './styles.module.css'
 
 interface Course {
@@ -57,8 +56,6 @@ const courses: Course[] = [
 ]
 
 const Education: React.FC = () => {
-  const { t } = useI18n()
-
   return (
     <Section id="educacao" spacing="lg">
       <Typography variant="h2" className={styles.educationTitle}>
@@ -115,4 +112,4 @@ const Education: React.FC = () => {
   )
 }
 
-export default Education 
+export default Education

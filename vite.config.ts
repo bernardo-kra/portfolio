@@ -1,8 +1,6 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import { resolve } from 'path';
-
-const isProduction = process.env.NODE_ENV === 'production' || process.env.GITHUB_ACTIONS;
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
@@ -27,4 +25,4 @@ export default defineConfig({
       '@context': resolve(__dirname, 'src/context'),
     },
   },
-});
+})

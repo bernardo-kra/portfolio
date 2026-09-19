@@ -7,15 +7,17 @@ import { useAppConfig } from '@context'
 import { SimpleAuthModal } from '@components/auth/SimpleAuthModal'
 import { FloatingChatButton } from '@components/chat'
 import { NotificationCenter } from '@components/notifications'
-import type { Lang } from '@src/i18n'
+import type { Lang, PortfolioI18n } from '@src/i18n'
 
 interface PortfolioNavProps {
-  t: any
+  t: PortfolioI18n
   lang: Lang
   setLang: (lang: Lang) => void
 }
 
-const navItems = [
+type NavLabelKey = 'aboutTitle' | 'experienceTitle' | 'educationTitle' | 'contactTitle'
+
+const navItems: Array<{ id: string; labelKey: NavLabelKey; icon: string }> = [
   { id: 'sobre', labelKey: 'aboutTitle', icon: '👤' },
   { id: 'experiencia', labelKey: 'experienceTitle', icon: '💼' },
   { id: 'educacao', labelKey: 'educationTitle', icon: '🎓' },
@@ -265,4 +267,4 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   )
 }
 
-export default PortfolioNav 
+export default PortfolioNav

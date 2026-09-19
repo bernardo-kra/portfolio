@@ -23,12 +23,6 @@ const ParallaxElement: React.FC<ParallaxElementProps> = ({
     if (disabled) return
 
     const handleScroll = () => {
-      if (!elementRef.current) return
-
-      const rect = elementRef.current.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      const elementHeight = rect.height
-      
       const scrolled = window.scrollY
       const rate = scrolled * speed
       

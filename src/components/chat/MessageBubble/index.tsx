@@ -2,16 +2,10 @@ import React from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import styles from './styles.module.css';
+import type { ChatMessage, ChatTimestamp } from '../../../services/chatService';
 
 interface MessageBubbleProps {
-  message: {
-    id: string;
-    message: string;
-    senderEmail: string;
-    senderName: string;
-    timestamp: any;
-    isAdmin: boolean;
-  };
+  message: ChatMessage;
   isOwnMessage: boolean;
   showSenderName?: boolean;
 }
@@ -21,11 +15,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   isOwnMessage, 
   showSenderName = false 
 }) => {
-  const formatTime = (timestamp: any) => {
+  const formatTime = (timestamp: ChatTimestamp) => {
     if (!timestamp) return '';
     
     try {
-      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      const date = timestamp instanceof Date
+        ? timestamp
+        : typeof timestamp === 'object'
+          ? timestamp.toDate?.() ?? new Date((timestamp.seconds ?? 0) * 1000)
+          : new Date(timestamp);
       return format(date, 'HH:mm', { locale: ptBR });
     } catch {
       return '';

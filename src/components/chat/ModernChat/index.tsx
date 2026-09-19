@@ -31,10 +31,6 @@ const ModernChat: React.FC = () => {
     setSelectedUserId(undefined);
   };
 
-  const handleBackToChat = () => {
-    setShowConversationList(false);
-  };
-
   return (
     <div className={styles.chatContainer}>
       {isAdmin && canViewAllChats ? (

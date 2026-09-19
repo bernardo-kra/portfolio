@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Typography, Button, Input, Card } from '@components/common'
 import { Settings, Target, Coffee, X } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
@@ -10,6 +10,12 @@ const TimerSettings: React.FC = () => {
   const [focusMinutes, setFocusMinutes] = useState(Math.floor(state.focusDuration / 60))
   const [breakMinutes, setBreakMinutes] = useState(Math.floor(state.breakDuration / 60))
   const modalRef = useRef<HTMLDivElement>(null)
+
+  const handleCancel = useCallback(() => {
+    setFocusMinutes(Math.floor(state.focusDuration / 60))
+    setBreakMinutes(Math.floor(state.breakDuration / 60))
+    setIsOpen(false)
+  }, [state.focusDuration, state.breakDuration])
 
   useEffect(() => {
     setFocusMinutes(Math.floor(state.focusDuration / 60))
@@ -32,7 +38,7 @@ const TimerSettings: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'unset'
     }
-  }, [isOpen])
+  }, [isOpen, handleCancel])
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -48,17 +54,11 @@ const TimerSettings: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [isOpen])
+  }, [isOpen, handleCancel])
 
   const handleSave = () => {
     setFocusDuration(focusMinutes)
     setBreakDuration(breakMinutes)
-    setIsOpen(false)
-  }
-
-  const handleCancel = () => {
-    setFocusMinutes(Math.floor(state.focusDuration / 60))
-    setBreakMinutes(Math.floor(state.breakDuration / 60))
     setIsOpen(false)
   }
 

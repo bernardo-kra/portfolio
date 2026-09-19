@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
-    dataLayer: any[]
+    gtag: (...args: unknown[]) => void
+    dataLayer: unknown[]
   }
 }
 
@@ -11,7 +11,7 @@ export const useAnalytics = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || []
-      function gtag(...args: any[]) {
+      function gtag(...args: unknown[]) {
         window.dataLayer.push(args)
       }
       window.gtag = gtag

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { chatService } from '../../../services/chatService';
-import type { ChatConversation } from '../../../services/chatService';
+import type { ChatConversation, ChatTimestamp } from '../../../services/chatService';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import styles from './styles.module.css';
@@ -36,11 +36,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
     }
   };
 
-  const formatLastMessageTime = (timestamp: any) => {
+  const formatLastMessageTime = (timestamp: ChatTimestamp) => {
     if (!timestamp) return '';
     
     try {
-      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      const date = timestamp instanceof Date
+        ? timestamp
+        : typeof timestamp === 'object'
+          ? timestamp.toDate?.() ?? new Date((timestamp.seconds ?? 0) * 1000)
+          : new Date(timestamp);
       const now = new Date();
       const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
       

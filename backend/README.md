@@ -1,140 +1,45 @@
 # Portfolio Backend
 
-Backend simples para o portfolio com integração ao Firebase.
+API Express em TypeScript para autenticação, chat, contato, analytics e dados do portfólio. Usuários, sessões e dados da aplicação são persistidos no Firestore.
 
-## 🚀 Funcionalidades
+## Executar localmente
 
-- **Portfolio**: CRUD completo para projetos
-- **Contato**: Sistema de mensagens
-- **Analytics**: Rastreamento de visualizações de páginas
-- **Firebase**: Integração com Firestore e Authentication
-
-## 📋 Pré-requisitos
-
-- Node.js 18+
-- Conta no Firebase
-- Chave de serviço do Firebase
-
-## ⚙️ Configuração
-
-1. **Instalar dependências:**
 ```bash
-cd backend
-npm install
-```
-
-2. **Configurar variáveis de ambiente:**
-```bash
-cp env.example .env
-```
-
-3. **Configurar Firebase:**
-   - Acesse o [Console do Firebase](https://console.firebase.google.com/)
-   - Crie um projeto ou use um existente
-   - Vá em "Configurações do projeto" > "Contas de serviço"
-   - Gere uma nova chave privada
-   - Configure as variáveis no arquivo `.env`
-
-4. **Executar em desenvolvimento:**
-```bash
+npm ci
+copy env.example .env
 npm run dev
 ```
 
-5. **Build para produção:**
-```bash
-npm run build
-npm start
-```
+Em shells Unix, use `cp env.example .env`. O servidor usa a porta `3001` por padrão.
 
-## 🔗 Endpoints da API
+## Scripts
 
-### Health Check
-- `GET /api/health` - Status da API
+| Comando               | Finalidade                               |
+| --------------------- | ---------------------------------------- |
+| `npm run dev`         | Executa com reload via tsx               |
+| `npm run build`       | Compila TypeScript em `dist`             |
+| `npm start`           | Executa o build                          |
+| `npm run lint`        | Analisa `src`                            |
+| `npm run setup-admin` | Executa o assistente de criação do admin |
 
-### Portfolio
-- `GET /api/portfolio/projects` - Listar projetos
-- `POST /api/portfolio/projects` - Criar projeto
-- `GET /api/portfolio/projects/:id` - Buscar projeto
-- `PUT /api/portfolio/projects/:id` - Atualizar projeto
-- `DELETE /api/portfolio/projects/:id` - Deletar projeto
+## Rotas
 
-### Contato
-- `POST /api/contact/messages` - Enviar mensagem
-- `GET /api/contact/messages` - Listar mensagens
-- `PATCH /api/contact/messages/:id/read` - Marcar como lida
+Todas as rotas usam o prefixo `/api`.
 
-### Analytics
-- `POST /api/analytics/page-view` - Registrar visualização
-- `GET /api/analytics/stats` - Estatísticas
+- `/health`: status do serviço.
+- `/auth`: registro, login e dados de autenticação.
+- `/chat`: mensagens, respostas, leitura e estatísticas.
+- `/contact`: mensagens do formulário de contato.
+- `/analytics`: visualizações e estatísticas.
+- `/portfolio`: CRUD de projetos.
+- `/security`: logs e estatísticas restritos ao admin.
 
-## 🛠️ Scripts Disponíveis
+Consulte os arquivos em `src/routes` para os contratos atuais. Ainda não há uma especificação OpenAPI nem testes automatizados.
 
-- `npm run dev` - Executar em modo desenvolvimento
-- `npm run build` - Build para produção
-- `npm start` - Executar versão de produção
-- `npm run lint` - Verificar código
-- `npm run format` - Formatar código
+## Autenticação
 
-## 🔧 Estrutura do Projeto
+As rotas protegidas esperam `Authorization: Bearer <token>`. Login e cadastro criam uma sessão com duração de sete dias; apenas o hash SHA-256 do token é persistido na coleção `sessions`. O header `x-user-email` é opcional e, quando enviado, precisa corresponder ao usuário da sessão.
 
-```
-backend/
-├── src/
-│   ├── config/
-│   │   └── firebase.ts      # Configuração do Firebase
-│   ├── middleware/
-│   │   ├── cors.ts          # Configuração CORS
-│   │   └── errorHandler.ts  # Tratamento de erros
-│   ├── routes/
-│   │   ├── portfolio.ts     # Rotas do portfolio
-│   │   ├── contact.ts       # Rotas de contato
-│   │   ├── analytics.ts     # Rotas de analytics
-│   │   └── index.ts         # Roteador principal
-│   └── index.ts             # Servidor principal
-├── package.json
-├── tsconfig.json
-└── README.md
-```
+## Deploy
 
-## 🔐 Variáveis de Ambiente
-
-```env
-PORT=3001
-NODE_ENV=development
-FIREBASE_PROJECT_ID=seu-projeto-id
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@seu-projeto.iam.gserviceaccount.com
-CORS_ORIGIN=http://localhost:5173
-```
-
-## 📝 Exemplo de Uso
-
-### Criar um projeto:
-```bash
-curl -X POST http://localhost:3001/api/portfolio/projects \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Meu Projeto",
-    "description": "Descrição do projeto",
-    "technologies": ["React", "TypeScript"],
-    "githubUrl": "https://github.com/user/repo",
-    "liveUrl": "https://meuprojeto.com"
-  }'
-```
-
-### Enviar mensagem de contato:
-```bash
-curl -X POST http://localhost:3001/api/contact/messages \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "João Silva",
-    "email": "joao@email.com",
-    "subject": "Interesse em projeto",
-    "message": "Olá, gostaria de conversar sobre um projeto."
-  }'
-```
-
-
-
-
-
+O serviço atual usa Render. Configure o diretório raiz como `backend`, execute `npm ci && npm run build` e inicie com `npm start`. As variáveis necessárias estão em `env.example` e na documentação da raiz.

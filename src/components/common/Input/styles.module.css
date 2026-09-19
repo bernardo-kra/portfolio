@@ -40,7 +40,6 @@
   opacity: 1;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .inputLabel {
     font-size: var(--font-size-sm);

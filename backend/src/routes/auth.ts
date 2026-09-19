@@ -1,7 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { db, auth } from '../config/firebase.js';
+import { db } from '../config/firebase.js';
 import bcrypt from 'bcryptjs';
 import { authRateLimit } from '../middleware/rateLimiter.js';
+import { createSession } from '../services/sessionService.js';
+import { verifyToken, type AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -57,18 +59,19 @@ router.post('/register', authRateLimit, async (req: Request, res: Response) => {
 
     await userRef.set(userData);
 
-    const user = await auth.createUser({
-      email,
-      password,
-      displayName: `${firstName} ${lastName}`,
-    });
+    const token = await createSession(email);
 
     res.status(201).json({
       success: true,
       data: {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
+        token,
+        user: {
+          email,
+          firstName,
+          lastName,
+          phone: phone || '',
+          role: userData.role,
+        },
       },
       message: 'Usuário criado com sucesso!',
     });
@@ -119,12 +122,12 @@ router.post('/login', authRateLimit, async (req: Request, res: Response) => {
       });
     }
 
-    const customToken = await auth.createCustomToken(userData.email);
+    const token = await createSession(userData.email);
 
     res.json({
       success: true,
       data: {
-        customToken,
+        token,
         user: {
           email: userData.email,
           firstName: userData.firstName,
@@ -144,9 +147,16 @@ router.post('/login', authRateLimit, async (req: Request, res: Response) => {
   }
 });
 
-router.get('/profile/:email', async (req: Request, res: Response) => {
+router.get('/profile/:email', verifyToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { email } = req.params;
+    const email = String(req.params.email);
+
+    if (req.user?.email !== email && req.user?.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: { message: 'Acesso negado' },
+      });
+    }
 
     const userRef = db.collection('users').doc(email);
     const userDoc = await userRef.get();

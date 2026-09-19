@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.module.css';
 
+const sections = [
+  { id: 'sobre', label: 'Sobre', icon: '👤' },
+  { id: 'experiencia', label: 'Experiência', icon: '💼' },
+  { id: 'educacao', label: 'Educação', icon: '🎓' },
+  { id: 'contato', label: 'Contato', icon: '📧' },
+];
+
 const QuickNavigation: React.FC = () => {
   const [activeSection, setActiveSection] = useState('sobre');
   const [isVisible, setIsVisible] = useState(false);
-
-  const sections = [
-    { id: 'sobre', label: 'Sobre', icon: '👤' },
-    { id: 'experiencia', label: 'Experiência', icon: '💼' },
-    { id: 'educacao', label: 'Educação', icon: '🎓' },
-    { id: 'contato', label: 'Contato', icon: '📧' },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +27,6 @@ const QuickNavigation: React.FC = () => {
         }
       }
 
-      // Show/hide based on scroll position
       setIsVisible(window.scrollY > 300);
     };
 

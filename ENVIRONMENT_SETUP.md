@@ -1,67 +1,51 @@
-# Configuração de Ambiente
+# Configuração de ambiente
 
-## Backend URL
+Nunca versione arquivos `.env` nem credenciais do Firebase.
 
-O frontend está configurado para usar o backend hospedado no Render. A URL padrão é:
-`https://portfolio-08my.onrender.com`
+## Frontend
 
-## Variáveis de Ambiente Configuradas no GitHub
-
-As seguintes variáveis já estão configuradas no GitHub para deploy automático:
-
-### Backend
-- `VITE_BACKEND_URL` - URL do backend (https://portfolio-08my.onrender.com)
-- `VITE_BACKEND_ENABLED` - Habilitar/desabilitar backend
-
-### Features
-- `VITE_AUTH_ENABLED` - Sistema de autenticação
-- `VITE_CHAT_ENABLED` - Sistema de chat
-- `VITE_ANALYTICS_ENABLED` - Analytics
-- `VITE_PORTFOLIO_ENABLED` - Seção portfolio
-
-### UI
-- `VITE_SHOW_CHAT_BUTTON` - Mostrar botão de chat
-- `VITE_SHOW_AUTH_BUTTON` - Mostrar botão de autenticação
-- `VITE_SHOW_CONTACT_METHODS` - Mostrar métodos de contato
-
-### Firebase (Backend)
-- `FIREBASE_CLIENT_EMAIL` - Email do cliente Firebase
-- `FIREBASE_PRIVATE_KEY` - Chave privada Firebase
-- `FIREBASE_PROJECT_ID` - ID do projeto Firebase
-- `FIREBASE_WEB_API_KEY` - API Key do Firebase
-
-## Configuração Local (Desenvolvimento)
-
-Para desenvolvimento local, crie um arquivo `.env` na raiz do projeto com:
+Crie `.env.local` na raiz quando precisar sobrescrever os padrões:
 
 ```env
-# Backend Configuration
-VITE_BACKEND_URL=https://portfolio-08my.onrender.com
+VITE_BACKEND_URL=http://localhost:3001
 VITE_BACKEND_ENABLED=true
-
-# Feature Flags
 VITE_AUTH_ENABLED=true
 VITE_CHAT_ENABLED=true
 VITE_ANALYTICS_ENABLED=true
 VITE_PORTFOLIO_ENABLED=true
-
-# UI Configuration
 VITE_SHOW_CHAT_BUTTON=true
 VITE_SHOW_AUTH_BUTTON=true
 VITE_SHOW_CONTACT_METHODS=true
-
-# Environment
-NODE_ENV=production
+VITE_GA_MEASUREMENT_ID=
 ```
 
-## Como Funciona
+Em desenvolvimento, a URL padrão do backend é `http://localhost:3001`. Em produção, o fallback atual é `https://portfolio-08my.onrender.com`.
 
-1. **Desenvolvimento**: Usa `http://localhost:3001` automaticamente
-2. **Produção**: Usa `https://portfolio-08my.onrender.com` ou a URL definida em `VITE_BACKEND_URL`
+Todas as flags são habilitadas por padrão e só são desligadas quando o valor é exatamente `false`.
 
-## Nota sobre Render Free Tier
+## Backend
 
-O Render free tier pode "dormir" após inatividade. Se o backend não responder:
-1. Acesse o painel do Render
-2. Faça um deploy manual ou aguarde a próxima requisição
-3. O primeiro acesso pode demorar alguns segundos para "acordar" o serviço
+Copie o exemplo e substitua os valores:
+
+```bash
+cd backend
+cp env.example .env
+```
+
+Variáveis consumidas diretamente pelo backend:
+
+```env
+PORT=3001
+NODE_ENV=development
+FIREBASE_PROJECT_ID=
+FIREBASE_PRIVATE_KEY=
+FIREBASE_CLIENT_EMAIL=
+```
+
+O `FIREBASE_PRIVATE_KEY` pode conter quebras de linha escapadas como `\n`. As demais variáveis do arquivo `backend/env.example` são úteis para configurar a credencial completa no provedor de hospedagem.
+
+## Produção
+
+- GitHub Actions: configure `VITE_GA_MEASUREMENT_ID` se o analytics deve ser habilitado.
+- Render: configure as credenciais Firebase como secrets.
+- Não coloque variáveis `FIREBASE_*` no frontend; tudo que começa com `VITE_` pode ser exposto no bundle.

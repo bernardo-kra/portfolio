@@ -30,10 +30,8 @@ const ContactForm: React.FC = () => {
     setSubmitStatus('idle')
 
     try {
-      // Simular envio do formulário
       await new Promise(resolve => setTimeout(resolve, 2000))
       
-      // Aqui você integraria com seu serviço de e-mail (Mailchimp, Sendinblue, etc.)
       
       setSubmitStatus('success')
       setFormData({
@@ -46,7 +44,7 @@ const ContactForm: React.FC = () => {
         timeline: '',
         acceptTerms: false
       })
-    } catch (error) {
+    } catch {
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)

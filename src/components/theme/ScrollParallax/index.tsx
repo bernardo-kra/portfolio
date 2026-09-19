@@ -21,7 +21,6 @@ const ScrollParallax: React.FC<ScrollParallaxProps> = ({
     const handleScroll = () => {
       if (!elementRef.current) return
       
-      const rect = elementRef.current.getBoundingClientRect()
       const scrolled = window.pageYOffset
       const rate = scrolled * -speed
       

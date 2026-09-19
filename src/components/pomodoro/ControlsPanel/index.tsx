@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Typography, Button, Card } from '@components/common'
-import { Settings, Music, Volume2, Target } from 'lucide-react'
+import { Typography } from '@components/common'
+import { Settings, Music, Target } from 'lucide-react'
 import TimerSettings from '../TimerSettings'
 import LofiPlayer from '../LofiPlayer'
 import MusicPlaylist from '../MusicPlaylist'

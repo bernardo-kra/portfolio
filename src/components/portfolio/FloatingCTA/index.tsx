@@ -8,10 +8,8 @@ const FloatingCTA: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      
-      // Show CTA when user scrolls past 50% of the page
+
       setIsVisible(scrollPosition > documentHeight * 0.5);
     };
 

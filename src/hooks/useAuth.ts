@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppConfig } from '@context';
 
-interface User {
+export interface AuthUser {
   email: string;
   firstName: string;
   lastName: string;
@@ -10,8 +10,8 @@ interface User {
 }
 
 export const useAuth = () => {
-  const { isBackendEnabled, isFeatureEnabled } = useAppConfig();
-  const [user, setUser] = useState<User | null>(null);
+  const { isFeatureEnabled } = useAppConfig();
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const useAuth = () => {
     setLoading(false);
   }, [isFeatureEnabled]);
 
-  const login = (userData: User) => {
+  const login = (userData: AuthUser) => {
     if (!isFeatureEnabled('authentication')) {
       return;
     }
@@ -54,4 +54,3 @@ export const useAuth = () => {
     isAuthenticated,
   };
 };
-
