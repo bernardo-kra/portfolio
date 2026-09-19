@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { requireAdmin } from '../middleware/adminAuth.js';
 import { securityLogger } from '../middleware/securityLogger.js';
+import type { SecurityEvent } from '../middleware/securityLogger.js';
 
 const router = Router();
 
-// Rota para visualizar logs de segurança (apenas admin)
 router.get('/logs', requireAdmin, (req: Request, res: Response) => {
   try {
     const { type, ip, limit = 50 } = req.query;
@@ -12,7 +12,7 @@ router.get('/logs', requireAdmin, (req: Request, res: Response) => {
     let logs;
     
     if (type) {
-      logs = securityLogger.getLogsByType(type as any, Number(limit));
+      logs = securityLogger.getLogsByType(type as SecurityEvent['type'], Number(limit));
     } else if (ip) {
       logs = securityLogger.getLogsByIP(ip as string, Number(limit));
     } else {
@@ -36,7 +36,6 @@ router.get('/logs', requireAdmin, (req: Request, res: Response) => {
   }
 });
 
-// Rota para estatísticas de segurança (apenas admin)
 router.get('/stats', requireAdmin, (req: Request, res: Response) => {
   try {
     const allLogs = securityLogger.getLogs(1000);
@@ -53,7 +52,7 @@ router.get('/stats', requireAdmin, (req: Request, res: Response) => {
         acc[log.ip] = (acc[log.ip] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
-      recent: allLogs.slice(-10) // Últimos 10 eventos
+      recent: allLogs.slice(-10)
     };
 
     res.json({

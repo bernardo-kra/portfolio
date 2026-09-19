@@ -1,9 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Typography } from '@components/common'
-import { Volume2, Music, ExternalLink, Settings, Play, Pause, SkipForward, SkipBack } from 'lucide-react'
+import { Music, ExternalLink, Settings, Play, Pause } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
 import MusicSettings from '../MusicSettings'
 import styles from './styles.module.css'
+
+const extractVideoId = (url: string): string => {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/watch\?.*&v=)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match?.[1]) return match[1]
+  }
+
+  return ''
+}
+
+const getEmbedUrl = (url: string): string => {
+  const videoId = extractVideoId(url)
+  if (!videoId) return ''
+  return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0&loop=1&playlist=${videoId}&enablejsapi=1&origin=${window.location.origin}&widget_referrer=${window.location.origin}&movie_player=1`
+}
+
+const isValidYouTubeUrl = (url: string): boolean => {
+  if (!url.trim()) return false
+  return extractVideoId(url).length === 11
+}
 
 const LofiPlayer: React.FC = () => {
   const { state } = usePomodoro()
@@ -13,37 +41,6 @@ const LofiPlayer: React.FC = () => {
   const { musicSettings } = state
   
   const currentTrack = musicSettings.tracks.find(track => track.id === musicSettings.currentTrackId)
-
-  const extractVideoId = (url: string): string => {
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/watch\?.*&v=)([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
-    ]
-    
-    for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match && match[1]) {
-        return match[1]
-      }
-    }
-    
-    return ''
-  }
-
-  const getEmbedUrl = (url: string): string => {
-    const videoId = extractVideoId(url)
-    if (!videoId) return ''
-    return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0&loop=1&playlist=${videoId}&enablejsapi=1&origin=${window.location.origin}&widget_referrer=${window.location.origin}&movie_player=1`
-  }
-
-  const isValidYouTubeUrl = (url: string): boolean => {
-    if (!url.trim()) return false
-    const videoId = extractVideoId(url)
-    return videoId.length === 11
-  }
 
   useEffect(() => {
     if (!musicSettings.isEnabled || !iframeRef.current || !currentTrack || !isValidYouTubeUrl(currentTrack.url)) return
@@ -161,7 +158,6 @@ const LofiPlayer: React.FC = () => {
 
       {showSettings && <MusicSettings />}
 
-      {/* Compact Player */}
       {currentTrack && isValidYouTubeUrl(currentTrack.url) && (
         <div className={styles.compactPlayer}>
           <div className={styles.playerControls}>
@@ -187,7 +183,6 @@ const LofiPlayer: React.FC = () => {
             </div>
           </div>
           
-          {/* Minimal YouTube Player */}
           <div className={styles.youtubeContainer}>
             <div className={styles.youtubeWrapper}>
               <iframe
@@ -204,7 +199,6 @@ const LofiPlayer: React.FC = () => {
         </div>
       )}
 
-      {/* Warning when URL is invalid */}
       {musicSettings.isEnabled && currentTrack && !isValidYouTubeUrl(currentTrack.url) && (
         <div className={styles.urlWarning}>
           <Typography variant="body2" color="error" align="center">

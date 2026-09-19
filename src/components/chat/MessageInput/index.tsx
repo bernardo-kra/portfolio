@@ -17,7 +17,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
   cooldownRemaining = 0
 }) => {
   const [message, setMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,7 +24,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     if (message.trim() && !disabled && cooldownRemaining === 0) {
       onSendMessage(message.trim());
       setMessage('');
-      setIsTyping(false);
     }
   };
 
@@ -40,7 +38,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     const value = e.target.value;
     if (value.length <= maxLength) {
       setMessage(value);
-      setIsTyping(value.trim().length > 0);
     }
   };
 

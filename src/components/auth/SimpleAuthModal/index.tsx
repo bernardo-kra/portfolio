@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
+import type { AuthUser } from '@hooks/useAuth';
 
 interface SimpleAuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (user: any) => void;
+  onSuccess: (user: AuthUser) => void;
 }
 
 export const SimpleAuthModal: React.FC<SimpleAuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
@@ -53,15 +54,15 @@ export const SimpleAuthModal: React.FC<SimpleAuthModalProps> = ({ isOpen, onClos
       const data = await response.json();
 
       if (data.success) {
-        const userData = data.data.user || data.data;
+        const userData = data.data.user;
         localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('token', data.data.customToken || '');
+        localStorage.setItem('token', data.data.token);
         onSuccess(userData);
         onClose();
       } else {
         setError(data.error.message);
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);

@@ -12,7 +12,7 @@ interface Notification {
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp'>) => {
     const newNotification: Notification = {
@@ -24,7 +24,6 @@ export const useNotifications = () => {
     setNotifications(prev => [newNotification, ...prev]);
     setUnreadCount(prev => prev + 1);
 
-    // Mostrar notificação do navegador se permitido
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('Nova mensagem', {
         body: notification.message,
@@ -61,14 +60,12 @@ export const useNotifications = () => {
     return Notification.permission === 'granted';
   }, []);
 
-  // Verificar permissões de notificação ao carregar
   useEffect(() => {
     if (isAuthenticated) {
       requestNotificationPermission();
     }
   }, [isAuthenticated, requestNotificationPermission]);
 
-  // Limpar notificações antigas (mais de 7 dias)
   useEffect(() => {
     const cleanup = setInterval(() => {
       const sevenDaysAgo = new Date();
@@ -77,7 +74,7 @@ export const useNotifications = () => {
       setNotifications(prev =>
         prev.filter(notif => notif.timestamp > sevenDaysAgo)
       );
-    }, 24 * 60 * 60 * 1000); // Verificar a cada 24 horas
+    }, 24 * 60 * 60 * 1000);
 
     return () => clearInterval(cleanup);
   }, []);

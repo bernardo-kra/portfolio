@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface SecurityEvent {
+export interface SecurityEvent {
   timestamp: Date;
   type: 'RATE_LIMIT' | 'AUTH_FAILURE' | 'SUSPICIOUS_ACTIVITY' | 'UNAUTHORIZED_ACCESS';
   ip: string;
@@ -31,7 +31,6 @@ class SecurityLogger {
 
     this.logs.push(securityEvent);
     
-    // Log no console para monitoramento
     console.warn(`🚨 SECURITY EVENT [${event.type}]:`, {
       timestamp: securityEvent.timestamp.toISOString(),
       ip: event.ip,
@@ -40,7 +39,6 @@ class SecurityLogger {
       details: event.details
     });
 
-    // Manter apenas os últimos 1000 logs em memória
     if (this.logs.length > 1000) {
       this.logs = this.logs.slice(-1000);
     }
@@ -65,12 +63,10 @@ class SecurityLogger {
 
 export const securityLogger = SecurityLogger.getInstance();
 
-// Middleware para logar tentativas suspeitas
 export const securityLoggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const originalSend = res.send;
   
   res.send = function(data) {
-    // Log de tentativas de acesso não autorizado
     if (res.statusCode === 401 || res.statusCode === 403) {
       securityLogger.log({
         type: 'UNAUTHORIZED_ACCESS',
@@ -82,7 +78,6 @@ export const securityLoggerMiddleware = (req: Request, res: Response, next: Next
       });
     }
 
-    // Log de rate limiting
     if (res.statusCode === 429) {
       securityLogger.log({
         type: 'RATE_LIMIT',
@@ -100,12 +95,10 @@ export const securityLoggerMiddleware = (req: Request, res: Response, next: Next
   next();
 };
 
-// Middleware para detectar atividade suspeita
 export const suspiciousActivityDetector = (req: Request, res: Response, next: NextFunction) => {
   const userAgent = req.get('User-Agent') || '';
   const ip = req.ip || 'unknown';
   
-  // Detectar user agents suspeitos
   const suspiciousPatterns = [
     /bot/i,
     /crawler/i,

@@ -9,7 +9,7 @@ interface UseScrollAnimationOptions {
 export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options
   const [isVisible, setIsVisible] = useState(false)
-  const elementRef = useRef<HTMLElement>(null)
+  const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,14 +29,11 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
       }
     )
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current)
-    }
+    const element = elementRef.current
+    if (element) observer.observe(element)
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current)
-      }
+      if (element) observer.unobserve(element)
     }
   }, [threshold, rootMargin, triggerOnce])
 

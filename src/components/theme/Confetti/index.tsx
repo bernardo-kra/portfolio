@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styles from './styles.module.css'
 
 interface ConfettiProps {
@@ -14,23 +14,16 @@ interface ConfettiPiece {
   delay: number
 }
 
+const colors = [
+  '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
+  '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43'
+]
+
 const Confetti: React.FC<ConfettiProps> = ({ trigger, onComplete }) => {
   const [pieces, setPieces] = useState<ConfettiPiece[]>([])
   const [isActive, setIsActive] = useState(false)
 
-  const colors = [
-    '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
-    '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43'
-  ]
-
-  useEffect(() => {
-    if (trigger && !isActive) {
-      setIsActive(true)
-      createConfetti()
-    }
-  }, [trigger, isActive])
-
-  const createConfetti = () => {
+  const createConfetti = useCallback(() => {
     const newPieces: ConfettiPiece[] = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       x: Math.random() * window.innerWidth,
@@ -46,7 +39,14 @@ const Confetti: React.FC<ConfettiProps> = ({ trigger, onComplete }) => {
       setPieces([])
       onComplete?.()
     }, 3000)
-  }
+  }, [onComplete])
+
+  useEffect(() => {
+    if (trigger && !isActive) {
+      setIsActive(true)
+      createConfetti()
+    }
+  }, [trigger, isActive, createConfetti])
 
   if (!isActive) return null
 

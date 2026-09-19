@@ -15,7 +15,7 @@ const SMALL_RATIO = 0.9
 
 export const usePreviewFit = (
   imageUrl: string | undefined,
-  containerRef: RefObject<HTMLElement>
+  containerRef: RefObject<HTMLElement | null>
 ): PreviewFitResult => {
   const [fit, setFit] = useState<PreviewFit>('contain')
   const [position, setPosition] = useState<PreviewPosition>('center top')

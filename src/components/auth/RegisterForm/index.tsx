@@ -3,9 +3,10 @@ import Button from '@components/common/Button';
 import Input from '@components/common/Input';
 import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
+import type { AuthUser } from '@hooks/useAuth';
 
 interface RegisterFormProps {
-  onSuccess: (user: any) => void;
+  onSuccess: (user: AuthUser) => void;
   onSwitchToLogin: () => void;
 }
 
@@ -51,13 +52,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem('user', JSON.stringify(data.data));
-        localStorage.setItem('token', data.data.customToken);
-        onSuccess(data.data);
+        localStorage.setItem('user', JSON.stringify(data.data.user));
+        localStorage.setItem('token', data.data.token);
+        onSuccess(data.data.user);
       } else {
         setError(data.error.message);
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao criar conta');
     } finally {
       setLoading(false);
@@ -137,4 +138,3 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, onSwitchT
     </div>
   );
 };
-

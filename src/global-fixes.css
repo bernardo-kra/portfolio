@@ -1,4 +1,3 @@
-/* Global fixes for layout issues */
 * {
   box-sizing: border-box;
 }
@@ -23,7 +22,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Remove any conflicting styles from App.css */
 .app {
   width: 100%;
   height: 100%;
@@ -32,7 +30,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Ensure proper container behavior */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -40,7 +37,6 @@ body {
   padding: 0 1rem;
 }
 
-/* Fix for any potential double scrollbars */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--brand-orange, #ff9900) transparent;

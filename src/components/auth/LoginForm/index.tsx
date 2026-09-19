@@ -3,9 +3,10 @@ import Button from '@components/common/Button';
 import Input from '@components/common/Input';
 import { appConfig } from '../../../config/app.config';
 import styles from './styles.module.css';
+import type { AuthUser } from '@hooks/useAuth';
 
 interface LoginFormProps {
-  onSuccess: (user: any) => void;
+  onSuccess: (user: AuthUser) => void;
   onSwitchToRegister: () => void;
 }
 
@@ -42,12 +43,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
 
       if (data.success) {
         localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem('token', data.data.customToken);
+        localStorage.setItem('token', data.data.token);
         onSuccess(data.data.user);
       } else {
         setError(data.error.message);
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao fazer login');
     } finally {
       setLoading(false);
@@ -90,4 +91,3 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
     </div>
   );
 };
-

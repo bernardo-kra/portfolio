@@ -24,7 +24,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
     setIsLoaded(true)
   }
 
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleError = () => {
     setHasError(true)
   }
 

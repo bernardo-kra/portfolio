@@ -1,69 +1,69 @@
-import { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
+import { getSessionEmail } from '../services/sessionService.js';
 
-interface AuthenticatedRequest extends Request {
-  user?: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
+export interface AuthenticatedUser {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
 }
 
-export const verifyToken = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
+
+const getBearerToken = (req: Request): string | null => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) return null;
+  return authHeader.slice(7).trim() || null;
+};
+
+export const authenticateRequest = async (
+  req: Request
+): Promise<AuthenticatedUser | null> => {
+  const token = getBearerToken(req);
+  if (!token) return null;
+
+  const email = await getSessionEmail(token);
+  if (!email) return null;
+
+  const claimedEmail = req.headers['x-user-email'];
+  if (typeof claimedEmail === 'string' && claimedEmail !== email) return null;
+
+  const userDoc = await db.collection('users').doc(email).get();
+  const userData = userDoc.data();
+  if (!userDoc.exists || !userData) return null;
+
+  return {
+    email,
+    firstName: String(userData.firstName ?? ''),
+    lastName: String(userData.lastName ?? ''),
+    role: String(userData.role ?? 'user'),
+  };
+};
+
+export const verifyToken = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const authHeader = req.headers.authorization;
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const user = await authenticateRequest(req);
+    if (!user) {
       return res.status(401).json({
         success: false,
-        error: { message: 'Token de acesso necessário' }
+        error: { message: 'Sessão inválida ou expirada' },
       });
     }
 
-    const token = authHeader.substring(7);
-    const userEmail = req.headers['x-user-email'] as string;
-
-    if (!userEmail) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Email do usuário necessário' }
-      });
-    }
-
-    // Verificar se o usuário existe no Firestore
-    const userDoc = await db.collection('users').doc(userEmail).get();
-    
-    if (!userDoc.exists) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Usuário não encontrado' }
-      });
-    }
-
-    const userData = userDoc.data();
-    
-    if (!userData) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Dados do usuário inválidos' }
-      });
-    }
-
-    // Adicionar dados do usuário à requisição
-    req.user = {
-      email: userEmail,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      role: userData.role || 'user'
-    };
-
+    req.user = user;
     next();
   } catch (error) {
-    console.error('Erro na verificação do token:', error);
+    console.error('Erro na verificação da sessão:', error);
     res.status(401).json({
       success: false,
-      error: { message: 'Token inválido' }
+      error: { message: 'Sessão inválida' },
     });
   }
 };

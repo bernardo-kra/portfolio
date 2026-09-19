@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
+import type { DocumentData, Query } from 'firebase-admin/firestore';
 
 const router = Router();
 
@@ -42,7 +43,7 @@ router.get('/stats', async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
 
-    let query: any = db.collection('analytics');
+    let query: Query<DocumentData> = db.collection('analytics');
 
     if (startDate) {
       query = query.where('timestamp', '>=', new Date(startDate as string));
@@ -53,15 +54,16 @@ router.get('/stats', async (req: Request, res: Response) => {
     }
 
     const snapshot = await query.get();
-    const analytics = snapshot.docs.map((doc: any) => ({
+    const analytics: Array<DocumentData & { id: string }> = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
 
-    const pageViews = analytics.reduce((acc: any, item: any) => {
-      acc[item.page] = (acc[item.page] || 0) + 1;
+    const pageViews = analytics.reduce<Record<string, number>>((acc, item) => {
+      const page = typeof item.page === 'string' ? item.page : 'unknown';
+      acc[page] = (acc[page] || 0) + 1;
       return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     res.json({
       success: true,

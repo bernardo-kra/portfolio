@@ -48,6 +48,10 @@ interface PomodoroState {
   activeTaskName?: string
 }
 
+type StoredPomodoroState = Omit<PomodoroState, 'cycles'> & {
+  cycles: Array<Omit<PomodoroCycle, 'completedAt'> & { completedAt: string }>
+}
+
 type PomodoroAction =
   | { type: 'START' }
   | { type: 'PAUSE' }
@@ -300,15 +304,15 @@ export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) 
     
     if (savedState) {
       try {
-        const parsedState = JSON.parse(savedState)
-        const cyclesWithDates = parsedState.cycles.map((cycle: any) => ({
+        const parsedState = JSON.parse(savedState) as StoredPomodoroState
+        const cyclesWithDates = parsedState.cycles.map(cycle => ({
           ...cycle,
           completedAt: new Date(cycle.completedAt)
         }))
         
         if (savedMusicSettings) {
           try {
-            const parsedMusicSettings = JSON.parse(savedMusicSettings)
+            const parsedMusicSettings = JSON.parse(savedMusicSettings) as Partial<MusicSettings>
             parsedState.musicSettings = {
               ...parsedState.musicSettings,
               ...parsedMusicSettings

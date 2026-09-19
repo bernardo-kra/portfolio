@@ -6,16 +6,13 @@ import { useAppConfig } from '@context/AppConfigContext';
 import styles from './styles.module.css';
 import Container from '@components/common/Container';
 import bernardoPhoto from '/bernardo-kra.jpg';
+import type { PortfolioI18n } from '@src/i18n';
+
+const emojis = ['🙂', '😊', '😄', '😉'];
+const glitchChars = ['�', '▒', '░'];
 
 interface InteractiveHeroSectionProps {
-  t: {
-    heroTitle?: string;
-    name?: string;
-    heroSubtitle?: string;
-    role?: string;
-    ctaButton?: string;
-    secondaryButton?: string;
-  };
+  t: PortfolioI18n;
 }
 
 const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) => {
@@ -23,7 +20,6 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
   const [typedText, setTypedText] = useState('');
   const [suffixText, setSuffixText] = useState('');
   const [phase, setPhase] = useState<'type' | 'pause' | 'smile' | 'emoji' | 'delete'>('type');
-  const [suffixMode, setSuffixMode] = useState<'none' | 'emoji' | 'react' | 'glitch'>('none');
   const plannedSuffixRef = useRef<'none' | 'emoji' | 'react' | 'glitch'>('none');
   const cycleRef = useRef(0);
   const lastEmojiRef = useRef<string | null>(null);
@@ -34,23 +30,10 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
   const [isBadgeFading, setIsBadgeFading] = useState(false);
   const { config } = useAppConfig();
 
-  const roles = t.heroRoles ?? [
-    'Desenvolvedor Frontend',
-    'React Specialist',
-    'TypeScript Expert',
-    'UI/UX Enthusiast',
-    'Full Stack Developer',
-  ];
+  const roles = t.heroRoles;
 
-  const emojis = ['🙂', '😊', '😄', '😉'];
   const reactIcon = '⚛︎';
-  const glitchChars = ['�', '▒', '░'];
-  const badgeSets = t.heroBadgeSets ?? [
-    ['React', 'TypeScript', 'Node.js'],
-    ['Next.js', 'UI', 'Performance'],
-    ['Design Systems', 'A11y', 'DX'],
-    ['Testing', 'State', 'SEO'],
-  ];
+  const badgeSets = t.heroBadgeSets;
 
   useEffect(() => {
     setIsVisible(true);
@@ -101,15 +84,12 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
         if (plannedSuffixRef.current === 'emoji') {
           setPhase('smile');
         } else if (plannedSuffixRef.current === 'react') {
-          setSuffixMode('react');
           setSuffixText(` ${reactIcon}`);
           setPhase('delete');
         } else if (plannedSuffixRef.current === 'glitch') {
-          setSuffixMode('glitch');
           setSuffixText(` ${glitchChars[Math.floor(Math.random() * glitchChars.length)]}`);
           setPhase('delete');
         } else {
-          setSuffixMode('none');
           setSuffixText('');
           setPhase('delete');
         }
@@ -126,7 +106,6 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
       }
 
       if (phase === 'emoji') {
-        setSuffixMode('emoji');
         const available = emojis.filter((e) => e !== lastEmojiRef.current);
         const nextEmoji = available[Math.floor(Math.random() * available.length)];
         lastEmojiRef.current = nextEmoji;
@@ -149,7 +128,6 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
             glitchRef.current = cycleRef.current % 10 === 0;
           }
           setCurrentRole(nextRole);
-          setSuffixMode('none');
           setPhase('type');
         }
       }
@@ -245,7 +223,7 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
                 className={styles.primaryButton}
                 icon="🚀"
               >
-                {t.ctaButton || 'Conheça meu trabalho'}
+                {t.heroCTA}
               </Button>
 
               <Button
@@ -255,7 +233,7 @@ const InteractiveHeroSection: React.FC<InteractiveHeroSectionProps> = ({ t }) =>
                 className={styles.secondaryButton}
                 icon="📧"
               >
-                {t.secondaryButton || 'Vamos conversar'}
+                {t.contactTitle}
               </Button>
             </div>
 

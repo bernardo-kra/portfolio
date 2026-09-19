@@ -21,17 +21,14 @@ function randomBetween(a: number, b: number) {
 }
 
 function hexToRgba(hex: string, alpha: number): string {
-  // Remove # if present
   hex = hex.replace('#', '')
   
-  // Handle 3-digit hex colors
   if (hex.length === 3) {
     hex = hex.split('').map(char => char + char).join('')
   }
   
-  // Ensure we have 6 digits
   if (hex.length !== 6) {
-    return `rgba(255, 255, 255, ${alpha})` // fallback to white
+    return `rgba(255, 255, 255, ${alpha})`
   }
   
   const r = parseInt(hex.slice(0, 2), 16)
@@ -141,21 +138,17 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
     const width = canvas.width
     const height = canvas.height
 
-    // Enable smooth rendering
     ctx.imageSmoothingEnabled = true
     ctx.imageSmoothingQuality = 'high'
     
-    // Clear completely
     ctx.clearRect(0, 0, width, height)
     
-    // Render nebulae first (background)
     for (const nebula of nebulae.current) {
       const parallaxX = (mouse.current.x - 0.5) * 20 * 0.3
       const parallaxY = (mouse.current.y - 0.5) * 10 * 0.3
       const x = nebula.x + (disableParallax ? 0 : parallaxX)
       const y = nebula.y + (disableParallax ? 0 : parallaxY)
       
-      // Create smooth elliptical nebula instead of rectangular
       ctx.save()
       ctx.beginPath()
       ctx.ellipse(x, y, nebula.width / 2, nebula.height / 2, 0, 0, 2 * Math.PI)
@@ -176,7 +169,6 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
       if (nebula.x > width + nebula.width) nebula.x = -nebula.width
     }
     
-    // Render planets
     for (const planet of planets.current) {
       const parallaxX = (mouse.current.x - 0.5) * 40 * 0.5
       const parallaxY = (mouse.current.y - 0.5) * 20 * 0.5
@@ -196,7 +188,6 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
       if (planet.x > width + planet.radius) planet.x = -planet.radius
     }
     
-    // Render comets
     for (const comet of comets.current) {
       comet.x += comet.vx
       comet.y += comet.vy
@@ -211,15 +202,12 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
         comet.tail = []
       }
       
-      // Update tail
       comet.tail.unshift({ x: comet.x, y: comet.y })
       if (comet.tail.length > 20) comet.tail.pop()
       
-      // Only render if comet is visible or close to viewport
       if (comet.x > -50 && comet.x < width + 50 && comet.y > -50 && comet.y < height + 50) {
         ctx.save()
         
-        // Draw smooth tail with gradient
         if (comet.tail.length > 1) {
           ctx.globalAlpha = comet.life * 0.8
           for (let i = 0; i < comet.tail.length - 1; i++) {
@@ -241,7 +229,6 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
           }
         }
         
-        // Draw comet head with glow
         const headGlow = ctx.createRadialGradient(comet.x, comet.y, 0, comet.x, comet.y, 8)
         headGlow.addColorStop(0, `rgba(255, 255, 255, ${comet.life})`)
         headGlow.addColorStop(0.5, `rgba(255, 255, 255, ${comet.life * 0.5})`)
@@ -252,7 +239,6 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
         ctx.arc(comet.x, comet.y, 8, 0, 2 * Math.PI)
         ctx.fill()
         
-        // Draw main head
         ctx.beginPath()
         ctx.arc(comet.x, comet.y, 3, 0, 2 * Math.PI)
         ctx.fillStyle = '#ffffff'
@@ -263,12 +249,10 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
       }
     }
     
-    // Render moon
     const moonX = width * 0.15
     const moonY = height * 0.2
     const moonRadius = 30
     
-    // Moon glow
     const moonGlow = ctx.createRadialGradient(moonX, moonY, 0, moonX, moonY, moonRadius * 2)
     moonGlow.addColorStop(0, 'rgba(255, 255, 200, 0.3)')
     moonGlow.addColorStop(0.5, 'rgba(255, 255, 200, 0.1)')
@@ -276,13 +260,11 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
     ctx.fillStyle = moonGlow
     ctx.fillRect(moonX - moonRadius * 2, moonY - moonRadius * 2, moonRadius * 4, moonRadius * 4)
     
-    // Moon body
     ctx.beginPath()
     ctx.arc(moonX, moonY, moonRadius, 0, 2 * Math.PI)
     ctx.fillStyle = '#F5F5DC'
     ctx.fill()
     
-    // Moon craters
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
     ctx.beginPath()
     ctx.arc(moonX - 8, moonY - 5, 3, 0, 2 * Math.PI)
@@ -294,14 +276,12 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
     ctx.arc(moonX - 3, moonY + 10, 1.5, 0, 2 * Math.PI)
     ctx.fill()
     
-    // Render stars last (foreground)
     for (const star of stars.current) {
       const parallaxX = (mouse.current.x - 0.5) * 60 * (1 - star.depth)
       const parallaxY = (mouse.current.y - 0.5) * 30 * (1 - star.depth)
       const x = star.x + (disableParallax ? 0 : parallaxX)
       const y = star.y + (disableParallax ? 0 : parallaxY)
       
-      // Only render stars that are fully visible
       if (x >= 0 && x <= width && y >= 0 && y <= height) {
         ctx.beginPath()
         ctx.arc(x, y, star.r, 0, 2 * Math.PI)
@@ -362,7 +342,7 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [createStars, createNebulae, createPlanets, createComets, animate])
+  }, [createStars, createNebulae, createPlanets, createComets, animate, disableParallax])
 
   return (
     <canvas
@@ -383,4 +363,4 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = React.memo(({ di
 
 StarfieldBackground.displayName = 'StarfieldBackground'
 
-export default StarfieldBackground 
+export default StarfieldBackground

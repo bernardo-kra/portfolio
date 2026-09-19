@@ -1,7 +1,7 @@
 .portfolioNav {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 999;
   background: var(--bg-default);
   color: var(--text-default);
   border-radius: 12px;

@@ -63,7 +63,7 @@ router.post('/projects', async (req: Request, res: Response) => {
 
 router.get('/projects/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const doc = await db.collection('projects').doc(id).get();
 
     if (!doc.exists) {
@@ -88,7 +88,7 @@ router.get('/projects/:id', async (req: Request, res: Response) => {
 
 router.put('/projects/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const updateData = {
       ...req.body,
       updatedAt: new Date(),
@@ -113,7 +113,7 @@ router.put('/projects/:id', async (req: Request, res: Response) => {
 
 router.delete('/projects/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     await db.collection('projects').doc(id).delete();
 
     res.json({

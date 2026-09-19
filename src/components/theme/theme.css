@@ -1,58 +1,29 @@
-/*
-🎨 Estrutura de cores e responsividade do projeto
-
-🔹 Cores Dinâmicas (mudam entre os temas claro/escuro)
-   - Essas cores se adaptam ao tema escolhido pelo usuário.
-   - Exemplo: `gray-900` será escuro no modo dark e claro no modo light.
-
-🔸 Cores Fixas (não mudam entre os temas)
-   - São usadas para botões, alertas e destaques.
-   - Exemplo: `primary`, `success`, `error` sempre terão os mesmos tons.
-
-📱 Sistema de Responsividade
-   - Breakpoints: 400px, 600px, 768px, 900px, 1200px
-   - Container: max-width responsivo com padding adaptativo
-   - Tipografia: escalável com clamp() e rem
-   - Espaçamentos: variáveis CSS para consistência
-
-📝 Estrutura:
-   - Fundo geral: `gray-900` (dinâmico)
-   - Cards/caixas: `gray-800` (dinâmico)
-   - Bordas/separadores: `gray-700` ou `gray-600` (dinâmico)
-   - Texto principal: `--text-default` (dinâmico)
-   - Texto secundário/placeholders: `--text-muted` (dinâmico)
-   - Hover/ativo: `gray-700` e `gray-600` ou conforme preferir (dinâmico)
-
-🚨 Atenção aos comentários! Eles descrevem cada categoria de cores e sua função.
-*/
+@import './responsive-utils.css';
 
 :root {
-  transition: background-color 0.4s cubic-bezier(0.4,0.2,0.2,1),
-              color 0.4s cubic-bezier(0.4,0.2,0.2,1),
-              border-color 0.4s cubic-bezier(0.4,0.2,0.2,1),
-              box-shadow 0.4s cubic-bezier(0.4,0.2,0.2,1),
-              filter 0.4s cubic-bezier(0.4,0.2,0.2,1);
-  
-  /* 📱 Breakpoints e Responsividade */
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0.2, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0.2, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0.2, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0.2, 0.2, 1),
+    filter 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+
   --breakpoint-xs: 400px;
   --breakpoint-sm: 600px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 900px;
   --breakpoint-xl: 1200px;
-  
-  /* 📏 Espaçamentos Responsivos */
+
   --spacing-xs: clamp(0.25rem, 1vw, 0.5rem);
   --spacing-sm: clamp(0.5rem, 2vw, 1rem);
   --spacing-md: clamp(1rem, 3vw, 1.5rem);
   --spacing-lg: clamp(1.5rem, 4vw, 2rem);
   --spacing-xl: clamp(2rem, 5vw, 3rem);
   --spacing-2xl: clamp(3rem, 6vw, 4rem);
-  
-  /* 📐 Container Responsivo */
+
   --container-padding: clamp(1rem, 4vw, 2rem);
   --container-max-width: min(1200px, 95vw);
-  
-  /* 🔤 Tipografia Responsiva */
+
   --font-size-xs: clamp(0.75rem, 2vw, 0.875rem);
   --font-size-sm: clamp(0.875rem, 2.5vw, 1rem);
   --font-size-base: clamp(1rem, 3vw, 1.125rem);
@@ -62,8 +33,7 @@
   --font-size-3xl: clamp(2rem, 6vw, 2.5rem);
   --font-size-4xl: clamp(2.5rem, 7vw, 3rem);
   --font-size-5xl: clamp(3rem, 8vw, 4rem);
-  
-  /* 🎭 Tons de Cinza (cores dinâmicas que mudam entre claro/escuro) */
+
   --gray-100: #f4f6fa;
   --gray-200: #e6e9f0;
   --gray-300: #cdd3e1;
@@ -74,23 +44,19 @@
   --gray-800: #181f2e;
   --gray-900: #23263a;
 
-  /* 🌿 Cores Primárias (base: #646cffaa) */
   --primary: #646cffaa;
   --primary-light: #8d92ffcc;
   --primary-dark: #4549b3;
   --color-primary: var(--primary);
 
-  /* 🔗 Links */
   --link-color: #646cff;
   --link-hover: #535bf2;
 
-  /* 🚦 Alertas (cores fixas, usadas para feedbacks visuais) */
   --success: #22c55e;
   --warning: #eab308;
   --error: #991b1b;
   --info: #0ea5e9;
 
-  /* 🎨 Texto sobre fundos coloridos (para garantir contraste) */
   --text-over-primary: #fff;
   --text-over-primary-dark: #fff;
   --text-over-primary-light: #fff;
@@ -99,15 +65,12 @@
   --text-over-error: #e6e9f0;
   --text-over-info: #0a0f1a;
 
-  /* 📝 Cores do Texto (dinâmicas) */
   --text-default: #f4f6fa;
   --text-muted: #aab3cc;
 
-  /* 🚫 Cores para botões e elementos desativados */
   --disabled: #555f7d;
   --text-disabled: #aab3cc;
 
-  /* 🔔 Cores do Toastify (notificações) */
   --toastify-color-light: var(--text-default);
   --toastify-color-dark: var(--text-default);
   --toastify-color-info: var(--info);
@@ -119,7 +82,6 @@
   --toastify-color-progress-light: var(--primary);
   --toastify-color-progress-dark: var(--primary);
 
-  /* Extras para backgrounds animados */
   --star-color-1: #fff;
   --star-color-2: #bfcfff;
   --star-color-3: #e6e9ff;
@@ -128,18 +90,17 @@
   --cloud-shadow: #fff;
   --day-gradient-1: #b3e0ff;
   --day-gradient-2: #e6f7ff;
-  --toggle-bg-dark: rgba(35,38,58,0.7);
-  --toggle-bg-light: rgba(255,255,255,0.7);
+  --toggle-bg-dark: rgba(35, 38, 58, 0.7);
+  --toggle-bg-light: rgba(255, 255, 255, 0.7);
   --toggle-bg-active: rgba(100, 108, 255, 0.15);
   --card-bg: var(--gray-800);
   --avatar-bg: var(--gray-700);
   --chip-bg: var(--primary-light);
   --chip-text: #23263a;
 
-  --brand-orange: #FF9900;
-  --brand-orange-light: #FFD699;
+  --brand-orange: #ff9900;
+  --brand-orange-light: #ffd699;
 
-  /* Background variables */
   --bg-default: var(--gray-900);
   --bg-secondary: var(--gray-800);
   --white: var(--gray-100);
@@ -167,7 +128,7 @@
   --link-color: #176dc1;
   --link-hover: #1e90ff;
 
-  --card-bg: rgba(255,255,255,0.75);
+  --card-bg: rgba(255, 255, 255, 0.75);
   --avatar-bg: #d2e6f7;
   --chip-bg: linear-gradient(90deg, #1e90ff 60%, #8fd3f4 100%);
   --chip-text: #fff;
@@ -181,15 +142,15 @@
   --star-color-4: #eaf3fa;
   --cloud-color: #fff;
   --cloud-shadow: #b3d4ef;
-  --day-gradient-1: #4A90E2;
-  --day-gradient-2: #87CEEB;
-  --day-gradient-3: #E0F6FF;
+  --day-gradient-1: #4a90e2;
+  --day-gradient-2: #87ceeb;
+  --day-gradient-3: #e0f6ff;
 
-  --card-glass-bg: rgba(255,255,255,0.75);
-  --glass-border: 1.5px solid rgba(30,144,255,0.13);
-  --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
+  --card-glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: 1.5px solid rgba(30, 144, 255, 0.13);
+  --glass-shadow:
+    0 8px 32px 0 rgba(30, 144, 255, 0.1), 0 1.5px 8px 0 rgba(30, 144, 255, 0.06);
 
-  /* Background variables for light theme */
   --bg-default: var(--gray-100);
   --bg-secondary: var(--gray-200);
   --white: #ffffff;
@@ -234,21 +195,20 @@
   --day-gradient-1: #b3e0ff;
   --day-gradient-2: #e6f7ff;
 
-  --toggle-bg-dark: rgba(35,38,58,0.7);
-  --toggle-bg-light: rgba(255,255,255,0.7);
+  --toggle-bg-dark: rgba(35, 38, 58, 0.7);
+  --toggle-bg-light: rgba(255, 255, 255, 0.7);
   --toggle-bg-active: rgba(100, 108, 255, 0.15);
 
-  --card-glass-bg: rgba(255,255,255,0.75);
-  --glass-border: 1.5px solid rgba(30,144,255,0.13);
-  --glass-shadow: 0 8px 32px 0 rgba(30,144,255,0.10), 0 1.5px 8px 0 rgba(30,144,255,0.06);
+  --card-glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: 1.5px solid rgba(30, 144, 255, 0.13);
+  --glass-shadow:
+    0 8px 32px 0 rgba(30, 144, 255, 0.1), 0 1.5px 8px 0 rgba(30, 144, 255, 0.06);
 
-  /* Background variables for dark theme */
   --bg-default: var(--gray-900);
   --bg-secondary: var(--gray-800);
   --white: var(--gray-100);
 }
 
-/* 🎚️ Scrollbar customizado para o tema */
 ::-webkit-scrollbar {
   width: 10px;
   background: var(--gray-900);
@@ -262,16 +222,11 @@
   background: var(--primary);
 }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--primary-dark) var(--gray-900);
 }
 
-/* Importar utilitários de responsividade */
-@import './responsive-utils.css';
-
-/* Regras específicas para prevenir overflow horizontal */
 .hero__section,
 .aboutme__section,
 .projects__container,
@@ -282,7 +237,6 @@
   box-sizing: border-box !important;
 }
 
-/* Garantir que textos não causem overflow */
 .hero__title,
 .hero__subtitle,
 .aboutme__title,

@@ -1,93 +1,62 @@
 # Portfolio
 
-Portfólio pessoal desenvolvido com Vite, React e TypeScript.
+Portfólio pessoal em React, TypeScript e Vite. O repositório também contém um backend Express usado por autenticação, chat, contato e analytics.
 
-## 🚀 Tecnologias
+## Requisitos
 
-- [Vite](https://vitejs.dev/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Lucide React](https://lucide.dev/) - Ícones
-- [React Router](https://reactrouter.com/) - Roteamento
-- [React Toastify](https://fkhadra.github.io/react-toastify/) - Notificações
-- [date-fns](https://date-fns.org/) - Manipulação de datas
+- Node.js 22 LTS
+- npm
+- Credenciais do Firebase apenas para executar o backend
 
-## 📦 Instalação
+## Desenvolvimento
 
 ```bash
-# Clone o repositório
-git clone https://github.com/bernardo-kra/portfolio.git
-
-# Entre na pasta
-cd portfolio
-
-# Instale as dependências
-npm install
-```
-
-## 🛠️ Scripts Disponíveis
-
-```bash
-# Desenvolvimento
+npm ci
 npm run dev
-
-# Build para produção
-npm run build
-
-# Preview do build
-npm run preview
-
-# Lint do código
-npm run lint
-
-# Formatação com Prettier
-npm run format
-
-# Verificar formatação
-npm run format:check
-
-# Deploy para GitHub Pages
-npm run deploy
 ```
 
-## 📝 Padrão de Commits
+O frontend abre em `http://localhost:5173`. Para executar frontend e backend juntos:
 
-Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/). Veja o arquivo [COMMIT_CONVENTION.md](./COMMIT_CONVENTION.md) para mais detalhes.
-
-## 🌐 Deploy
-
-Deploy automático configurado via GitHub Actions. Veja [DEPLOYMENT.md](./DEPLOYMENT.md) para documentação completa.
-
-**URLs de Produção:**
-- **GitHub Pages:** https://bernardo-kra.github.io/portfolio/
-- **Vercel:** https://portfolio-bernardokras-projects.vercel.app/
-
-**⚠️ IMPORTANTE:** Veja [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) antes de fazer qualquer mudança no deploy.
-
-## 📁 Estrutura do Projeto
-
-```
-portfolio/
-├── src/
-│   ├── components/     # Componentes React
-│   ├── pages/         # Páginas da aplicação
-│   ├── hooks/         # Custom hooks
-│   ├── utils/         # Funções utilitárias
-│   ├── types/         # Definições de tipos TypeScript
-│   └── styles/        # Arquivos de estilo
-├── public/            # Arquivos estáticos
-├── .github/           # Configurações do GitHub
-└── docs/              # Documentação
+```bash
+npm --prefix backend ci
+npm run dev:full
 ```
 
-## 🤝 Contribuição
+Consulte [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) para configurar os arquivos `.env`.
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request.
+## Scripts
 
-## 📄 Licença
+| Comando                | Finalidade                 |
+| ---------------------- | -------------------------- |
+| `npm run dev`          | Inicia o frontend          |
+| `npm run dev:backend`  | Inicia o backend           |
+| `npm run dev:full`     | Inicia os dois processos   |
+| `npm run build`        | Compila o frontend         |
+| `npm run build:full`   | Compila frontend e backend |
+| `npm run lint`         | Executa a análise estática |
+| `npm run format:check` | Verifica a formatação      |
+| `npm run preview`      | Serve o build localmente   |
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+## Estrutura
+
+```text
+api/                  Funções serverless simples da raiz
+backend/src/          API Express e integração Firebase Admin
+public/               Arquivos estáticos
+src/Pages/            Páginas carregadas por rota
+src/components/       Componentes por domínio
+src/config/           Configuração do frontend
+src/context/          Contextos React
+src/hooks/            Hooks compartilhados
+src/services/         Clientes de serviços
+```
+
+As rotas principais são `/`, `/portfolio`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d` e `/admin/chat`.
+
+## Deploy
+
+O frontend principal é publicado em `https://bernardo-kra.github.io/`. O backend usa Render e o frontend também pode ser compilado pela Vercel. A configuração completa está em [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+## Convenções
+
+As mensagens de commit seguem [Conventional Commits](./COMMIT_CONVENTION.md).

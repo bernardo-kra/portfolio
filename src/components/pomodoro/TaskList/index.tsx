@@ -24,8 +24,8 @@ const TaskList: React.FC = () => {
     const savedTasks = localStorage.getItem('pomodoro-tasks')
     if (savedTasks) {
       try {
-        const parsedTasks = JSON.parse(savedTasks)
-        const tasksWithDates = parsedTasks.map((task: any) => ({
+        const parsedTasks = JSON.parse(savedTasks) as Array<Omit<Task, 'createdAt'> & { createdAt: string }>
+        const tasksWithDates = parsedTasks.map(task => ({
           ...task,
           createdAt: new Date(task.createdAt)
         }))
@@ -108,11 +108,11 @@ const TaskList: React.FC = () => {
     return Math.min((task.completedCycles / task.estimatedCycles) * 100, 100)
   }
 
-  const getProgressColor = (task: Task) => {
+  const getProgressColor = (task: Task): 'success' | 'brand' | 'default' => {
     const percentage = getProgressPercentage(task)
     if (percentage >= 100) return 'success'
     if (percentage >= 50) return 'brand'
-    return 'muted'
+    return 'default'
   }
 
   return (
@@ -249,7 +249,7 @@ const TaskList: React.FC = () => {
                       />
                     </div>
                     <div className={styles.progressText}>
-                      <Tag variant={getProgressColor(task) as any} size="sm">
+                      <Tag variant={getProgressColor(task)} size="sm">
                         {task.completedCycles}/{task.estimatedCycles} ciclos
                       </Tag>
                       {task.isCompleted && (

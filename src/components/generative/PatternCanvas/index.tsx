@@ -1,13 +1,16 @@
 import React, { useRef, useEffect } from 'react'
 import styles from './styles.module.css'
-import { InfiniteGenerator, CosmicSettings } from './InfiniteGenerator'
+import { InfiniteGenerator, type CosmicSettings } from './InfiniteGenerator'
 
 interface PatternCanvasProps {
   pauseGeneration?: boolean
   settings?: CosmicSettings
 }
 
-const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false, settings }) => {
+const PatternCanvas: React.FC<PatternCanvasProps> = ({
+  pauseGeneration = false,
+  settings,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | undefined>(undefined)
   const generatorRef = useRef<InfiniteGenerator | undefined>(undefined)
@@ -29,7 +32,11 @@ const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false, 
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    generatorRef.current = new InfiniteGenerator(ctx, canvas.width, canvas.height)
+    generatorRef.current = new InfiniteGenerator(
+      ctx,
+      canvas.width,
+      canvas.height
+    )
 
     const animate = (timestamp: number) => {
       if (generatorRef.current) {
@@ -56,10 +63,7 @@ const PatternCanvas: React.FC<PatternCanvasProps> = ({ pauseGeneration = false, 
 
   return (
     <div className={styles.canvasContainer}>
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-      />
+      <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   )
 }

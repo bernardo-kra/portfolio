@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
-import { CosmicSettings } from '../PatternCanvas/InfiniteGenerator'
+import type { CosmicSettings } from '../PatternCanvas/InfiniteGenerator'
 
 interface CosmicControlPanelProps {
   settings: CosmicSettings
@@ -13,30 +13,56 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
   settings,
   onSettingsChange,
   isVisible,
-  onToggle
+  onToggle,
 }) => {
-  const [activeTab, setActiveTab] = useState<'density' | 'visual' | 'time'>('density')
+  const [activeTab, setActiveTab] = useState<'density' | 'visual' | 'time'>(
+    'density'
+  )
 
   const colorPalettes = [
-    { id: 'nebula', name: 'Nebulosa', colors: ['#ff6b9d', '#c44569', '#f8b500', '#4ecdc4'] },
-    { id: 'aurora', name: 'Aurora', colors: ['#00d4aa', '#00a8cc', '#ff6b6b', '#4ecdc4'] },
-    { id: 'supernova', name: 'Supernova', colors: ['#ff4757', '#ffa502', '#ff6348', '#ff7675'] },
-    { id: 'cosmic', name: 'Cósmico', colors: ['#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'] },
-    { id: 'galaxy', name: 'Galáxia', colors: ['#2d3436', '#636e72', '#74b9ff', '#0984e3'] },
-    { id: 'stellar', name: 'Estelar', colors: ['#ffffff', '#f1c40f', '#e74c3c', '#9b59b6'] }
+    {
+      id: 'nebula',
+      name: 'Nebulosa',
+      colors: ['#ff6b9d', '#c44569', '#f8b500', '#4ecdc4'],
+    },
+    {
+      id: 'aurora',
+      name: 'Aurora',
+      colors: ['#00d4aa', '#00a8cc', '#ff6b6b', '#4ecdc4'],
+    },
+    {
+      id: 'supernova',
+      name: 'Supernova',
+      colors: ['#ff4757', '#ffa502', '#ff6348', '#ff7675'],
+    },
+    {
+      id: 'cosmic',
+      name: 'Cósmico',
+      colors: ['#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'],
+    },
+    {
+      id: 'galaxy',
+      name: 'Galáxia',
+      colors: ['#2d3436', '#636e72', '#74b9ff', '#0984e3'],
+    },
+    {
+      id: 'stellar',
+      name: 'Estelar',
+      colors: ['#ffffff', '#f1c40f', '#e74c3c', '#9b59b6'],
+    },
   ]
 
   const handleSliderChange = (key: keyof CosmicSettings, value: number) => {
     onSettingsChange({
       ...settings,
-      [key]: value
+      [key]: value,
     })
   }
 
   const handlePaletteChange = (paletteId: string) => {
     onSettingsChange({
       ...settings,
-      colorPalette: paletteId
+      colorPalette: paletteId,
     })
   }
 
@@ -48,13 +74,13 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
       asteroidDensity: 0.6,
       cometDensity: 0.4,
       timeSpeed: 1.0,
-      colorPalette: 'nebula'
+      colorPalette: 'nebula',
     })
   }
 
   if (!isVisible) {
     return (
-      <button 
+      <button
         className={styles.toggleButton}
         onClick={onToggle}
         title="Abrir painel de controle cósmico"
@@ -68,7 +94,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
     <div className={styles.controlPanel}>
       <div className={styles.panelHeader}>
         <h3 className={styles.panelTitle}>🎛️ Controle Cósmico</h3>
-        <button 
+        <button
           className={styles.closeButton}
           onClick={onToggle}
           title="Fechar painel"
@@ -78,19 +104,19 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
       </div>
 
       <div className={styles.tabContainer}>
-        <button 
+        <button
           className={`${styles.tab} ${activeTab === 'density' ? styles.active : ''}`}
           onClick={() => setActiveTab('density')}
         >
           🌟 Densidade
         </button>
-        <button 
+        <button
           className={`${styles.tab} ${activeTab === 'visual' ? styles.active : ''}`}
           onClick={() => setActiveTab('visual')}
         >
           🎨 Visual
         </button>
-        <button 
+        <button
           className={`${styles.tab} ${activeTab === 'time' ? styles.active : ''}`}
           onClick={() => setActiveTab('time')}
         >
@@ -102,11 +128,13 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
         {activeTab === 'density' && (
           <div className={styles.section}>
             <h4 className={styles.sectionTitle}>Densidade dos Elementos</h4>
-            
+
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>⭐ Estrelas</span>
-                <span className={styles.value}>{Math.round(settings.starDensity * 100)}%</span>
+                <span className={styles.value}>
+                  {Math.round(settings.starDensity * 100)}%
+                </span>
               </label>
               <input
                 type="range"
@@ -114,7 +142,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="1"
                 step="0.1"
                 value={settings.starDensity}
-                onChange={(e) => handleSliderChange('starDensity', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange('starDensity', parseFloat(e.target.value))
+                }
                 className={styles.slider}
               />
             </div>
@@ -122,7 +152,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>🌌 Nebulosas</span>
-                <span className={styles.value}>{Math.round(settings.nebulaDensity * 100)}%</span>
+                <span className={styles.value}>
+                  {Math.round(settings.nebulaDensity * 100)}%
+                </span>
               </label>
               <input
                 type="range"
@@ -130,7 +162,12 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="1"
                 step="0.1"
                 value={settings.nebulaDensity}
-                onChange={(e) => handleSliderChange('nebulaDensity', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange(
+                    'nebulaDensity',
+                    parseFloat(e.target.value)
+                  )
+                }
                 className={styles.slider}
               />
             </div>
@@ -138,7 +175,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>✨ Poeira Cósmica</span>
-                <span className={styles.value}>{Math.round(settings.dustDensity * 100)}%</span>
+                <span className={styles.value}>
+                  {Math.round(settings.dustDensity * 100)}%
+                </span>
               </label>
               <input
                 type="range"
@@ -146,7 +185,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="1"
                 step="0.1"
                 value={settings.dustDensity}
-                onChange={(e) => handleSliderChange('dustDensity', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange('dustDensity', parseFloat(e.target.value))
+                }
                 className={styles.slider}
               />
             </div>
@@ -154,7 +195,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>🪨 Asteroides</span>
-                <span className={styles.value}>{Math.round(settings.asteroidDensity * 100)}%</span>
+                <span className={styles.value}>
+                  {Math.round(settings.asteroidDensity * 100)}%
+                </span>
               </label>
               <input
                 type="range"
@@ -162,7 +205,12 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="1"
                 step="0.1"
                 value={settings.asteroidDensity}
-                onChange={(e) => handleSliderChange('asteroidDensity', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange(
+                    'asteroidDensity',
+                    parseFloat(e.target.value)
+                  )
+                }
                 className={styles.slider}
               />
             </div>
@@ -170,7 +218,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>☄️ Cometas</span>
-                <span className={styles.value}>{Math.round(settings.cometDensity * 100)}%</span>
+                <span className={styles.value}>
+                  {Math.round(settings.cometDensity * 100)}%
+                </span>
               </label>
               <input
                 type="range"
@@ -178,7 +228,9 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="1"
                 step="0.1"
                 value={settings.cometDensity}
-                onChange={(e) => handleSliderChange('cometDensity', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange('cometDensity', parseFloat(e.target.value))
+                }
                 className={styles.slider}
               />
             </div>
@@ -212,15 +264,16 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
           </div>
         )}
 
-
         {activeTab === 'time' && (
           <div className={styles.section}>
             <h4 className={styles.sectionTitle}>Velocidade Temporal</h4>
-            
+
             <div className={styles.sliderGroup}>
               <label className={styles.sliderLabel}>
                 <span>⏱️ Velocidade</span>
-                <span className={styles.value}>{settings.timeSpeed.toFixed(1)}x</span>
+                <span className={styles.value}>
+                  {settings.timeSpeed.toFixed(1)}x
+                </span>
               </label>
               <input
                 type="range"
@@ -228,25 +281,27 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                 max="5"
                 step="0.1"
                 value={settings.timeSpeed}
-                onChange={(e) => handleSliderChange('timeSpeed', parseFloat(e.target.value))}
+                onChange={(e) =>
+                  handleSliderChange('timeSpeed', parseFloat(e.target.value))
+                }
                 className={styles.slider}
               />
             </div>
 
             <div className={styles.timePresets}>
-              <button 
+              <button
                 className={styles.presetButton}
                 onClick={() => handleSliderChange('timeSpeed', 0.1)}
               >
                 🐌 Lento
               </button>
-              <button 
+              <button
                 className={styles.presetButton}
                 onClick={() => handleSliderChange('timeSpeed', 1.0)}
               >
                 ⏯️ Normal
               </button>
-              <button 
+              <button
                 className={styles.presetButton}
                 onClick={() => handleSliderChange('timeSpeed', 3.0)}
               >
@@ -258,10 +313,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
       </div>
 
       <div className={styles.panelFooter}>
-        <button 
-          className={styles.resetButton}
-          onClick={resetToDefaults}
-        >
+        <button className={styles.resetButton} onClick={resetToDefaults}>
           🔄 Resetar
         </button>
       </div>

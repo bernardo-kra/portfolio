@@ -3,7 +3,7 @@
   right: var(--spacing-lg);
   top: 50%;
   transform: translateY(-50%);
-  z-index: 500;
+  z-index: 1001;
   background: var(--card-background);
   border-radius: 16px;
   padding: var(--spacing-sm);
@@ -11,6 +11,7 @@
   border: 1px solid var(--border-default);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  pointer-events: auto;
 }
 
 .quickNav:hover {
@@ -91,7 +92,6 @@
   font-weight: 600;
 }
 
-/* Mobile Responsive */
 @media (max-width: 768px) {
   .quickNav {
     right: var(--spacing-sm);
@@ -138,4 +138,3 @@
     display: none;
   }
 }
-
