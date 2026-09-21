@@ -7,21 +7,41 @@ import HeaderBar from './components/HeaderBar'
 import HeroSection from './components/HeroSection'
 import DeckGrid from './components/DeckGrid'
 import Ribbon from './components/Ribbon'
+import StudyGuide from '@components/common/StudyGuide'
 
 const Experimental3D: React.FC = () => {
   const navigate = useNavigate()
   const { lang, setLang, t } = useI18n()
   const overlayRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [motionEnabled, setMotionEnabled] = useState(
+    () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
   const [isPortalOpen, setIsPortalOpen] = useState(false)
   const [mode, setMode] = useState<'live' | 'inspect'>('live')
   const [power, setPower] = useState(84)
   const [signal, setSignal] = useState<'green' | 'yellow' | 'red'>('green')
+
+  useEffect(() => {
+    const syncVideo = () => {
+      if (!motionEnabled || document.hidden) videoRef.current?.pause()
+      else videoRef.current?.play().catch(() => {})
+    }
+    syncVideo()
+    document.addEventListener('visibilitychange', syncVideo)
+    return () => document.removeEventListener('visibilitychange', syncVideo)
+  }, [motionEnabled])
 
   const handleSetLang = (l: Lang) => setLang(l)
 
   useEffect(() => {
     const overlay = overlayRef.current
     if (!overlay) return
+    if (!motionEnabled) {
+      overlay.style.setProperty('--mx', '0.5')
+      overlay.style.setProperty('--my', '0.5')
+      return
+    }
 
     const handleMove = (event: MouseEvent) => {
       const rect = overlay.getBoundingClientRect()
@@ -43,10 +63,11 @@ const Experimental3D: React.FC = () => {
       overlay.removeEventListener('mousemove', handleMove)
       overlay.removeEventListener('mouseleave', handleLeave)
     }
-  }, [])
+  }, [motionEnabled])
 
   return (
     <div
+      data-motion={motionEnabled ? 'playing' : 'paused'}
       className={[
         styles.experimental3D,
         isPortalOpen ? styles.portalOpen : '',
@@ -54,13 +75,26 @@ const Experimental3D: React.FC = () => {
         signal === 'green'
           ? styles.signalGreenMode
           : signal === 'yellow'
-          ? styles.signalYellowMode
-          : styles.signalRedMode,
+            ? styles.signalYellowMode
+            : styles.signalRedMode,
       ]
         .filter(Boolean)
         .join(' ')}
     >
       <div className={styles.themeControls}>
+        <button
+          className={styles.languageToggle}
+          onClick={() => setMotionEnabled(!motionEnabled)}
+          aria-pressed={!motionEnabled}
+        >
+          {motionEnabled
+            ? lang === 'pt'
+              ? 'Pausar cena'
+              : 'Pause scene'
+            : lang === 'pt'
+              ? 'Retomar cena'
+              : 'Resume scene'}
+        </button>
         <button
           className={styles.languageToggle}
           onClick={() => handleSetLang(lang === 'pt' ? 'en' : 'pt')}
@@ -77,7 +111,16 @@ const Experimental3D: React.FC = () => {
         </button>
       </div>
 
-      <video className={styles.videoBackground} autoPlay loop muted playsInline>
+      <video
+        ref={videoRef}
+        className={styles.videoBackground}
+        autoPlay={motionEnabled}
+        loop
+        muted
+        playsInline
+        preload="none"
+        aria-hidden="true"
+      >
         <source src="/130502-747461498.mp4" type="video/mp4" />
       </video>
 
@@ -98,14 +141,17 @@ const Experimental3D: React.FC = () => {
           brandText={t.experimental3d?.brandText ?? 'NEON BAY / DOCK 07'}
           statusLabel={
             isPortalOpen
-              ? t.experimental3d?.status?.portalOpen ?? 'Portal aberto'
-              : t.experimental3d?.status?.hangarActive ?? 'Hangar ativo'
+              ? (t.experimental3d?.status?.portalOpen ?? 'Portal aberto')
+              : (t.experimental3d?.status?.hangarActive ?? 'Hangar ativo')
           }
           isPortalOpen={isPortalOpen}
         />
 
         <HeroSection
-          title={t.experimental3d?.hero?.title ?? 'Controle de acesso para o piso luminoso.'}
+          title={
+            t.experimental3d?.hero?.title ??
+            'Controle de acesso para o piso luminoso.'
+          }
           copy={
             t.experimental3d?.hero?.copy ??
             'Um painel inspirado na baia industrial do video: luzes de sinalizacao no chao, metal frio e anuncios de status em tempo real. Clique nos controles para energizar, alternar modo e testar sinais do dock.'
@@ -120,13 +166,17 @@ const Experimental3D: React.FC = () => {
           power={power}
           signal={signal}
           onTogglePortal={() => setIsPortalOpen((prev) => !prev)}
-          onToggleMode={() => setMode((prev) => (prev === 'live' ? 'inspect' : 'live'))}
+          onToggleMode={() =>
+            setMode((prev) => (prev === 'live' ? 'inspect' : 'live'))
+          }
           onPowerChange={(value) => setPower(value)}
           onSignalChange={(value) => setSignal(value)}
           labels={{
             openPortal: t.experimental3d?.buttons?.openPortal ?? 'Abrir portal',
-            closePortal: t.experimental3d?.buttons?.closePortal ?? 'Fechar portal',
-            modeInspect: t.experimental3d?.buttons?.modeInspect ?? 'Modo inspecao',
+            closePortal:
+              t.experimental3d?.buttons?.closePortal ?? 'Fechar portal',
+            modeInspect:
+              t.experimental3d?.buttons?.modeInspect ?? 'Modo inspecao',
             modeLive: t.experimental3d?.buttons?.modeLive ?? 'Modo live',
             panelTitle: t.experimental3d?.panel?.title ?? 'Status da baia',
             panelLive: t.experimental3d?.panel?.live ?? 'Operacional',
@@ -140,8 +190,10 @@ const Experimental3D: React.FC = () => {
             statSignalAlert: t.experimental3d?.stats?.signalAlert ?? 'Alerta',
             statSignalRisk: t.experimental3d?.stats?.signalRisk ?? 'Risco',
             statControl: t.experimental3d?.stats?.control ?? 'Controle',
-            statControlManual: t.experimental3d?.stats?.controlManual ?? 'Manual',
-            statControlAudit: t.experimental3d?.stats?.controlAudit ?? 'Auditoria',
+            statControlManual:
+              t.experimental3d?.stats?.controlManual ?? 'Manual',
+            statControlAudit:
+              t.experimental3d?.stats?.controlAudit ?? 'Auditoria',
             controlEnergy: t.experimental3d?.controls?.energy ?? 'Energia',
             controlSignal: t.experimental3d?.controls?.signal ?? 'Sinal',
           }}
@@ -175,14 +227,14 @@ const Experimental3D: React.FC = () => {
 
         <Ribbon
           items={[
-            t.experimental3dRibbon?.[0] ?? 'PISO ATIVO •',
-            t.experimental3dRibbon?.[1] ?? 'LUZES DE GUIA •',
-            t.experimental3dRibbon?.[2] ?? 'DOCK 07 LIBERADO •',
-            t.experimental3dRibbon?.[3] ?? 'METAL INDUSTRIAL •',
-            t.experimental3dRibbon?.[4] ?? 'PORTAL EM ESPERA •',
-            t.experimental3dRibbon?.[5] ?? 'ACESSO CONTROLADO •',
+            ...t.experimental3dRibbon.slice(0, 4),
+            isPortalOpen
+              ? t.experimental3d.status.portalOpen
+              : t.experimental3d.stats.doorLocked,
+            t.experimental3dRibbon[5],
           ]}
         />
+        <StudyGuide study="dock" />
       </div>
     </div>
   )

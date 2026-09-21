@@ -238,31 +238,31 @@
   .taskList {
     margin-top: var(--spacing-xl);
   }
-  
+
   .taskHeader {
     flex-direction: column;
     gap: var(--spacing-sm);
     text-align: center;
   }
-  
+
   .addTaskCard {
     padding: var(--spacing-md);
   }
-  
+
   .taskContent {
     padding: var(--spacing-sm);
   }
-  
+
   .taskNameRow {
     gap: var(--spacing-xs);
   }
-  
+
   .completeButton,
   .deleteButton {
     min-width: 28px;
     height: 28px;
   }
-  
+
   .checkbox {
     width: 14px;
     height: 14px;
@@ -273,12 +273,12 @@
   .addTaskForm {
     gap: var(--spacing-sm);
   }
-  
+
   .addTaskActions {
     flex-direction: column;
     gap: var(--spacing-xs);
   }
-  
+
   .progressText {
     flex-direction: column;
     align-items: flex-start;
@@ -290,13 +290,92 @@
   .emptyTasks {
     padding: var(--spacing-lg);
   }
-  
+
   .emptyIcon {
     width: 36px;
     height: 36px;
   }
-  
+
   .taskContent {
     padding: var(--spacing-xs);
   }
+}
+
+.taskInfo,
+.taskName {
+  min-width: 0;
+}
+.taskName {
+  overflow-wrap: anywhere;
+}
+.taskHeader {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.taskNameRow {
+  flex-wrap: wrap;
+}
+.taskName {
+  flex-basis: 100px;
+}
+.taskButtons {
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.deleteButton {
+  width: auto;
+  height: auto;
+  min-height: 36px;
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+}
+@media (max-width: 600px) {
+  .taskButtons {
+    flex-basis: 100%;
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+  .tasksContainer {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+  .taskContent {
+    padding: 0.5rem;
+  }
+}
+
+.undoArea {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  min-width: 0;
+}
+.taskNotice {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  color: var(--text-default);
+}
+.taskNotice:empty {
+  margin: 0;
+}
+.undoButton {
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  background: transparent;
+  border: 1px solid var(--brand-orange);
+  color: var(--text-default);
+  font: inherit;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  white-space: normal;
+}
+.undoButton:focus-visible,
+.taskHeader:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 3px;
 }

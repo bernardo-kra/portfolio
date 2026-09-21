@@ -3,6 +3,7 @@ import { Typography, Section } from '@components/common'
 import { useI18n } from '@src/i18n'
 import { useAppConfig } from '@context/AppConfigContext'
 import styles from './styles.module.css'
+import { profile } from '@src/config/profile'
 
 const Footer: React.FC = () => {
   const { t } = useI18n()
@@ -10,14 +11,27 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <Section variant="footer" background="muted" spacing="lg" className={styles.footer}>
+    <Section
+      variant="footer"
+      background="muted"
+      spacing="lg"
+      className={styles.footer}
+    >
       <div className={styles.footerContent}>
         <div className={styles.footerMain}>
           <div className={styles.footerBrand}>
-            <Typography variant="h3" color="brand" className={styles.footerName}>
+            <Typography
+              variant="h3"
+              color="brand"
+              className={styles.footerName}
+            >
               Bernardo Kraczkowski
             </Typography>
-            <Typography variant="body2" color="muted" className={styles.footerTagline}>
+            <Typography
+              variant="body2"
+              color="muted"
+              className={styles.footerTagline}
+            >
               {t.footerTagline}
             </Typography>
           </div>
@@ -28,27 +42,76 @@ const Footer: React.FC = () => {
                 {t.footerQuickLinks}
               </Typography>
               <ul className={styles.footerList}>
-                <li><a href="#sobre" className={styles.footerLink}>{t.aboutTitle}</a></li>
-                <li><a href="#experiencia" className={styles.footerLink}>{t.experienceTitle}</a></li>
-                <li><a href="#projetos" className={styles.footerLink}>{t.projectsTitle}</a></li>
-                <li><a href="#contato" className={styles.footerLink}>{t.contactTitle}</a></li>
+                <li>
+                  <a
+                    href={profile.resumeUrl}
+                    download={profile.resumeFilename}
+                    className={styles.footerLink}
+                    title={t.recruiter.pdfLanguage}
+                  >
+                    {t.downloadCV} · PDF
+                  </a>
+                </li>
+                <li>
+                  <a href="#sobre" className={styles.footerLink}>
+                    {t.aboutTitle}
+                  </a>
+                </li>
+                <li>
+                  <a href="#experiencia" className={styles.footerLink}>
+                    {t.experienceTitle}
+                  </a>
+                </li>
+                <li>
+                  <a href="#projetos" className={styles.footerLink}>
+                    {t.projectsTitle}
+                  </a>
+                </li>
+                <li>
+                  <a href="#contato" className={styles.footerLink}>
+                    {t.contactTitle}
+                  </a>
+                </li>
               </ul>
             </div>
 
             {config.ui.showContactMethods && (
               <div className={styles.footerSection}>
-                <Typography variant="h4" size="sm" className={styles.footerTitle}>
+                <Typography
+                  variant="h4"
+                  size="sm"
+                  className={styles.footerTitle}
+                >
                   {t.footerConnect}
                 </Typography>
                 <ul className={styles.footerList}>
                   <li>
-                    <a href="https://github.com/bernardo-kra" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>GitHub</a>
+                    <a
+                      href="https://github.com/bernardo-kra"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.footerLink}
+                    >
+                      GitHub
+                    </a>
                   </li>
                   <li>
-                    <a href="https://www.linkedin.com/in/bernardo-chimoka-853709170/" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
+                    <a
+                      href="https://www.linkedin.com/in/bernardo-chimoka-853709170/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.footerLink}
+                    >
+                      LinkedIn
+                    </a>
                   </li>
                   <li>
-                    <a href="mailto:bernardo_kra@hotmail.com" className={styles.footerLink}>Email</a>
+                    <a
+                      href="mailto:bernardo_kra@hotmail.com"
+                      className={styles.footerLink}
+                    >
+                      Email
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -57,11 +120,19 @@ const Footer: React.FC = () => {
         </div>
 
         <div className={styles.footerBottom}>
-          <Typography variant="caption" color="muted" className={styles.footerCopyright}>
+          <Typography
+            variant="caption"
+            color="muted"
+            className={styles.footerCopyright}
+          >
             © {currentYear} Bernardo Kraczkowski. Todos os direitos reservados.
           </Typography>
           <div className={styles.footerTech}>
-            <Typography variant="caption" color="muted" className={styles.footerBuiltWith}>
+            <Typography
+              variant="caption"
+              color="muted"
+              className={styles.footerBuiltWith}
+            >
               {t.footerBuiltWith}
             </Typography>
           </div>
@@ -71,4 +142,4 @@ const Footer: React.FC = () => {
   )
 }
 
-export default Footer 
+export default Footer

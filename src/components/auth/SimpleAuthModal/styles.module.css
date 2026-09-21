@@ -19,9 +19,11 @@
   padding: 2rem;
   max-width: 400px;
   width: 90%;
-  max-height: 90vh;
+  max-height: calc(100dvh - 2rem);
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--border-default, #e5e7eb);
 }
 
@@ -49,6 +51,9 @@
 }
 
 .header {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-right: 1.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -151,12 +156,8 @@
     padding: 1.5rem;
     margin: 1rem;
   }
-  
+
   .row {
     grid-template-columns: 1fr;
   }
 }
-
-
-
-

@@ -91,7 +91,12 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
   }
 
   return (
-    <div className={styles.controlPanel}>
+    <div
+      id="cosmic-controls"
+      className={styles.controlPanel}
+      role="region"
+      aria-label="Ajustes da cena"
+    >
       <div className={styles.panelHeader}>
         <h3 className={styles.panelTitle}>🎛️ Controle Cósmico</h3>
         <button
@@ -107,18 +112,21 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
         <button
           className={`${styles.tab} ${activeTab === 'density' ? styles.active : ''}`}
           onClick={() => setActiveTab('density')}
+          aria-pressed={activeTab === 'density'}
         >
           🌟 Densidade
         </button>
         <button
           className={`${styles.tab} ${activeTab === 'visual' ? styles.active : ''}`}
           onClick={() => setActiveTab('visual')}
+          aria-pressed={activeTab === 'visual'}
         >
           🎨 Visual
         </button>
         <button
           className={`${styles.tab} ${activeTab === 'time' ? styles.active : ''}`}
           onClick={() => setActiveTab('time')}
+          aria-pressed={activeTab === 'time'}
         >
           ⏰ Tempo
         </button>
@@ -138,6 +146,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Densidade de estrelas"
                 min="0"
                 max="1"
                 step="0.1"
@@ -158,6 +167,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Densidade de nebulosas"
                 min="0"
                 max="1"
                 step="0.1"
@@ -181,6 +191,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Densidade de poeira"
                 min="0"
                 max="1"
                 step="0.1"
@@ -201,6 +212,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Densidade de asteroides"
                 min="0"
                 max="1"
                 step="0.1"
@@ -224,6 +236,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Densidade de cometas"
                 min="0"
                 max="1"
                 step="0.1"
@@ -247,6 +260,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
                   className={`${styles.paletteButton} ${settings.colorPalette === palette.id ? styles.active : ''}`}
                   onClick={() => handlePaletteChange(palette.id)}
                   title={palette.name}
+                  aria-pressed={settings.colorPalette === palette.id}
                 >
                   <div className={styles.palettePreview}>
                     {palette.colors.map((color, index) => (
@@ -277,6 +291,7 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
               </label>
               <input
                 type="range"
+                aria-label="Velocidade da animação"
                 min="0.1"
                 max="5"
                 step="0.1"

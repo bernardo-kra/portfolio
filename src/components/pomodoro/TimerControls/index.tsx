@@ -6,15 +6,18 @@ import { toast } from 'react-toastify'
 import styles from './styles.module.css'
 
 const TimerControls: React.FC = () => {
-  const { state, dispatch, startTimer, pauseTimer, resetTimer, skipTimer, setFocusDuration, setBreakDuration } = usePomodoro()
+  const {
+    state,
+    dispatch,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    skipTimer,
+    setFocusDuration,
+    setBreakDuration,
+  } = usePomodoro()
   const audioRef = useRef<HTMLAudioElement>(null)
   const notificationRef = useRef<string | number | null>(null)
-
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission()
-    }
-  }, [])
 
   useEffect(() => {
     const formatTime = (seconds: number): string => {
@@ -34,7 +37,10 @@ const TimerControls: React.FC = () => {
     }
   }, [state.timeLeft, state.isRunning, state.mode])
 
-  const showNotification = (message: string, type: 'info' | 'success' = 'info') => {
+  const showNotification = (
+    message: string,
+    type: 'info' | 'success' = 'info'
+  ) => {
     if (notificationRef.current) {
       toast.update(notificationRef.current, {
         render: message,
@@ -44,7 +50,7 @@ const TimerControls: React.FC = () => {
       })
     } else {
       notificationRef.current = toast[type](message, {
-        position: "top-center",
+        position: 'top-center',
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -52,14 +58,23 @@ const TimerControls: React.FC = () => {
         draggable: true,
         onClose: () => {
           notificationRef.current = null
-        }
+        },
       })
     }
   }
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      if (
+        event.repeat ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        (event.target instanceof HTMLElement &&
+          event.target.closest(
+            'input, textarea, select, button, a, [contenteditable="true"], [role="slider"]'
+          ))
+      ) {
         return
       }
 
@@ -82,32 +97,53 @@ const TimerControls: React.FC = () => {
           break
         case 'arrowup':
           event.preventDefault()
-          const currentDuration = state.mode === 'focus' ? state.focusDuration : state.breakDuration
-          const newDuration = Math.min(currentDuration + 60, state.mode === 'focus' ? 7200 : 3600)
+          const currentDuration =
+            state.mode === 'focus' ? state.focusDuration : state.breakDuration
+          const newDuration = Math.min(
+            currentDuration + 60,
+            state.mode === 'focus' ? 7200 : 3600
+          )
           if (state.mode === 'focus') {
             setFocusDuration(Math.floor(newDuration / 60))
           } else {
             setBreakDuration(Math.floor(newDuration / 60))
           }
-          showNotification(`Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} aumentada para ${Math.floor(newDuration / 60)}min`)
+          showNotification(
+            `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} aumentada para ${Math.floor(newDuration / 60)}min`
+          )
           break
         case 'arrowdown':
           event.preventDefault()
-          const currentDurationDown = state.mode === 'focus' ? state.focusDuration : state.breakDuration
+          const currentDurationDown =
+            state.mode === 'focus' ? state.focusDuration : state.breakDuration
           const newDurationDown = Math.max(currentDurationDown - 60, 60)
           if (state.mode === 'focus') {
             setFocusDuration(Math.floor(newDurationDown / 60))
           } else {
             setBreakDuration(Math.floor(newDurationDown / 60))
           }
-          showNotification(`Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} diminuída para ${Math.floor(newDurationDown / 60)}min`)
+          showNotification(
+            `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} diminuída para ${Math.floor(newDurationDown / 60)}min`
+          )
           break
       }
     }
 
     document.addEventListener('keydown', handleKeyPress)
     return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [state.isRunning, state.timeLeft, state.mode, state.focusDuration, state.breakDuration, startTimer, pauseTimer, resetTimer, skipTimer, setFocusDuration, setBreakDuration])
+  }, [
+    state.isRunning,
+    state.timeLeft,
+    state.mode,
+    state.focusDuration,
+    state.breakDuration,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    skipTimer,
+    setFocusDuration,
+    setBreakDuration,
+  ])
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -118,17 +154,18 @@ const TimerControls: React.FC = () => {
       }, 1000)
     } else if (state.timeLeft === 0 && state.isRunning) {
       dispatch({ type: 'SWITCH' })
-      
-              if (audioRef.current) {
+
+      if (audioRef.current) {
         audioRef.current.play().catch(console.error)
       }
-      
-      const message = state.mode === 'focus' 
-        ? '🎯 Tempo de foco concluído! Hora da pausa.' 
-        : '☕ Pausa concluída! Hora de focar novamente.'
-      
+
+      const message =
+        state.mode === 'focus'
+          ? '🎯 Tempo de foco concluído! Hora da pausa.'
+          : '☕ Pausa concluída! Hora de focar novamente.'
+
       toast.success(message, {
-        position: "top-center",
+        position: 'top-center',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -136,19 +173,21 @@ const TimerControls: React.FC = () => {
         draggable: true,
       })
 
-              if ('Notification' in window && Notification.permission === 'granted') {
-        const notificationTitle = state.mode === 'focus' ? 'Hora da Pausa!' : 'Hora de Focar!'
-        const notificationBody = state.mode === 'focus' 
-          ? 'Parabéns! Você completou um ciclo de foco. Agora é hora de descansar.'
-          : 'Pausa concluída! Vamos voltar ao foco e continuar produtivo.'
-        
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const notificationTitle =
+          state.mode === 'focus' ? 'Hora da Pausa!' : 'Hora de Focar!'
+        const notificationBody =
+          state.mode === 'focus'
+            ? 'Parabéns! Você completou um ciclo de foco. Agora é hora de descansar.'
+            : 'Pausa concluída! Vamos voltar ao foco e continuar produtivo.'
+
         new Notification(notificationTitle, {
           body: notificationBody,
           icon: '/favicon.ico',
           badge: '/favicon.ico',
           tag: 'pomodoro-notification',
           requireInteraction: false,
-          silent: false
+          silent: false,
         })
       }
     }
@@ -212,7 +251,7 @@ const TimerControls: React.FC = () => {
             className={styles.controlButton}
             icon={<RotateCcw size={20} />}
           >
-            Resetar
+            Reiniciar ciclo
           </Button>
 
           <Button
@@ -226,17 +265,19 @@ const TimerControls: React.FC = () => {
           </Button>
         </div>
 
-        {/* Keyboard shortcuts help */}
         <div className={styles.keyboardShortcuts}>
           <small>
-            <strong>Atalhos:</strong> Espaço (Iniciar/Pausar) • R (Resetar) • S (Pular) • ↑/↓ (Ajustar tempo)
+            <strong>Atalhos:</strong> Espaço (Iniciar/Pausar) • R (Resetar) • S
+            (Pular) • ↑/↓ (Ajustar tempo)
           </small>
         </div>
       </div>
 
-      {/* Hidden audio element for notifications */}
       <audio ref={audioRef} preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav" />
+        <source
+          src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT"
+          type="audio/wav"
+        />
       </audio>
     </>
   )

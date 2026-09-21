@@ -1,9 +1,30 @@
 .homePage {
+  --section-spacing: clamp(3rem, 7vw, 6rem);
+  --card-background: var(--card-bg);
+  --border-default: color-mix(in srgb, var(--text-default) 12%, transparent);
+  --border-color: var(--border-default);
   width: 100%;
   min-height: 100vh;
-  background: var(--bg-primary);
+  background:
+    radial-gradient(
+      ellipse 90vw 700px at 10% 15%,
+      rgba(255, 153, 0, 0.07),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 85vw 900px at 100% 45%,
+      rgba(99, 102, 241, 0.06),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 80vw 700px at 15% 85%,
+      rgba(16, 185, 129, 0.04),
+      transparent 75%
+    ),
+    var(--bg-default);
   color: var(--text-default);
   position: relative;
+  isolation: isolate;
   --hx: 0.5;
   --hy: 0.5;
 }
@@ -17,9 +38,21 @@
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(900px 520px at 20% 20%, rgba(255, 154, 46, 0.08), transparent 62%),
-    radial-gradient(700px 480px at 80% 30%, rgba(99, 102, 241, 0.06), transparent 60%),
-    radial-gradient(600px 380px at 30% 80%, rgba(16, 185, 129, 0.06), transparent 60%);
+    radial-gradient(
+      900px 520px at 20% 20%,
+      rgba(255, 154, 46, 0.08),
+      transparent 62%
+    ),
+    radial-gradient(
+      700px 480px at 80% 30%,
+      rgba(99, 102, 241, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(
+      600px 380px at 30% 80%,
+      rgba(16, 185, 129, 0.06),
+      transparent 60%
+    );
   opacity: 0.8;
   pointer-events: none;
   z-index: 0;
@@ -135,7 +168,7 @@
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: 600;
-  background: var(--toggle-bg-dark, rgba(35,38,58,0.7));
+  background: var(--toggle-bg-dark, rgba(35, 38, 58, 0.7));
   color: var(--color-primary);
   transition: background 0.2s;
   min-width: 32px;
@@ -146,7 +179,7 @@
 }
 
 :root[data-theme='light'] .languageToggle {
-  background: var(--toggle-bg-light, rgba(255,255,255,0.7));
+  background: var(--toggle-bg-light, rgba(255, 255, 255, 0.7));
 }
 
 .languageToggle:hover {
@@ -160,9 +193,6 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255, 153, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
   padding: var(--spacing-2xl) 0;
 }
 
@@ -179,8 +209,8 @@
       600px 360px at calc(80% - (var(--hx) * 20%)) calc(20% + (var(--hy) * 20%)),
       rgba(99, 102, 241, 0.12),
       transparent 65%
-    ),
-    linear-gradient(180deg, rgba(10, 12, 18, 0.45), rgba(10, 12, 18, 0));
+    );
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
   filter: blur(0.3px);
   transition: background 0.2s ease;
   pointer-events: none;
@@ -189,27 +219,24 @@
 
 .lightDisabled .heroBackground {
   background:
-    radial-gradient(500px 320px at 50% 50%, rgba(255, 170, 70, 0.08), transparent 65%),
-    radial-gradient(600px 360px at 70% 30%, rgba(99, 102, 241, 0.08), transparent 65%),
-    linear-gradient(180deg, rgba(10, 12, 18, 0.45), rgba(10, 12, 18, 0));
+    radial-gradient(
+      500px 320px at 50% 50%,
+      rgba(255, 170, 70, 0.08),
+      transparent 65%
+    ),
+    radial-gradient(
+      600px 360px at 70% 30%,
+      rgba(99, 102, 241, 0.08),
+      transparent 65%
+    );
 }
 
 .lightBlown .heroBackground {
-  background:
-    radial-gradient(400px 240px at 50% 50%, rgba(255, 170, 70, 0.04), transparent 70%),
-    linear-gradient(180deg, rgba(10, 12, 18, 0.5), rgba(10, 12, 18, 0));
-}
-
-.heroSection::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  background: linear-gradient(to bottom, transparent 0%, var(--bg-secondary) 100%);
-  z-index: 1;
-  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  background: radial-gradient(
+    400px 240px at 50% 50%,
+    rgba(255, 170, 70, 0.04),
+    transparent 70%
+  );
 }
 
 .heroContainer {
@@ -227,7 +254,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--spacing-4xl);
+  gap: var(--section-spacing);
   border-radius: 16px;
   z-index: 2;
 }
@@ -250,8 +277,13 @@
 }
 
 @keyframes floatImage {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .greeting {
@@ -285,7 +317,11 @@
   font-weight: 900;
   margin: 0 0 var(--spacing-md) 0;
   position: relative;
-  background: linear-gradient(135deg, var(--text-default) 0%, var(--brand-orange) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--text-default) 0%,
+    var(--brand-orange) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -376,25 +412,10 @@
   margin-top: var(--spacing-xs);
 }
 
-/* Projects Section */
 .projectsSection {
-  padding: var(--spacing-4xl) 0;
-  background: var(--bg-secondary);
+  padding: var(--section-spacing) 0;
   position: relative;
-  margin-top: -50px;
-  padding-top: calc(var(--spacing-4xl) + 50px);
-}
-
-.projectsSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background: linear-gradient(to bottom, var(--bg-default) 0%, var(--bg-secondary) 100%);
-  z-index: 1;
-  clip-path: polygon(0 100%, 100% 80%, 100% 0, 0 0);
+  scroll-margin-top: var(--spacing-2xl);
 }
 
 .projectsContainer {
@@ -408,7 +429,7 @@
 
 .sectionHeader {
   text-align: center;
-  margin-bottom: var(--spacing-4xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .sectionTitle {
@@ -435,7 +456,7 @@
 
 .projectsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--spacing-xl);
   width: 100%;
   align-items: stretch;
@@ -450,7 +471,9 @@
   cursor: pointer;
   transition: all 0.4s ease;
   overflow: hidden;
-  height: 100%;
+  width: 100%;
+  height: auto;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   min-height: 360px;
@@ -462,7 +485,11 @@
   grid-column: span 2;
   border-color: rgba(255, 155, 60, 0.6);
   box-shadow: 0 22px 50px rgba(255, 155, 60, 0.12);
-  background: linear-gradient(180deg, rgba(255, 155, 60, 0.08), rgba(0, 0, 0, 0));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 155, 60, 0.08),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 .projectCard::before {
@@ -494,6 +521,7 @@
   margin-bottom: var(--spacing-md);
   min-height: 56px;
   gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
 .cardIcon {
@@ -508,6 +536,8 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .featuredBadge {
@@ -534,8 +564,12 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  white-space: nowrap;
-  line-height: 1;
+  white-space: normal;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  line-height: 1.4;
 }
 
 .cardContent {
@@ -620,7 +654,9 @@
   background-position: var(--preview-pos, center top);
   opacity: 0;
   transform: scale(1.02);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background-repeat: no-repeat;
 }
@@ -726,10 +762,8 @@
 }
 
 .ctaSection {
-  padding: var(--spacing-4xl) 0;
-  background: var(--bg-secondary);
+  padding: var(--section-spacing) 0;
   position: relative;
-  padding-bottom: 40px;
 }
 
 .ctaContainer {
@@ -744,7 +778,11 @@
   padding: var(--spacing-2xl);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(135deg, rgba(255, 155, 60, 0.08), rgba(59, 130, 246, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 155, 60, 0.08),
+    rgba(59, 130, 246, 0.05)
+  );
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
@@ -754,7 +792,11 @@
 .ctaGlow {
   position: absolute;
   inset: -20%;
-  background: radial-gradient(500px 300px at 20% 30%, rgba(255, 155, 60, 0.2), transparent 70%);
+  background: radial-gradient(
+    500px 300px at 20% 30%,
+    rgba(255, 155, 60, 0.2),
+    transparent 70%
+  );
   opacity: 0.6;
   animation: ambientDrift 12s ease-in-out infinite;
   pointer-events: none;
@@ -833,41 +875,13 @@
   letter-spacing: 0.18em;
 }
 
-/* Stats Section */
 .statsSection {
-  padding: var(--spacing-4xl) 0;
-  background: var(--bg-default);
+  padding: var(--section-spacing) 0;
   position: relative;
-  margin-top: 0;
-  padding-top: var(--spacing-4xl);
 }
 
-.statsSection::before {
-  content: '';
-  position: absolute;
-  top: -100px;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 153, 0, 0.02) 30%,
-    rgba(59, 130, 246, 0.02) 60%,
-    var(--bg-primary) 100%
-  );
-  z-index: 0;
-  pointer-events: none;
-}
-
-:root[data-theme='light'] .statsSection::before {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 153, 0, 0.03) 30%,
-    rgba(59, 130, 246, 0.03) 60%,
-    var(--bg-primary) 100%
-  );
+.statsSection + .statsSection {
+  padding-top: 0;
 }
 
 .statsContainer {
@@ -914,9 +928,7 @@
 
 .footer {
   text-align: center;
-  padding: var(--spacing-lg) 0;
-  border-top: 1px solid var(--border-color);
-  margin-top: var(--spacing-4xl);
+  padding: var(--spacing-2xl) var(--spacing-md);
 }
 
 .copyright {
@@ -924,7 +936,6 @@
   color: var(--text-muted);
 }
 
-/* Animations */
 @keyframes slideInDown {
   from {
     opacity: 0;
@@ -969,7 +980,6 @@
   }
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .projectsGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -992,34 +1002,34 @@
   .ctaContainer {
     padding: 0 var(--spacing-sm);
   }
-  
+
   .heroContent {
     flex-direction: column;
     text-align: center;
     gap: var(--spacing-lg);
   }
-  
+
   .heroText {
     flex: 1;
     text-align: center;
     min-width: auto;
   }
-  
+
   .heroImage {
     flex: 1;
     height: 250px;
     background-size: contain;
     background-position: center;
   }
-  
+
   .heroTitle {
     font-size: 2.5rem;
   }
-  
+
   .heroSubtitle {
     font-size: 1.5rem;
   }
-  
+
   .projectsGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
@@ -1028,7 +1038,7 @@
   .ctaActions {
     flex-direction: column;
   }
-  
+
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1041,25 +1051,120 @@
   .ctaContainer {
     padding: 0 var(--spacing-xs);
   }
-  
+
   .heroContent {
     padding: var(--spacing-lg) 0;
   }
-  
+
   .heroImage {
     height: 200px;
   }
-  
+
   .projectCard {
     padding: var(--spacing-lg);
   }
-  
+
   .statsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .projectsGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+  }
+}
+
+.profileLink,
+.resumeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  color: var(--text-default);
+  font-size: 0.85rem;
+}
+.resumeLink small {
+  color: var(--text-muted);
+}
+.profileLink:hover,
+.resumeLink:hover {
+  color: var(--brand-orange);
+}
+.projectCard {
+  color: var(--text-default);
+  text-decoration: none;
+}
+.projectCard:hover {
+  color: var(--text-default);
+}
+.homePage :where(a, button):focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 4px;
+}
+.techChips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .homePage *,
+  .homePage *::before,
+  .homePage *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.projectsGrid > div {
+  display: flex;
+  min-width: 0;
+}
+.cardContent,
+.cardHeader {
+  min-width: 0;
+}
+.cardIcon {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  overflow-wrap: anywhere;
+}
+.cardMeta {
+  flex: 1 1 max-content;
+}
+.featureTag {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1024px) {
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .projectsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .projectCard {
+    min-height: 0;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+  .cardHeader {
+    margin-bottom: 0;
+  }
+  .cardFeatures {
+    min-height: 0;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .previewLayer {
+    display: none;
+  }
+  .projectCard:hover {
+    transform: none;
+  }
+  .projectCard:hover .cardIcon {
+    transform: none;
   }
 }

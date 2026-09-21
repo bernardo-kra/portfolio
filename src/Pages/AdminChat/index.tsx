@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@hooks/useAuth';
-import { useAppConfig } from '@context';
-import { ModernChat } from '@components/chat';
-import { Link } from 'react-router-dom';
-import styles from './styles.module.css';
+import React from 'react'
+import { useAuth } from '@hooks/useAuth'
+import { useAppConfig } from '@context'
+import { ModernChat } from '@components/chat'
+import { Link } from 'react-router-dom'
+import styles from './styles.module.css'
 
 const AdminChat: React.FC = () => {
-  const { user, isAuthenticated } = useAuth();
-  const { isFeatureEnabled, isBackendEnabled } = useAppConfig();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    if (user?.role === 'admin') {
-      setIsAdmin(true);
-    }
-  }, [user]);
+  const { user, isAuthenticated } = useAuth()
+  const { isFeatureEnabled, isBackendEnabled } = useAppConfig()
+  const isAdmin = user?.role === 'admin'
 
   if (!isAuthenticated) {
     return (
@@ -22,9 +16,12 @@ const AdminChat: React.FC = () => {
         <div className={styles.loginRequired}>
           <h2>🔒 Acesso Restrito</h2>
           <p>Você precisa fazer login para acessar esta página.</p>
+          <Link to="/portfolio" className={styles.backButton}>
+            Voltar ao portfólio
+          </Link>
         </div>
       </div>
-    );
+    )
   }
 
   if (!isAdmin) {
@@ -33,10 +30,15 @@ const AdminChat: React.FC = () => {
         <div className={styles.accessDenied}>
           <h2>🚫 Acesso Negado</h2>
           <p>Esta página é restrita apenas para administradores.</p>
-          <p>Seu perfil: <strong>{user?.role || 'user'}</strong></p>
+          <p>
+            Seu perfil: <strong>{user?.role || 'user'}</strong>
+          </p>
+          <Link to="/portfolio" className={styles.backButton}>
+            Voltar ao portfólio
+          </Link>
         </div>
       </div>
-    );
+    )
   }
 
   if (!isBackendEnabled || !isFeatureEnabled('chat')) {
@@ -45,9 +47,12 @@ const AdminChat: React.FC = () => {
         <div className={styles.serviceUnavailable}>
           <h2>⚠️ Serviço Indisponível</h2>
           <p>O sistema de chat está temporariamente indisponível.</p>
+          <Link to="/portfolio" className={styles.backButton}>
+            Voltar ao portfólio
+          </Link>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -70,7 +75,9 @@ const AdminChat: React.FC = () => {
         <div className={styles.stats}>
           <div className={styles.statCard}>
             <h3>👤 Usuário Logado</h3>
-            <p>{user?.firstName} {user?.lastName}</p>
+            <p>
+              {user?.firstName} {user?.lastName}
+            </p>
             <span className={styles.role}>Admin</span>
           </div>
           <div className={styles.statCard}>
@@ -89,7 +96,7 @@ const AdminChat: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdminChat;
+export default AdminChat

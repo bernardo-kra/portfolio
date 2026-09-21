@@ -1,0 +1,10 @@
+:where(button, a[href]):not(:disabled):not([aria-disabled='true']):active {
+  filter: brightness(0.86);
+}
+@media (forced-colors: active) {
+  :where(button, a[href]):not(:disabled):not([aria-disabled='true']):active {
+    filter: none;
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bernardo-kra.github.io/portfolio/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://bernardo-kra.github.io/</loc></url>
+  <url><loc>https://bernardo-kra.github.io/portfolio</loc></url>
+  <url><loc>https://bernardo-kra.github.io/pomodoro</loc></url>
+  <url><loc>https://bernardo-kra.github.io/generative</loc></url>
+  <url><loc>https://bernardo-kra.github.io/landing</loc></url>
+  <url><loc>https://bernardo-kra.github.io/experimental3d</loc></url>
+  <url><loc>https://bernardo-kra.github.io/agency</loc></url>
 </urlset>
 

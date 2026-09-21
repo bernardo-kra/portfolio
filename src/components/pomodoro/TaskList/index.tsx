@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Typography, Button, Input, Card, Tag } from '@components/common'
 import { Plus, Check, Trash2, Target, Play } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
 import styles from './styles.module.css'
+import { removeTask, restoreTask, type DeletedTask } from './taskHistory'
 
 interface Task {
   id: string
@@ -15,29 +16,36 @@ interface Task {
 
 const TaskList: React.FC = () => {
   const { state, setActiveTask } = usePomodoro()
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    try {
+      const savedTasks = localStorage.getItem('pomodoro-tasks')
+      if (!savedTasks) return []
+      const parsedTasks = JSON.parse(savedTasks) as Array<
+        Omit<Task, 'createdAt'> & { createdAt: string }
+      >
+      return parsedTasks.map((task) => ({
+        ...task,
+        createdAt: new Date(task.createdAt),
+      }))
+    } catch {
+      return []
+    }
+  })
   const [newTaskName, setNewTaskName] = useState('')
   const [newTaskCycles, setNewTaskCycles] = useState(1)
   const [isAddingTask, setIsAddingTask] = useState(false)
+  const [deletedTasks, setDeletedTasks] = useState<
+    (DeletedTask<Task> & { wasActive: boolean })[]
+  >([])
+  const [taskNotice, setTaskNotice] = useState('')
+  const headerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const savedTasks = localStorage.getItem('pomodoro-tasks')
-    if (savedTasks) {
-      try {
-        const parsedTasks = JSON.parse(savedTasks) as Array<Omit<Task, 'createdAt'> & { createdAt: string }>
-        const tasksWithDates = parsedTasks.map(task => ({
-          ...task,
-          createdAt: new Date(task.createdAt)
-        }))
-        setTasks(tasksWithDates)
-      } catch (error) {
-        console.error('Error loading tasks:', error)
-      }
+    try {
+      localStorage.setItem('pomodoro-tasks', JSON.stringify(tasks))
+    } catch {
+      console.error('Unable to save tasks on this device')
     }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('pomodoro-tasks', JSON.stringify(tasks))
   }, [tasks])
 
   useEffect(() => {
@@ -47,38 +55,40 @@ const TaskList: React.FC = () => {
         const lastProcessedCycle = localStorage.getItem('last-processed-cycle')
         if (lastProcessedCycle !== lastCycle.id) {
           localStorage.setItem('last-processed-cycle', lastCycle.id)
-          
-          setTasks(prevTasks => {
-            const updatedTasks = [...prevTasks]
-            const incompleteTaskIndex = updatedTasks.findIndex(task => !task.isCompleted)
-            
-            if (incompleteTaskIndex !== -1) {
-              updatedTasks[incompleteTaskIndex].completedCycles += 1
-              
-              if (updatedTasks[incompleteTaskIndex].completedCycles >= updatedTasks[incompleteTaskIndex].estimatedCycles) {
-                updatedTasks[incompleteTaskIndex].isCompleted = true
+
+          setTasks((prevTasks) =>
+            prevTasks.map((task) => {
+              if (task.id !== lastCycle.taskId || task.isCompleted) return task
+              const completedCycles = task.completedCycles + 1
+              return {
+                ...task,
+                completedCycles,
+                isCompleted: completedCycles >= task.estimatedCycles,
               }
-            }
-            
-            return updatedTasks
-          })
+            })
+          )
         }
       }
     }
   }, [state.cycles])
 
   const addTask = () => {
-    if (newTaskName.trim()) {
+    if (
+      newTaskName.trim() &&
+      Number.isInteger(newTaskCycles) &&
+      newTaskCycles >= 1 &&
+      newTaskCycles <= 20
+    ) {
       const newTask: Task = {
         id: Date.now().toString(),
         name: newTaskName.trim(),
         estimatedCycles: newTaskCycles,
         completedCycles: 0,
         isCompleted: false,
-        createdAt: new Date()
+        createdAt: new Date(),
       }
-      
-      setTasks(prev => [newTask, ...prev])
+
+      setTasks((prev) => [newTask, ...prev])
       setNewTaskName('')
       setNewTaskCycles(1)
       setIsAddingTask(false)
@@ -86,18 +96,41 @@ const TaskList: React.FC = () => {
   }
 
   const toggleTaskCompletion = (taskId: string) => {
-    setTasks(prev => prev.map(task => 
-      task.id === taskId 
-        ? { ...task, isCompleted: !task.isCompleted }
-        : task
-    ))
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
+      )
+    )
   }
 
   const deleteTask = (taskId: string) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId))
+    const result = removeTask(tasks, taskId)
+    const deleted = result.deleted
+    if (!deleted) return
+    setTasks(result.tasks)
+    setDeletedTasks((prev) => [
+      ...prev,
+      { ...deleted, wasActive: state.activeTaskId === taskId },
+    ])
+    setTaskNotice(
+      `Tarefa “${deleted.task.name}” excluída. Você pode desfazer abaixo enquanto esta página estiver aberta.`
+    )
+    headerRef.current?.focus()
     if (state.activeTaskId === taskId) {
       setActiveTask(null)
     }
+  }
+
+  const undoDelete = () => {
+    const deleted = deletedTasks.at(-1)
+    if (!deleted) return
+    setTasks((prev) => restoreTask(prev, deleted))
+    setDeletedTasks((prev) => prev.slice(0, -1))
+    if (deleted.wasActive && !state.activeTaskId) {
+      setActiveTask({ taskId: deleted.task.id, taskName: deleted.task.name })
+    }
+    setTaskNotice(`Tarefa “${deleted.task.name}” restaurada com seu progresso.`)
+    headerRef.current?.focus()
   }
 
   const startTask = (task: Task) => {
@@ -117,7 +150,7 @@ const TaskList: React.FC = () => {
 
   return (
     <div className={styles.taskList}>
-      <div className={styles.taskHeader}>
+      <div className={styles.taskHeader} ref={headerRef} tabIndex={-1}>
         <div className={styles.taskTitle}>
           <Target size={20} className={styles.taskIcon} />
           <Typography variant="h4" weight="semibold">
@@ -134,13 +167,33 @@ const TaskList: React.FC = () => {
         </Button>
       </div>
 
+      <div className={styles.undoArea}>
+        <p role="status" aria-atomic="true" className={styles.taskNotice}>
+          {taskNotice}
+        </p>
+        {deletedTasks.length > 0 && (
+          <button
+            type="button"
+            className={styles.undoButton}
+            onClick={undoDelete}
+          >
+            Desfazer última exclusão
+            {deletedTasks.length > 1
+              ? ` (${deletedTasks.length} disponíveis)`
+              : ''}
+          </button>
+        )}
+      </div>
+
       {isAddingTask && (
         <Card variant="outlined" className={styles.addTaskCard}>
           <div className={styles.addTaskForm}>
             <Input
               label="Nome da Tarefa"
               value={newTaskName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTaskName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNewTaskName(e.target.value)
+              }
               placeholder="Digite o nome da tarefa..."
               className={styles.taskInput}
             />
@@ -150,7 +203,9 @@ const TaskList: React.FC = () => {
               min="1"
               max="20"
               value={newTaskCycles}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTaskCycles(Number(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNewTaskCycles(Number(e.target.value))
+              }
               className={styles.cyclesInput}
             />
             <div className={styles.addTaskActions}>
@@ -165,7 +220,12 @@ const TaskList: React.FC = () => {
                 variant="primary"
                 size="sm"
                 onClick={addTask}
-                disabled={!newTaskName.trim()}
+                disabled={
+                  !newTaskName.trim() ||
+                  !Number.isInteger(newTaskCycles) ||
+                  newTaskCycles < 1 ||
+                  newTaskCycles > 20
+                }
               >
                 Adicionar
               </Button>
@@ -182,11 +242,12 @@ const TaskList: React.FC = () => {
               Nenhuma tarefa criada
             </Typography>
             <Typography variant="body2" color="muted">
-              Crie tarefas para acompanhar seu progresso durante os ciclos de foco
+              Crie tarefas para acompanhar seu progresso durante os ciclos de
+              foco
             </Typography>
           </div>
         ) : (
-          tasks.map(task => (
+          tasks.map((task) => (
             <Card
               key={task.id}
               variant="default"
@@ -194,57 +255,65 @@ const TaskList: React.FC = () => {
             >
               <div className={styles.taskContent}>
                 <div className={styles.taskInfo}>
-                                     <div className={styles.taskNameRow}>
-                     <Button
-                       variant="ghost"
-                       size="sm"
-                       onClick={() => toggleTaskCompletion(task.id)}
-                       className={styles.completeButton}
-                       icon={task.isCompleted ? <Check size={16} /> : undefined}
-                     >
-                       {!task.isCompleted && <div className={styles.checkbox} />}
-                     </Button>
-                     
-                     <Typography 
-                       variant="h6" 
-                       className={styles.taskName}
-                       style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}
-                     >
-                       {task.name}
-                     </Typography>
-                     
-                     <div className={styles.taskButtons}>
-                       {!task.isCompleted && (
-                         <Button
-                           variant="outline"
-                           size="sm"
-                           onClick={() => startTask(task)}
-                           className={styles.startButton}
-                           icon={<Play size={16} />}
-                         >
-                           Iniciar
-                         </Button>
-                       )}
-                       
-                       <Button
-                         variant="ghost"
-                         size="sm"
-                         onClick={() => deleteTask(task.id)}
-                         className={styles.deleteButton}
-                         icon={<Trash2 size={16} />}
-                       >
-                         Deletar
-                       </Button>
-                     </div>
-                   </div>
-                  
+                  <div className={styles.taskNameRow}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleTaskCompletion(task.id)}
+                      className={styles.completeButton}
+                      aria-label={`${task.isCompleted ? 'Reabrir' : 'Concluir'} tarefa: ${task.name}`}
+                      aria-pressed={task.isCompleted}
+                      icon={task.isCompleted ? <Check size={16} /> : undefined}
+                    >
+                      {!task.isCompleted && <div className={styles.checkbox} />}
+                    </Button>
+
+                    <Typography
+                      variant="h6"
+                      className={styles.taskName}
+                      style={{
+                        textDecoration: task.isCompleted
+                          ? 'line-through'
+                          : 'none',
+                      }}
+                    >
+                      {task.name}
+                    </Typography>
+
+                    <div className={styles.taskButtons}>
+                      {!task.isCompleted && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => startTask(task)}
+                          className={styles.startButton}
+                          icon={<Play size={16} />}
+                        >
+                          {state.activeTaskId === task.id
+                            ? 'Selecionada'
+                            : 'Selecionar'}
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => deleteTask(task.id)}
+                        className={styles.deleteButton}
+                        icon={<Trash2 size={16} />}
+                      >
+                        Deletar
+                      </Button>
+                    </div>
+                  </div>
+
                   <div className={styles.taskProgress}>
                     <div className={styles.progressBar}>
-                      <div 
+                      <div
                         className={styles.progressFill}
-                        style={{ 
+                        style={{
                           width: `${getProgressPercentage(task)}%`,
-                          backgroundColor: `var(--${getProgressColor(task)})`
+                          backgroundColor: `var(--${getProgressColor(task)})`,
                         }}
                       />
                     </div>

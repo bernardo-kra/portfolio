@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Typography, Container, Section, HomeButton } from '@components/common'
-import { useScrollToTop } from '@hooks/useScrollToTop'
 import StarfieldBackground from '@theme/StarfieldBackground'
 import DayBackground from '@theme/DayBackground'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
@@ -15,13 +14,14 @@ import {
   ControlsPanel,
   TaskList,
   TimerStats,
-  CyclesHistory
+  CyclesHistory,
 } from '@components/pomodoro'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './styles.module.css'
 import StarParallaxToggle from '@theme/StarParallaxToggle'
 import DarkBackground from '@theme/DarkBackground'
+import StudyGuide from '@components/common/StudyGuide'
 
 const STORAGE_KEY = 'starfield-disable-parallax'
 
@@ -30,17 +30,15 @@ const PomodoroContent: React.FC = () => {
   const { theme } = useTheme()
   const { isTransparent, toggleTransparency } = useBackgroundTransparency()
   const [isMobile, setIsMobile] = useState(false)
-  
-  useScrollToTop()
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) setDisableParallax(saved === 'true')
-    
+
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
+
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
@@ -49,23 +47,31 @@ const PomodoroContent: React.FC = () => {
   }, [disableParallax])
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+    <div
+      style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}
+    >
       <HomeButton />
-      
+
       {theme === 'dark' ? (
-        isMobile ? <DarkBackground /> : <StarfieldBackground disableParallax={disableParallax} />
+        isMobile ? (
+          <DarkBackground />
+        ) : (
+          <StarfieldBackground disableParallax={disableParallax} />
+        )
       ) : (
         <DayBackground />
       )}
-      
-      <div style={{ 
-        position: 'fixed', 
-        top: 10, 
-        left: isMobile ? 80 : 200, 
-        zIndex: 20, 
-        display: 'flex', 
-        gap: '8px' 
-      }}>
+
+      <div
+        style={{
+          position: 'fixed',
+          top: 10,
+          left: isMobile ? 80 : 200,
+          zIndex: 20,
+          display: 'flex',
+          gap: '8px',
+        }}
+      >
         <StarParallaxToggle
           value={disableParallax}
           onChange={setDisableParallax}
@@ -74,30 +80,50 @@ const PomodoroContent: React.FC = () => {
           value={isTransparent}
           onChange={toggleTransparency}
         />
-
       </div>
-      
-      <ThemeToggleButton style={{ position: 'fixed', top: 10, right: 10, zIndex: 20 }} />
-      
-      <Container style={{ background: 'transparent', position: 'relative', zIndex: 2 }}>
+
+      <ThemeToggleButton
+        style={{ position: 'fixed', top: 10, right: 10, zIndex: 20 }}
+      />
+
+      <Container
+        style={{ background: 'transparent', position: 'relative', zIndex: 2 }}
+      >
         <div className={styles.pomodoroPage}>
           <ScrollAnimation animation="fade-in" delay={200}>
             <Section spacing="lg" className={styles.pomodoroHeader}>
-              <Typography variant="h1" align="center" className={styles.pageTitle}>
+              <Typography
+                variant="h1"
+                align="center"
+                className={styles.pageTitle}
+              >
                 Pomodoro Timer
               </Typography>
-              <Typography variant="body1" color="muted" align="center" className={styles.pageSubtitle}>
-                Técnica de produtividade para gerenciar seu tempo de forma eficiente
+              <Typography
+                variant="body1"
+                color="muted"
+                align="center"
+                className={styles.pageSubtitle}
+              >
+                Uma tarefa de cada vez. Inicie um bloco de foco, faça uma pausa
+                e acompanhe seu progresso.
               </Typography>
             </Section>
           </ScrollAnimation>
 
+          <p className={styles.quickStart}>
+            1. Escolha uma tarefa · 2. Inicie o timer · 3. Faça uma pausa
+          </p>
           <div className={styles.pomodoroGrid}>
             <ScrollAnimation animation="fade-in" delay={400}>
               <div className={styles.timerColumn}>
                 <div className={styles.timerCard}>
                   <div className={styles.cardHeader}>
-                    <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                    <Typography
+                      variant="h4"
+                      weight="semibold"
+                      className={styles.cardTitle}
+                    >
                       ⏱️ Timer Pomodoro
                     </Typography>
                   </div>
@@ -109,7 +135,11 @@ const PomodoroContent: React.FC = () => {
 
             <div className={styles.controlsCard}>
               <div className={styles.cardHeader}>
-                <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                <Typography
+                  variant="h4"
+                  weight="semibold"
+                  className={styles.cardTitle}
+                >
                   ⚙️ Controles
                 </Typography>
               </div>
@@ -119,7 +149,11 @@ const PomodoroContent: React.FC = () => {
             <ScrollAnimation animation="slide-left" delay={500}>
               <div className={styles.tasksColumn}>
                 <div className={styles.cardHeader}>
-                  <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                  <Typography
+                    variant="h4"
+                    weight="semibold"
+                    className={styles.cardTitle}
+                  >
                     📋 Tarefas
                   </Typography>
                 </div>
@@ -130,7 +164,11 @@ const PomodoroContent: React.FC = () => {
             <ScrollAnimation animation="slide-right" delay={600}>
               <div className={styles.statsColumn}>
                 <div className={styles.cardHeader}>
-                  <Typography variant="h4" weight="semibold" className={styles.cardTitle}>
+                  <Typography
+                    variant="h4"
+                    weight="semibold"
+                    className={styles.cardTitle}
+                  >
                     📊 Estatísticas
                   </Typography>
                 </div>
@@ -139,9 +177,10 @@ const PomodoroContent: React.FC = () => {
               </div>
             </ScrollAnimation>
           </div>
+          <StudyGuide study="pomodoro" />
         </div>
       </Container>
-      
+
       <ToastContainer
         position="top-center"
         autoClose={5000}

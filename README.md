@@ -34,6 +34,7 @@ Consulte [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) para configurar os arqui
 | `npm run build`        | Compila o frontend         |
 | `npm run build:full`   | Compila frontend e backend |
 | `npm run lint`         | Executa a análise estática |
+| `npm run test:tasks`   | Testa exclusão e restauração de tarefas |
 | `npm run format:check` | Verifica a formatação      |
 | `npm run preview`      | Serve o build localmente   |
 
@@ -51,7 +52,9 @@ src/hooks/            Hooks compartilhados
 src/services/         Clientes de serviços
 ```
 
-As rotas principais são `/`, `/portfolio`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d` e `/admin/chat`.
+As rotas principais são `/`, `/portfolio`, `/agency`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d` e `/admin/chat`.
+
+O estudo Forma (`/agency`) é uma agência conceitual inspirada em referências de design editorial. As fotografias são servidas localmente; os créditos estão em [public/images/forma/CREDITS.md](./public/images/forma/CREDITS.md). Consulte [UX_REVIEW.md](./UX_REVIEW.md) para a revisão de interface e os testes manuais pendentes.
 
 ## Deploy
 

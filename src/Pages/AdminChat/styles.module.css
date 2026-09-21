@@ -7,7 +7,11 @@
 .header {
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--card-background) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--card-background) 0%,
+    var(--bg-secondary) 100%
+  );
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: 2px solid var(--brand-orange);
@@ -128,7 +132,8 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 2px solid var(--brand-orange);
   overflow: hidden;
-  min-height: 600px;
+  height: min(750px, 85dvh);
+  min-height: 300px;
 }
 
 .loginRequired,
@@ -174,32 +179,32 @@
   .container {
     padding: var(--spacing-md);
   }
-  
+
   .header {
     padding: var(--spacing-md);
   }
-  
+
   .headerContent {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .headerText {
     margin-bottom: var(--spacing-md);
   }
-  
+
   .header h1 {
     font-size: var(--font-size-xl);
   }
-  
+
   .stats {
     grid-template-columns: 1fr;
   }
-  
+
   .chatContainer {
-    min-height: 500px;
+    min-height: 300px;
   }
-  
+
   .backButton {
     width: 100%;
     justify-content: center;

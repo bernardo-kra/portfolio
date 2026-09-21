@@ -1,62 +1,54 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Typography, Container, FadeInOnScroll } from '@components/common';
-import { FloatingChatButton } from '@components/chat';
-import ThemeToggleButton from '@components/theme/ThemeToggleButton';
-import { useI18n } from '@src/i18n';
-import { usePreviewFit } from '@hooks/usePreviewFit';
-import styles from './styles.module.css';
-import './global-fixes.css';
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Typography, Container, FadeInOnScroll } from '@components/common'
+import { FloatingChatButton } from '@components/chat'
+import ThemeToggleButton from '@components/theme/ThemeToggleButton'
+import { useI18n } from '@src/i18n'
+import { usePreviewFit } from '@hooks/usePreviewFit'
+import styles from './styles.module.css'
+import { profile } from '@src/config/profile'
+import { Download } from 'lucide-react'
+import Ribbon from '@components/common/Ribbon'
 
 type Project = {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: string;
-  color: string;
-  route: string;
-  features: string[];
-  previewImage?: string;
-  isFeatured?: boolean;
-  featuredLabel?: string;
-};
+  id: string
+  title: string
+  subtitle: string
+  description: string
+  icon: string
+  color: string
+  route: string
+  features: string[]
+  previewImage?: string
+  isFeatured?: boolean
+  featuredLabel?: string
+}
 
 type ProjectCardProps = {
-  project: Project;
-  hoveredCard: string | null;
-  setHoveredCard: (value: string | null) => void;
-  onNavigate: (route: string) => void;
-  index: number;
-};
+  project: Project
+  index: number
+}
 
-const ProjectCard: React.FC<ProjectCardProps> = ({
-  project,
-  hoveredCard,
-  setHoveredCard,
-  onNavigate,
-  index,
-}) => {
-  const previewRef = useRef<HTMLDivElement>(null);
-  const { fit, position } = usePreviewFit(project.previewImage, previewRef);
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+  const previewRef = useRef<HTMLDivElement>(null)
+  const { fit, position } = usePreviewFit(project.previewImage, previewRef)
 
   return (
     <FadeInOnScroll delay={300 + index * 100}>
-      <div
+      <Link
+        to={project.route}
         className={[
           styles.projectCard,
-          hoveredCard === project.id ? styles.hovered : '',
           project.isFeatured ? styles.projectCardFeatured : '',
         ]
           .filter(Boolean)
           .join(' ')}
-        onClick={() => onNavigate(project.route)}
-        onMouseEnter={() => setHoveredCard(project.id)}
-        onMouseLeave={() => setHoveredCard(null)}
         style={
           {
             '--project-color': project.color,
-            '--preview-image': project.previewImage ? `url(${project.previewImage})` : 'none',
+            '--preview-image': project.previewImage
+              ? `url(${project.previewImage})`
+              : 'none',
             '--preview-fit': fit,
             '--preview-pos': position,
           } as React.CSSProperties
@@ -79,7 +71,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             {project.title}
           </Typography>
 
-          <Typography variant="body2" color="muted" className={styles.cardDescription}>
+          <Typography
+            variant="body2"
+            color="muted"
+            className={styles.cardDescription}
+          >
             {project.description}
           </Typography>
 
@@ -110,79 +106,94 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
 
         <div className={styles.cardHoverEffect} />
-      </div>
+      </Link>
     </FadeInOnScroll>
-  );
-};
+  )
+}
 
 const ModernHomePage: React.FC = () => {
-  const navigate = useNavigate();
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const { lang, setLang, t } = useI18n();
-  const homeRef = useRef<HTMLDivElement>(null);
-  const projectsRef = useRef<HTMLElement>(null);
-  const [lightEnabled, setLightEnabled] = useState(false);
-  const [lightBlown, setLightBlown] = useState(false);
-  const lastPointerRef = useRef<{ x: number; y: number; t: number } | null>(null);
-  const targetRef = useRef({ x: 0.5, y: 0.5 });
-  const currentRef = useRef({ x: 0.5, y: 0.5 });
-  const rafRef = useRef<number | null>(null);
+  const navigate = useNavigate()
+  const { lang, setLang, t } = useI18n()
+  const homeRef = useRef<HTMLDivElement>(null)
+  const projectsRef = useRef<HTMLElement>(null)
+  const [lightEnabled, setLightEnabled] = useState(false)
+  const [lightBlown, setLightBlown] = useState(false)
+  const lastPointerRef = useRef<{ x: number; y: number; t: number } | null>(
+    null
+  )
+  const targetRef = useRef({ x: 0.5, y: 0.5 })
+  const currentRef = useRef({ x: 0.5, y: 0.5 })
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
-    const home = homeRef.current;
-    if (!home) return;
+    const home = homeRef.current
+    if (!home || !lightEnabled) return
 
     const updateVars = () => {
-      if (!home) return;
-      const current = currentRef.current;
-      const target = targetRef.current;
-      current.x += (target.x - current.x) * 0.08;
-      current.y += (target.y - current.y) * 0.08;
-      home.style.setProperty('--hx', `${current.x}`);
-      home.style.setProperty('--hy', `${current.y}`);
-      rafRef.current = window.requestAnimationFrame(updateVars);
-    };
+      if (!home) return
+      const current = currentRef.current
+      const target = targetRef.current
+      current.x += (target.x - current.x) * 0.08
+      current.y += (target.y - current.y) * 0.08
+      home.style.setProperty('--hx', `${current.x}`)
+      home.style.setProperty('--hy', `${current.y}`)
+      rafRef.current = window.requestAnimationFrame(updateVars)
+    }
 
-    rafRef.current = window.requestAnimationFrame(updateVars);
+    rafRef.current = window.requestAnimationFrame(updateVars)
 
     const handleMove = (event: MouseEvent) => {
-      const x = event.clientX / window.innerWidth;
-      const y = event.clientY / window.innerHeight;
-      const now = performance.now();
-      const last = lastPointerRef.current;
+      const x = event.clientX / window.innerWidth
+      const y = event.clientY / window.innerHeight
+      const now = performance.now()
+      const last = lastPointerRef.current
       if (lightEnabled && last) {
-        const dx = x - last.x;
-        const dy = y - last.y;
-        const dt = Math.max(now - last.t, 1);
-        const speed = Math.hypot(dx, dy) / dt;
+        const dx = x - last.x
+        const dy = y - last.y
+        const dt = Math.max(now - last.t, 1)
+        const speed = Math.hypot(dx, dy) / dt
         if (speed > 0.006) {
-          setLightEnabled(false);
-          setLightBlown(true);
-          lastPointerRef.current = null;
-          return;
+          setLightEnabled(false)
+          setLightBlown(true)
+          lastPointerRef.current = null
+          return
         }
       }
 
-      targetRef.current = { x, y };
-      lastPointerRef.current = { x, y, t: now };
-    };
+      targetRef.current = { x, y }
+      lastPointerRef.current = { x, y, t: now }
+    }
 
     const handleLeave = () => {
-      targetRef.current = { x: 0.5, y: 0.5 };
-      lastPointerRef.current = null;
-    };
+      targetRef.current = { x: 0.5, y: 0.5 }
+      lastPointerRef.current = null
+    }
 
-    window.addEventListener('mousemove', handleMove, { passive: true });
-    window.addEventListener('mouseleave', handleLeave);
+    window.addEventListener('mousemove', handleMove, { passive: true })
+    window.addEventListener('mouseleave', handleLeave)
 
     return () => {
-      window.removeEventListener('mousemove', handleMove);
-      window.removeEventListener('mouseleave', handleLeave);
-      if (rafRef.current) window.cancelAnimationFrame(rafRef.current);
-    };
-  }, [lightEnabled]);
+      window.removeEventListener('mousemove', handleMove)
+      window.removeEventListener('mouseleave', handleLeave)
+      if (rafRef.current) window.cancelAnimationFrame(rafRef.current)
+    }
+  }, [lightEnabled])
 
   const projects: Project[] = [
+    {
+      id: 'agency',
+      title: 'Forma — Creative Studio',
+      subtitle: lang === 'pt' ? 'Estudo de agência' : 'Agency study',
+      description:
+        lang === 'pt'
+          ? 'Design editorial, formas orgânicas e uma galeria interativa. Um estúdio criativo do conceito ao código.'
+          : 'Editorial design, organic shapes and an interactive gallery. A creative studio from concept to code.',
+      icon: 'f.',
+      color: '#267b48',
+      route: '/agency',
+      features: ['Design', 'CSS Grid', 'Responsivo', 'UX'],
+      previewImage: '/images/forma/studio.webp',
+    },
     {
       id: 'portfolio',
       title: t.portfolioTitle,
@@ -215,7 +226,7 @@ const ModernHomePage: React.FC = () => {
       icon: 'ART',
       color: '#8b5cf6',
       route: '/generative',
-      features: ['Algoritmos', 'Padroes', 'Interatividade', 'Export'],
+      features: ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas'],
       previewImage: '/preview-fullpage-generative.png',
     },
     {
@@ -233,14 +244,15 @@ const ModernHomePage: React.FC = () => {
       id: 'experimental3d',
       title: 'Dock 07',
       subtitle: 'Experimento 3D',
-      description: 'Interface cinematografica com luzes, camadas e interacao ao vivo.',
+      description:
+        'Interface cinematografica com luzes, camadas e interacao ao vivo.',
       icon: 'NEON',
       color: '#f97316',
       route: '/experimental3d',
       features: ['Luzes', 'Parallax', 'Atmosfera', 'Interacao'],
       previewImage: '/preview-fullpage-experimental3d.png',
     },
-  ];
+  ]
 
   return (
     <div
@@ -253,7 +265,6 @@ const ModernHomePage: React.FC = () => {
     >
       <div className={styles.ambientBackdrop} aria-hidden="true" />
       <div className={styles.cursorLight} aria-hidden="true" />
-      {/* Theme Controls */}
       <div className={styles.themeControls}>
         <ThemeToggleButton />
         <button
@@ -264,8 +275,6 @@ const ModernHomePage: React.FC = () => {
           {lang === 'pt' ? 'EN' : 'PT'}
         </button>
       </div>
-
-      {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroBackground} aria-hidden="true" />
         <Container className={styles.heroContainer}>
@@ -292,15 +301,32 @@ const ModernHomePage: React.FC = () => {
                 <div className={styles.heroPrompt}>
                   <button
                     className={styles.heroExplore}
-                    onClick={() => projectsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() =>
+                      projectsRef.current?.scrollIntoView({
+                        behavior: 'smooth',
+                      })
+                    }
                   >
-                    Explorar projetos
+                    {t.recruiter.exploreStudies}
                   </button>
+                  <Link to="/portfolio" className={styles.profileLink}>
+                    {t.recruiter.professionalProfile} →
+                  </Link>
+                  <a
+                    href={profile.resumeUrl}
+                    download={profile.resumeFilename}
+                    className={styles.resumeLink}
+                    title={t.recruiter.pdfLanguage}
+                  >
+                    <Download size={16} aria-hidden="true" />
+                    {t.downloadCV}
+                    <small>PDF</small>
+                  </a>
                   <span
                     className={styles.heroHint}
                     onMouseEnter={() => {
-                      setLightEnabled(true);
-                      setLightBlown(false);
+                      setLightEnabled(true)
+                      setLightBlown(false)
                     }}
                   >
                     Passe o mouse para ativar a luz (movimento rapido apaga)
@@ -313,32 +339,52 @@ const ModernHomePage: React.FC = () => {
           </FadeInOnScroll>
         </Container>
       </section>
-
-      {/* Projects Section */}
-      <section className={styles.projectsSection} ref={projectsRef}>
+      <Ribbon
+        items={
+          lang === 'pt'
+            ? [
+                'Interfaces com propósito',
+                'React & TypeScript',
+                'Experiência em e-commerce',
+                'Qualidade de software',
+                'Aprender construindo',
+              ]
+            : [
+                'Purposeful interfaces',
+                'React & TypeScript',
+                'E-commerce experience',
+                'Software quality',
+                'Learning by building',
+              ]
+        }
+      />
+      <section
+        id="estudos"
+        className={styles.projectsSection}
+        ref={projectsRef}
+      >
         <Container className={styles.projectsContainer}>
           <FadeInOnScroll delay={200}>
             <div className={styles.sectionHeader}>
               <Typography variant="h2" className={styles.sectionTitle}>
                 {t.myProjects}
               </Typography>
-              <Typography variant="body1" color="muted" className={styles.sectionSubtitle}>
+              <Typography
+                variant="body1"
+                color="muted"
+                className={styles.sectionSubtitle}
+              >
                 {t.projectsSubtitle}
               </Typography>
-              <div className={styles.sectionHint}>Comece pelo projeto em destaque</div>
+              <div className={styles.sectionHint}>
+                {t.recruiter.professionalProfile}
+              </div>
             </div>
           </FadeInOnScroll>
 
           <div className={styles.projectsGrid}>
             {projects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                hoveredCard={hoveredCard}
-                setHoveredCard={setHoveredCard}
-                onNavigate={navigate}
-                index={index}
-              />
+              <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </div>
         </Container>
@@ -351,66 +397,43 @@ const ModernHomePage: React.FC = () => {
               <div className={styles.ctaGlow} aria-hidden="true" />
               <div className={styles.ctaContent}>
                 <Typography variant="h2" className={styles.ctaTitle}>
-                  Vamos transformar sua ideia em produto?
+                  {t.recruiter.homeCta}
                 </Typography>
                 <Typography variant="body1" className={styles.ctaText}>
-                  Me conte o contexto do seu projeto e eu retorno com um plano de execucao e
-                  estimativa.
+                  {t.recruiter.homeCopy}
                 </Typography>
                 <div className={styles.ctaActions}>
                   <button
                     className={styles.ctaPrimary}
                     onClick={() => navigate('/portfolio')}
                   >
-                    Quero um briefing
+                    {t.explorePortfolio}
                   </button>
-                  <button
+                  <a
                     className={styles.ctaSecondary}
-                    onClick={() => navigate('/portfolio')}
+                    href={profile.resumeUrl}
+                    download={profile.resumeFilename}
+                    title={t.recruiter.pdfLanguage}
                   >
-                    Ver portfolio completo
-                  </button>
+                    {t.downloadCV} ↓
+                  </a>
                 </div>
               </div>
               <div className={styles.ctaStats}>
                 <div>
-                  <span className={styles.ctaStatNumber}>5+</span>
-                  <span className={styles.ctaStatLabel}>anos de experiencia</span>
+                  <span className={styles.ctaStatNumber}>React</span>
+                  <span className={styles.ctaStatLabel}>Frontend</span>
                 </div>
                 <div>
-                  <span className={styles.ctaStatNumber}>10+</span>
-                  <span className={styles.ctaStatLabel}>projetos entregues</span>
+                  <span className={styles.ctaStatNumber}>TypeScript</span>
+                  <span className={styles.ctaStatLabel}>JavaScript</span>
                 </div>
                 <div>
-                  <span className={styles.ctaStatNumber}>100%</span>
-                  <span className={styles.ctaStatLabel}>foco em qualidade</span>
+                  <span className={styles.ctaStatNumber}>QA</span>
+                  <span className={styles.ctaStatLabel}>
+                    {t.recruiter.learning}
+                  </span>
                 </div>
-              </div>
-            </div>
-          </FadeInOnScroll>
-        </Container>
-      </section>
-
-      {/* Stats Section */}
-      <section className={styles.statsSection}>
-        <Container className={styles.statsContainer}>
-          <FadeInOnScroll delay={800}>
-            <div className={styles.statsGrid}>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>5+</div>
-                <div className={styles.statLabel}>{t.experience}</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>8+</div>
-                <div className={styles.statLabel}>{t.projectsCompleted}</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>10+</div>
-                <div className={styles.statLabel}>{t.technologies}</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>100%</div>
-                <div className={styles.statLabel}>{t.satisfaction}</div>
               </div>
             </div>
           </FadeInOnScroll>
@@ -433,14 +456,19 @@ const ModernHomePage: React.FC = () => {
       </section>
 
       <div className={styles.footer}>
-        <Typography variant="caption" color="muted" className={styles.copyright}>
-          © {new Date().getFullYear()} Bernardo Kraczkowski. Todos os direitos reservados.
+        <Typography
+          variant="caption"
+          color="muted"
+          className={styles.copyright}
+        >
+          © {new Date().getFullYear()} Bernardo Kraczkowski. Todos os direitos
+          reservados.
         </Typography>
       </div>
 
       <FloatingChatButton />
     </div>
-  );
-};
+  )
+}
 
-export default ModernHomePage;
+export default ModernHomePage

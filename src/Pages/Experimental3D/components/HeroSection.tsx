@@ -62,10 +62,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {copy}
         </Typography>
         <div className={styles.heroActions}>
-          <button className={styles.primaryCta} onClick={onTogglePortal}>
+          <button
+            className={styles.primaryCta}
+            onClick={onTogglePortal}
+            aria-pressed={isPortalOpen}
+          >
             {isPortalOpen ? labels.closePortal : labels.openPortal}
           </button>
-          <button className={styles.secondaryCta} onClick={onToggleMode}>
+          <button
+            className={styles.secondaryCta}
+            onClick={onToggleMode}
+            aria-pressed={mode === 'inspect'}
+          >
             {mode === 'live' ? labels.modeInspect : labels.modeLive}
           </button>
         </div>
@@ -102,14 +110,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               {signal === 'green'
                 ? labels.statSignalOk
                 : signal === 'yellow'
-                ? labels.statSignalAlert
-                : labels.statSignalRisk}
+                  ? labels.statSignalAlert
+                  : labels.statSignalRisk}
             </span>
           </div>
           <div className={styles.stat}>
             <span className={styles.statLabel}>{labels.statControl}</span>
             <span className={styles.statValue}>
-              {mode === 'live' ? labels.statControlManual : labels.statControlAudit}
+              {mode === 'live'
+                ? labels.statControlManual
+                : labels.statControlAudit}
             </span>
           </div>
         </div>
@@ -126,6 +136,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <input
               className={styles.powerSlider}
               type="range"
+              aria-label={labels.controlEnergy}
+              aria-valuetext={`${power}%`}
               min={20}
               max={100}
               value={power}
@@ -143,6 +155,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 ]
                   .filter(Boolean)
                   .join(' ')}
+                aria-label={labels.statSignalOk}
+                aria-pressed={signal === 'green'}
                 onClick={() => onSignalChange('green')}
               />
               <button
@@ -153,6 +167,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 ]
                   .filter(Boolean)
                   .join(' ')}
+                aria-label={labels.statSignalAlert}
+                aria-pressed={signal === 'yellow'}
                 onClick={() => onSignalChange('yellow')}
               />
               <button
@@ -163,6 +179,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 ]
                   .filter(Boolean)
                   .join(' ')}
+                aria-label={labels.statSignalRisk}
+                aria-pressed={signal === 'red'}
                 onClick={() => onSignalChange('red')}
               />
             </div>

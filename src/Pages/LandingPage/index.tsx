@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { HomeButton, FadeInOnScroll } from '@components/common'
 import styles from './styles.module.css'
-import { useScrollToTop } from '@hooks/useScrollToTop'
 
-// Landing Page Components
 import HeroSection from '@components/landing/HeroSection'
 import BenefitsSection from '@components/landing/BenefitsSection'
 import SocialProofSection from '@components/landing/SocialProofSection'
 import FAQSection from '@components/landing/FAQSection'
 import ContactForm from '@components/landing/ContactForm'
 import Footer from '@components/landing/Footer'
+import Ribbon from '@components/common/Ribbon'
+import StudyGuide from '@components/common/StudyGuide'
 
 const LandingPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0)
-  
-  useScrollToTop()
 
   useEffect(() => {
     const updateScrollProgress = () => {
       const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = Math.min(scrollTop / docHeight, 1)
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight
+      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0
       setScrollProgress(progress)
     }
 
@@ -30,18 +29,28 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.landing__wrapper}>
-      <div 
+      <div
         className={styles.landing__scrollIndicator}
         style={{ transform: `scaleX(${scrollProgress})` }}
       />
-      
+
       <HomeButton />
-      
+
       <main className={styles.landing__main}>
         <FadeInOnScroll delay={100}>
           <HeroSection />
         </FadeInOnScroll>
 
+        <Ribbon
+          items={[
+            'Mensagem clara',
+            'Experiência verificável',
+            'Design responsivo',
+            'Contato direto',
+            'Estudo em React',
+          ]}
+          tone="violet"
+        />
         <FadeInOnScroll delay={200}>
           <BenefitsSection />
         </FadeInOnScroll>
@@ -59,6 +68,7 @@ const LandingPage: React.FC = () => {
         </FadeInOnScroll>
       </main>
 
+      <StudyGuide study="landing" />
       <Footer />
     </div>
   )

@@ -53,7 +53,15 @@
   color: var(--primary-hover);
 }
 
-
-
-
-
+.container,
+.row > * {
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 1.25rem;
+  }
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

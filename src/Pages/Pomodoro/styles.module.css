@@ -124,7 +124,7 @@
     grid-template-columns: 1fr 1.5fr 1fr;
     gap: var(--spacing-lg);
   }
-  
+
   .controlsCard {
     height: calc(100vh - 100px);
     min-height: 700px;
@@ -136,14 +136,14 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-lg);
   }
-  
+
   .statsColumn {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-lg);
   }
-  
+
   .controlsCard {
     height: calc(100vh - 80px);
     min-height: 600px;
@@ -154,27 +154,27 @@
   .pomodoroPage {
     padding: var(--spacing-lg) 0;
   }
-  
+
   .pomodoroHeader {
     padding-top: var(--spacing-lg);
   }
-  
+
   .pomodoroGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
     padding: var(--spacing-md) 0;
   }
-  
+
   .statsColumn {
     grid-column: 1;
     display: flex;
     flex-direction: column;
   }
-  
+
   .timerCard {
     padding: var(--spacing-lg);
   }
-  
+
   .controlsCard {
     padding: var(--spacing-md);
     height: calc(100vh - 60px);
@@ -186,33 +186,33 @@
   .pomodoroPage {
     padding: var(--spacing-md) 0;
   }
-  
+
   .pomodoroHeader {
     padding-top: var(--spacing-md);
   }
-  
+
   .pageTitle {
     font-size: clamp(2rem, 5vw, 3rem);
   }
-  
+
   .pageSubtitle {
     font-size: clamp(1rem, 2vw, 1.2rem);
   }
-  
+
   .pomodoroGrid {
     gap: var(--spacing-md);
   }
-  
+
   .controlsCard {
     height: calc(100vh - 40px);
     min-height: 400px;
     padding: var(--spacing-sm) 0;
   }
-  
+
   .timerCard {
     padding: var(--spacing-md);
   }
-  
+
   .controlsCard {
     padding: var(--spacing-sm);
   }
@@ -222,24 +222,67 @@
   .pomodoroPage {
     padding: var(--spacing-sm) 0;
   }
-  
+
   .pomodoroHeader {
     padding-top: var(--spacing-sm);
   }
-  
+
   .pageTitle {
     font-size: clamp(1.5rem, 4vw, 2.5rem);
   }
-  
+
   .pageSubtitle {
     font-size: clamp(0.9rem, 1.8vw, 1.1rem);
   }
-  
+
   .timerCard {
     padding: var(--spacing-sm);
   }
-  
+
   .controlsCard {
     padding: var(--spacing-xs);
+  }
+}
+.quickStart {
+  text-align: center;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin: 0 auto 1.5rem;
+  max-width: 55ch;
+  padding-inline: 1rem;
+}
+.pomodoroPage {
+  padding-top: 5rem;
+}
+.controlsCard {
+  height: auto;
+  min-height: 0;
+}
+.pomodoroGrid {
+  grid-template-columns: minmax(300px, 1fr) minmax(0, 1.25fr);
+  align-items: start;
+}
+.statsColumn {
+  grid-column: auto;
+}
+@media (max-width: 900px) {
+  .pomodoroGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pomodoroGrid > *,
+.timerCard,
+.controlsCard {
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .pomodoroGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .statsColumn {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
   }
 }

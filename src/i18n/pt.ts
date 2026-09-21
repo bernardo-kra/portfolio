@@ -1,4 +1,29 @@
 const pt = {
+  recruiter: {
+    eyebrow: 'Frontend · experiência & experimentação',
+    summary:
+      'Desenvolvedor Frontend com experiência em React, TypeScript, e-commerce e qualidade de software. Construo interfaces e uso este espaço para compartilhar o que aprendo na prática.',
+    portraitNote: 'Interfaces com atenção aos detalhes.',
+    learning: 'Aprender construindo',
+    viewCode: 'Explorar o código',
+    openStudy: 'Abrir estudo',
+    studyNote:
+      'Experimentos pessoais para explorar interfaces e tecnologia. O contexto profissional está na seção de experiência.',
+    timerStudy:
+      'Estado, ciclos de foco e organização de tarefas em uma aplicação React.',
+    artStudy:
+      'Algoritmos, padrões visuais e interação com Canvas para transformar código em imagem.',
+    dockStudy:
+      'Um laboratório visual de luz, profundidade e interação feito com CSS.',
+    skipContent: 'Pular para o conteúdo',
+    pageTitle: 'Desenvolvedor Frontend React e TypeScript',
+    homeCta: 'Experiência profissional. Curiosidade em movimento.',
+    homeCopy:
+      'Conheça minha trajetória, explore os estudos ou baixe meu currículo. Vamos conversar sobre a próxima oportunidade.',
+    exploreStudies: 'Explorar estudos',
+    professionalProfile: 'Conheça meu perfil profissional',
+    pdfLanguage: 'Currículo em português',
+  },
   name: 'Bernardo Kraczkowski',
   role: 'Desenvolvedor Frontend | React | TypeScript | Soluções Digitais',
   heroCTA: 'Ver Projetos',
@@ -6,14 +31,28 @@ const pt = {
   experienceTitle: 'Experiência',
   educationTitle: 'Educação',
   aboutMe: 'Olá! Eu sou Bernardo 👋',
-  aboutDescription: 'Desenvolvedor Frontend com experiência em React, TypeScript e desenvolvimento de interfaces modernas. Especialista em criar soluções digitais eficientes e experiências de usuário de qualidade.',
-  aboutDescriptionLong: 'Desenvolvedor Frontend com experiência sólida em React, TypeScript e desenvolvimento de interfaces modernas. Trabalho com projetos diversos, desde e-commerce até aplicações corporativas, sempre focando na qualidade do código e na experiência do usuário.',
-  skills: ['React', 'TypeScript', 'JavaScript', 'Vite', 'CSS Modules', 'Oracle Commerce Cloud', 'E-commerce', 'QA', 'SQL', 'Git'],
+  aboutDescription:
+    'Desenvolvedor Frontend com experiência em React, TypeScript e desenvolvimento de interfaces modernas. Especialista em criar soluções digitais eficientes e experiências de usuário de qualidade.',
+  aboutDescriptionLong:
+    'Desenvolvedor Frontend com experiência sólida em React, TypeScript e desenvolvimento de interfaces modernas. Trabalho com projetos diversos, desde e-commerce até aplicações corporativas, sempre focando na qualidade do código e na experiência do usuário.',
+  skills: [
+    'React',
+    'TypeScript',
+    'JavaScript',
+    'Vite',
+    'CSS Modules',
+    'Oracle Commerce Cloud',
+    'E-commerce',
+    'QA',
+    'SQL',
+    'Git',
+  ],
   projectsTitle: 'Projetos',
   demoTitle: 'Demo',
   clockDemoTitle: 'Relógio em',
   clockDemoHighlight: 'Tempo Real',
-  clockDemoDescription: 'Componente React funcional que atualiza a cada segundo usando useState e useEffect',
+  clockDemoDescription:
+    'Componente React funcional que atualiza a cada segundo usando useState e useEffect',
   showClock: 'Mostrar relógio',
   showCode: 'Mostrar código',
   viewClock: 'Ver Relógio',
@@ -23,7 +62,8 @@ const pt = {
   projects: [
     {
       title: 'E-commerce OCC',
-      description: 'Desenvolvimento de componentes React para Oracle Commerce Cloud.',
+      description:
+        'Desenvolvimento de componentes React para Oracle Commerce Cloud.',
       link: 'https://github.com/bernardo-kra',
     },
     {
@@ -38,11 +78,15 @@ const pt = {
     },
   ],
   contactTitle: 'Contato',
-  contactSubtitle: 'Vamos conversar! Entre em contato através dos canais abaixo.',
-  contactMessage: 'Estou sempre aberto a novas oportunidades e colaborações interessantes.',
+  contactSubtitle:
+    'Vamos conversar! Entre em contato através dos canais abaixo.',
+  contactMessage:
+    'Estou sempre aberto a novas oportunidades e colaborações interessantes.',
   contactDisabledTitle: 'Contato Temporariamente Indisponível',
-  contactDisabledMessage: 'Devido a políticas de plataforma, os métodos de contato direto estão temporariamente indisponíveis neste portfólio.',
-  contactDisabledNote: 'Para oportunidades profissionais, utilize as plataformas oficiais de networking.',
+  contactDisabledMessage:
+    'Devido a políticas de plataforma, os métodos de contato direto estão temporariamente indisponíveis neste portfólio.',
+  contactDisabledNote:
+    'Para oportunidades profissionais, utilize as plataformas oficiais de networking.',
   email: 'bernardo_kra@hotmail.com',
   linkedin: '/in/bernardo-chimoka-853709170',
   github: 'github.com/bernardo-kra',
@@ -65,10 +109,10 @@ const pt = {
     projects: 'Projetos Participados',
     projectsDesc: 'Trabalho em equipe',
     qa: 'Anos de QA',
-    qaDesc: 'Validação e Testes'
+    qaDesc: 'Validação e Testes',
   },
   aboutMeSpecializations: {
-    title: 'Tecnologias e Ferramentas'
+    title: 'Tecnologias e Ferramentas',
   },
   aboutMeAchievements: {
     title: 'Principais Competências',
@@ -81,7 +125,7 @@ const pt = {
     testing: 'Testes Automatizados / Manuais',
     testingDesc: 'Jest, Cypress e testes E2E',
     documentation: 'Documentação Técnica',
-    documentationDesc: 'Storybook e documentação de componentes'
+    documentationDesc: 'Storybook e documentação de componentes',
   },
   workExperience: {
     title: 'Minha Experiência',
@@ -96,17 +140,43 @@ const pt = {
         location: 'São Paulo',
         role: 'Desenvolvedor Front-End / QA',
         period: '2021 - Atual',
-        shortDescription: 'Desenvolvimento React para e-commerce internacional com Oracle Commerce Cloud.',
-        fullDescription: 'Atuação em projetos de e-commerce internacional com foco no desenvolvimento de interfaces modernas utilizando React e integração com Oracle Commerce Cloud (OCC). Experiência na criação de componentes modulares, reutilizáveis e performáticos, com arquitetura baseada em composição. Implementação de controle de estado com Context API, hooks customizados e boas práticas de gerenciamento de ciclo de vida com useEffect, useMemo e useCallback. Navegação estruturada em SPA (Single Page Applications) com React Router, otimização de desempenho com lazy-loading, code splitting (React.lazy e Suspense) e memoização de componentes. Conhecimento em manipulação direta do DOM com useRef, estruturação de formulários controlados, validação de dados e feedback dinâmico ao usuário. Integração com REST APIs usando axios, com tratamento de estados de carregamento, erro e sincronização de dados. Validação funcional e técnica de componentes em ambientes Oracle Preview e Staging, com histórico de atuação também como QA técnico. Participação ativa em processos de versionamento, controle de branches e ciclos de deploy em ambientes dev, tst e prd. Comunicação direta com clientes em português e espanhol, garantindo entendimento técnico e entrega de soluções alinhadas ao negócio.',
-        technologies: ['React', 'JavaScript (ES6+)', 'HTML5', 'CSS3', 'SASS', 'TypeScript', 'Context API', 'Hooks', 'React Router', 'Lazy-loading', 'Suspense', 'useMemo', 'useCallback', 'useRef', 'useEffect', 'Oracle Commerce Cloud', 'REST APIs', 'Axios', 'Git', 'Bitbucket', 'Jira', 'Postman', 'Figma'],
+        shortDescription:
+          'Desenvolvimento React para e-commerce internacional com Oracle Commerce Cloud.',
+        fullDescription:
+          'Atuação em projetos de e-commerce internacional com foco no desenvolvimento de interfaces modernas utilizando React e integração com Oracle Commerce Cloud (OCC). Experiência na criação de componentes modulares, reutilizáveis e performáticos, com arquitetura baseada em composição. Implementação de controle de estado com Context API, hooks customizados e boas práticas de gerenciamento de ciclo de vida com useEffect, useMemo e useCallback. Navegação estruturada em SPA (Single Page Applications) com React Router, otimização de desempenho com lazy-loading, code splitting (React.lazy e Suspense) e memoização de componentes. Conhecimento em manipulação direta do DOM com useRef, estruturação de formulários controlados, validação de dados e feedback dinâmico ao usuário. Integração com REST APIs usando axios, com tratamento de estados de carregamento, erro e sincronização de dados. Validação funcional e técnica de componentes em ambientes Oracle Preview e Staging, com histórico de atuação também como QA técnico. Participação ativa em processos de versionamento, controle de branches e ciclos de deploy em ambientes dev, tst e prd. Comunicação direta com clientes em português e espanhol, garantindo entendimento técnico e entrega de soluções alinhadas ao negócio.',
+        technologies: [
+          'React',
+          'JavaScript (ES6+)',
+          'HTML5',
+          'CSS3',
+          'SASS',
+          'TypeScript',
+          'Context API',
+          'Hooks',
+          'React Router',
+          'Lazy-loading',
+          'Suspense',
+          'useMemo',
+          'useCallback',
+          'useRef',
+          'useEffect',
+          'Oracle Commerce Cloud',
+          'REST APIs',
+          'Axios',
+          'Git',
+          'Bitbucket',
+          'Jira',
+          'Postman',
+          'Figma',
+        ],
         achievements: [
           'Desenvolvimento de interfaces modernas com React',
           'Implementação de arquitetura baseada em composição',
           'Otimização de performance com lazy-loading e memoização',
           'Validação funcional e técnica em ambientes Oracle',
           'Controle de versionamento e ciclos de deploy',
-          'Suporte a clientes'
-        ]
+          'Suporte a clientes',
+        ],
       },
       {
         id: 'bertolini',
@@ -114,15 +184,33 @@ const pt = {
         location: 'Bento Gonçalves',
         role: 'Analista de QA (Qualidade de Software)',
         period: '2019 - 2021',
-        shortDescription: 'Validação de sistemas e análise de dados SQL para garantir qualidade de software.',
-        fullDescription: 'Responsável pela validação técnica de sistemas logísticos empresariais através da leitura e análise de tarefas dos analistas de desenvolvimento. Executava validação completa dos sistemas para verificar conformidade com regras de negócio, cadastrando defeitos quando necessário. Desenvolvia queries SQL complexas para manipulação de dados e criação de casos de teste específicos para cada regra de negócio. Atuava na validação de módulos especializados como NF-e (Nota Fiscal Eletrônica), logística fluvial e rodoviária, gestão portuária, expedição e faturamento. Utilizava ferramentas como Jenkins para automação de testes e SQL Server para análise e manipulação de dados, garantindo a qualidade e integridade dos sistemas empresariais.',
-        technologies: ['SQL', 'SQL Server', 'Jenkins', 'Testes Funcionais', 'Testes Exploratórios', 'Testes Regressivos', 'Análise de Dados', 'Relatórios de Auditoria', 'Validação de Integridade', 'NF-e', 'Logística', 'Gestão Portuária', 'Documentação Funcional', 'Análise de Estórias', 'Identificação de Gaps'],
+        shortDescription:
+          'Validação de sistemas e análise de dados SQL para garantir qualidade de software.',
+        fullDescription:
+          'Responsável pela validação técnica de sistemas logísticos empresariais através da leitura e análise de tarefas dos analistas de desenvolvimento. Executava validação completa dos sistemas para verificar conformidade com regras de negócio, cadastrando defeitos quando necessário. Desenvolvia queries SQL complexas para manipulação de dados e criação de casos de teste específicos para cada regra de negócio. Atuava na validação de módulos especializados como NF-e (Nota Fiscal Eletrônica), logística fluvial e rodoviária, gestão portuária, expedição e faturamento. Utilizava ferramentas como Jenkins para automação de testes e SQL Server para análise e manipulação de dados, garantindo a qualidade e integridade dos sistemas empresariais.',
+        technologies: [
+          'SQL',
+          'SQL Server',
+          'Jenkins',
+          'Testes Funcionais',
+          'Testes Exploratórios',
+          'Testes Regressivos',
+          'Análise de Dados',
+          'Relatórios de Auditoria',
+          'Validação de Integridade',
+          'NF-e',
+          'Logística',
+          'Gestão Portuária',
+          'Documentação Funcional',
+          'Análise de Estórias',
+          'Identificação de Gaps',
+        ],
         achievements: [
           'Validação de regras fiscais, rodoviarias e portuárias',
           'Desenvolvimento de queries SQL complexas para auditoria',
           'Análise de estórias e identificação de gaps de desenvolvimento',
           'Validação técnica de módulos especializados (NF-e, logística)',
-        ]
+        ],
       },
       {
         id: 'bertolini-support',
@@ -130,15 +218,22 @@ const pt = {
         location: 'Bento Gonçalves',
         role: 'Suporte Técnico de TI / Plantonista',
         period: '2018 - 2019',
-        shortDescription: 'Suporte técnico para 28 filiais em sistemas empresariais.',
-        fullDescription: 'Atendi usuários de 28 filiais em sistemas de emissão, financeiro, logístico, RH, fiscal e manutenção. Forneci suporte técnico especializado para garantir operação ininterrupta dos sistemas. Documentei procedimentos e resolvi problemas técnicos em tempo real.',
-        technologies: ['Suporte Técnico', 'Sistemas Empresariais', 'Troubleshooting', 'Documentação'],
+        shortDescription:
+          'Suporte técnico para 28 filiais em sistemas empresariais.',
+        fullDescription:
+          'Atendi usuários de 28 filiais em sistemas de emissão, financeiro, logístico, RH, fiscal e manutenção. Forneci suporte técnico especializado para garantir operação ininterrupta dos sistemas. Documentei procedimentos e resolvi problemas técnicos em tempo real.',
+        technologies: [
+          'Suporte Técnico',
+          'Sistemas Empresariais',
+          'Troubleshooting',
+          'Documentação',
+        ],
         achievements: [
           'Suporte técnico para 28 filiais',
           'Manutenção de sistemas empresariais',
           'Resolução de problemas em tempo real',
-          'Documentação de procedimentos técnicos'
-        ]
+          'Documentação de procedimentos técnicos',
+        ],
       },
       {
         id: 'sertao',
@@ -146,39 +241,45 @@ const pt = {
         location: 'Sertão - RS',
         role: 'Suporte Técnico de TI',
         period: '2017 - 2017',
-        shortDescription: 'Manutenção e configuração de infraestrutura de TI municipal.',
-        fullDescription: 'Instalei, mantive e configurei computadores  da prefeitura. Forneci suporte técnico para estações de trabalho públicas. Garanti funcionamento adequado da infraestrutura de TI para atender necessidades da administração municipal.',
+        shortDescription:
+          'Manutenção e configuração de infraestrutura de TI municipal.',
+        fullDescription:
+          'Instalei, mantive e configurei computadores  da prefeitura. Forneci suporte técnico para estações de trabalho públicas. Garanti funcionamento adequado da infraestrutura de TI para atender necessidades da administração municipal.',
         technologies: ['Manutenção de Hardware', 'Instalação de Sistemas'],
         achievements: [
           'Manutenção de infraestrutura de TI',
-          'Instalação e configuração de sistemas'
-        ]
-      }
-    ]
+          'Instalação e configuração de sistemas',
+        ],
+      },
+    ],
   },
   greeting: 'Olá, eu sou',
   scrollDown: 'Role para baixo',
   heroTitle: 'Bernardo Kraczkowski',
-  heroSubtitle: 'Desenvolvedor React focado em interfaces rápidas e envolventes',
-  heroDescription: 'Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.',
+  heroSubtitle:
+    'Desenvolvedor React focado em interfaces rápidas e envolventes',
+  heroDescription:
+    'Transformo ideias em produtos digitais performáticos, acessíveis e fáceis de usar.',
   heroRoles: [
     'Desenvolvedor Frontend',
     'Especialista em React',
     'TypeScript na prática',
     'UI/UX Enthusiast',
-    'Full Stack Developer'
+    'Full Stack Developer',
   ],
   heroBadgeSets: [
     ['React', 'TypeScript', 'Node.js'],
     ['Next.js', 'UI', 'Performance'],
     ['Design Systems', 'A11y', 'DX'],
-    ['Testes', 'Estado', 'SEO']
+    ['Testes', 'Estado', 'SEO'],
   ],
-  myProjects: 'Meus Projetos',
-  projectsSubtitle: 'Explore as diferentes áreas do meu trabalho',
+  myProjects: 'Laboratório de estudos',
+  projectsSubtitle:
+    'Ideias que viram interfaces. Um espaço para experimentar, aprender e construir com código.',
   portfolioTitle: 'Portfolio',
   portfolioSubtitle: 'Meu trabalho',
-  portfolioDescription: 'Conheça meus projetos, habilidades e experiência profissional',
+  portfolioDescription:
+    'Conheça meus projetos, habilidades e experiência profissional',
   pomodoroTitle: 'Pomodoro Timer',
   pomodoroSubtitle: 'Produtividade',
   pomodoroDescription: 'Ferramenta de produtividade para gerenciar seu tempo',
@@ -196,46 +297,45 @@ const pt = {
   acceptingProjects: 'Aceitando novos projetos • resposta média < 24h',
   explorePortfolio: 'Explorar portfólio',
   viewLanding: 'Ver landing',
-  downloadCV: 'Baixar CV'
-  ,
+  downloadCV: 'Baixar CV',
   experimental3dCards: {
     runway: {
       title: 'Pista luminosa',
       text: 'Sequencia de luzes amarelas e vermelhas para guiar a entrada.',
-      foot: 'Canal 01'
+      foot: 'Canal 01',
     },
     terminal: {
       title: 'Terminal retro',
       text: 'Estacao de controle com brilho verde e interface compacta.',
-      foot: 'Console 4B'
+      foot: 'Console 4B',
     },
     alerts: {
       title: 'Alertas ativos',
       text: 'Tubos vermelhos e sinais piscando para indicar riscos.',
-      foot: 'Nivel medio'
-    }
+      foot: 'Nivel medio',
+    },
   },
   experimental3d: {
     brandText: 'NEON BAY / DOCK 07',
     status: {
       hangarActive: 'Hangar ativo',
-      portalOpen: 'Portal aberto'
+      portalOpen: 'Portal aberto',
     },
     hero: {
       title: 'Controle de acesso para o piso luminoso.',
-      copy: 'Um painel inspirado na baia industrial do video: luzes de sinalizacao no chao, metal frio e anuncios de status em tempo real. Clique nos controles para energizar, alternar modo e testar sinais do dock.'
+      copy: 'Um painel inspirado na baia industrial do video: luzes de sinalizacao no chao, metal frio e anuncios de status em tempo real. Clique nos controles para energizar, alternar modo e testar sinais do dock.',
     },
     buttons: {
       openPortal: 'Abrir portal',
       closePortal: 'Fechar portal',
       modeInspect: 'Modo inspecao',
-      modeLive: 'Modo live'
+      modeLive: 'Modo live',
     },
     tags: ['Luzes neon', 'Metal escuro', 'Ambiente subterraneo'],
     panel: {
       title: 'Status da baia',
       live: 'Operacional',
-      inspect: 'Inspecao'
+      inspect: 'Inspecao',
     },
     stats: {
       energy: 'Energia',
@@ -248,12 +348,12 @@ const pt = {
       signalRisk: 'Risco',
       control: 'Controle',
       controlManual: 'Manual',
-      controlAudit: 'Auditoria'
+      controlAudit: 'Auditoria',
     },
     controls: {
       energy: 'Energia',
-      signal: 'Sinal'
-    }
+      signal: 'Sinal',
+    },
   },
   experimental3dRibbon: [
     'PISO ATIVO •',
@@ -261,8 +361,8 @@ const pt = {
     'DOCK 07 LIBERADO •',
     'METAL INDUSTRIAL •',
     'PORTAL EM ESPERA •',
-    'ACESSO CONTROLADO •'
-  ]
+    'ACESSO CONTROLADO •',
+  ],
 }
 
-export default pt;
+export default pt

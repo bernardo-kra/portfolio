@@ -228,21 +228,21 @@
   .lofiPlayer {
     padding: 0.75rem;
   }
-  
+
   .compactPlayer {
     padding: 0.5rem;
   }
-  
+
   .playerControls {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .trackInfo {
     width: 100%;
   }
-  
+
   .youtubeContainer {
     height: 400px;
   }
@@ -254,10 +254,25 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .playerActions {
     width: 100%;
     justify-content: space-between;
   }
 }
 
+.playerHeader,
+.playerActions,
+.youtubeInfo {
+  flex-wrap: wrap;
+}
+.playerTitle {
+  min-width: 0;
+}
+.playerControls {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.trackInfo {
+  flex-basis: 100px;
+}

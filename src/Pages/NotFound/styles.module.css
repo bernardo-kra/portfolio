@@ -1,0 +1,40 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+  color: var(--text-default);
+}
+.page h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin: 1rem 0;
+}
+.page p {
+  line-height: 1.7;
+}
+.code {
+  font-family: monospace;
+  color: var(--brand-orange);
+}
+.page nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.page a {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--brand-orange);
+  border-radius: 10px;
+  color: var(--text-default);
+}
+.page a:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 4px;
+}

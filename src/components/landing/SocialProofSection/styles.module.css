@@ -11,8 +11,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
-              radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 70% 70%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 60%
+    );
   pointer-events: none;
 }
 
@@ -89,12 +98,15 @@
 }
 
 .socialProof__testimonial {
+  color: #303746;
   background: rgba(255, 255, 255, 0.95);
   padding: 2.5rem;
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   position: relative;
 }
 
@@ -206,24 +218,24 @@
   .socialProof {
     padding: 3rem 1rem;
   }
-  
+
   .socialProof__stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   .socialProof__testimonials {
     grid-template-columns: 1fr;
   }
-  
+
   .socialProof__testimonial {
     padding: 2rem;
   }
-  
+
   .socialProof__clientLogos {
     gap: 1rem;
   }
-  
+
   .socialProof__clientLogo {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
@@ -234,19 +246,19 @@
   .socialProof__stats {
     grid-template-columns: 1fr;
   }
-  
+
   .socialProof__stat {
     padding: 1.5rem 1rem;
   }
-  
+
   .socialProof__statNumber {
     font-size: 2rem;
   }
-  
+
   .socialProof__testimonial {
     padding: 1.5rem;
   }
-  
+
   .socialProof__testimonial::before {
     font-size: 3rem;
     top: 0.5rem;

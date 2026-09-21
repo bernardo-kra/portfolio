@@ -1,61 +1,66 @@
+.timerIcon {
+  display: block;
+  flex-shrink: 0;
+}
+
 .po__timer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
 }
 
 .po__timer__link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    flex-direction: column;
-    font-size: var(--font-size-xl);
-    color: var(--color-primary);
-    transition: all 0.3s ease-in-out;
-    padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-direction: column;
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+  transition: all 0.3s ease-in-out;
+  padding: var(--spacing-sm);
 }
 
 .po__timer__link:hover {
-    filter: drop-shadow(1px 1px 0 var(--color-primary));
+  filter: drop-shadow(1px 1px 0 var(--color-primary));
 }
 
 .po__timer__link:hover svg {
-    filter: drop-shadow(1px 1px 0 var(--color-primary));
+  filter: drop-shadow(1px 1px 0 var(--color-primary));
 }
 
 .po__timer__link span {
-    font-weight: 700;
-    color: var(--color-primary);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 @media (max-width: 600px) {
-    .po__timer {
-        gap: var(--spacing-xs);
-    }
-    
-    .po__timer__link {
-        font-size: var(--font-size-lg);
-        padding: var(--spacing-xs);
-        gap: var(--spacing-xs);
-    }
+  .po__timer {
+    gap: var(--spacing-xs);
+  }
+
+  .po__timer__link {
+    font-size: var(--font-size-lg);
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
 }
 
 @media (max-width: 400px) {
-    .po__timer {
-        gap: var(--spacing-xs);
-    }
-    
-    .po__timer__link {
-        font-size: var(--font-size-base);
-        padding: var(--spacing-xs);
-        gap: var(--spacing-xs);
-    }
-    
-    .po__timer__link span {
-        font-size: var(--font-size-sm);
-    }
+  .po__timer {
+    gap: var(--spacing-xs);
+  }
+
+  .po__timer__link {
+    font-size: var(--font-size-base);
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .po__timer__link span {
+    font-size: var(--font-size-sm);
+  }
 }
 
 .timerPointer {
@@ -85,17 +90,39 @@
 }
 
 @keyframes alarmShake {
-  0% { transform: rotate(0deg); }
-  10% { transform: rotate(-18deg); }
-  20% { transform: rotate(18deg); }
-  30% { transform: rotate(-16deg); }
-  40% { transform: rotate(16deg); }
-  50% { transform: rotate(-12deg); }
-  60% { transform: rotate(12deg); }
-  70% { transform: rotate(-8deg); }
-  80% { transform: rotate(8deg); }
-  90% { transform: rotate(-4deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-18deg);
+  }
+  20% {
+    transform: rotate(18deg);
+  }
+  30% {
+    transform: rotate(-16deg);
+  }
+  40% {
+    transform: rotate(16deg);
+  }
+  50% {
+    transform: rotate(-12deg);
+  }
+  60% {
+    transform: rotate(12deg);
+  }
+  70% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(8deg);
+  }
+  90% {
+    transform: rotate(-4deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 /* Efeito de bounce no relógio inteiro */
@@ -106,10 +133,19 @@
   animation: bounce 0.5s;
 }
 @keyframes bounce {
-  0%, 100% { transform: translateY(0);}
-  30% { transform: translateY(-10px);}
-  50% { transform: translateY(0);}
-  70% { transform: translateY(-5px);}
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateY(-5px);
+  }
 }
 
 /* Efeito de pulse no relógio inteiro */
@@ -120,8 +156,13 @@
   animation: pulse 0.6s;
 }
 @keyframes pulse {
-  0%, 100% { transform: scale(1);}
-  50% { transform: scale(1.15);}
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 /* Efeito de wiggle só no ponteiro */
@@ -132,9 +173,20 @@
   animation: wiggle 0.4s;
 }
 @keyframes wiggle {
-  0%, 100% { transform: rotate(var(--pointer-angle, 0deg)); }
-  20% { transform: rotate(calc(var(--pointer-angle, 0deg) - 25deg)); }
-  40% { transform: rotate(calc(var(--pointer-angle, 0deg) + 20deg)); }
-  60% { transform: rotate(calc(var(--pointer-angle, 0deg) - 15deg)); }
-  80% { transform: rotate(calc(var(--pointer-angle, 0deg) + 10deg)); }
+  0%,
+  100% {
+    transform: rotate(var(--pointer-angle, 0deg));
+  }
+  20% {
+    transform: rotate(calc(var(--pointer-angle, 0deg) - 25deg));
+  }
+  40% {
+    transform: rotate(calc(var(--pointer-angle, 0deg) + 20deg));
+  }
+  60% {
+    transform: rotate(calc(var(--pointer-angle, 0deg) - 15deg));
+  }
+  80% {
+    transform: rotate(calc(var(--pointer-angle, 0deg) + 10deg));
+  }
 }

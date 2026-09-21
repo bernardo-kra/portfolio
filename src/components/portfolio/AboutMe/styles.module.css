@@ -1,3 +1,8 @@
+.specializationsColumn,
+.achievementsColumn {
+  min-width: 0;
+}
+
 .aboutmeSection {
   background: var(--gray-100);
   border-radius: 20px;
@@ -49,7 +54,7 @@
 
 .aboutmeMetrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-2xl);
 }
@@ -204,7 +209,6 @@
   margin: 0;
 }
 
-
 .achievementCard {
   background: var(--white);
   border: 1px solid var(--gray-200);
@@ -266,30 +270,30 @@
     padding: var(--spacing-xl);
     border-radius: 16px;
   }
-  
+
   .aboutmeMetrics {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--spacing-md);
   }
-  
+
   .aboutmeContent {
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
   }
-  
+
   .specializationsList {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: var(--spacing-sm);
   }
-  
+
   .achievementsList {
     gap: var(--spacing-sm);
   }
-  
+
   .aboutmeTitle {
     font-size: var(--font-size-3xl);
   }
-  
+
   .aboutmeSubtitle {
     font-size: var(--font-size-base);
   }
@@ -301,67 +305,67 @@
     border-radius: 12px;
     margin: var(--spacing-md) auto;
   }
-  
+
   .aboutmeHeader {
     margin-bottom: var(--spacing-xl);
   }
-  
+
   .aboutmeMetrics {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-xl);
   }
-  
+
   .metricCard {
     padding: var(--spacing-md);
   }
-  
+
   .metricIcon {
     width: 40px;
     height: 40px;
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .metricValue {
     font-size: var(--font-size-2xl);
   }
-  
+
   .metricLabel {
     font-size: var(--font-size-sm);
   }
-  
+
   .metricDescription {
     font-size: var(--font-size-xs);
   }
-  
+
   .columnTitle {
     font-size: var(--font-size-lg);
     margin-bottom: var(--spacing-md);
   }
-  
+
   .specializationsList {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: var(--spacing-sm);
   }
-  
+
   .achievementsList {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--spacing-sm);
   }
-  
+
   .achievementCard {
     padding: var(--spacing-sm);
   }
-  
+
   .achievementIcon {
     width: 36px;
     height: 36px;
   }
-  
+
   .achievementTitle {
     font-size: var(--font-size-sm);
   }
-  
+
   .achievementDescription {
     font-size: var(--font-size-xs);
   }
@@ -372,54 +376,54 @@
     padding: var(--spacing-md);
     border-radius: 8px;
   }
-  
+
   .aboutmeTitle {
     font-size: var(--font-size-2xl);
   }
-  
+
   .aboutmeSubtitle {
     font-size: var(--font-size-sm);
   }
-  
+
   .aboutmeLocation {
     font-size: var(--font-size-xs);
   }
-  
+
   .aboutmeMetrics {
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xs);
   }
-  
+
   .metricCard {
     padding: var(--spacing-sm);
   }
-  
+
   .metricIcon {
     width: 32px;
     height: 32px;
   }
-  
+
   .metricValue {
     font-size: var(--font-size-xl);
   }
-  
+
   .metricLabel {
     font-size: var(--font-size-xs);
   }
-  
+
   .metricDescription {
     font-size: var(--font-size-xs);
   }
-  
+
   .columnTitle {
     font-size: var(--font-size-base);
   }
-  
+
   .achievementCard {
     padding: var(--spacing-xs);
     gap: var(--spacing-sm);
   }
-  
+
   .achievementIcon {
     width: 32px;
     height: 32px;

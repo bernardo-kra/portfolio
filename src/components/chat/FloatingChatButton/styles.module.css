@@ -63,11 +63,15 @@
 }
 
 .chatModal {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--card-background);
   border-radius: 16px;
   width: 100%;
   max-width: 800px;
-  max-height: 80vh;
+  height: min(720px, calc(100dvh - 40px));
+  max-height: calc(100dvh - 40px);
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   animation: modalSlideIn 0.3s ease-out;
@@ -85,6 +89,7 @@
 }
 
 .chatHeader {
+  flex-shrink: 0;
   padding: var(--spacing-md);
   border-bottom: 1px solid var(--border-default);
   display: flex;
@@ -131,15 +136,14 @@
     padding: 12px 16px;
     font-size: var(--font-size-xs);
   }
-  
+
   .chatText {
     display: none;
   }
-  
+
   .chatModal {
     margin: 0;
     border-radius: 0;
     max-height: 100vh;
   }
 }
-

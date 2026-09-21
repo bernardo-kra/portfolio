@@ -7,14 +7,16 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   style?: React.CSSProperties
 }
 
-const Container = React.memo(function Container({ 
-  children, 
-  className = '', 
+const Container = React.memo(function Container({
+  children,
+  className = '',
   style,
-  ...props 
+  ...props
 }: ContainerProps) {
-  const containerClassName = [styles.container, className].filter(Boolean).join(' ')
-  
+  const containerClassName = [styles.po__container, className]
+    .filter(Boolean)
+    .join(' ')
+
   return (
     <div className={containerClassName} style={style} {...props}>
       {children}

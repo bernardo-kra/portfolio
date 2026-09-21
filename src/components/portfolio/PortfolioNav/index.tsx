@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
 import { useAuth } from '@src/hooks/useAuth'
@@ -15,18 +15,24 @@ interface PortfolioNavProps {
   setLang: (lang: Lang) => void
 }
 
-type NavLabelKey = 'aboutTitle' | 'experienceTitle' | 'educationTitle' | 'contactTitle'
+type NavLabelKey =
+  | 'aboutTitle'
+  | 'experienceTitle'
+  | 'educationTitle'
+  | 'contactTitle'
+  | 'projectsTitle'
 
 const navItems: Array<{ id: string; labelKey: NavLabelKey; icon: string }> = [
-  { id: 'sobre', labelKey: 'aboutTitle', icon: '👤' },
   { id: 'experiencia', labelKey: 'experienceTitle', icon: '💼' },
+  { id: 'projetos', labelKey: 'projectsTitle', icon: '↗' },
+  { id: 'sobre', labelKey: 'aboutTitle', icon: '👤' },
   { id: 'educacao', labelKey: 'educationTitle', icon: '🎓' },
   { id: 'contato', labelKey: 'contactTitle', icon: '📧' },
 ]
 
 const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   const navigate = useNavigate()
-  const [active, setActive] = useState('sobre')
+  const [active, setActive] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
@@ -36,7 +42,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      let found = 'sobre'
+      let found = ''
       for (const item of navItems) {
         const el = document.getElementById(item.id)
         if (el) {
@@ -47,25 +53,30 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
       setActive(found)
 
       const scrollTop = window.pageYOffset
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = (scrollTop / docHeight) * 100
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight
+      const progress =
+        docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0
       setScrollProgress(progress)
 
       if (scrollTop > 100) {
         setShowUserDropdown(false)
       }
     }
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
-      if (!target.closest(`.${styles.userDropdown}`) && !target.closest(`.${styles.userInfo}`)) {
+      if (
+        !target.closest(`.${styles.userDropdown}`) &&
+        !target.closest(`.${styles.userInfo}`)
+      ) {
         setShowUserDropdown(false)
       }
     }
@@ -89,15 +100,22 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
 
   return (
     <>
-      <nav className={styles.portfolioNav}>
+      <nav className={styles.portfolioNav} aria-label={t.portfolioTitle}>
         <div className={styles.progressBar}>
-          <div 
-            className={styles.progressFill} 
+          <div
+            className={styles.progressFill}
             style={{ width: `${scrollProgress}%` }}
           />
         </div>
-        
+
         <div className={styles.navContent}>
+          <Link
+            to="/"
+            className={styles.brandLink}
+            aria-label={t.recruiter.exploreStudies}
+          >
+            BK<span>/ LAB</span>
+          </Link>
           <ul className={styles.portfolioNavList}>
             {navItems.map((item) => (
               <li key={item.id}>
@@ -106,31 +124,41 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                   onClick={() => scrollToSection(item.id)}
                 >
                   <span className={styles.navIcon}>{item.icon}</span>
-                  <span className={styles.navLabel}>{t[item.labelKey] || item.id}</span>
+                  <span className={styles.navLabel}>
+                    {t[item.labelKey] || item.id}
+                  </span>
                 </button>
               </li>
             ))}
           </ul>
-          
+
           <div className={styles.portfolioNavActions}>
-            {!isAuthenticated && isFeatureEnabled('authentication') && config.ui.showAuthButton && (
-              <button
-                className={styles.loginBtn}
-                onClick={() => setIsAuthModalOpen(true)}
-              >
-                Login
-              </button>
-            )}
+            {!isAuthenticated &&
+              isFeatureEnabled('authentication') &&
+              config.ui.showAuthButton && (
+                <button
+                  className={styles.loginBtn}
+                  onClick={() => setIsAuthModalOpen(true)}
+                >
+                  Login
+                </button>
+              )}
             {isAuthenticated && (
               <div className={styles.userInfo}>
-                <button 
+                <button
                   className={styles.userButton}
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                 >
-                  <span className={styles.userName}>Olá, {user?.firstName}</span>
-                  <span className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}>▼</span>
+                  <span className={styles.userName}>
+                    Olá, {user?.firstName}
+                  </span>
+                  <span
+                    className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}
+                  >
+                    ▼
+                  </span>
                 </button>
-                
+
                 {showUserDropdown && (
                   <div className={styles.userDropdown}>
                     <div className={styles.dropdownHeader}>
@@ -145,11 +173,11 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className={styles.dropdownDivider}></div>
-                    
+
                     <div className={styles.dropdownMenu}>
-                      <button 
+                      <button
                         className={styles.dropdownItem}
                         onClick={() => {
                           setShowUserDropdown(false)
@@ -158,33 +186,33 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         <span className={styles.dropdownIcon}>👤</span>
                         Meu Perfil
                       </button>
-                      
-                 <button
-                   className={styles.dropdownItem}
-                   onClick={() => {
-                     setShowUserDropdown(false)
-                   }}
-                 >
-                   <span className={styles.dropdownIcon}>⚙️</span>
-                   Configurações
-                 </button>
 
-                 {user?.role === 'admin' && (
-                   <button
-                     className={styles.dropdownItem}
-                     onClick={() => {
-                       setShowUserDropdown(false)
-                       navigate('/admin/chat')
-                     }}
-                   >
-                     <span className={styles.dropdownIcon}>💬</span>
-                     Admin Chat
-                   </button>
-                 )}
-                      
+                      <button
+                        className={styles.dropdownItem}
+                        onClick={() => {
+                          setShowUserDropdown(false)
+                        }}
+                      >
+                        <span className={styles.dropdownIcon}>⚙️</span>
+                        Configurações
+                      </button>
+
+                      {user?.role === 'admin' && (
+                        <button
+                          className={styles.dropdownItem}
+                          onClick={() => {
+                            setShowUserDropdown(false)
+                            navigate('/admin/chat')
+                          }}
+                        >
+                          <span className={styles.dropdownIcon}>💬</span>
+                          Admin Chat
+                        </button>
+                      )}
+
                       <div className={styles.dropdownDivider}></div>
-                      
-                      <button 
+
+                      <button
                         className={styles.dropdownItem}
                         onClick={() => {
                           logout()
@@ -199,34 +227,45 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                 )}
               </div>
             )}
-                        {isAuthenticated && <NotificationCenter />}
-                        <button
-                          className={styles.langToggle}
-                          onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-                          aria-label={t.langToggle}
-                        >
-                          {lang === 'pt' ? 'EN' : 'PT'}
-                        </button>
-                        <ThemeToggleButton />
+            {isAuthenticated && <NotificationCenter />}
+            <button
+              className={styles.langToggle}
+              onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+              aria-label={t.langToggle}
+            >
+              {lang === 'pt' ? 'EN' : 'PT'}
+            </button>
+            <ThemeToggleButton />
           </div>
         </div>
-        
-        <button 
+
+        <button
           className={styles.mobileMenuToggle}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="portfolio-mobile-menu"
         >
-          <span className={`${styles.hamburger} ${isMobileMenuOpen ? styles.open : ''}`}>
+          <span
+            className={`${styles.hamburger} ${isMobileMenuOpen ? styles.open : ''}`}
+          >
             <span></span>
             <span></span>
             <span></span>
           </span>
         </button>
       </nav>
-      
+
       {isMobileMenuOpen && (
-        <div className={styles.mobileMenuOverlay} onClick={() => setIsMobileMenuOpen(false)}>
-          <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.mobileMenuOverlay}
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <div
+            id="portfolio-mobile-menu"
+            className={styles.mobileMenu}
+            onClick={(e) => e.stopPropagation()}
+          >
             <ul className={styles.mobileNavList}>
               {navItems.map((item) => (
                 <li key={item.id}>
@@ -235,7 +274,9 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                     onClick={() => scrollToSection(item.id)}
                   >
                     <span className={styles.navIcon}>{item.icon}</span>
-                    <span className={styles.navLabel}>{t[item.labelKey] || item.id}</span>
+                    <span className={styles.navLabel}>
+                      {t[item.labelKey] || item.id}
+                    </span>
                   </button>
                 </li>
               ))}
@@ -257,8 +298,8 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onSuccess={(userData) => {
-          login(userData);
-          setIsAuthModalOpen(false);
+          login(userData)
+          setIsAuthModalOpen(false)
         }}
       />
 

@@ -1,11 +1,18 @@
 .controlPanel {
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100vw - 2rem);
   position: fixed;
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
   width: 320px;
   max-height: 80vh;
-  background: linear-gradient(135deg, rgba(20, 20, 40, 0.95), rgba(40, 20, 60, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 40, 0.95),
+    rgba(40, 20, 60, 0.95)
+  );
   backdrop-filter: blur(20px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -33,7 +40,11 @@
   transform: translateY(-50%);
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, rgba(20, 20, 40, 0.9), rgba(40, 20, 60, 0.9));
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 40, 0.9),
+    rgba(40, 20, 60, 0.9)
+  );
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
@@ -53,6 +64,7 @@
 }
 
 .panelHeader {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -112,6 +124,8 @@
 }
 
 .tabContent {
+  min-height: 0;
+  flex: 1;
   padding: 20px;
   max-height: 400px;
   overflow-y: auto;
@@ -258,6 +272,7 @@
 }
 
 .panelFooter {
+  flex-shrink: 0;
   padding: 16px 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
@@ -281,25 +296,60 @@
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
+.controlPanel :is(button, input):focus-visible {
+  outline: 2px solid #a5f3fc;
+  outline-offset: 3px;
+}
+
 @media (max-width: 768px) {
   .controlPanel {
     right: 10px;
     width: 280px;
     max-height: 70vh;
   }
-  
+
   .toggleButton {
     right: 10px;
     width: 45px;
     height: 45px;
     font-size: 18px;
   }
-  
+
   .tabContent {
     max-height: 300px;
   }
-  
+
   .paletteGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+.controlPanel {
+  max-height: calc(100dvh - 2rem);
+}
+.tabContainer {
+  flex-shrink: 0;
+}
+.tab {
+  min-width: 0;
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .controlPanel {
+    top: auto;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    width: calc(100% - 1.5rem);
+    max-width: none;
+    max-height: min(70dvh, 560px);
+    transform: none;
+    animation: none;
+  }
+  .panelHeader,
+  .panelFooter {
+    padding: 0.75rem 1rem;
+  }
+  .tabContent {
+    max-height: none;
   }
 }

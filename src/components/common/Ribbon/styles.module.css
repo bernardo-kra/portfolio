@@ -1,0 +1,110 @@
+.ribbon {
+  --ribbon-ink: #f7c785;
+  --ribbon-bg: #251e16;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  color: var(--ribbon-ink);
+  background: var(--ribbon-bg);
+  border-block: 1px solid color-mix(in srgb, var(--ribbon-ink) 20%, transparent);
+}
+.ribbon[data-tone='violet'] {
+  --ribbon-ink: #e1d0ff;
+  --ribbon-bg: #241b35;
+}
+.ribbon[data-tone='mint'] {
+  --ribbon-ink: #afe6cb;
+  --ribbon-bg: #142c26;
+}
+.viewport {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+.track {
+  display: flex;
+  width: 100%;
+  max-width: none;
+}
+.run {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  min-width: 100%;
+  max-width: none !important;
+  list-style: none;
+  margin: 0;
+  padding: 1rem 2rem 1rem 0;
+  animation: travel 34s linear infinite;
+}
+.run li {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2rem;
+  white-space: nowrap;
+  font: 0.72rem monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.run li span {
+  opacity: 0.5;
+}
+.ribbon:hover .run,
+.ribbon:focus-within .run,
+.track[data-paused='true'] .run {
+  animation-play-state: paused;
+}
+.control {
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.8rem;
+  border: 0;
+  border-left: 1px solid #ffffff24;
+  border-radius: 0;
+  color: inherit;
+  background: var(--ribbon-bg);
+  font-size: 0.7rem;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.control:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+@keyframes travel {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@media (max-width: 480px) {
+  .control span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .run {
+    animation: none;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  .run li {
+    white-space: normal;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+  }
+  .run[aria-hidden='true'],
+  .control {
+    display: none;
+  }
+}

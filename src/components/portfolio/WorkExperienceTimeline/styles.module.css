@@ -116,14 +116,14 @@
 
 .timelineDotOrange {
   background: var(--brand-orange);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px var(--brand-orange),
     0 4px 12px rgba(255, 153, 0, 0.3);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root[data-theme='dark'] .timelineDotOrange {
-  box-shadow: 
+  box-shadow:
     0 0 0 2px var(--brand-orange),
     0 4px 12px rgba(255, 153, 0, 0.4);
 }
@@ -134,14 +134,14 @@
 
 .timelineDotDark {
   background: var(--text-default);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px var(--text-default),
     0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 :root[data-theme='dark'] .timelineDotDark {
   background: var(--gray-300);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px var(--gray-300),
     0 4px 12px rgba(255, 255, 255, 0.1);
 }
@@ -151,13 +151,13 @@
 }
 
 .timelineDotOrange:hover {
-  box-shadow: 
+  box-shadow:
     0 0 0 3px var(--brand-orange),
     0 6px 20px rgba(255, 153, 0, 0.5);
 }
 
 .timelineDotDark:hover {
-  box-shadow: 
+  box-shadow:
     0 0 0 3px var(--text-default),
     0 6px 20px rgba(0, 0, 0, 0.3);
 }
@@ -271,7 +271,7 @@
 }
 
 .expandedContent.expanded {
-  max-height: 800px;
+  max-height: none;
   opacity: 1;
   transform: translateY(0);
   padding-top: var(--spacing-lg);
@@ -412,7 +412,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -425,19 +426,19 @@
 @keyframes gentleExpand {
   0% {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       0 0 0 2px var(--brand-orange),
       0 4px 12px rgba(255, 153, 0, 0.3);
   }
   30% {
     transform: scale(1.15);
-    box-shadow: 
+    box-shadow:
       0 0 0 3px var(--brand-orange),
       0 6px 16px rgba(255, 153, 0, 0.4);
   }
   100% {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       0 0 0 2px var(--brand-orange),
       0 4px 12px rgba(255, 153, 0, 0.3);
   }
@@ -446,26 +447,27 @@
 @keyframes gentleExpandDark {
   0% {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       0 0 0 2px var(--text-default),
       0 4px 12px rgba(0, 0, 0, 0.2);
   }
   30% {
     transform: scale(1.15);
-    box-shadow: 
+    box-shadow:
       0 0 0 3px var(--text-default),
       0 6px 16px rgba(0, 0, 0, 0.3);
   }
   100% {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       0 0 0 2px var(--text-default),
       0 4px 12px rgba(0, 0, 0, 0.2);
   }
 }
 
 @keyframes gentlePulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -505,7 +507,7 @@
   .timelineTitle {
     font-size: var(--font-size-2xl);
   }
-  
+
   .timelineRow {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -513,44 +515,44 @@
     align-items: center;
     min-height: auto;
   }
-  
+
   .timelineRow.expanded {
     min-height: auto;
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
-  
+
   .timelineRow.expanded .timelineCenter {
     animation: none;
   }
-  
+
   .timelineLeft,
   .timelineRight {
     text-align: center;
     padding: 0;
     justify-content: center;
   }
-  
+
   .timelineCenter {
     order: -1;
     margin-bottom: var(--spacing-md);
     height: auto;
     min-height: auto;
   }
-  
+
   .timelineLine {
     display: none;
   }
-  
+
   .timelineDesc {
     font-size: var(--font-size-sm);
   }
-  
+
   .timelineDot {
     width: 20px;
     height: 20px;
   }
-  
+
   .expandedContent.expanded {
     padding-top: var(--spacing-md);
     margin-left: 0;
@@ -558,12 +560,12 @@
     padding-left: 0;
     padding-right: 0;
   }
-  
+
   .expandedContent.expanded::before,
   .expandedContent.expanded::after {
     display: none;
   }
-  
+
   .expandedGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -576,58 +578,58 @@
     margin: var(--spacing-lg) 0;
     border-radius: 12px;
   }
-  
+
   .timelineTitle {
     font-size: var(--font-size-xl);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .timelineContainer {
     max-width: 100%;
   }
-  
+
   .timelineRow {
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-xl);
   }
-  
+
   .timelineRow.expanded {
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-2xl);
   }
-  
+
   .timelineCompany {
     font-size: var(--font-size-lg);
   }
-  
+
   .timelineRole {
     font-size: var(--font-size-base);
   }
-  
+
   .timelineDot {
     width: 18px;
     height: 18px;
   }
-  
+
   .currentIndicator {
     width: 6px;
     height: 6px;
   }
-  
+
   .technologiesList {
     justify-content: center;
     gap: var(--spacing-xs);
   }
-  
+
   .achievementItem {
     padding-left: var(--spacing-md);
   }
-  
+
   .expandedContent.expanded {
     padding-top: var(--spacing-sm);
     padding-bottom: var(--spacing-sm);
   }
-  
+
   .fullDescription {
     font-size: var(--font-size-sm);
     line-height: 1.6;
@@ -640,82 +642,82 @@
     margin: var(--spacing-md) 0;
     border-radius: 8px;
   }
-  
+
   .timelineTitle {
     font-size: var(--font-size-lg);
     margin-bottom: var(--spacing-md);
   }
-  
+
   .timelineRow {
     gap: var(--spacing-xs);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .timelineRow.expanded {
     gap: var(--spacing-xs);
     margin-bottom: var(--spacing-xl);
   }
-  
+
   .timelineCompany {
     font-size: var(--font-size-base);
   }
-  
+
   .timelineRole {
     font-size: var(--font-size-sm);
   }
-  
+
   .timelinePeriod {
     font-size: var(--font-size-xs);
   }
-  
+
   .timelineDesc {
     font-size: var(--font-size-xs);
   }
-  
+
   .timelineDot {
     width: 16px;
     height: 16px;
   }
-  
+
   .currentIndicator {
     width: 5px;
     height: 5px;
   }
-  
+
   .technologyTag {
     font-size: var(--font-size-xs);
     padding: 0.25rem 0.5rem;
   }
-  
+
   .expandedContent.expanded {
     padding-top: var(--spacing-xs);
     padding-bottom: var(--spacing-xs);
   }
-  
+
   .fullDescription {
     font-size: var(--font-size-xs);
     line-height: 1.5;
   }
-  
+
   .sectionTitle {
     font-size: var(--font-size-xs);
     margin-bottom: var(--spacing-xs);
   }
-  
+
   .technologiesSection,
   .achievementsSection {
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .expandedGrid {
     gap: var(--spacing-sm);
   }
-  
+
   .achievementItem {
     padding-left: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
   }
-  
+
   .expandButton {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);

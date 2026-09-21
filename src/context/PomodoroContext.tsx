@@ -66,7 +66,10 @@ type PomodoroAction =
   | { type: 'SET_CURRENT_TRACK'; payload: string }
   | { type: 'NEXT_TRACK' }
   | { type: 'PREVIOUS_TRACK' }
-  | { type: 'SET_ACTIVE_TASK'; payload: { taskId: string; taskName: string } | null }
+  | {
+      type: 'SET_ACTIVE_TASK'
+      payload: { taskId: string; taskName: string } | null
+    }
   | { type: 'LOAD_STATE'; payload: PomodoroState }
 
 const initialState: PomodoroState = {
@@ -84,8 +87,8 @@ const initialState: PomodoroState = {
         name: 'Lofi Hip Hop',
         url: 'https://www.youtube.com/watch?v=rXOOYIQHe-U',
         artist: 'Lofi Girl',
-        isDefault: true
-      }
+        isDefault: true,
+      },
     ],
     currentTrackId: 'default',
     autoStopOnTimerEnd: true,
@@ -95,177 +98,222 @@ const initialState: PomodoroState = {
     backgroundMode: false,
     volume: 0.3,
     shuffleMode: false,
-    repeatMode: 'none'
-  }
+    repeatMode: 'none',
+  },
 }
 
-function pomodoroReducer(state: PomodoroState, action: PomodoroAction): PomodoroState {
+function pomodoroReducer(
+  state: PomodoroState,
+  action: PomodoroAction
+): PomodoroState {
   switch (action.type) {
     case 'START':
       return { ...state, isRunning: true }
-    
+
     case 'PAUSE':
       return { ...state, isRunning: false }
-    
+
     case 'RESET':
       return {
         ...state,
-        timeLeft: state.mode === 'focus' ? state.focusDuration : state.breakDuration,
-        isRunning: false
+        timeLeft:
+          state.mode === 'focus' ? state.focusDuration : state.breakDuration,
+        isRunning: false,
       }
-    
+
     case 'TICK':
       if (state.timeLeft <= 0) {
         return state
       }
       return { ...state, timeLeft: state.timeLeft - 1 }
-    
+
     case 'SWITCH':
       const newMode: PomodoroMode = state.mode === 'focus' ? 'break' : 'focus'
-      const newTimeLeft = newMode === 'focus' ? state.focusDuration : state.breakDuration
-      
-      const newCycle: PomodoroCycle | null = state.timeLeft === 0 ? {
-        id: Date.now().toString(),
-        mode: state.mode,
-        completedAt: new Date(),
-        duration: state.mode === 'focus' ? state.focusDuration : state.breakDuration,
-        taskId: state.activeTaskId,
-        taskName: state.activeTaskName
-      } : null
-      
+      const newTimeLeft =
+        newMode === 'focus' ? state.focusDuration : state.breakDuration
+
+      const newCycle: PomodoroCycle | null =
+        state.timeLeft === 0
+          ? {
+              id: Date.now().toString(),
+              mode: state.mode,
+              completedAt: new Date(),
+              duration:
+                state.mode === 'focus'
+                  ? state.focusDuration
+                  : state.breakDuration,
+              taskId: state.activeTaskId,
+              taskName: state.activeTaskName,
+            }
+          : null
+
       return {
         ...state,
         mode: newMode,
         timeLeft: newTimeLeft,
         isRunning: false,
-        cycles: newCycle ? [newCycle, ...state.cycles] : state.cycles
+        cycles: newCycle ? [newCycle, ...state.cycles] : state.cycles,
       }
-    
+
     case 'SET_FOCUS_DURATION':
       return {
         ...state,
         focusDuration: action.payload,
-        timeLeft: state.mode === 'focus' ? action.payload : state.timeLeft
+        timeLeft: state.mode === 'focus' ? action.payload : state.timeLeft,
       }
-    
+
     case 'SET_BREAK_DURATION':
       return {
         ...state,
         breakDuration: action.payload,
-        timeLeft: state.mode === 'break' ? action.payload : state.timeLeft
+        timeLeft: state.mode === 'break' ? action.payload : state.timeLeft,
       }
-    
-          case 'SET_MUSIC_SETTINGS':
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            ...action.payload
-          }
-        }
-      
-      case 'ADD_MUSIC_TRACK':
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            tracks: [...state.musicSettings.tracks, action.payload]
-          }
-        }
-      
-      case 'REMOVE_MUSIC_TRACK':
-        const updatedTracks = state.musicSettings.tracks.filter(track => track.id !== action.payload)
-        const newCurrentTrackId = state.musicSettings.currentTrackId === action.payload 
-          ? (updatedTracks[0]?.id || 'default')
+
+    case 'SET_MUSIC_SETTINGS':
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          ...action.payload,
+        },
+      }
+
+    case 'ADD_MUSIC_TRACK':
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          tracks: [...state.musicSettings.tracks, action.payload],
+        },
+      }
+
+    case 'REMOVE_MUSIC_TRACK':
+      const updatedTracks = state.musicSettings.tracks.filter(
+        (track) => track.id !== action.payload
+      )
+      const newCurrentTrackId =
+        state.musicSettings.currentTrackId === action.payload
+          ? updatedTracks[0]?.id || 'default'
           : state.musicSettings.currentTrackId
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            tracks: updatedTracks,
-            currentTrackId: newCurrentTrackId
-          }
-        }
-      
-      case 'SET_CURRENT_TRACK':
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            currentTrackId: action.payload
-          }
-        }
-      
-      case 'NEXT_TRACK':
-        const currentIndex = state.musicSettings.tracks.findIndex(track => track.id === state.musicSettings.currentTrackId)
-        let nextIndex: number
-        
-        if (state.musicSettings.shuffleMode) {
-          const availableTracks = state.musicSettings.tracks.filter(track => track.id !== state.musicSettings.currentTrackId)
-          if (availableTracks.length > 0) {
-            const randomTrack = availableTracks[Math.floor(Math.random() * availableTracks.length)]
-            nextIndex = state.musicSettings.tracks.findIndex(track => track.id === randomTrack.id)
-          } else {
-            nextIndex = currentIndex
-          }
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          tracks: updatedTracks,
+          currentTrackId: newCurrentTrackId,
+        },
+      }
+
+    case 'SET_CURRENT_TRACK':
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          currentTrackId: action.payload,
+        },
+      }
+
+    case 'NEXT_TRACK':
+      const currentIndex = state.musicSettings.tracks.findIndex(
+        (track) => track.id === state.musicSettings.currentTrackId
+      )
+      let nextIndex: number
+
+      if (state.musicSettings.shuffleMode) {
+        const availableTracks = state.musicSettings.tracks.filter(
+          (track) => track.id !== state.musicSettings.currentTrackId
+        )
+        if (availableTracks.length > 0) {
+          const randomTrack =
+            availableTracks[Math.floor(Math.random() * availableTracks.length)]
+          nextIndex = state.musicSettings.tracks.findIndex(
+            (track) => track.id === randomTrack.id
+          )
         } else {
-          nextIndex = currentIndex === -1 || currentIndex === state.musicSettings.tracks.length - 1 ? 0 : currentIndex + 1
-        }
-        
-        if (state.musicSettings.repeatMode === 'one') {
           nextIndex = currentIndex
-        } else if (state.musicSettings.repeatMode === 'all' && nextIndex === 0 && currentIndex === state.musicSettings.tracks.length - 1) {
-          nextIndex = 0
         }
-        
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            currentTrackId: state.musicSettings.tracks[nextIndex]?.id || 'default'
-          }
-        }
-      
-      case 'PREVIOUS_TRACK':
-        const prevCurrentIndex = state.musicSettings.tracks.findIndex(track => track.id === state.musicSettings.currentTrackId)
-        let prevIndex: number
-        
-        if (state.musicSettings.shuffleMode) {
-          const availableTracks = state.musicSettings.tracks.filter(track => track.id !== state.musicSettings.currentTrackId)
-          if (availableTracks.length > 0) {
-            const randomTrack = availableTracks[Math.floor(Math.random() * availableTracks.length)]
-            prevIndex = state.musicSettings.tracks.findIndex(track => track.id === randomTrack.id)
-          } else {
-            prevIndex = prevCurrentIndex
-          }
+      } else {
+        nextIndex =
+          currentIndex === -1 ||
+          currentIndex === state.musicSettings.tracks.length - 1
+            ? 0
+            : currentIndex + 1
+      }
+
+      if (state.musicSettings.repeatMode === 'one') {
+        nextIndex = currentIndex
+      } else if (
+        state.musicSettings.repeatMode === 'all' &&
+        nextIndex === 0 &&
+        currentIndex === state.musicSettings.tracks.length - 1
+      ) {
+        nextIndex = 0
+      }
+
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          currentTrackId:
+            state.musicSettings.tracks[nextIndex]?.id || 'default',
+        },
+      }
+
+    case 'PREVIOUS_TRACK':
+      const prevCurrentIndex = state.musicSettings.tracks.findIndex(
+        (track) => track.id === state.musicSettings.currentTrackId
+      )
+      let prevIndex: number
+
+      if (state.musicSettings.shuffleMode) {
+        const availableTracks = state.musicSettings.tracks.filter(
+          (track) => track.id !== state.musicSettings.currentTrackId
+        )
+        if (availableTracks.length > 0) {
+          const randomTrack =
+            availableTracks[Math.floor(Math.random() * availableTracks.length)]
+          prevIndex = state.musicSettings.tracks.findIndex(
+            (track) => track.id === randomTrack.id
+          )
         } else {
-          prevIndex = prevCurrentIndex <= 0 ? state.musicSettings.tracks.length - 1 : prevCurrentIndex - 1
-        }
-        
-        if (state.musicSettings.repeatMode === 'one') {
           prevIndex = prevCurrentIndex
-        } else if (state.musicSettings.repeatMode === 'all' && prevIndex === state.musicSettings.tracks.length - 1 && prevCurrentIndex === 0) {
-          prevIndex = state.musicSettings.tracks.length - 1
         }
-        
-        return {
-          ...state,
-          musicSettings: {
-            ...state.musicSettings,
-            currentTrackId: state.musicSettings.tracks[prevIndex]?.id || 'default'
-          }
-        }
-      
-      case 'SET_ACTIVE_TASK':
-        return {
-          ...state,
-          activeTaskId: action.payload?.taskId,
-          activeTaskName: action.payload?.taskName
-        }
-      
-      case 'LOAD_STATE':
-        return action.payload
-    
+      } else {
+        prevIndex =
+          prevCurrentIndex <= 0
+            ? state.musicSettings.tracks.length - 1
+            : prevCurrentIndex - 1
+      }
+
+      if (state.musicSettings.repeatMode === 'one') {
+        prevIndex = prevCurrentIndex
+      } else if (
+        state.musicSettings.repeatMode === 'all' &&
+        prevIndex === state.musicSettings.tracks.length - 1 &&
+        prevCurrentIndex === 0
+      ) {
+        prevIndex = state.musicSettings.tracks.length - 1
+      }
+
+      return {
+        ...state,
+        musicSettings: {
+          ...state.musicSettings,
+          currentTrackId:
+            state.musicSettings.tracks[prevIndex]?.id || 'default',
+        },
+      }
+
+    case 'SET_ACTIVE_TASK':
+      return {
+        ...state,
+        activeTaskId: action.payload?.taskId,
+        activeTaskName: action.payload?.taskName,
+      }
+
+    case 'LOAD_STATE':
+      return action.payload
+
     default:
       return state
   }
@@ -289,69 +337,84 @@ interface PomodoroContextType {
   setActiveTask: (task: { taskId: string; taskName: string } | null) => void
 }
 
-const PomodoroContext = createContext<PomodoroContextType | undefined>(undefined)
+const PomodoroContext = createContext<PomodoroContextType | undefined>(
+  undefined
+)
 
 interface PomodoroProviderProps {
   children: ReactNode
 }
 
-export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(pomodoroReducer, initialState)
-
-  useEffect(() => {
-    const savedState = localStorage.getItem('pomodoro-state')
-    const savedMusicSettings = localStorage.getItem('music-settings')
-    
-    if (savedState) {
+export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({
+  children,
+}) => {
+  const [state, dispatch] = useReducer(
+    pomodoroReducer,
+    initialState,
+    (fallback) => {
       try {
-        const parsedState = JSON.parse(savedState) as StoredPomodoroState
-        const cyclesWithDates = parsedState.cycles.map(cycle => ({
-          ...cycle,
-          completedAt: new Date(cycle.completedAt)
-        }))
-        
-        if (savedMusicSettings) {
-          try {
-            const parsedMusicSettings = JSON.parse(savedMusicSettings) as Partial<MusicSettings>
-            parsedState.musicSettings = {
-              ...parsedState.musicSettings,
-              ...parsedMusicSettings
-            }
-          } catch (error) {
-            console.error('Error loading music settings:', error)
-          }
+        const savedState = localStorage.getItem('pomodoro-state')
+        const savedMusicSettings = localStorage.getItem('music-settings')
+        const parsedState = savedState
+          ? (JSON.parse(savedState) as StoredPomodoroState)
+          : null
+        const musicSettings = savedMusicSettings
+          ? (JSON.parse(savedMusicSettings) as Partial<MusicSettings>)
+          : {}
+        return {
+          ...fallback,
+          ...parsedState,
+          isRunning: false,
+          musicSettings: {
+            ...fallback.musicSettings,
+            ...parsedState?.musicSettings,
+            ...musicSettings,
+          },
+          cycles: (parsedState?.cycles ?? []).map((cycle) => ({
+            ...cycle,
+            completedAt: new Date(cycle.completedAt),
+          })),
         }
-        
-        dispatch({ type: 'LOAD_STATE', payload: { ...parsedState, cycles: cyclesWithDates } })
-      } catch (error) {
-        console.error('Error loading pomodoro state:', error)
+      } catch {
+        return fallback
       }
     }
-  }, [])
+  )
 
   useEffect(() => {
     const stateToSave = {
       ...state,
       musicSettings: {
-        ...state.musicSettings
-      }
+        ...state.musicSettings,
+      },
     }
-    localStorage.setItem('pomodoro-state', JSON.stringify(stateToSave))
+    try {
+      localStorage.setItem('pomodoro-state', JSON.stringify(stateToSave))
+    } catch {
+      console.error('Unable to save timer state on this device')
+    }
   }, [state])
 
   const startTimer = () => dispatch({ type: 'START' })
   const pauseTimer = () => dispatch({ type: 'PAUSE' })
   const resetTimer = () => dispatch({ type: 'RESET' })
   const skipTimer = () => dispatch({ type: 'SWITCH' })
-  const setFocusDuration = (minutes: number) => dispatch({ type: 'SET_FOCUS_DURATION', payload: minutes * 60 })
-  const setBreakDuration = (minutes: number) => dispatch({ type: 'SET_BREAK_DURATION', payload: minutes * 60 })
-  const setMusicSettings = (settings: Partial<MusicSettings>) => dispatch({ type: 'SET_MUSIC_SETTINGS', payload: settings })
-  const addMusicTrack = (track: MusicTrack) => dispatch({ type: 'ADD_MUSIC_TRACK', payload: track })
-  const removeMusicTrack = (trackId: string) => dispatch({ type: 'REMOVE_MUSIC_TRACK', payload: trackId })
-  const setCurrentTrack = (trackId: string) => dispatch({ type: 'SET_CURRENT_TRACK', payload: trackId })
+  const setFocusDuration = (minutes: number) =>
+    dispatch({ type: 'SET_FOCUS_DURATION', payload: minutes * 60 })
+  const setBreakDuration = (minutes: number) =>
+    dispatch({ type: 'SET_BREAK_DURATION', payload: minutes * 60 })
+  const setMusicSettings = (settings: Partial<MusicSettings>) =>
+    dispatch({ type: 'SET_MUSIC_SETTINGS', payload: settings })
+  const addMusicTrack = (track: MusicTrack) =>
+    dispatch({ type: 'ADD_MUSIC_TRACK', payload: track })
+  const removeMusicTrack = (trackId: string) =>
+    dispatch({ type: 'REMOVE_MUSIC_TRACK', payload: trackId })
+  const setCurrentTrack = (trackId: string) =>
+    dispatch({ type: 'SET_CURRENT_TRACK', payload: trackId })
   const nextTrack = () => dispatch({ type: 'NEXT_TRACK' })
   const previousTrack = () => dispatch({ type: 'PREVIOUS_TRACK' })
-  const setActiveTask = (task: { taskId: string; taskName: string } | null) => dispatch({ type: 'SET_ACTIVE_TASK', payload: task })
+  const setActiveTask = (task: { taskId: string; taskName: string } | null) =>
+    dispatch({ type: 'SET_ACTIVE_TASK', payload: task })
 
   const value: PomodoroContextType = {
     state,
@@ -368,7 +431,7 @@ export const PomodoroProvider: React.FC<PomodoroProviderProps> = ({ children }) 
     setCurrentTrack,
     nextTrack,
     previousTrack,
-    setActiveTask
+    setActiveTask,
   }
 
   return (

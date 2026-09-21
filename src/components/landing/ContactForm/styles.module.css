@@ -11,8 +11,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
-              radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+  background:
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 60%
+    );
   pointer-events: none;
 }
 
@@ -46,6 +55,7 @@
 }
 
 .contact__formWrapper {
+  color: #303746;
   background: rgba(255, 255, 255, 0.95);
   padding: 3rem;
   border-radius: 12px;
@@ -203,15 +213,15 @@
   .contact {
     padding: 3rem 1rem;
   }
-  
+
   .contact__formWrapper {
     padding: 2rem;
   }
-  
+
   .contact__formGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .contact__form {
     gap: 1.25rem;
   }
@@ -221,23 +231,37 @@
   .contact__formWrapper {
     padding: 1.5rem;
   }
-  
+
   .contact__title {
     font-size: 1.75rem;
   }
-  
+
   .contact__subtitle {
     font-size: 1rem;
   }
-  
+
   .contact__input,
   .contact__select,
   .contact__textarea {
     padding: 0.625rem 0.875rem;
   }
-  
+
   .contact__submitButton {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
   }
+}
+
+.directLinks {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.directLinks a {
+  overflow-wrap: anywhere;
+}
+.contact :where(a, button, input, textarea):focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 3px;
 }

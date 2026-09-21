@@ -25,7 +25,7 @@
 .modalContainer {
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
+  max-height: calc(100dvh - 2rem);
   overflow-y: auto;
   animation: slideIn 0.3s ease-out;
 }
@@ -150,19 +150,19 @@
   .modalOverlay {
     padding: var(--spacing-sm);
   }
-  
+
   .settingsCard {
     padding: var(--spacing-lg);
   }
-  
+
   .settingsGrid {
     gap: var(--spacing-lg);
   }
-  
+
   .modalHeader {
     margin-bottom: var(--spacing-md);
   }
-  
+
   .settingsTitle {
     font-size: var(--font-size-xl);
   }
@@ -172,22 +172,22 @@
   .settingsCard {
     padding: var(--spacing-md);
   }
-  
+
   .settingsGrid {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .settingsActions {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
-  
+
   .actionButtons {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .closeButton {
     width: 36px;
     height: 36px;
@@ -199,19 +199,19 @@
   .modalOverlay {
     padding: var(--spacing-xs);
   }
-  
+
   .settingsCard {
     padding: var(--spacing-sm);
   }
-  
+
   .settingsGrid {
     gap: var(--spacing-sm);
   }
-  
+
   .settingsTitle {
     font-size: var(--font-size-lg);
   }
-  
+
   .closeButton {
     width: 32px;
     height: 32px;

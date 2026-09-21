@@ -305,8 +305,8 @@
   transition: transform 0.2s ease;
 }
 
-
-.loginBtn, .logoutBtn {
+.loginBtn,
+.logoutBtn {
   background: var(--brand-orange);
   color: white;
   border: none;
@@ -317,7 +317,8 @@
   transition: all 0.2s ease;
 }
 
-.loginBtn:hover, .logoutBtn:hover {
+.loginBtn:hover,
+.logoutBtn:hover {
   background: var(--brand-orange-hover);
   transform: translateY(-1px);
 }
@@ -349,7 +350,10 @@
   padding: var(--spacing-lg);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-default);
-  min-width: 250px;
+  width: min(320px, calc(100vw - 40px));
+  min-width: 0;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
 }
 
 .mobileNavList {
@@ -411,29 +415,28 @@
   border-color: var(--brand-orange);
 }
 
-
 @media (max-width: 900px) {
   .portfolioNav {
     margin: var(--spacing-sm) auto var(--spacing-md) auto;
   }
-  
+
   .navContent {
     padding: var(--spacing-xs) var(--spacing-md);
   }
-  
+
   .portfolioNavList {
     gap: var(--spacing-md);
   }
-  
+
   .portfolioNavLink {
     font-size: var(--font-size-sm);
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   .navLabel {
     display: none;
   }
-  
+
   .langToggle {
     font-size: var(--font-size-sm);
     padding: var(--spacing-xs);
@@ -444,23 +447,23 @@
   .portfolioNav {
     margin: var(--spacing-xs) auto var(--spacing-sm) auto;
   }
-  
+
   .navContent {
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   .portfolioNavList {
     display: none;
   }
-  
+
   .mobileMenuToggle {
     display: block;
   }
-  
+
   .portfolioNavActions {
     gap: var(--spacing-xs);
   }
-  
+
   .langToggle {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);
@@ -471,19 +474,89 @@
   .portfolioNav {
     margin: var(--spacing-xs) auto;
   }
-  
+
   .navContent {
     padding: var(--spacing-xs);
   }
-  
+
   .portfolioNavActions {
     gap: var(--spacing-xs);
   }
-  
+
   .langToggle {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);
     min-width: 24px;
     height: 24px;
+  }
+}
+.brandLink {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--text-default);
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.brandLink span {
+  font: 0.65rem monospace;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.navContent {
+  gap: 1rem;
+  padding-inline: 1rem;
+}
+.portfolioNavList {
+  gap: 0.1rem;
+}
+.portfolioNavLink {
+  font-size: 0.85rem;
+  padding-inline: 0.7rem;
+}
+@media (max-width: 600px) {
+  .navContent {
+    padding-right: 3.5rem;
+    gap: 0.5rem;
+  }
+  .mobileMenuToggle {
+    position: absolute;
+    right: 0.6rem;
+    top: 0.6rem;
+    z-index: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .portfolioNavList {
+    display: none;
+  }
+  .mobileMenuToggle {
+    display: block;
+  }
+  .navContent {
+    padding-right: 3.5rem;
+  }
+  .mobileMenuToggle {
+    position: absolute;
+    right: 0.6rem;
+    top: 0.6rem;
+    z-index: 3;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+@media (max-width: 400px) {
+  .brandLink span {
+    display: none;
+  }
+  .brandLink {
+    font-size: 1rem;
+  }
+  .navContent {
+    padding-left: 0.6rem;
+    gap: 0.25rem;
   }
 }

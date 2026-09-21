@@ -278,41 +278,41 @@
   .musicPlaylist {
     padding: var(--spacing-md);
   }
-  
+
   .playlistHeader {
     flex-direction: column;
     gap: var(--spacing-sm);
     text-align: center;
   }
-  
+
   .currentTrackInfo {
     flex-direction: column;
     gap: var(--spacing-sm);
     text-align: center;
   }
-  
+
   .trackControls {
     justify-content: center;
   }
-  
+
   .trackSettings {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
-  
+
   .settingGroup {
     justify-content: center;
   }
-  
+
   .trackInfo {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
-  
+
   .trackNameRow {
     justify-content: center;
   }
-  
+
   .trackActions {
     justify-content: center;
   }
@@ -323,20 +323,20 @@
     max-width: 100%;
     padding: var(--spacing-sm);
   }
-  
+
   .currentTrackCard {
     padding: var(--spacing-sm);
   }
-  
+
   .trackName {
     font-size: var(--font-size-lg);
   }
-  
+
   .controlButton {
     min-width: 32px;
     height: 32px;
   }
-  
+
   .playButton {
     min-width: 40px;
     height: 40px;
@@ -347,22 +347,41 @@
   .musicPlaylist {
     padding: var(--spacing-xs);
   }
-  
+
   .currentTrackCard {
     padding: var(--spacing-xs);
   }
-  
+
   .trackControls {
     gap: var(--spacing-xs);
   }
-  
+
   .controlButton {
     min-width: 28px;
     height: 28px;
   }
-  
+
   .playButton {
     min-width: 36px;
     height: 36px;
   }
+}
+
+.playlistHeader,
+.currentTrackInfo,
+.trackSettings {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.trackDetails {
+  min-width: 0;
+  flex-basis: 130px;
+}
+.trackControls,
+.settingGroup {
+  flex-wrap: wrap;
+}
+.volumeControl {
+  max-width: 100%;
+  min-width: 0;
 }

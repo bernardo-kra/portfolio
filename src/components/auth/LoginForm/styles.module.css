@@ -47,7 +47,11 @@
   color: var(--primary-hover);
 }
 
-
-
-
-
+.container {
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 1.25rem;
+  }
+}

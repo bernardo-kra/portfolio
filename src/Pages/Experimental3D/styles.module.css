@@ -13,7 +13,11 @@
   inset: 0;
   background:
     linear-gradient(180deg, rgba(8, 10, 12, 0.05), rgba(5, 6, 7, 0.82)),
-    radial-gradient(900px 600px at 15% 80%, rgba(255, 180, 90, 0.12), transparent 60%);
+    radial-gradient(
+      900px 600px at 15% 80%,
+      rgba(255, 180, 90, 0.12),
+      transparent 60%
+    );
   z-index: 1;
   pointer-events: none;
 }
@@ -114,7 +118,8 @@
       transparent 60%
     ),
     radial-gradient(
-      900px 700px at calc(80% + (var(--mx) * -25%)) calc(30% + (var(--my) * 15%)),
+      900px 700px at calc(80% + (var(--mx) * -25%))
+        calc(30% + (var(--my) * 15%)),
       rgba(255, 180, 90, 0.08),
       transparent 70%
     ),
@@ -131,7 +136,12 @@
 .atmoBeam {
   position: absolute;
   inset: -20% 55% -10% -10%;
-  background: linear-gradient(120deg, rgba(255, 190, 110, 0.0), rgba(255, 190, 110, 0.18), rgba(255, 190, 110, 0.0));
+  background: linear-gradient(
+    120deg,
+    rgba(255, 190, 110, 0),
+    rgba(255, 190, 110, 0.18),
+    rgba(255, 190, 110, 0)
+  );
   transform: skewX(-12deg) translateX(calc((var(--mx) - 0.5) * 60px));
   opacity: 0.6;
   mix-blend-mode: screen;
@@ -141,7 +151,12 @@
 .atmoBeamWide {
   position: absolute;
   inset: -30% -10% -20% 45%;
-  background: linear-gradient(120deg, rgba(255, 190, 110, 0.0), rgba(255, 190, 110, 0.08), rgba(255, 190, 110, 0.0));
+  background: linear-gradient(
+    120deg,
+    rgba(255, 190, 110, 0),
+    rgba(255, 190, 110, 0.08),
+    rgba(255, 190, 110, 0)
+  );
   transform: skewX(8deg) translateX(calc((var(--mx) - 0.5) * -40px));
   opacity: 0.2;
   mix-blend-mode: screen;
@@ -155,7 +170,8 @@
     linear-gradient(90deg, rgba(255, 200, 120, 0.08) 1px, transparent 1px),
     linear-gradient(180deg, rgba(255, 200, 120, 0.06) 1px, transparent 1px);
   background-size: 56px 36px;
-  transform: perspective(600px) rotateX(52deg) translateY(calc((var(--my) - 0.5) * -40px));
+  transform: perspective(600px) rotateX(52deg)
+    translateY(calc((var(--my) - 0.5) * -40px));
   transform-origin: top;
   opacity: 0.25;
   filter: blur(0.2px);
@@ -168,7 +184,10 @@
     radial-gradient(circle, rgba(255, 230, 180, 0.35) 1px, transparent 2px),
     radial-gradient(circle, rgba(255, 200, 120, 0.25) 1px, transparent 2px),
     radial-gradient(circle, rgba(255, 120, 90, 0.25) 1px, transparent 2px);
-  background-size: 120px 120px, 180px 180px, 240px 240px;
+  background-size:
+    120px 120px,
+    180px 180px,
+    240px 240px;
   background-position:
     calc(var(--mx) * 30px) calc(var(--my) * 20px),
     calc(var(--mx) * -40px) calc(var(--my) * -30px),
@@ -347,7 +366,9 @@
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
-  transition: border 0.2s ease, background 0.2s ease;
+  transition:
+    border 0.2s ease,
+    background 0.2s ease;
 }
 
 .secondaryCta:hover {
@@ -391,6 +412,12 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: rgba(255, 240, 200, 0.9);
+}
+
+.panelTitle {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  line-height: 1.4;
+  margin: 0;
 }
 
 .panelStatus {
@@ -470,7 +497,9 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(8, 10, 12, 0.78);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-  transition: transform 0.2s ease, border 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border 0.2s ease;
 }
 
 .deckCard:hover {
@@ -560,7 +589,9 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .signalGreen {
@@ -581,50 +612,6 @@
 .signalActive {
   transform: translateY(-1px);
   box-shadow: 0 0 16px rgba(255, 200, 90, 0.6);
-}
-
-.ribbon {
-  overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(8, 10, 12, 0.7);
-  padding: 0.6rem 0;
-}
-
-.ribbonTrack {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  height: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 0.7rem;
-  color: rgba(255, 240, 200, 0.9);
-}
-
-.ribbonRun {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: inline-flex;
-  gap: 2rem;
-  padding-right: 2rem;
-  white-space: nowrap;
-  animation: ribbonLoop 18s linear infinite;
-  will-change: transform;
-}
-
- .ribbonRun:nth-child(2) {
-  left: 100%;
- }
-
-@keyframes ribbonLoop {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
 }
 
 @keyframes hazeDrift {
@@ -727,5 +714,54 @@
 
   .hero {
     gap: 2rem;
+  }
+}
+
+.experimental3D :where(button, a, input):focus-visible {
+  outline: 2px solid #ffe0a3;
+  outline-offset: 4px;
+}
+.experimental3D[data-motion='paused'] *,
+.experimental3D[data-motion='paused'] *::before,
+.experimental3D[data-motion='paused'] *::after {
+  animation-play-state: paused !important;
+}
+
+.hero > *,
+.deckCard {
+  min-width: 0;
+}
+.themeControls {
+  max-width: calc(100% - 1rem);
+  flex-wrap: wrap;
+}
+.statusPills {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .overlay {
+    padding-top: 4.5rem;
+  }
+  .headerRow {
+    padding-inline: 1rem;
+  }
+  .hero {
+    padding-inline: 1rem;
+  }
+  .heroActions {
+    min-width: 0;
+  }
+  .heroActions button {
+    white-space: normal;
+    min-height: 44px;
+  }
+  .languageToggle,
+  .backButton {
+    min-height: 36px;
+  }
+  .brand {
+    letter-spacing: 0.1em;
+    flex-wrap: wrap;
   }
 }

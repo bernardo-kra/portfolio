@@ -1,14 +1,14 @@
 .footer {
-  background: var(--gray-100);
-  border-top: 1px solid var(--gray-200);
+  background: transparent;
+  border-top: none;
   padding: var(--spacing-2xl) 0 var(--spacing-lg) 0;
   margin-top: var(--spacing-2xl);
-  animation: fadeIn 1.2s cubic-bezier(.4,1.2,.4,1) 0.5s both;
+  animation: fadeIn 1.2s cubic-bezier(0.4, 1.2, 0.4, 1) 0.5s both;
 }
 
 :root[data-theme='dark'] .footer {
-  background: var(--gray-900);
-  border-top: 1px solid var(--gray-700);
+  background: transparent;
+  border-top: none;
 }
 
 .footerContent {
@@ -181,8 +181,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 900px) {
@@ -190,12 +196,12 @@
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
   }
-  
+
   .footerLinks {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--spacing-lg);
   }
-  
+
   .footerBottom {
     flex-direction: column;
     gap: var(--spacing-md);
@@ -208,42 +214,42 @@
     padding: var(--spacing-xl) 0 var(--spacing-md) 0;
     margin-top: var(--spacing-xl);
   }
-  
+
   .footerContent {
     padding: 0 var(--spacing-sm);
   }
-  
+
   .footerMain {
     gap: var(--spacing-lg);
   }
-  
+
   .footerName {
     font-size: var(--font-size-xl);
   }
-  
+
   .footerTagline {
     font-size: var(--font-size-sm);
   }
-  
+
   .footerLinks {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
-  
+
   .footerTitle {
     font-size: var(--font-size-base);
   }
-  
+
   .footerLink {
     font-size: var(--font-size-sm);
   }
-  
+
   .footerTech {
     flex-direction: column;
     gap: var(--spacing-sm);
     align-items: center;
   }
-  
+
   .footerTechIcons {
     gap: var(--spacing-sm);
   }
@@ -254,29 +260,29 @@
     padding: var(--spacing-lg) 0 var(--spacing-sm) 0;
     margin-top: var(--spacing-lg);
   }
-  
+
   .footerContent {
     padding: 0 var(--spacing-xs);
   }
-  
+
   .footerName {
     font-size: var(--font-size-lg);
   }
-  
+
   .footerTagline {
     font-size: var(--font-size-xs);
   }
-  
+
   .footerTitle {
     font-size: var(--font-size-sm);
   }
-  
+
   .footerLink {
     font-size: var(--font-size-xs);
   }
-  
+
   .footerTechIcon {
     width: 24px;
     height: 24px;
   }
-} 
+}

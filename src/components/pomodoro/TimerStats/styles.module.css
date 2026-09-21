@@ -83,26 +83,26 @@
   .timerStats {
     margin-top: var(--spacing-xl);
   }
-  
+
   .statsTitle {
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
   }
-  
+
   .statCard {
     padding: var(--spacing-md);
     min-height: 70px;
   }
-  
+
   .statIcon {
     width: 40px;
     height: 40px;
   }
-  
+
   .statValue {
     font-size: var(--font-size-xl);
   }
@@ -113,21 +113,21 @@
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
   }
-  
+
   .statCard {
     padding: var(--spacing-sm);
     min-height: 60px;
   }
-  
+
   .statIcon {
     width: 36px;
     height: 36px;
   }
-  
+
   .statValue {
     font-size: var(--font-size-lg);
   }
-  
+
   .statLabel {
     font-size: var(--font-size-xs);
   }
@@ -138,18 +138,31 @@
     grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
-  
+
   .statCard {
     padding: var(--spacing-sm);
     min-height: 60px;
   }
-  
+
   .statIcon {
     width: 32px;
     height: 32px;
   }
-  
+
   .statValue {
     font-size: var(--font-size-base);
   }
+}
+
+.statValue,
+.statLabel {
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+}
+.statsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+.statCard {
+  min-width: 0;
 }

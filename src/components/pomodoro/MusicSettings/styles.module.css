@@ -1,3 +1,11 @@
+.settingsHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
 .settingsButton {
   font-size: var(--font-size-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -21,7 +29,7 @@
 .modalContainer {
   width: 100%;
   max-width: 600px;
-  max-height: 90vh;
+  max-height: calc(100dvh - 2rem);
   overflow-y: auto;
   animation: slideIn 0.3s ease-out;
 }
@@ -260,23 +268,23 @@
   .modalOverlay {
     padding: var(--spacing-sm);
   }
-  
+
   .settingsCard {
     padding: var(--spacing-lg);
   }
-  
+
   .settingsContent {
     gap: var(--spacing-lg);
   }
-  
+
   .modalHeader {
     margin-bottom: var(--spacing-md);
   }
-  
+
   .settingsTitle {
     font-size: var(--font-size-xl);
   }
-  
+
   .previewIframe {
     height: 150px;
   }
@@ -286,34 +294,34 @@
   .settingsCard {
     padding: var(--spacing-md);
   }
-  
+
   .settingsContent {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .modalActions {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
-  
+
   .settingsActions {
     flex-direction: column;
     gap: var(--spacing-sm);
     align-items: stretch;
   }
-  
+
   .actionButtons {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .closeButton {
     width: 36px;
     height: 36px;
     padding: calc(var(--spacing-xs) * 0.75);
   }
-  
+
   .previewIframe {
     height: 120px;
   }
@@ -323,25 +331,25 @@
   .modalOverlay {
     padding: var(--spacing-xs);
   }
-  
+
   .settingsCard {
     padding: var(--spacing-sm);
   }
-  
+
   .settingsContent {
     gap: var(--spacing-sm);
   }
-  
+
   .settingsTitle {
     font-size: var(--font-size-lg);
   }
-  
+
   .closeButton {
     width: 32px;
     height: 32px;
     padding: calc(var(--spacing-xs) * 0.5);
   }
-  
+
   .previewIframe {
     height: 100px;
   }
