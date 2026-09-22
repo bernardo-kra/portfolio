@@ -1,9 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { resolve } from 'path'
+import { copyFile, mkdir } from 'node:fs/promises'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'portfolio-route-entry',
+      apply: 'build',
+      async writeBundle(options) {
+        const outputDirectory = resolve(options.dir || 'dist')
+        const routeDirectory = resolve(outputDirectory, 'portfolio')
+        await mkdir(routeDirectory, { recursive: true })
+        await copyFile(
+          resolve(outputDirectory, 'index.html'),
+          resolve(routeDirectory, 'index.html')
+        )
+      },
+    },
+  ],
   base: '/',
   build: {
     rollupOptions: {

@@ -68,6 +68,17 @@ npm run preview
 
 Verifique a home e as rotas diretas. O arquivo `public/404.html` faz o fallback das rotas no GitHub Pages.
 
+O build também gera `dist/portfolio/index.html` com o mesmo HTML da entrada
+principal. Isso permite servir a aplicação atual quando o host redireciona
+`/portfolio` para `/portfolio/`. Antes de iniciar o React, a entrada remove a
+barra final da URL com `history.replaceState`, preservando parâmetros e âncoras
+sem provocar outro redirecionamento HTTP.
+
+Se `/portfolio/` continuar entregando uma publicação antiga após o deploy,
+verifique se há um GitHub Pages de projeto ativo no repositório `portfolio`
+ocupando esse caminho. Nesse caso, desative essa publicação antiga e mantenha
+o site principal no repositório `bernardo-kra.github.io`.
+
 ## Observações
 
 - Não use `/portfolio/` como base enquanto o destino for o domínio raiz.
