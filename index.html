@@ -1,63 +1,41 @@
-<!doctype html >
- <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8"/><link rel="icon" type="image/png" href="/manProgramming.png"/>
-        <link rel="apple-touch-icon" href="/my.png"/>
-        <link rel="manifest" href="/site.webmanifest"/>
-        <meta name="theme-color" content="#0b0b0b"/>
-        <meta name="color-scheme" content="dark light"/>
-        <link rel="canonical" href="https://bernardo-kra.github.io/"/>
-        <meta name="description" content="Portfólio de Bernardo Kra. Desenvolvedor React, projetos, experiências e contato."/>
-        <meta name="author" content="Bernardo Kra"/>
-        <meta name="robots" content="index, follow"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="Bernardo Kra — Portfólio React"/>
-        <meta property="og:description" content="Desenvolvedor React. Projetos, experiências e contato."/>
-        <meta property="og:url" content="https://bernardo-kra.github.io/"/>
-        <meta property="og:image" content="/bernardo-kra.jpg"/>
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content="Bernardo Kra — Portfólio React"/>
-        <meta name="twitter:description" content="Desenvolvedor React. Projetos, experiências e contato."/>
-        <meta name="twitter:image" content="/bernardo-kra.jpg"/>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Bernardo Kraczkowski</title>
+    <script>
+        // Single Page Apps for GitHub Pages
+        // MIT License
+        // https://github.com/rafgraph/spa-github-pages
+        // This script takes the current url and converts the path and query
+        // string into just a query string, and then redirects the browser
+        // to the new url with only a query string and hash fragment,
+        // e.g. https://www.foo.tld/one/two?a=b&c=d#qwe, becomes
+        // https://www.foo.tld/?/one/two&a=b~and~c=d#qwe
+        // Note: this 404.html file must be at least 512 bytes for it to work
+        // with Internet Explorer (it is currently > 512 bytes)
 
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTSRG7HEGS"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+        // If you're creating a Project Pages site and NOT using a custom domain,
+        // then set pathSegmentsToKeep to 1 (enterprise users may need to set it to > 1).
+        // This way the code will only replace the route part of the path, and not
+        // the real directory in which the app resides, for example:
+        // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
+        // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
+        // Otherwise, leave pathSegmentsToKeep as 0.
+        var pathSegmentsToKeep = 0;
 
-          gtag('config', 'G-TTSRG7HEGS');
-        </script>
-
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Bernardo Kra — Portfólio React</title>
-      <script type="module" crossorigin src="/assets/index-DHPAOE5Q.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-Dl-JeTwr.css">
-    </head>
-    <body>
-        <div id="root"></div>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('img:not([loading])').forEach(function(img) {
-              img.setAttribute('loading', 'lazy')
-            })
-          })
-        </script>
-        <script>
-            (function(l) {
-                if (l.search[1] === '/' ) {
-                    var decoded = l.search.slice(1).split('&').map(function(s) { 
-                        return s.replace(/~and~/g, '&')
-                    }).join('?');
-                    window.history.replaceState(null, null,
-                        l.pathname.slice(0, -1) + decoded + l.hash
-                    );
-                }
-            }(window.location))
-        </script>
-    </body>
+        var l = window.location;
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
+    </script>
+</head>
+<body>
+    <p>Redirecionando...</p>
+</body>
 </html>
