@@ -14,7 +14,7 @@ const pt = {
     artStudy:
       'Algoritmos, padrões visuais e interação com Canvas para transformar código em imagem.',
     dockStudy:
-      'Um laboratório visual de luz, profundidade e interação feito com CSS.',
+      'Um terminal de espionagem steampunk com mapa vetorial, sintonia de sinais e uma missão interativa.',
     skipContent: 'Pular para o conteúdo',
     pageTitle: 'Desenvolvedor Frontend React e TypeScript',
     homeCta: 'Experiência profissional. Curiosidade em movimento.',
@@ -298,71 +298,6 @@ const pt = {
   explorePortfolio: 'Explorar portfólio',
   viewLanding: 'Ver landing',
   downloadCV: 'Baixar CV',
-  experimental3dCards: {
-    runway: {
-      title: 'Pista luminosa',
-      text: 'Sequencia de luzes amarelas e vermelhas para guiar a entrada.',
-      foot: 'Canal 01',
-    },
-    terminal: {
-      title: 'Terminal retro',
-      text: 'Estacao de controle com brilho verde e interface compacta.',
-      foot: 'Console 4B',
-    },
-    alerts: {
-      title: 'Alertas ativos',
-      text: 'Tubos vermelhos e sinais piscando para indicar riscos.',
-      foot: 'Nivel medio',
-    },
-  },
-  experimental3d: {
-    brandText: 'NEON BAY / DOCK 07',
-    status: {
-      hangarActive: 'Hangar ativo',
-      portalOpen: 'Portal aberto',
-    },
-    hero: {
-      title: 'Controle de acesso para o piso luminoso.',
-      copy: 'Um painel inspirado na baia industrial do video: luzes de sinalizacao no chao, metal frio e anuncios de status em tempo real. Clique nos controles para energizar, alternar modo e testar sinais do dock.',
-    },
-    buttons: {
-      openPortal: 'Abrir portal',
-      closePortal: 'Fechar portal',
-      modeInspect: 'Modo inspecao',
-      modeLive: 'Modo live',
-    },
-    tags: ['Luzes neon', 'Metal escuro', 'Ambiente subterraneo'],
-    panel: {
-      title: 'Status da baia',
-      live: 'Operacional',
-      inspect: 'Inspecao',
-    },
-    stats: {
-      energy: 'Energia',
-      door: 'Porta',
-      doorOpen: 'Aberta',
-      doorLocked: 'Travada',
-      signals: 'Sinais',
-      signalOk: 'OK',
-      signalAlert: 'Alerta',
-      signalRisk: 'Risco',
-      control: 'Controle',
-      controlManual: 'Manual',
-      controlAudit: 'Auditoria',
-    },
-    controls: {
-      energy: 'Energia',
-      signal: 'Sinal',
-    },
-  },
-  experimental3dRibbon: [
-    'PISO ATIVO •',
-    'LUZES DE GUIA •',
-    'DOCK 07 LIBERADO •',
-    'METAL INDUSTRIAL •',
-    'PORTAL EM ESPERA •',
-    'ACESSO CONTROLADO •',
-  ],
 }
 
 export default pt

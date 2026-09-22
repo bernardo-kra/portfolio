@@ -1,5 +1,7 @@
 # Revisão de UX
 
+Atualização Neon Bay: a rota `/experimental3d` agora usa um terminal de espionagem steampunk em SVG/CSS, com missão de sintonia e interceptação. As referências abaixo à cena antiga (vídeo, portal, energia e sinais) são históricas. O diagnóstico e o roteiro atual de validação estão em [Experimental3D/README.md](./src/Pages/Experimental3D/README.md).
+
 ## Direção
 
 O site apresenta a trajetória profissional e um laboratório de estudos. Os textos devem levar a evidências reais: experiência, código, demonstrações e currículo. Não usar depoimentos fictícios, métricas sem fonte ou promessas de resultado.

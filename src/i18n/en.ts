@@ -13,7 +13,8 @@ const en = {
       'State, focus cycles and task management in a React application.',
     artStudy:
       'Algorithms, visual patterns and Canvas interaction that turn code into images.',
-    dockStudy: 'A visual lab for light, depth and interaction built with CSS.',
+    dockStudy:
+      'A steampunk spy terminal with a vector map, signal tuning and an interactive mission.',
     skipContent: 'Skip to content',
     pageTitle: 'React and TypeScript Frontend Developer',
     homeCta: 'Professional experience. Curiosity in motion.',
@@ -288,71 +289,6 @@ const en = {
   explorePortfolio: 'Explore portfolio',
   viewLanding: 'View landing',
   downloadCV: 'Download CV',
-  experimental3dCards: {
-    runway: {
-      title: 'Guidance floor',
-      text: 'Yellow and red light sequence to guide entry.',
-      foot: 'Channel 01',
-    },
-    terminal: {
-      title: 'Retro terminal',
-      text: 'Control station with green glow and compact interface.',
-      foot: 'Console 4B',
-    },
-    alerts: {
-      title: 'Active alerts',
-      text: 'Red tubes and blinking signals indicate risk.',
-      foot: 'Medium level',
-    },
-  },
-  experimental3d: {
-    brandText: 'NEON BAY / DOCK 07',
-    status: {
-      hangarActive: 'Hangar active',
-      portalOpen: 'Portal open',
-    },
-    hero: {
-      title: 'Access control for the luminous floor.',
-      copy: 'A panel inspired by the industrial bay: floor guidance lights, cold metal, and real-time status. Use the controls to power on, switch modes, and test dock signals.',
-    },
-    buttons: {
-      openPortal: 'Open portal',
-      closePortal: 'Close portal',
-      modeInspect: 'Inspect mode',
-      modeLive: 'Live mode',
-    },
-    tags: ['Neon lights', 'Dark metal', 'Underground bay'],
-    panel: {
-      title: 'Bay status',
-      live: 'Operational',
-      inspect: 'Inspection',
-    },
-    stats: {
-      energy: 'Energy',
-      door: 'Door',
-      doorOpen: 'Open',
-      doorLocked: 'Locked',
-      signals: 'Signals',
-      signalOk: 'OK',
-      signalAlert: 'Alert',
-      signalRisk: 'Risk',
-      control: 'Control',
-      controlManual: 'Manual',
-      controlAudit: 'Audit',
-    },
-    controls: {
-      energy: 'Energy',
-      signal: 'Signal',
-    },
-  },
-  experimental3dRibbon: [
-    'ACTIVE FLOOR •',
-    'GUIDANCE LIGHTS •',
-    'DOCK 07 CLEARED •',
-    'INDUSTRIAL METAL •',
-    'PORTAL ON STANDBY •',
-    'CONTROLLED ACCESS •',
-  ],
 }
 
 export default en

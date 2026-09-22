@@ -242,15 +242,17 @@ const ModernHomePage: React.FC = () => {
     },
     {
       id: 'experimental3d',
-      title: 'Dock 07',
-      subtitle: 'Experimento 3D',
+      title: 'Neon Bay',
+      subtitle: lang === 'pt' ? 'Ficção interativa' : 'Interactive fiction',
       description:
-        'Interface cinematografica com luzes, camadas e interacao ao vivo.',
+        lang === 'pt'
+          ? 'Um terminal de espionagem steampunk. Explore a baía, sintonize sinais e descubra três mensagens.'
+          : 'A steampunk spy terminal. Explore the bay, tune signals and uncover three messages.',
       icon: 'NEON',
       color: '#f97316',
       route: '/experimental3d',
-      features: ['Luzes', 'Parallax', 'Atmosfera', 'Interacao'],
-      previewImage: '/preview-fullpage-experimental3d.png',
+      features: ['SVG', 'React', 'TypeScript', 'UX'],
+      previewImage: '/neon-bay-preview.svg',
     },
   ]
 

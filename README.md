@@ -26,17 +26,18 @@ Consulte [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) para configurar os arqui
 
 ## Scripts
 
-| Comando                | Finalidade                 |
-| ---------------------- | -------------------------- |
-| `npm run dev`          | Inicia o frontend          |
-| `npm run dev:backend`  | Inicia o backend           |
-| `npm run dev:full`     | Inicia os dois processos   |
-| `npm run build`        | Compila o frontend         |
-| `npm run build:full`   | Compila frontend e backend |
-| `npm run lint`         | Executa a análise estática |
+| Comando                | Finalidade                              |
+| ---------------------- | --------------------------------------- |
+| `npm run dev`          | Inicia o frontend                       |
+| `npm run dev:backend`  | Inicia o backend                        |
+| `npm run dev:full`     | Inicia os dois processos                |
+| `npm run build`        | Compila o frontend                      |
+| `npm run build:full`   | Compila frontend e backend              |
+| `npm run lint`         | Executa a análise estática              |
 | `npm run test:tasks`   | Testa exclusão e restauração de tarefas |
-| `npm run format:check` | Verifica a formatação      |
-| `npm run preview`      | Serve o build localmente   |
+| `npm run test:neon`    | Testa a missão e a sintonia do Neon Bay |
+| `npm run format:check` | Verifica a formatação                   |
+| `npm run preview`      | Serve o build localmente                |
 
 ## Estrutura
 
@@ -55,6 +56,8 @@ src/services/         Clientes de serviços
 As rotas principais são `/`, `/portfolio`, `/agency`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d` e `/admin/chat`.
 
 O estudo Forma (`/agency`) é uma agência conceitual inspirada em referências de design editorial. As fotografias são servidas localmente; os créditos estão em [public/images/forma/CREDITS.md](./public/images/forma/CREDITS.md). Consulte [UX_REVIEW.md](./UX_REVIEW.md) para a revisão de interface e os testes manuais pendentes.
+
+O Neon Bay (`/experimental3d`) é uma simulação de terminal de espionagem steampunk. A rota foi preservada, mas a experiência utiliza SVG e CSS sem vídeo ou motor 3D. Consulte [o diagnóstico e o roteiro de testes](./src/Pages/Experimental3D/README.md).
 
 ## Deploy
 

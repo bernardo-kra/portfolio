@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520">
+  <rect width="800" height="520" fill="#0b1210"/>
+  <g font-family="monospace">
+    <text x="40" y="55" fill="#d2ab79" font-size="17" letter-spacing="5">NEON BAY / 07</text>
+    <text x="40" y="91" fill="#a2ada6" font-size="10" letter-spacing="3">INTELLIGENCE BUREAU</text>
+    <rect x="40" y="125" width="465" height="310" rx="5" fill="#121c19" stroke="#2b3834"/>
+    <g fill="none" stroke="#4c6754">
+      <path d="M41 185h80v35h95v-45h75v60h95v-38h118M41 390h90v-30h150v42h110v-55h112"/>
+      <path d="M139 220v88h30v-88m72-45v99h32v-99m135-40v83h27v-83"/>
+      <circle cx="273" cy="280" r="102"/><circle cx="273" cy="280" r="63"/>
+      <path d="M163 280h220M273 171v218" opacity=".4"/>
+      <path d="m176 335 91-100 139 68" stroke="#d2ab79" stroke-dasharray="4 7"/>
+    </g>
+    <g fill="#a8ebc4"><circle cx="176" cy="335" r="7"/><circle cx="267" cy="235" r="7"/><circle cx="406" cy="303" r="7"/></g>
+    <rect x="525" y="125" width="235" height="310" rx="5" fill="#121c19" stroke="#2b3834"/>
+    <text x="547" y="161" fill="#d2ab79" font-size="11">ANALOG RECEIVER</text>
+    <text x="547" y="212" fill="#e5e8de" font-size="22">Dock 07</text>
+    <text x="547" y="283" fill="#eee1ba" font-size="46">88.0</text>
+    <text x="682" y="283" fill="#d2ab79" font-size="13">MHz</text>
+    <path d="M547 309h191" stroke="#a8ebc4" stroke-width="3"/>
+    <rect x="547" y="355" width="191" height="43" rx="3" fill="#a8ebc4"/>
+    <text x="570" y="381" fill="#102219" font-size="12">INTERCEPT SIGNAL</text>
+    <text x="40" y="478" fill="#a2ada6" font-size="10" letter-spacing="2">LOCAL SIMULATION / STEAMPUNK SIGNALS</text>
+  </g>
+</svg>

@@ -15,7 +15,7 @@ const RouteEffects = () => {
       '/pomodoro': t.pomodoroTitle,
       '/generative': t.generativeTitle,
       '/landing': t.landingTitle,
-      '/experimental3d': 'Dock 07',
+      '/experimental3d': 'Neon Bay — Intelligence Bureau',
       '/agency': 'Forma — Creative Studio',
     }
     const route = pathname.replace(/\/$/, '') || '/'

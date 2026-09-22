@@ -44,9 +44,9 @@ const Portfolio = () => {
     },
     {
       route: '/experimental3d',
-      title: 'Dock 07',
+      title: 'Neon Bay',
       text: t.recruiter.dockStudy,
-      tag: 'CSS / INTERACTION',
+      tag: 'SVG / INTERACTION',
       visual: '07',
       kind: 'dock',
     },

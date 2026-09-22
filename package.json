@@ -14,6 +14,7 @@
     "build:full": "npm run build && npm run build:backend",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test:tasks": "node --experimental-strip-types --test tests/taskHistory.test.mjs",
+    "test:neon": "node --experimental-strip-types --test tests/neonConsole.test.mjs tests/neonRender.test.mjs",
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
