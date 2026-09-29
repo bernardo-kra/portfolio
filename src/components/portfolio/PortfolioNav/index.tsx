@@ -150,7 +150,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                 >
                   <span className={styles.userName}>
-                    Olá, {user?.firstName}
+                    {lang === 'pt' ? 'Olá' : 'Hello'}, {user?.firstName}
                   </span>
                   <span
                     className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}
@@ -184,7 +184,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         }}
                       >
                         <span className={styles.dropdownIcon}>👤</span>
-                        Meu Perfil
+                        {lang === 'pt' ? 'Meu Perfil' : 'My Profile'}
                       </button>
 
                       <button
@@ -194,7 +194,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         }}
                       >
                         <span className={styles.dropdownIcon}>⚙️</span>
-                        Configurações
+                        {lang === 'pt' ? 'Configurações' : 'Settings'}
                       </button>
 
                       {user?.role === 'admin' && (
@@ -220,7 +220,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         }}
                       >
                         <span className={styles.dropdownIcon}>🚪</span>
-                        Sair
+                        {lang === 'pt' ? 'Sair' : 'Sign out'}
                       </button>
                     </div>
                   </div>
@@ -242,7 +242,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
         <button
           className={styles.mobileMenuToggle}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
+          aria-label={lang === 'pt' ? 'Alternar menu' : 'Toggle menu'}
           aria-expanded={isMobileMenuOpen}
           aria-controls="portfolio-mobile-menu"
         >

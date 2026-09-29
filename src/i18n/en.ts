@@ -1,4 +1,61 @@
 const en = {
+  education: {
+    title: 'Academic',
+    highlight: 'Education',
+    degreeLabel: 'Undergraduate Degree',
+    degree: 'Systems Analysis and Development',
+    institution:
+      'Federal Institute of Education, Science and Technology of Rio Grande do Sul',
+    campus: 'Bento Gonçalves Campus',
+    coursesLabel: 'Additional Courses',
+    courses: [
+      {
+        title: 'React + Redux: Fundamentals and 2 Apps from Scratch',
+        platform: 'Cod3r',
+        duration: '54.5h',
+        lessons: '447 lessons',
+        description:
+          'React and Redux through practical application development.',
+      },
+      {
+        title: 'Complete Next.js and React + TailwindCSS + Firebase',
+        platform: 'Cod3r',
+        duration: '28.5h',
+        lessons: '230 lessons',
+        description: 'Next.js, React, TailwindCSS and Firebase.',
+      },
+      {
+        title: 'React 19 and Next.js 15 (App Router, Server Actions, Tailwind)',
+        platform: 'Luiz Otávio Miranda',
+        duration: '83.5h',
+        lessons: '386 lessons',
+        description:
+          'React 19 and Next.js 15 with App Router and Server Actions.',
+      },
+      {
+        title: 'JavaScript: ES6+, OOP, Promises, Async/Await, Axios',
+        platform: 'Geek University',
+        duration: '27h',
+        lessons: '110 lessons',
+        description: 'JavaScript ES6+, OOP and asynchronous requests.',
+      },
+      {
+        title:
+          'Full JavaScript Stack: React, Next, Node, Vue, jQuery, Webpack, MySQL',
+        platform: 'Cod3r',
+        duration: '89h',
+        lessons: '641 lessons',
+        description: 'Full JavaScript stack: frontend, backend and databases.',
+      },
+      {
+        title: 'Complete Java: Spring Boot, MongoDB, Hibernate, JPA, JavaFX',
+        platform: 'Cod3r',
+        duration: '90h',
+        lessons: 'Complete course',
+        description: 'Java, Spring Boot and related technologies.',
+      },
+    ],
+  },
   recruiter: {
     eyebrow: 'Frontend · experience & experimentation',
     summary:

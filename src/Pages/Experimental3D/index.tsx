@@ -1,270 +1,111 @@
 import { useEffect, useReducer, useRef, useState } from 'react'
-import type { CSSProperties, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
-  ArrowUpRight,
+  ArrowRight,
   Check,
   ChevronRight,
-  Compass,
-  Crosshair,
-  Maximize2,
-  Pause,
-  Play,
+  Cpu,
+  FileText,
+  Folder,
+  HardDrive,
+  KeyRound,
+  LockKeyhole,
+  Network,
   Radio,
   RotateCcw,
-  ScanLine,
-  Settings2,
+  ShieldCheck,
   Terminal,
-  Volume2,
-  VolumeX,
-  X,
+  Unplug,
+  Zap,
 } from 'lucide-react'
 import { useI18n } from '@src/i18n'
-import { profile } from '@src/config/profile'
-import SectorMap from './components/SectorMap'
-import SignalScope from './components/SignalScope'
+import SignalConsole from './SignalConsole'
 import {
-  consoleReducer,
-  createConsoleState,
-  sectors,
-  signalQuality,
-} from './consoleState'
-import type { SectorId } from './consoleState'
-import { parseCommand } from './commands'
-import { consoleCopy } from './copy'
-import { cinematicCopy } from './cinematicCopy'
-import { useConsoleAudio } from './useConsoleAudio'
-import styles from './styles.module.css'
+  createMissionState,
+  gateCodes,
+  missionReducer,
+  requiredRoutes,
+} from './missionState'
+import type { MissionFile } from './missionState'
+import { missionCopy } from './missionCopy'
+import GateCamera from './components/GateCamera'
+import styles from './mission.module.css'
 
-type Feedback =
-  | 'invalid'
-  | 'busy'
-  | 'needScan'
-  | 'needSignal'
-  | 'already'
-  | 'started'
-  | 'accepted'
-  | 'cancelled'
-  | 'commandHint'
+const files: { id: MissionFile; name: string; size: string; date: string }[] = [
+  {
+    id: 'manifest',
+    name: 'CARGO_MANIFEST.log',
+    size: '24.8 KB',
+    date: '23:04:12',
+  },
+  {
+    id: 'personnel',
+    name: 'NIGHT_SHIFT.dat',
+    size: '8.2 KB',
+    date: '23:11:09',
+  },
+  {
+    id: 'maintenance',
+    name: 'RELAY_PROTOCOL.txt',
+    size: '2.1 KB',
+    date: '23:17:42',
+  },
+  { id: 'blacktide', name: 'BLACK_TIDE.nb', size: '77.0 KB', date: '23:59:07' },
+]
+const letters = ['A', 'B', 'C']
 
 export default function Experimental3D() {
   const { lang, setLang } = useI18n()
-  const copy = consoleCopy[lang]
-  const cinema = cinematicCopy[lang]
-  const [state, dispatch] = useReducer(
-    consoleReducer,
+  const copy = missionCopy[lang]
+  const [mission, dispatch] = useReducer(
+    missionReducer,
     undefined,
-    createConsoleState
+    createMissionState
   )
-  const [reducedMotion, setReducedMotion] = useState(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [code, setCode] = useState('')
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const extractionRef = useRef<HTMLButtonElement>(null)
+  const previousPhase = useRef(mission.phase)
+  const fileIndex = files.findIndex((file) => file.id === mission.file)
+  const selectedFile = files[fileIndex]
+  const linked = mission.routes.every(
+    (value, index) => value === requiredRoutes[index]
   )
-  const [effectsEnabled, setEffectsEnabled] = useState(true)
-  const [visible, setVisible] = useState(() => !document.hidden)
-  const [immersive, setImmersive] = useState(false)
-  const [command, setCommand] = useState('')
-  const [feedback, setFeedback] = useState<Feedback>('commandHint')
-  const frequencyRef = useRef<HTMLInputElement>(null)
-  const messageRef = useRef<HTMLParagraphElement>(null)
-  const operationId = useRef(0)
-  const commandOrigin = useRef(false)
-  const audio = useConsoleAudio()
+  const step =
+    mission.phase === 'server' ? 0 : mission.phase === 'signal' ? 1 : 2
 
   useEffect(() => {
-    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const syncMotion = () => setReducedMotion(preference.matches)
-    const syncVisibility = () => setVisible(!document.hidden)
-    preference.addEventListener('change', syncMotion)
-    document.addEventListener('visibilitychange', syncVisibility)
-    return () => {
-      preference.removeEventListener('change', syncMotion)
-      document.removeEventListener('visibilitychange', syncVisibility)
-    }
-  }, [])
-
-  const sector = sectors.find((item) => item.id === state.selected)!
-  const details = copy.sectors[state.selected]
-  const scanned = state.scanned.includes(state.selected)
-  const captured = state.captured.includes(state.selected)
-  const quality = scanned ? signalQuality(state.frequency, sector.frequency) : 0
-  const aligned = scanned && quality >= 84
-  const complete = state.captured.length === sectors.length
-  const nextSector = sectors.find((item) => !state.captured.includes(item.id))
-  const latest = state.events[0]
-  const operation = state.operation
-  const motion = effectsEnabled && !reducedMotion && visible
-  const phaseLabels =
-    operation?.kind === 'capture' ? cinema.capturePhases : cinema.scanPhases
+    if (previousPhase.current === mission.phase) return
+    previousPhase.current = mission.phase
+    headingRef.current?.focus({ preventScroll: true })
+    headingRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
+  }, [mission.phase])
 
   useEffect(() => {
-    if (!operation || !visible) return
-    if (!effectsEnabled || reducedMotion) {
-      dispatch({ type: 'finish', id: operation.id })
-      return
-    }
-    const timer = window.setTimeout(
-      () =>
-        dispatch({ type: 'advance', id: operation.id, stage: operation.stage }),
-      650
-    )
-    return () => window.clearTimeout(timer)
-  }, [operation, visible, effectsEnabled, reducedMotion])
+    if (mission.gates === 3) extractionRef.current?.focus()
+  }, [mission.gates])
 
-  useEffect(() => {
-    if (commandOrigin.current) return
-    const target =
-      latest.kind === 'capture'
-        ? messageRef.current
-        : latest.kind === 'scan' || latest.kind === 'assist'
-          ? frequencyRef.current
-          : null
-    target?.focus({ preventScroll: true })
-    if (latest.kind === 'capture')
-      target?.scrollIntoView({ block: 'nearest', behavior: 'instant' })
-  }, [latest])
-
-  const selectSector = (id: SectorId) => {
-    commandOrigin.current = false
-    audio.play('select')
-    dispatch({ type: 'select', sector: id })
+  const restart = () => {
+    setCode('')
+    dispatch({ type: 'reset' })
   }
-  const begin = (kind: 'scan' | 'capture'): Feedback => {
-    if (operation) return 'busy'
-    if ((kind === 'scan' && scanned) || (kind === 'capture' && captured))
-      return 'already'
-    if (kind === 'capture' && !scanned) return 'needScan'
-    if (kind === 'capture' && !aligned) return 'needSignal'
-    operationId.current += 1
-    dispatch({ type: 'begin', kind, id: operationId.current })
-    audio.play(kind)
-    return 'started'
-  }
-  const execute = (event: FormEvent) => {
-    event.preventDefault()
-    commandOrigin.current = true
-    const parsed = parseCommand(command)
-    if (!parsed) {
-      setFeedback('invalid')
-      return
-    }
-    if (
-      operation &&
-      !['cancel', 'reset', 'help', 'target'].includes(parsed.type)
-    ) {
-      setFeedback('busy')
-      return
-    }
-    setCommand('')
-    setFeedback('accepted')
-    switch (parsed.type) {
-      case 'help':
-        setFeedback('commandHint')
-        break
-      case 'scan':
-        setFeedback(begin('scan'))
-        break
-      case 'intercept':
-        setFeedback(begin('capture'))
-        break
-      case 'tune':
-        dispatch({ type: 'tune', frequency: parsed.frequency })
-        break
-      case 'assist':
-        if (!scanned) setFeedback('needScan')
-        else dispatch({ type: 'assist' })
-        break
-      case 'target':
-        dispatch({ type: 'select', sector: parsed.sector })
-        break
-      case 'cancel':
-        dispatch({ type: 'cancel' })
-        setFeedback('cancelled')
-        break
-      case 'reset':
-        dispatch({ type: 'reset' })
-        break
-    }
-  }
-  const step = captured
-    ? copy.stepDone
-    : !scanned
-      ? copy.stepScan
-      : aligned
-        ? copy.stepRead
-        : copy.stepTune
-  const hint = captured
-    ? copy.doneHint
-    : !scanned
-      ? copy.scanHint
-      : aligned
-        ? copy.readHint
-        : copy.tuneHint
 
   return (
-    <main
-      className={styles.console}
-      data-motion={motion ? 'on' : 'off'}
-      data-immersive={immersive}
-      data-busy={operation?.kind ?? 'idle'}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') setImmersive(false)
-      }}
-    >
-      <div className={styles.shell}>
-        <header className={styles.header}>
+    <div className={styles.mission}>
+      <div className={styles.frame}>
+        <header className={styles.topbar}>
           <Link to="/" className={styles.back}>
-            <ArrowLeft size={16} aria-hidden="true" />
-            <span>{copy.back}</span>
+            <ArrowLeft size={15} /> {copy.back}
           </Link>
-          <div className={styles.brand}>
-            <Compass size={30} aria-hidden="true" />
-            <span>
-              NEON BAY<small>SIGNAL INTELLIGENCE / VII</small>
-            </span>
-          </div>
-          <div className={styles.headerActions}>
-            <button
-              aria-label={
-                cinema.motion + ': ' + (motion ? cinema.off : cinema.on)
-              }
-              title={reducedMotion ? cinema.motionPreference : cinema.motion}
-              aria-pressed={effectsEnabled && !reducedMotion}
-              disabled={reducedMotion}
-              onClick={() => setEffectsEnabled((value) => !value)}
-            >
-              {motion ? (
-                <Pause size={16} aria-hidden="true" />
-              ) : (
-                <Play size={16} aria-hidden="true" />
-              )}
-            </button>
-            <button
-              aria-label={
-                cinema.sound + ': ' + (audio.enabled ? cinema.on : cinema.off)
-              }
-              title={audio.available ? cinema.sound : cinema.unavailable}
-              aria-pressed={audio.enabled}
-              disabled={!audio.available}
-              onClick={() => void audio.toggle()}
-            >
-              {audio.enabled ? (
-                <Volume2 size={16} aria-hidden="true" />
-              ) : (
-                <VolumeX size={16} aria-hidden="true" />
-              )}
-            </button>
-            <button
-              aria-label={immersive ? cinema.exitFocus : cinema.focus}
-              title={immersive ? cinema.exitFocus : cinema.focus}
-              aria-pressed={immersive}
-              onClick={() => setImmersive((value) => !value)}
-            >
-              {immersive ? (
-                <X size={16} aria-hidden="true" />
-              ) : (
-                <Maximize2 size={16} aria-hidden="true" />
-              )}
+          <span className={styles.wordmark}>
+            <span className={styles.brandMark}>A</span> ASTERION{' '}
+            <small>SYSTEMS</small>
+          </span>
+          <div className={styles.topActions}>
+            <button onClick={restart} title={copy.replayHint}>
+              <RotateCcw size={14} />
+              <span>{copy.restart}</span>
             </button>
             <button
               onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
@@ -274,426 +115,495 @@ export default function Experimental3D() {
             </button>
           </div>
         </header>
-        <section className={styles.intro} aria-labelledby="neon-title">
-          <div>
-            <p className={styles.eyebrow}>{cinema.classification}</p>
-            <h1 id="neon-title">
-              {cinema.operation}
-              <span aria-hidden="true">_</span>
-            </h1>
-            <p className={styles.introCopy}>{cinema.subtitle}</p>
-          </div>
-          <div className={styles.operationBadge}>
-            <span className={styles.statusDot} />
-            {copy.simulation}
-            <strong>NB—007</strong>
-            <span>STEAM / SIGNAL / SECRETS</span>
-          </div>
-        </section>
-        <div className={styles.workspace}>
-          <section className={styles.mapPanel} aria-labelledby="map-title">
-            <div className={styles.panelHeading}>
-              <h2 id="map-title">
-                <Crosshair size={16} aria-hidden="true" />
-                {cinema.network}
-              </h2>
-              <span>TACTICAL VIEW / 01</span>
-            </div>
-            <SectorMap
-              selected={state.selected}
-              captured={state.captured}
-              operation={operation}
-              motion={motion}
-              quality={quality}
-              onSelect={selectSector}
-            />
-            <div
-              className={styles.sectors}
-              role="group"
-              aria-label={copy.sector}
-            >
-              {sectors.map((item, index) => (
-                <button
-                  key={item.id}
-                  className={styles.sectorButton}
-                  aria-pressed={state.selected === item.id}
-                  onClick={() => selectSector(item.id)}
-                >
-                  <span className={styles.sectorNumber}>
-                    {state.captured.includes(item.id) ? (
-                      <Check size={17} aria-label={copy.captured} />
-                    ) : (
-                      '0' + (index + 1)
-                    )}
-                  </span>
-                  <span>
-                    <strong>{copy.sectors[item.id].name}</strong>
-                    <small>{copy.sectors[item.id].type}</small>
-                  </span>
-                  <ChevronRight size={13} aria-hidden="true" />
-                </button>
-              ))}
-            </div>
-            <div
-              className={styles.sequence}
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <div>
-                <span className={styles.eyebrow}>
-                  {operation ? cinema.sequence : cinema.tracking}
-                </span>
-                <strong>
-                  {operation
-                    ? phaseLabels[operation.stage]
-                    : complete
-                      ? cinema.extraction
-                      : details.name}
-                </strong>
-              </div>
-              {operation ? (
-                <>
-                  <span className={styles.sequenceCount}>
-                    0{operation.stage + 1}
-                    <small> / 03</small>
-                  </span>
-                  <progress
-                    max={3}
-                    value={operation.stage + 1}
-                    aria-label={cinema.sequence}
-                  />
-                  <div className={styles.sequenceActions}>
-                    <button onClick={() => dispatch({ type: 'cancel' })}>
-                      {cinema.cancel}
-                    </button>
-                    <button
-                      onClick={() =>
-                        dispatch({ type: 'finish', id: operation.id })
-                      }
-                    >
-                      {cinema.skip}
-                      <ChevronRight size={14} aria-hidden="true" />
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <span className={styles.sequenceCode}>
-                  {captured
-                    ? 'ARCHIVED'
-                    : scanned
-                      ? 'CHANNEL LOCK'
-                      : 'AWAITING SCAN'}
-                </span>
-              )}
-            </div>
-          </section>
-          <section className={styles.receiver} aria-labelledby="receiver-title">
-            <div className={styles.panelHeading}>
-              <h2 id="receiver-title">
-                <Radio size={16} aria-hidden="true" />
-                {copy.receiver}
-              </h2>
-              <span>{sector.code}</span>
-            </div>
-            <div className={styles.receiverBody}>
-              <div className={styles.receiverTitle}>
-                <div>
-                  <p className={styles.eyebrow}>{details.type}</p>
-                  <h3>{details.name}</h3>
-                </div>
-                <span
-                  className={styles.brassDial}
-                  style={
-                    {
-                      '--angle': (state.frequency - 80) * 6 - 120 + 'deg',
-                    } as CSSProperties
-                  }
-                  aria-hidden="true"
-                >
-                  <i />
-                </span>
-              </div>
-              <div className={styles.readout}>
-                <label htmlFor="neon-frequency">{copy.frequency}</label>
-                <div>
-                  <output htmlFor="neon-frequency">
-                    {state.frequency.toFixed(1)}
-                  </output>
-                  <span>MHz</span>
-                  <small>{scanned ? quality + '% LOCK' : 'NO LOCK'}</small>
-                </div>
-                <div className={styles.dial} aria-hidden="true">
-                  <span
-                    style={{ left: ((state.frequency - 80) / 40) * 100 + '%' }}
-                  />
-                </div>
-              </div>
-              <input
-                id="neon-frequency"
-                ref={frequencyRef}
-                className={styles.frequency}
-                type="range"
-                min="80"
-                max="120"
-                step="1"
-                value={state.frequency}
-                disabled={!!operation}
-                aria-valuetext={state.frequency + ' MHz'}
-                aria-describedby="tune-help"
-                onChange={(event) =>
-                  dispatch({
-                    type: 'tune',
-                    frequency: Number(event.target.value),
-                  })
-                }
-              />
-              <div className={styles.rangeLabels} aria-hidden="true">
-                <span>80.0 MHz</span>
-                <span>120.0 MHz</span>
-              </div>
-              <div className={styles.spectrum}>
-                <div>
-                  <span>{cinema.spectrum}</span>
-                  <strong>{scanned ? quality + '%' : '—'}</strong>
-                </div>
-                <SignalScope
-                  quality={quality}
-                  frequency={state.frequency}
-                  label={cinema.waveform}
-                />
-              </div>
-              <p id="tune-help" className={styles.tuneHelp}>
-                {scanned
-                  ? cinema.channel +
-                    ': ' +
-                    sector.frequency +
-                    ' MHz · ' +
-                    (aligned ? copy.locked : copy.tuneHint)
-                  : copy.scanHint}
-              </p>
-              <div className={styles.receiverActions}>
-                {captured ? (
-                  <div className={styles.captured}>
-                    <Check size={18} aria-hidden="true" />
-                    {copy.captured}
-                  </div>
-                ) : (
-                  <button
-                    className={styles.primary}
-                    disabled={!!operation || (scanned && !aligned)}
-                    onClick={() => {
-                      commandOrigin.current = false
-                      begin(scanned ? 'capture' : 'scan')
-                    }}
-                  >
-                    {scanned ? (
-                      <Radio size={18} aria-hidden="true" />
-                    ) : (
-                      <ScanLine size={18} aria-hidden="true" />
-                    )}
-                    {operation
-                      ? phaseLabels[operation.stage]
-                      : scanned
-                        ? copy.capture
-                        : copy.scan}
-                    <ChevronRight size={16} aria-hidden="true" />
-                  </button>
-                )}
-                {scanned && !captured && !aligned && (
-                  <button
-                    className={styles.assist}
-                    disabled={!!operation}
-                    onClick={() => {
-                      commandOrigin.current = false
-                      dispatch({ type: 'assist' })
-                    }}
-                  >
-                    <Settings2 size={15} aria-hidden="true" />
-                    {copy.assist}
-                  </button>
-                )}
-                {captured && nextSector && (
-                  <button
-                    className={styles.assist}
-                    onClick={() => selectSector(nextSector.id)}
-                  >
-                    {copy.next}
-                    <ArrowUpRight size={16} aria-hidden="true" />
-                  </button>
-                )}
-              </div>
-              <p className={styles.description}>{details.text}</p>
-            </div>
-          </section>
+        <div className={styles.sessionBar}>
+          <span>
+            <i className={styles.statusLight} /> {copy.simulation}
+          </span>
+          <span>
+            {copy.session} / NB-{String(mission.attempt).padStart(3, '0')}
+          </span>
         </div>
-        <section className={styles.mission} aria-labelledby="mission-title">
-          <div className={styles.missionMark} aria-hidden="true">
-            {complete ? <Check size={25} /> : '0' + (state.captured.length + 1)}
-          </div>
-          <div>
-            <p className={styles.eyebrow}>{copy.briefing}</p>
-            <h2 id="mission-title">{complete ? copy.complete : step}</h2>
-            <p>{complete ? copy.completeHint : hint}</p>
-          </div>
-          <div className={styles.progress}>
-            <span>{copy.progress}</span>
-            <strong>
-              {state.captured.length}
-              <small> / 03</small>
-            </strong>
-            <progress
-              max={3}
-              value={state.captured.length}
-              aria-label={copy.progress}
-            />
-          </div>
-        </section>
-        <div className={styles.bottomGrid}>
-          <section
-            className={styles.dossier}
-            aria-labelledby="dossier-title"
-            data-decoded={captured}
-          >
-            <div className={styles.panelHeading}>
-              <h2 id="dossier-title">{cinema.transmission}</h2>
-              <span>{sector.code} / ENIGMA</span>
-            </div>
-            <div className={styles.dossierBody}>
-              <div className={styles.cipher} aria-hidden="true">
-                {Array.from({ length: 12 }, (_, i) => (
-                  <span
-                    key={i}
-                    data-decoded={
-                      captured ||
-                      (operation?.kind === 'capture' &&
-                        i < (operation.stage + 1) * 4)
-                    }
-                  >
-                    {captured ||
-                    (operation?.kind === 'capture' &&
-                      i < (operation.stage + 1) * 4)
-                      ? ['DOCK', 'STEAM', 'BRASS', 'NIGHT'][i % 4]
-                      : ['7F2A', '■Δ07', '0X9F', 'Σ4B1', 'C8E3', '4D∷2'][
-                          (i + sectors.indexOf(sector)) % 6
-                        ]}
-                  </span>
-                ))}
-              </div>
-              <p className={styles.eyebrow}>
-                {captured ? details.clue : cinema.waiting}
-              </p>
-              <p
-                ref={messageRef}
-                tabIndex={-1}
-                className={captured ? styles.message : styles.empty}
-              >
-                {captured ? details.message : copy.empty}
-              </p>
-              {captured && (
-                <span className={styles.decodedStamp}>
-                  <Check size={13} aria-hidden="true" />
-                  {cinema.decoded}
-                </span>
-              )}
-            </div>
-          </section>
-          <section className={styles.log} aria-labelledby="log-title">
-            <div className={styles.panelHeading}>
-              <h2 id="log-title">
-                <Terminal size={15} aria-hidden="true" />
-                {copy.log}
-              </h2>
-              <span>LOCAL / CLI</span>
-            </div>
-            <ol>
-              {state.events.map((event) => (
-                <li key={event.sequence}>
-                  <span>{String(event.sequence).padStart(2, '0')}</span>
-                  <span>
-                    {copy.events[event.kind]}
-                    <small>{copy.sectors[event.sector].name}</small>
-                  </span>
-                  <Check size={12} aria-hidden="true" />
-                </li>
-              ))}
-            </ol>
-            <form className={styles.commandForm} onSubmit={execute}>
-              <label htmlFor="neon-command">
-                NB:~$
-                <span className={styles.announcement}>{cinema.command}</span>
-              </label>
-              <input
-                id="neon-command"
-                value={command}
-                onChange={(event) => setCommand(event.target.value)}
-                placeholder="help"
-                maxLength={80}
-                autoComplete="off"
-                spellCheck={false}
-                autoCapitalize="none"
-                aria-describedby="command-feedback"
-              />
-              <button type="submit" aria-label={cinema.send}>
-                <ChevronRight size={18} aria-hidden="true" />
-              </button>
-            </form>
-            <p
-              className={styles.commandFeedback}
-              id="command-feedback"
-              role="status"
-            >
-              {cinema[feedback]}
-            </p>
-          </section>
-        </div>
-        <div className={styles.utilities}>
-          <details className={styles.help}>
-            <summary>{copy.help}</summary>
-            <p>
-              {copy.helpText} {cinema.commandHint}
-            </p>
-          </details>
-          <button
-            className={styles.reset}
-            onClick={() => {
-              commandOrigin.current = false
-              dispatch({ type: 'reset' })
-              setFeedback('commandHint')
-            }}
-            title={copy.resetHint}
-          >
-            <RotateCcw size={14} aria-hidden="true" />
-            {copy.reset}
-          </button>
-        </div>
-        <p
-          className={styles.announcement}
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
+        <ol
+          className={styles.steps}
+          aria-label={lang === 'pt' ? 'Etapas da missão' : 'Mission stages'}
         >
-          {copy.events[latest.kind]}: {copy.sectors[latest.sector].name}.
-          {latest.kind === 'scan' ? ' ' + sector.frequency + ' MHz.' : ''}
-          {latest.kind === 'capture' ? ' ' + details.message : ''}
-          {complete ? ' ' + copy.complete : ''}
-        </p>
-        <footer className={styles.footer}>
-          <p>{copy.footer}</p>
-          <div>
-            <Link to="/">
-              {copy.explore}
-              <ArrowUpRight size={14} aria-hidden="true" />
-            </Link>
-            <a
-              href={profile.github + '/portfolio'}
-              target="_blank"
-              rel="noopener noreferrer"
+          {copy.phases.map((label, index) => (
+            <li
+              key={label}
+              data-active={step === index}
+              data-done={step > index || mission.phase === 'complete'}
+              aria-current={
+                step === index && mission.phase !== 'complete'
+                  ? 'step'
+                  : undefined
+              }
             >
-              {copy.source}
-            </a>
-          </div>
+              <span>
+                {step > index || mission.phase === 'complete' ? (
+                  <Check size={14} />
+                ) : (
+                  `0${index + 1}`
+                )}
+              </span>
+              {label}
+              <ChevronRight size={14} />
+            </li>
+          ))}
+        </ol>
+        {mission.phase === 'server' && (
+          <main className={styles.stage}>
+            <section className={styles.intro}>
+              <div>
+                <p className={styles.eyebrow}>{copy.eyebrow}</p>
+                <h1 ref={headingRef} tabIndex={-1}>
+                  {copy.title}
+                </h1>
+                <p className={styles.lead}>{copy.intro}</p>
+              </div>
+              <div className={styles.objective}>
+                <span>{copy.objective}</span>
+                <strong>{copy.objectiveText}</strong>
+                <small>ASTERION / PRIVATE ARCHIVE / VOL. 07</small>
+              </div>
+            </section>
+            <div className={styles.serverGrid}>
+              <aside className={styles.sidebar}>
+                <p className={styles.panelLabel}>
+                  <HardDrive size={14} /> {copy.folders}
+                </p>
+                <div className={styles.volume}>
+                  <Folder size={17} />
+                  <span>
+                    {copy.volume}
+                    <small>/srv/asterion/operations</small>
+                  </span>
+                  <span>04</span>
+                </div>
+                <div className={styles.volumeMuted}>
+                  <LockKeyhole size={15} /> {copy.archive}
+                  <small>OFFLINE</small>
+                </div>
+                <div className={styles.storage}>
+                  <span>
+                    VOL_07 <strong>68%</strong>
+                  </span>
+                  <div>
+                    <i />
+                  </div>
+                  <small>136 GB / 200 GB</small>
+                </div>
+                <div className={styles.rackHeader}>
+                  <span>{copy.rack}</span>
+                  <Cpu size={15} />
+                </div>
+                <div
+                  className={styles.rack}
+                  role="img"
+                  aria-label={copy.rackLabel}
+                >
+                  {['PWR', 'CORE', 'ARCH', 'COMM', 'BACKUP'].map(
+                    (label, index) => (
+                      <div className={styles.rackUnit} key={label}>
+                        <small>0{index + 1}</small>
+                        <span>
+                          {label}
+                          <i />
+                        </span>
+                        <b />
+                        <b />
+                        <em />
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className={styles.telemetry}>
+                  <span>{copy.telemetry}</span>
+                  <dl>
+                    <div>
+                      <dt>{copy.latency}</dt>
+                      <dd>
+                        12 <small>ms</small>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{copy.temp}</dt>
+                      <dd>
+                        32 <small>°C</small>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </aside>
+              <section
+                className={styles.archivePanel}
+                aria-labelledby="archive-title"
+              >
+                <div className={styles.panelHeading}>
+                  <h2 id="archive-title">
+                    <Folder size={16} />
+                    {copy.files}
+                  </h2>
+                  <span>04 OBJECTS</span>
+                </div>
+                <div className={styles.path}>
+                  <span>ASTERION</span>
+                  <ChevronRight size={12} />
+                  <span>VOL_07</span>
+                  <ChevronRight size={12} />
+                  <strong>OPERATIONS</strong>
+                </div>
+                <div
+                  className={styles.fileList}
+                  role="group"
+                  aria-label={copy.files}
+                >
+                  {files.map((file, index) => (
+                    <button
+                      className={styles.fileRow}
+                      key={file.id}
+                      aria-pressed={mission.file === file.id}
+                      onClick={() => dispatch({ type: 'file', file: file.id })}
+                    >
+                      <span className={styles.fileIcon}>
+                        {file.id === 'blacktide' ? (
+                          <Radio size={21} />
+                        ) : (
+                          <FileText size={21} />
+                        )}
+                      </span>
+                      <span className={styles.fileName}>
+                        <strong>{file.name}</strong>
+                        <small>{copy.fileNames[index]}</small>
+                      </span>
+                      <span className={styles.fileSize}>
+                        {file.size}
+                        <small>{file.date}</small>
+                      </span>
+                      <ChevronRight size={15} />
+                    </button>
+                  ))}
+                </div>
+                <p className={styles.fileHint}>{copy.inspectHint}</p>
+                <div
+                  className={styles.filePreview}
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <div className={styles.previewHeading}>
+                    <span>{copy.preview}</span>
+                    <small>
+                      {mission.file === 'blacktide' ? 'LEVEL 07' : 'INTERNAL'}
+                    </small>
+                  </div>
+                  <p className={styles.eyebrow}>{copy.fileKinds[fileIndex]}</p>
+                  <h3>{selectedFile.name}</h3>
+                  <p className={styles.documentText}>
+                    {copy.fileText[fileIndex]}
+                  </p>
+                  {mission.file === 'blacktide' ? (
+                    <>
+                      <span className={styles.connectionStatus}>
+                        <i className={styles.statusLight} />
+                        {copy.restricted}
+                      </span>
+                      <button
+                        className={styles.primary}
+                        onClick={() => dispatch({ type: 'connect' })}
+                      >
+                        {copy.connect}
+                        <ArrowRight size={17} />
+                      </button>
+                    </>
+                  ) : (
+                    <span className={styles.readonly}>
+                      <LockKeyhole size={13} />
+                      {copy.readOnly}
+                    </span>
+                  )}
+                  <div className={styles.documentSeal} aria-hidden="true">
+                    A / VII
+                  </div>
+                </div>
+              </section>
+            </div>
+            <section className={styles.sessionLog} aria-label={copy.log}>
+              <Terminal size={16} />
+              <span>{copy.log}</span>
+              <ol>
+                {copy.serverLogs
+                  .slice(0, mission.file === 'blacktide' ? 3 : 2)
+                  .map((line, index) => (
+                    <li key={line}>
+                      <span>0{index + 1}</span>
+                      {line}
+                      <Check size={12} />
+                    </li>
+                  ))}
+              </ol>
+            </section>
+            <details className={styles.help}>
+              <summary>{copy.help}</summary>
+              <p>{copy.helpText}</p>
+            </details>
+          </main>
+        )}
+        {mission.phase === 'signal' && (
+          <section className={styles.signalStage}>
+            <div className={styles.signalBrief}>
+              <Radio size={23} />
+              <div>
+                <p className={styles.eyebrow}>02 / SIGNAL INTELLIGENCE</p>
+                <h1 tabIndex={-1} ref={headingRef}>
+                  {copy.signalTitle}
+                </h1>
+                <p>{copy.signalText}</p>
+              </div>
+            </div>
+            <SignalConsole
+              key={mission.attempt}
+              onContinue={(captured) => dispatch({ type: 'signals', captured })}
+              onRestart={restart}
+            />
+          </section>
+        )}
+        {mission.phase === 'control' && (
+          <main className={styles.stage}>
+            <section className={styles.intro}>
+              <div>
+                <p className={styles.eyebrow}>{copy.controlEyebrow}</p>
+                <h1 ref={headingRef} tabIndex={-1}>
+                  {copy.controlTitle}
+                </h1>
+                <p className={styles.lead}>{copy.controlIntro}</p>
+              </div>
+              <div className={styles.objective}>
+                <span>{copy.keyring}</span>
+                <strong>
+                  <KeyRound size={17} /> 088 / 104 / 116
+                </strong>
+                <small>DOCK · BOILER · TOWER</small>
+              </div>
+            </section>
+            <div className={styles.controlGrid}>
+              <section className={styles.visualPanel}>
+                <div className={styles.panelHeading}>
+                  <h2>
+                    <ShieldCheck size={16} />
+                    {copy.surveillance}
+                  </h2>
+                  <span
+                    className={mission.isolated ? styles.green : styles.amber}
+                  >
+                    {mission.isolated ? copy.isolated : copy.live}
+                  </span>
+                </div>
+                <GateCamera
+                  gates={mission.gates}
+                  isolated={mission.isolated}
+                  label={copy.cameraLabel}
+                  title={copy.camera}
+                />
+                <div className={styles.isolation}>
+                  <p>
+                    {mission.isolated
+                      ? copy.isolatedText
+                      : copy.feedback.isolate}
+                  </p>
+                  <button
+                    className={styles.secondary}
+                    disabled={mission.isolated}
+                    onClick={() => dispatch({ type: 'isolate' })}
+                  >
+                    {mission.isolated ? (
+                      <Check size={16} />
+                    ) : (
+                      <Unplug size={16} />
+                    )}
+                    {mission.isolated ? copy.isolated : copy.isolate}
+                  </button>
+                </div>
+                <div className={styles.patchPanel}>
+                  <div className={styles.panelHeading}>
+                    <h2>
+                      <Network size={16} />
+                      {copy.patch}
+                    </h2>
+                    <span className={linked ? styles.green : styles.amber}>
+                      {linked ? 'ONLINE' : 'OFFLINE'}
+                    </span>
+                  </div>
+                  <p>{copy.patchHint}</p>
+                  <div className={styles.patchMatrix}>
+                    {mission.routes.map((destination, index) => (
+                      <button
+                        key={index}
+                        disabled={mission.gates > 0}
+                        onClick={() => dispatch({ type: 'route', index })}
+                        aria-label={`${copy.relay} ${letters[index]}. ${copy.destination}: ${letters[destination]}`}
+                        data-linked={destination === requiredRoutes[index]}
+                      >
+                        <small>
+                          {copy.relay} 0{index + 1}
+                        </small>
+                        <span>
+                          {letters[index]}
+                          <span className={styles.wire} />
+                          <Zap size={14} />
+                          {letters[destination]}
+                        </span>
+                        <em>
+                          {copy.destination} {letters[destination]} ↻
+                        </em>
+                      </button>
+                    ))}
+                  </div>
+                  <span className={linked ? styles.green : styles.amber}>
+                    {linked ? copy.linked : copy.unlinked}
+                  </span>
+                </div>
+              </section>
+              <section
+                className={styles.accessPanel}
+                aria-labelledby="access-title"
+              >
+                <div className={styles.panelHeading}>
+                  <h2 id="access-title">
+                    <LockKeyhole size={16} />
+                    {copy.access}
+                  </h2>
+                  <span>{mission.gates} / 03</span>
+                </div>
+                <ol className={styles.gateList}>
+                  {copy.gateNames.map((name, index) => (
+                    <li
+                      key={name}
+                      data-open={mission.gates > index}
+                      data-current={mission.gates === index}
+                    >
+                      <span>
+                        {mission.gates > index ? (
+                          <Check size={18} />
+                        ) : (
+                          <LockKeyhole size={18} />
+                        )}
+                      </span>
+                      <div>
+                        <small>GATE 0{index + 1}</small>
+                        <strong>{name}</strong>
+                      </div>
+                      <em>{mission.gates > index ? copy.open : copy.locked}</em>
+                    </li>
+                  ))}
+                </ol>
+                <div className={styles.keyring}>
+                  <h3>
+                    <KeyRound size={14} />
+                    {copy.keyring}
+                  </h3>
+                  {gateCodes.map((key, index) => (
+                    <div key={key}>
+                      <span>GATE 0{index + 1}</span>
+                      <strong>{Number(key)} MHz</strong>
+                      <code>{key}</code>
+                    </div>
+                  ))}
+                  <p>{copy.keyHint}</p>
+                </div>
+                {mission.gates < 3 ? (
+                  <form
+                    className={styles.authorization}
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                      dispatch({ type: 'gate', code })
+                      setCode('')
+                    }}
+                  >
+                    <label htmlFor="gate-code">
+                      {copy.code} / GATE 0{mission.gates + 1}
+                    </label>
+                    <div>
+                      <KeyRound size={19} />
+                      <input
+                        id="gate-code"
+                        value={code}
+                        inputMode="numeric"
+                        autoComplete="off"
+                        maxLength={3}
+                        placeholder="000"
+                        onChange={(event) =>
+                          setCode(event.target.value.replace(/\D/g, ''))
+                        }
+                        aria-describedby="gate-feedback gate-help"
+                      />
+                      <span>3 DIGITS</span>
+                    </div>
+                    <button
+                      className={styles.primary}
+                      type="submit"
+                      disabled={code.length !== 3}
+                    >
+                      {copy.unlock}
+                      <ArrowRight size={16} />
+                    </button>
+                    <p id="gate-help">{copy.gateHelp}</p>
+                  </form>
+                ) : (
+                  <div className={styles.extraction}>
+                    <ShieldCheck size={28} />
+                    <p>{copy.extractionReady}</p>
+                    <button
+                      className={styles.primary}
+                      onClick={() => dispatch({ type: 'extract' })}
+                      ref={extractionRef}
+                    >
+                      {copy.extraction}
+                      <ArrowRight size={17} />
+                    </button>
+                  </div>
+                )}
+                <p id="gate-feedback" className={styles.feedback} role="status">
+                  {copy.feedback[mission.feedback]}
+                </p>
+              </section>
+            </div>
+          </main>
+        )}
+        {mission.phase === 'complete' && (
+          <main className={styles.complete}>
+            <div className={styles.completeEmblem}>
+              <ShieldCheck size={48} />
+              <span>NB / 007</span>
+            </div>
+            <p className={styles.eyebrow}>{copy.completeEyebrow}</p>
+            <h1 ref={headingRef} tabIndex={-1}>
+              {copy.completeTitle}
+            </h1>
+            <p className={styles.lead}>{copy.completeText}</p>
+            <section className={styles.report} aria-label={copy.report}>
+              {copy.reportItems.map((item, index) => (
+                <div key={item}>
+                  <Check size={17} />
+                  <strong>{index === 0 ? '01' : '03'}</strong>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </section>
+            <button className={styles.primary} onClick={restart}>
+              <RotateCcw size={17} />
+              {copy.replay}
+              <ArrowRight size={17} />
+            </button>
+            <p className={styles.replayHint}>{copy.replayHint}</p>
+            <Link to="/">{copy.back} ↗</Link>
+          </main>
+        )}
+        <footer className={styles.footer}>
+          <span>{copy.footer}</span>
+          <span>
+            NB-OS 7.0 <i /> {copy.simulation}
+          </span>
         </footer>
       </div>
-    </main>
+    </div>
   )
 }

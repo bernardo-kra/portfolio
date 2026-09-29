@@ -44,7 +44,7 @@ test('SectorMap renders active and paused states without translation props', asy
       'complete terminal renders with its map, controls and commands',
       async () => {
         const { default: Experimental3D } = await server.ssrLoadModule(
-          '/src/Pages/Experimental3D/index.tsx'
+          '/src/Pages/Experimental3D/SignalConsole.tsx'
         )
         const { MemoryRouter } = await server.ssrLoadModule('react-router-dom')
         const previousWindow = Object.getOwnPropertyDescriptor(
@@ -83,6 +83,25 @@ test('SectorMap renders active and paused states without translation props', asy
             Object.defineProperty(globalThis, 'document', previousDocument)
           else Reflect.deleteProperty(globalThis, 'document')
         }
+      }
+    )
+    await t.test(
+      'mission starts in the corporate archive before the receiver',
+      async () => {
+        const { default: Mission } = await server.ssrLoadModule(
+          '/src/Pages/Experimental3D/index.tsx'
+        )
+        const { MemoryRouter } = await server.ssrLoadModule('react-router-dom')
+        const markup = renderToStaticMarkup(
+          createElement(
+            MemoryRouter,
+            null,
+            createElement(I18nProvider, null, createElement(Mission))
+          )
+        )
+        assert.match(markup, /BLACK_TIDE.nb/)
+        assert.match(markup, /Os segredos têm um endereço/)
+        assert.doesNotMatch(markup, /neon-command|neon-frequency|gate-code/)
       }
     )
   } finally {

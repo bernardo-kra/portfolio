@@ -57,7 +57,7 @@ As rotas principais são `/`, `/portfolio`, `/agency`, `/landing`, `/pomodoro`, 
 
 O estudo Forma (`/agency`) é uma agência conceitual inspirada em referências de design editorial. As fotografias são servidas localmente; os créditos estão em [public/images/forma/CREDITS.md](./public/images/forma/CREDITS.md). Consulte [UX_REVIEW.md](./UX_REVIEW.md) para a revisão de interface e os testes manuais pendentes.
 
-O Neon Bay (`/experimental3d`) é uma simulação de terminal de espionagem steampunk. A rota foi preservada, mas a experiência utiliza SVG e CSS sem vídeo ou motor 3D. Consulte [o diagnóstico e o roteiro de testes](./src/Pages/Experimental3D/README.md).
+O Neon Bay (`/experimental3d`) é uma missão de espionagem steampunk em três etapas: arquivo corporativo, interceptação de sinais e controle de portões, com extração e reinício completo. A rota foi preservada, mas a experiência utiliza SVG e CSS sem vídeo ou motor 3D. Consulte [o diagnóstico e o roteiro de testes](./src/Pages/Experimental3D/README.md).
 
 ## Deploy
 

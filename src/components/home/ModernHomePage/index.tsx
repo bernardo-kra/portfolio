@@ -30,6 +30,7 @@ type ProjectCardProps = {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+  const { lang } = useI18n()
   const previewRef = useRef<HTMLDivElement>(null)
   const { fit, position } = usePreviewFit(project.previewImage, previewRef)
 
@@ -59,7 +60,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           <div className={styles.cardMeta}>
             {project.isFeatured && (
               <span className={styles.featuredBadge}>
-                {project.featuredLabel ?? 'Recomendado'}
+                {project.featuredLabel ??
+                  (lang === 'pt' ? 'Recomendado' : 'Recommended')}
               </span>
             )}
             <div className={styles.cardBadge}>{project.subtitle}</div>
@@ -97,11 +99,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             <span className={styles.loaderDot} />
             <span className={styles.loaderDot} />
             <span className={styles.loaderDot} />
-            <span className={styles.previewText}>Carregando preview</span>
+            <span className={styles.previewText}>
+              {lang === 'pt' ? 'Carregando preview' : 'Loading preview'}
+            </span>
           </div>
           <div className={styles.previewImage} ref={previewRef} />
           {!project.previewImage && (
-            <div className={styles.previewFallback}>Preview indisponivel</div>
+            <div className={styles.previewFallback}>
+              {lang === 'pt' ? 'Preview indisponível' : 'Preview unavailable'}
+            </div>
           )}
         </div>
 
@@ -191,7 +197,12 @@ const ModernHomePage: React.FC = () => {
       icon: 'f.',
       color: '#267b48',
       route: '/agency',
-      features: ['Design', 'CSS Grid', 'Responsivo', 'UX'],
+      features: [
+        'Design',
+        'CSS Grid',
+        lang === 'pt' ? 'Responsivo' : 'Responsive',
+        'UX',
+      ],
       previewImage: '/images/forma/studio.webp',
     },
     {
@@ -202,10 +213,13 @@ const ModernHomePage: React.FC = () => {
       icon: 'DEV',
       color: 'var(--brand-orange)',
       route: '/portfolio',
-      features: ['Projetos', 'Experiencia', 'Habilidades', 'Contato'],
+      features:
+        lang === 'pt'
+          ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
+          : ['Projects', 'Experience', 'Skills', 'Contact'],
       previewImage: '/preview-fullpage-portfolio.png',
       isFeatured: true,
-      featuredLabel: 'Destaque',
+      featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
     },
     {
       id: 'pomodoro',
@@ -215,7 +229,10 @@ const ModernHomePage: React.FC = () => {
       icon: 'TIME',
       color: '#10b981',
       route: '/pomodoro',
-      features: ['Timer', 'Tarefas', 'Estatisticas', 'Musica'],
+      features:
+        lang === 'pt'
+          ? ['Timer', 'Tarefas', 'Estatísticas', 'Música']
+          : ['Timer', 'Tasks', 'Statistics', 'Music'],
       previewImage: '/preview-fullpage-pomodoro.png',
     },
     {
@@ -226,7 +243,10 @@ const ModernHomePage: React.FC = () => {
       icon: 'ART',
       color: '#8b5cf6',
       route: '/generative',
-      features: ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas'],
+      features:
+        lang === 'pt'
+          ? ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas']
+          : ['Algorithms', 'Patterns', 'Interactivity', 'Canvas'],
       previewImage: '/preview-fullpage-generative.png',
     },
     {
@@ -246,8 +266,8 @@ const ModernHomePage: React.FC = () => {
       subtitle: lang === 'pt' ? 'Ficção interativa' : 'Interactive fiction',
       description:
         lang === 'pt'
-          ? 'Um terminal de espionagem steampunk. Explore a baía, sintonize sinais e descubra três mensagens.'
-          : 'A steampunk spy terminal. Explore the bay, tune signals and uncover three messages.',
+          ? 'Uma missão cinematográfica: explore um servidor, intercepte sinais e abra os portões da baía.'
+          : 'A cinematic mission: explore a server, intercept signals and open the gates of the bay.',
       icon: 'NEON',
       color: '#f97316',
       route: '/experimental3d',
@@ -272,7 +292,9 @@ const ModernHomePage: React.FC = () => {
         <button
           className={styles.languageToggle}
           onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-          aria-label="Change language"
+          aria-label={
+            lang === 'pt' ? 'Mudar para inglês' : 'Switch to Portuguese'
+          }
         >
           {lang === 'pt' ? 'EN' : 'PT'}
         </button>
@@ -331,7 +353,9 @@ const ModernHomePage: React.FC = () => {
                       setLightBlown(false)
                     }}
                   >
-                    Passe o mouse para ativar a luz (movimento rapido apaga)
+                    {lang === 'pt'
+                      ? 'Passe o mouse para ativar a luz (movimento rápido apaga)'
+                      : 'Hover to turn on the light (fast movement turns it off)'}
                   </span>
                 </div>
               </div>
@@ -463,8 +487,10 @@ const ModernHomePage: React.FC = () => {
           color="muted"
           className={styles.copyright}
         >
-          © {new Date().getFullYear()} Bernardo Kraczkowski. Todos os direitos
-          reservados.
+          © {new Date().getFullYear()} Bernardo Kraczkowski.{' '}
+          {lang === 'pt'
+            ? 'Todos os direitos reservados.'
+            : 'All rights reserved.'}
         </Typography>
       </div>
 

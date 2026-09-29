@@ -2,6 +2,34 @@
 
 Ficção interativa em `/experimental3d`. A URL histórica foi preservada; não há motor 3D nem conexão com sistemas de espionagem reais.
 
+## Missão em três etapas
+
+1. **Arquivo Asterion:** explorar quatro documentos em um servidor corporativo
+   fictício. `RELAY_PROTOCOL.txt` contém a pista dos relés; selecionar
+   `BLACK_TIDE.nb` e abrir o receptor inicia a etapa de sinais.
+2. **Interceptação:** a planta e os instrumentos anteriores foram preservados.
+   Recuperar os três setores libera o botão de controle de acesso; o usuário
+   pode ler a última mensagem antes de continuar.
+3. **Controle de acesso:** isolar a vigilância, ajustar os relés para A → C,
+   B → A, C → B e abrir os portões em ordem com `088`, `104` e `116`.
+   As chaves recuperadas ficam visíveis, sem exigir memorização. Erros indicam
+   o requisito ausente e não retiram progresso. A matriz trava após o primeiro
+   portão para preservar a alimentação da passagem.
+
+Após os três portões, confirmar a extração exibe um relatório e a opção de
+repetir. Reiniciar em qualquer etapa ou usar `reset` no terminal limpa todos os
+estados, desmonta o receptor e inicia outra sessão no arquivo. Recarregar a
+rota também recomeça; mudar de idioma preserva o progresso. A missão permanece
+na mesma URL, com telas internas e transferência de foco entre etapas.
+
+O gabinete usa CSS e a passagem usa SVG. Apenas os portões animam ao abrir,
+respeitando movimento reduzido. Não há requisições para servidores fictícios,
+execução de comandos externos ou armazenamento de credenciais.
+
+Arquivos da missão: `missionState.ts` (regras e transições), `missionCopy.ts`
+(PT/EN), `mission.module.css`, `components/GateCamera.tsx`, `index.tsx`
+(orquestração) e `SignalConsole.tsx` (receptor anterior).
+
 ## Diagnóstico da versão anterior
 
 A inspeção do código encontrou fontes de trabalho contínuo:
@@ -40,7 +68,7 @@ Escolher setor → varrer → sintonizar → interceptar → ler o arquivo.
 - `useConsoleAudio.ts`: sons sintetizados sob demanda.
 - `components/SectorMap.tsx`: mapa e pontos selecionáveis.
 - `components/SignalScope.tsx`: forma de onda determinística em SVG.
-- `index.tsx`: composição, receptor e acessibilidade.
+- `SignalConsole.tsx`: composição do receptor e acessibilidade.
 - `styles.module.css`: tema escuro isolado e breakpoints.
 
 Os quatro componentes da cena anterior e suas traduções sem uso foram removidos; podem ser recuperados pelo histórico do Git.
@@ -52,6 +80,24 @@ Os quatro componentes da cena anterior e suas traduções sem uso foram removido
 Os testes Neon Bay cobrem regras de sintonia, missão, histórico, sequências, cancelamento, callbacks desatualizados, comandos e renderização estática do mapa. A regressão de `cinema.paused` é coberta renderizando os três setores com radar ativo e pausado, sem propriedades de tradução vindas da página.
 
 O teste de renderização usa React e Vite em memória; ele detecta falhas de composição, mas não substitui a inspeção visual no navegador. O navegador integrado continua sem iniciar neste ambiente.
+
+### Validação da missão — 29/09/2026
+
+Build, lint e 20 testes do Neon Bay passaram. Os novos testes cobrem requisitos
+de avanço, códigos incorretos, ordem dos portões, bloqueio da matriz e dois
+ciclos completos com reinício. A renderização inicial do arquivo também é coberta.
+
+Foi possível executar Chrome headless com Playwright neste ambiente: missão
+completa, feedback de erro, extração, reinício, troca para inglês e comando
+`reset` verificados sem erros JavaScript. Layouts de arquivo e controle foram
+checados entre 320 e 1440 px, sem transbordamento horizontal; capturas de desktop
+e celular foram inspecionadas. Isso atualiza a limitação de navegador registrada
+nas revisões anteriores. Leitor de tela e dispositivos físicos não foram testados.
+
+A missão também foi concluída em inglês com animações habilitadas, cancelamento
+e conclusão imediata de sequências. Relés e códigos foram operados pelo teclado;
+o foco chegou à confirmação de extração. Trocar idioma manteve a matriz e o
+isolamento, e reiniciar durante uma varredura cancelou a operação anterior.
 
 Conferência visual e interativa pendente:
 

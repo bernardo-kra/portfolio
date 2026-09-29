@@ -1,4 +1,61 @@
 const pt = {
+  education: {
+    title: 'Formação',
+    highlight: 'Acadêmica',
+    degreeLabel: 'Graduação',
+    degree: 'Análise e Desenvolvimento de Sistemas',
+    institution:
+      'Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Sul',
+    campus: 'Campus Bento Gonçalves',
+    coursesLabel: 'Cursos Complementares',
+    courses: [
+      {
+        title: 'React + Redux: Fundamentos e 2 Apps do Zero',
+        platform: 'Cod3r',
+        duration: '54,5h',
+        lessons: '447 aulas',
+        description:
+          'React e Redux com desenvolvimento de aplicações práticas.',
+      },
+      {
+        title: 'Next.js e React Completo + TailwindCSS + Firebase',
+        platform: 'Cod3r',
+        duration: '28,5h',
+        lessons: '230 aulas',
+        description: 'Next.js, React, TailwindCSS e Firebase.',
+      },
+      {
+        title: 'React 19 e Next.js 15 (App Router, Server Actions, Tailwind)',
+        platform: 'Luiz Otávio Miranda',
+        duration: '83,5h',
+        lessons: '386 aulas',
+        description: 'React 19 e Next.js 15 com App Router e Server Actions.',
+      },
+      {
+        title: 'JavaScript: ES6+, OOP, Promises, Async/Await, Axios',
+        platform: 'Geek University',
+        duration: '27h',
+        lessons: '110 aulas',
+        description: 'JavaScript ES6+, OOP e requisições assíncronas.',
+      },
+      {
+        title:
+          'Stack Completa JS: React, Next, Node, Vue, jQuery, Webpack, MySQL',
+        platform: 'Cod3r',
+        duration: '89h',
+        lessons: '641 aulas',
+        description:
+          'Stack completa JavaScript: frontend, backend e banco de dados.',
+      },
+      {
+        title: 'Java Completo: Spring Boot, MongoDB, Hibernate, JPA, JavaFX',
+        platform: 'Cod3r',
+        duration: '90h',
+        lessons: 'Curso completo',
+        description: 'Java, Spring Boot e tecnologias relacionadas.',
+      },
+    ],
+  },
   recruiter: {
     eyebrow: 'Frontend · experiência & experimentação',
     summary:

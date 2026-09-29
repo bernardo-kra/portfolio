@@ -5,7 +5,7 @@ import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
 
 const AboutMe: React.FC = () => {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
 
   const metrics = [
     {
@@ -89,7 +89,7 @@ const AboutMe: React.FC = () => {
         </Typography>
         <div className={styles.aboutmeLocation}>
           <MapPin size={16} />
-          <span>Bento Gonçalves, RS - Brasil</span>
+          <span>Bento Gonçalves, RS - {lang === 'pt' ? 'Brasil' : 'Brazil'}</span>
         </div>
       </div>
 
