@@ -50,8 +50,8 @@ export default function PrivacyControls() {
             </h2>
             <p>
               {pt
-                ? 'O site funciona sem cookies de análise. Você pode permitir o Google Analytics para ajudar a entender as visitas. Sua escolha pode ser alterada a qualquer momento.'
-                : 'This site works without analytics cookies. You may allow Google Analytics to help understand visits. You can change your choice at any time.'}
+                ? 'Permitir Google Analytics para entender as visitas? O site funciona sem ele. Você pode mudar sua escolha depois.'
+                : 'Allow Google Analytics to understand visits? The site works without it. You can change your choice later.'}
             </p>
             <Link to="/privacy">
               {pt ? 'Política de privacidade' : 'Privacy policy'}

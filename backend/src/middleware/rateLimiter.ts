@@ -61,7 +61,7 @@ export const authRateLimit = rateLimit({
 // Rate limiter geral para APIs
 export const generalRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // máximo 100 requisições por 15 minutos
+  max: 600, // accommodate chat polling alongside normal navigation
   message: {
     success: false,
     error: { message: 'Muitas requisições. Tente novamente em 15 minutos.' }

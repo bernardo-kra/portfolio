@@ -13,6 +13,7 @@ export interface AuthUser {
   firstName: string
   lastName: string
   phone?: string
+  isChatOwner?: boolean
   role?: string
 }
 

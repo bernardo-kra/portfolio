@@ -3,6 +3,10 @@ import { chatService, type ChatMessage } from '../../../services/chatService'
 import { useChatPermissions } from '../../../hooks/useChatPermissions'
 import MessageBubble from '../MessageBubble'
 import MessageInput from '../MessageInput'
+import { useI18n } from '@src/i18n'
+import { MessageCircle, ArrowLeft } from 'lucide-react'
+import { format, isSameDay } from 'date-fns'
+import { ptBR, enUS } from 'date-fns/locale'
 import styles from './styles.module.css'
 
 interface WhatsAppChatProps {
@@ -14,10 +18,18 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   selectedUserId,
   onBack,
 }) => {
+  const { lang } = useI18n()
+  const pt = lang === 'pt'
+  const [loadError, setLoadError] = useState(false)
+  const [newMessages, setNewMessages] = useState(false)
+  const nearBottom = useRef(true)
+  const previousLast = useRef<string | undefined>(undefined)
+  const scrollContainer = useRef<HTMLDivElement>(null)
   const { isAdmin, userEmail } = useChatPermissions()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState('')
   const [cooldownRemaining, setCooldownRemaining] = useState(0)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -32,6 +44,11 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
       (newMessages) => {
         setMessages(newMessages)
         setLoading(false)
+        setLoadError(false)
+      },
+      () => {
+        setLoading(false)
+        setLoadError(true)
       }
     )
 
@@ -48,23 +65,35 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   }, [cooldownRemaining])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const last = messages.at(-1)?.id
+    if (last !== previousLast.current) {
+      if (nearBottom.current)
+        messagesEndRef.current?.scrollIntoView({ behavior: 'instant' })
+      else setNewMessages(true)
+      previousLast.current = last
+    }
   }, [messages])
 
   const handleSendMessage = async (message: string) => {
-    if (!chatUserId || sending) return
+    if (!chatUserId || sending) return false
 
     setSending(true)
+    setSendError('')
 
     const result = await chatService.sendMessage(chatUserId, message, isAdmin)
 
     if (result.success) {
       setCooldownRemaining(3)
     } else {
-      console.error('Erro ao enviar mensagem:', result.error)
+      setSendError(
+        pt
+          ? 'Não foi possível enviar. Sua mensagem foi mantida; tente novamente.'
+          : 'Could not send. Your draft was kept; please retry.'
+      )
     }
 
     setSending(false)
+    return result.success
   }
 
   if (loading) {
@@ -72,7 +101,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
       <div className={styles.chatContainer}>
         <div className={styles.loadingContainer}>
           <div className={styles.loadingSpinner}></div>
-          <p>Carregando conversa...</p>
+          <p>{pt ? 'Carregando conversa...' : 'Loading conversation...'}</p>
         </div>
       </div>
     )
@@ -82,48 +111,135 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
         {onBack && (
-          <button onClick={onBack} className={styles.backButton}>
-            ←
+          <button
+            aria-label={pt ? 'Voltar às conversas' : 'Back to conversations'}
+            onClick={onBack}
+            className={styles.backButton}
+          >
+            <ArrowLeft size={20} />
           </button>
         )}
         <div className={styles.chatInfo}>
           <h3 className={styles.chatTitle}>
-            {isAdmin ? 'Chat com Usuário' : 'Suporte'}
+            {isAdmin
+              ? pt
+                ? 'Conversa privada'
+                : 'Private conversation'
+              : pt
+                ? 'Converse com Bernardo'
+                : 'Talk to Bernardo'}
           </h3>
           <p className={styles.chatSubtitle}>
-            {isAdmin ? selectedUserId : 'Estamos aqui para ajudar'}
+            {isAdmin
+              ? selectedUserId
+              : pt
+                ? 'Somente você e Bernardo veem esta conversa'
+                : 'Only you and Bernardo can see this conversation'}
           </p>
         </div>
         <div className={styles.chatStatus} />
       </div>
 
-      <div className={styles.messagesContainer}>
-        {messages.length === 0 ? (
+      <div
+        className={styles.messagesContainer}
+        ref={scrollContainer}
+        onScroll={() => {
+          const el = scrollContainer.current
+          if (el) {
+            nearBottom.current =
+              el.scrollHeight - el.scrollTop - el.clientHeight < 80
+            if (nearBottom.current) setNewMessages(false)
+          }
+        }}
+      >
+        {messages.length === 0 && !loadError ? (
           <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>💬</div>
-            <h4>Nenhuma mensagem ainda</h4>
-            <p>Inicie uma conversa enviando uma mensagem!</p>
+            <div className={styles.emptyIcon}>
+              <MessageCircle size={28} />
+            </div>
+            <h4>{pt ? 'Nenhuma mensagem ainda' : 'No messages yet'}</h4>
+            <p>
+              {pt
+                ? 'Inicie uma conversa enviando uma mensagem!'
+                : 'Send a message to start a conversation!'}
+            </p>
           </div>
         ) : (
-          messages.map((message) => (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              isOwnMessage={message.senderEmail === userEmail}
-              showSenderName={isAdmin && message.senderEmail !== userEmail}
-            />
+          messages.map((message, index) => (
+            <React.Fragment key={message.id}>
+              {(index === 0 ||
+                !isSameDay(
+                  chatService.toDate(message.timestamp),
+                  chatService.toDate(messages[index - 1].timestamp)
+                )) && (
+                <p className={styles.dateLabel}>
+                  {chatService.toDate(message.timestamp).getTime()
+                    ? format(chatService.toDate(message.timestamp), 'PPP', {
+                        locale: pt ? ptBR : enUS,
+                      })
+                    : pt
+                      ? 'Data indisponível'
+                      : 'Date unavailable'}
+                </p>
+              )}
+              <MessageBubble
+                key={message.id}
+                message={message}
+                isOwnMessage={message.senderEmail === userEmail}
+                showSenderName={isAdmin && message.senderEmail !== userEmail}
+              />
+            </React.Fragment>
           ))
         )}
 
         <div ref={messagesEndRef} />
       </div>
 
+      {loadError && (
+        <div role="alert" className={styles.sendError}>
+          {pt
+            ? 'Não foi possível atualizar a conversa.'
+            : 'Could not update the conversation.'}{' '}
+          <button
+            onClick={() =>
+              window.dispatchEvent(new Event('portfolio:chat-refresh'))
+            }
+          >
+            {pt ? 'Tentar novamente' : 'Retry'}
+          </button>
+        </div>
+      )}
+      {newMessages && (
+        <button
+          className={styles.newMessages}
+          onClick={() => {
+            nearBottom.current = true
+            setNewMessages(false)
+            messagesEndRef.current?.scrollIntoView({ behavior: 'instant' })
+          }}
+        >
+          {pt ? 'Novas mensagens ↓' : 'New messages ↓'}
+        </button>
+      )}
+      {sendError && (
+        <p role="alert" className={styles.sendError}>
+          {sendError}
+        </p>
+      )}
       <MessageInput
+        key={chatUserId}
+        draftKey={`${userEmail}:${chatUserId}`}
         onSendMessage={handleSendMessage}
         disabled={sending}
         cooldownRemaining={cooldownRemaining}
         placeholder={
-          isAdmin ? 'Responder como admin...' : 'Digite sua mensagem...'
+          isAdmin
+            ? pt
+              ? 'Responder a esta pessoa...'
+              : 'Reply to this person...'
+            : pt
+              ? 'Digite sua mensagem...'
+              : 'Type your message...'
         }
       />
     </div>

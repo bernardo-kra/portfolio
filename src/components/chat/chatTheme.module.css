@@ -1,0 +1,40 @@
+.chatTheme {
+  --text-primary: #182b23;
+  --text-default: #182b23;
+  --text-muted: #4f6258;
+  --card-background: #ffffff;
+  --background-primary: #f1f6f2;
+  --bg-secondary: #f1f6f2;
+  --bg-default: #ffffff;
+  --border-default: #8b9e93;
+  --border-light: #d1ddd5;
+  --chat-accent: #235b48;
+  --chat-accent-hover: #194535;
+  --chat-on-accent: #ffffff;
+  --chat-warning: #825000;
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+:global([data-theme='dark']) .chatTheme {
+  --text-primary: #f0f7f3;
+  --text-default: #f0f7f3;
+  --text-muted: #bbcec4;
+  --card-background: #14201e;
+  --background-primary: #0b1513;
+  --bg-secondary: #1c2b25;
+  --bg-default: #14201e;
+  --border-default: #738b80;
+  --border-light: #344b40;
+  --chat-accent: #286349;
+  --chat-accent-hover: #1f503b;
+  --chat-warning: #f3ce88;
+}
+.chatTheme :where(button, textarea, input) {
+  font-family: inherit;
+}
+.chatTheme :where(button, textarea, input):focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}

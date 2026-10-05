@@ -273,3 +273,17 @@
 .contactFooter {
   text-align: center;
 }
+
+.contactCard {
+  background: var(--card-background);
+  border-color: var(--border-default);
+}
+:root[data-theme='dark'] .contactCard {
+  background: var(--card-background);
+  border-color: var(--border-default);
+}
+.contactCardIcon {
+  background: var(--bg-secondary);
+  color: var(--portfolio-accent);
+  box-shadow: none;
+}

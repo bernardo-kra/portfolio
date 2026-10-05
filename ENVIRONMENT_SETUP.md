@@ -142,3 +142,34 @@ ficam protegidas apenas porque o código local mudou. Reavalie as sessões antig
 antes de implantar: o backend aceita somente sessões versão 2, invalidando tokens
 antigos. Todos os usuários precisarão entrar novamente. Login administrativo
 por senha exige ao menos 16 caracteres, bloqueando senhas curtas históricas.
+
+## Caixa de entrada privada
+
+O proprietário da caixa de entrada é bernardokrac@gmail.com, definido no
+código do backend em backend/src/services/chatPolicy.ts. Não há variável de
+ambiente ou API para trocar esse perfil. O acesso exige uma sessão criada pelo
+login Google verificado, com o identificador Google correspondente ao cadastro.
+Login por senha e a função admin não concedem acesso à caixa de entrada.
+Isso não promove a conta a administradora de outros recursos. Após atualizar
+o backend, saia e entre com Google para atualizar as permissões.
+
+Alterar essa política exige acesso ao código e à publicação do backend.
+Quem controla a infraestrutura, as credenciais Firebase ou a conta Google do
+proprietário continua sendo uma autoridade confiável; proteja esses acessos.
+
+Cada usuário autenticado conversa somente com o proprietário. O backend ignora
+destinatários enviados por usuários comuns. O proprietário escolhe uma conversa
+em /admin/chat ou no botão Caixa de entrada e responde ao usuário selecionado.
+Respostas são exibidas à pessoa quando ela abre o chat. A conexão autenticada
+`GET /api/chat/events` envia avisos SSE de novas mensagens; o frontend busca
+o conteúdo pelas mesmas rotas protegidas. O backend observa somente o documento
+`chatActivity/{email}` do usuário autenticado. Cada envio grava a mensagem e os
+avisos dos dois participantes no mesmo batch Firestore. Não exige nova chave,
+dependência ou índice. A conexão é encerrada ao fechar o chat, sair da conta ou
+ocultar a aba, e se reconecta ao voltar. Sessões abertas são revalidadas a cada
+30 segundos. Se o SSE falhar, a conversa mantém consultas a cada 10 segundos
+e a caixa de entrada a cada 30 segundos. Publicar **frontend e backend** é
+necessário para ativar esse comportamento no site público.
+
+Mensagens antigas são preservadas e associadas pelo remetente ou
+destinatário. Elas não são compartilhadas com outros usuários.

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../ThemeContext/useTheme'
 import styles from './styles.module.css'
 
-const ANIMATION_DURATION = 2800
+const ANIMATION_DURATION = 450
 
 const TransitionThemeEffect: React.FC = React.memo(() => {
   const { registerThemeTransitionCallback } = useTheme()
@@ -16,9 +16,14 @@ const TransitionThemeEffect: React.FC = React.memo(() => {
       setDirection(newTheme === 'dark' ? 'to-dark' : 'to-light')
       setShow(true)
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
-      timeoutRef.current = window.setTimeout(() => setShow(false), ANIMATION_DURATION)
+      timeoutRef.current = window.setTimeout(
+        () => setShow(false),
+        ANIMATION_DURATION
+      )
     })
-     
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
+    }
   }, [registerThemeTransitionCallback])
 
   return show ? (
@@ -34,4 +39,4 @@ const TransitionThemeEffect: React.FC = React.memo(() => {
   ) : null
 })
 
-export default TransitionThemeEffect 
+export default TransitionThemeEffect

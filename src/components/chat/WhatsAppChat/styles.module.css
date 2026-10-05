@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--background-primary);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--card-background);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   gap: 15px;
@@ -32,18 +32,18 @@
   height: 45px;
   border: none;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--chat-accent);
   color: white;
   cursor: pointer;
   font-size: 1.3rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(35, 91, 72, 0.3);
 }
 
 .backButton:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: var(--chat-accent-hover);
   transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(35, 91, 72, 0.4);
 }
 
 .chatInfo {
@@ -54,20 +54,16 @@
 .chatTitle {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--text-primary);
   margin: 0 0 5px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .chatSubtitle {
   font-size: 0.9rem;
-  color: #718096;
+  color: var(--text-muted);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -83,7 +79,7 @@
 
 .typingIndicator {
   font-size: 0.8rem;
-  color: var(--brand-orange);
+  color: var(--chat-warning);
   font-style: italic;
   animation: pulse 1.5s infinite;
 }
@@ -97,20 +93,8 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: var(--background-primary);
   position: relative;
-}
-
-.messagesContainer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23667eea" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23764ba2" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23667eea" opacity="0.05"/><circle cx="10" cy="60" r="0.5" fill="%23764ba2" opacity="0.05"/><circle cx="90" cy="40" r="0.5" fill="%23667eea" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  pointer-events: none;
-  opacity: 0.3;
 }
 
 .messagesContainer::-webkit-scrollbar {
@@ -248,5 +232,36 @@
     width: 36px;
     height: 36px;
     font-size: 1rem;
+  }
+}
+
+.sendError {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: var(--card-background);
+  color: var(--chat-warning);
+  font-size: 0.875rem;
+}
+
+.dateLabel {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 1rem 0;
+}
+.newMessages,
+.sendError button {
+  align-self: center;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  color: var(--chat-on-accent);
+  background: var(--chat-accent);
+  font: inherit;
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loadingSpinner {
+    animation: none;
   }
 }

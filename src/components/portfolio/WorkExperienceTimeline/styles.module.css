@@ -724,3 +724,17 @@
     margin-bottom: var(--spacing-sm);
   }
 }
+
+.timelineDot {
+  padding: 0;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .timelineRow,
+  .timelineCenter,
+  .timelineDot,
+  .currentIndicator {
+    animation: none !important;
+    transition: none !important;
+  }
+}

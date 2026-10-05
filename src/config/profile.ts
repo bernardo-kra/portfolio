@@ -1,6 +1,8 @@
 import resumeUrl from '@src/CV_-_Bernardo_Kraczkowski.pdf?url'
 
 export const profile = {
+  whatsappNumber: '5554996206811',
+  whatsappLabel: '+55 (54) 99620-6811',
   location: 'Sertão, RS',
   resumeUrl,
   resumeFilename: 'Bernardo-Kraczkowski-CV.pdf',

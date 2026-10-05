@@ -1,12 +1,12 @@
-import { useAuth } from './useAuth';
+import { useAuth } from './useAuth'
 
 export const useChatPermissions = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth()
 
-  const isAdmin = user?.role === 'admin';
-  const canAccessChat = isAuthenticated;
-  const canViewAllChats = isAdmin;
-  const canSendMessages = isAuthenticated;
+  const isAdmin = user?.isChatOwner === true
+  const canAccessChat = isAuthenticated
+  const canViewAllChats = isAdmin
+  const canSendMessages = isAuthenticated
 
   return {
     isAdmin,
@@ -15,5 +15,5 @@ export const useChatPermissions = () => {
     canSendMessages,
     userEmail: user?.email,
     userName: user ? `${user.firstName} ${user.lastName}` : '',
-  };
-};
+  }
+}

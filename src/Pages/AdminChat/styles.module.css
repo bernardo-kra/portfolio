@@ -210,3 +210,23 @@
     justify-content: center;
   }
 }
+
+.backButton {
+  background: var(--chat-accent);
+  color: var(--chat-on-accent);
+}
+.backButton:hover {
+  background: var(--chat-accent-hover);
+}
+.header {
+  border: 1px solid var(--border-default);
+  box-shadow: none;
+}
+.headerText {
+  text-align: left;
+}
+.header h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

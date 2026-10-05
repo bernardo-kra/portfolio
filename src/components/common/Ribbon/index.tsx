@@ -45,7 +45,13 @@ const Ribbon = ({ items, label, tone = 'amber' }: RibbonProps) => {
         onClick={() => setPaused(!paused)}
         aria-pressed={paused}
         aria-label={
-          isPortuguese ? 'Pausar faixa animada' : 'Pause animated ribbon'
+          paused
+            ? isPortuguese
+              ? 'Continuar faixa animada'
+              : 'Resume animated ribbon'
+            : isPortuguese
+              ? 'Pausar faixa animada'
+              : 'Pause animated ribbon'
         }
       >
         {paused ? (

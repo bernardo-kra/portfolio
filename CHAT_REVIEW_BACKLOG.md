@@ -1,0 +1,25 @@
+# Revisão rigorosa — 5 de outubro de 2026
+
+Pendências registradas para uma etapa posterior. A atualização em tempo real
+é uma tarefa separada e não resolve automaticamente os pontos abaixo.
+
+- [ ] **Alta — limite do Google:** separar `/challenge` das tentativas de login.
+      Abrir o modal cinco vezes consome o limite de autenticação, sem tentar entrar.
+- [ ] **Alta — duplicação:** adicionar um identificador de envio e deduplicação
+      no backend. Se a mensagem for salva e a resposta se perder, tentar novamente
+      pode criar outra mensagem.
+- [ ] **Média — rascunho após envio:** limpar o rascunho também se o componente
+      for fechado ou a conversa mudar enquanto a requisição está em andamento.
+- [ ] **Média — leitura prematura:** marcar apenas mensagens realmente vistas.
+      Hoje a consulta marca mensagens como lidas mesmo com o histórico rolado para cima.
+- [ ] **Média — crescimento:** criar resumos por conversa e paginação por cursor.
+      A lista atual baixa todo o histórico, com risco de exceder limites e repetir
+      registros se novas mensagens chegarem durante a paginação por posição.
+- [ ] **Média — menu:** implementar ou remover “Meu Perfil” e “Configurações”,
+      que atualmente apenas fecham o menu.
+- [ ] **Baixa — tradução:** usar a locale inglesa nas datas antigas da lista.
+
+Reprodução: Chrome com dados simulados confirmou rascunho mantido após envio,
+leitura antecipada e reenvio sem identificador. Rotas reais com Firebase
+simulado confirmaram `429` na sexta preparação do Google. Os 49 testes então
+existentes, lint e build passaram, mas não cobriam esses comportamentos.

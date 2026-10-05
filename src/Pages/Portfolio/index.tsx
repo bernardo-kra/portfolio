@@ -16,6 +16,10 @@ const Portfolio = () => {
   const { t, lang, setLang } = useI18n()
   const studies = [
     {
+      context:
+        lang === 'pt'
+          ? 'Desafio: transformar uma referência visual em uma página utilizável. Decisão: separar galeria e filtros. Resultado: composição responsiva com navegação entre categorias.'
+          : 'Challenge: turn a visual reference into a usable page. Decision: separate the gallery and filters. Result: a responsive composition with category navigation.',
       route: '/agency',
       title: 'Forma — Creative Studio',
       text:
@@ -27,6 +31,10 @@ const Portfolio = () => {
       kind: 'agency',
     },
     {
+      context:
+        lang === 'pt'
+          ? 'Desafio: organizar ciclos de foco e tarefas. Decisão: modelar os estados do temporizador. Resultado: uma experiência de foco com controle de tarefas.'
+          : 'Challenge: organize focus cycles and tasks. Decision: model the timer states. Result: a focus experience with task management.',
       route: '/pomodoro',
       title: t.pomodoroTitle,
       text: t.recruiter.timerStudy,
@@ -35,6 +43,10 @@ const Portfolio = () => {
       kind: 'timer',
     },
     {
+      context:
+        lang === 'pt'
+          ? 'Desafio: transformar algoritmos em composição visual. Decisão: desenhar em Canvas. Resultado: exploração interativa de padrões.'
+          : 'Challenge: turn algorithms into visual compositions. Decision: render with Canvas. Result: interactive pattern exploration.',
       route: '/generative',
       title: t.generativeTitle,
       text: t.recruiter.artStudy,
@@ -43,6 +55,10 @@ const Portfolio = () => {
       kind: 'art',
     },
     {
+      context:
+        lang === 'pt'
+          ? 'Desafio: conectar exploração, sintonia e abertura de portões. Decisão: representar a missão em estados explícitos e usar SVG. Resultado: uma sequência interativa que pode ser reiniciada.'
+          : 'Challenge: connect exploration, signal tuning and gate controls. Decision: use explicit mission states and SVG. Result: a replayable interactive sequence.',
       route: '/experimental3d',
       title: 'Neon Bay',
       text: t.recruiter.dockStudy,
@@ -106,31 +122,41 @@ const Portfolio = () => {
             </div>
             <div className={styles.studyGrid}>
               {studies.map((study, index) => (
-                <Link
-                  to={study.route}
-                  className={styles.studyCard}
-                  key={study.route}
-                >
-                  <div
-                    className={styles.studyVisual}
-                    data-kind={study.kind}
-                    aria-hidden="true"
+                <article key={study.route} className={styles.studyEntry}>
+                  <Link
+                    to={study.route}
+                    className={styles.studyCard}
+                    key={study.route}
                   >
-                    <span className={styles.studyIndex}>0{index + 1}</span>
-                    <span className={styles.studyMark}>{study.visual}</span>
-                    <span className={styles.studyTag}>{study.tag}</span>
-                  </div>
-                  <div className={styles.studyBody}>
-                    <h3>
-                      {study.title}
-                      <ArrowUpRight size={20} aria-hidden="true" />
-                    </h3>
-                    <p>{study.text}</p>
-                    <span className={styles.studyAction}>
-                      {t.recruiter.openStudy} →
-                    </span>
-                  </div>
-                </Link>
+                    <div
+                      className={styles.studyVisual}
+                      data-kind={study.kind}
+                      aria-hidden="true"
+                    >
+                      <span className={styles.studyIndex}>0{index + 1}</span>
+                      <span className={styles.studyMark}>{study.visual}</span>
+                      <span className={styles.studyTag}>{study.tag}</span>
+                    </div>
+                    <div className={styles.studyBody}>
+                      <h3>
+                        {study.title}
+                        <ArrowUpRight size={20} aria-hidden="true" />
+                      </h3>
+                      <p>{study.text}</p>
+                      <span className={styles.studyAction}>
+                        {t.recruiter.openStudy} →
+                      </span>
+                    </div>
+                  </Link>
+                  <details className={styles.studyDetails}>
+                    <summary>
+                      {lang === 'pt'
+                        ? 'Como foi construído'
+                        : 'How it was built'}
+                    </summary>
+                    <p>{study.context}</p>
+                  </details>
+                </article>
               ))}
             </div>
             <p className={styles.studyNote}>{t.recruiter.studyNote}</p>

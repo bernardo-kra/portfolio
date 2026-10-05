@@ -1,12 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
-import { getSessionEmail } from '../services/sessionService.js';
+import { getSessionIdentity } from '../services/sessionService.js';
+import { isChatOwner } from '../services/chatPolicy.js';
 
 export interface AuthenticatedUser {
   email: string;
   firstName: string;
   lastName: string;
   role: string;
+  isChatOwner: boolean;
 }
 
 export interface AuthenticatedRequest extends Request {
@@ -25,8 +27,9 @@ export const authenticateRequest = async (
   const token = getBearerToken(req);
   if (!token) return null;
 
-  const email = await getSessionEmail(token);
-  if (!email) return null;
+  const identity = await getSessionIdentity(token);
+  if (!identity) return null;
+  const { email } = identity;
 
   const claimedEmail = req.headers['x-user-email'];
   if (typeof claimedEmail === 'string' && claimedEmail !== email) return null;
@@ -40,6 +43,8 @@ export const authenticateRequest = async (
     firstName: String(userData.firstName ?? ''),
     lastName: String(userData.lastName ?? ''),
     role: String(userData.role ?? 'user'),
+    isChatOwner:
+      identity.googleSub === userData.googleSub && isChatOwner(identity),
   };
 };
 

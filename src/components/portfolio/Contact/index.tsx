@@ -1,5 +1,11 @@
 import React from 'react'
-import { Mail, Linkedin, Github, MessageCircle } from 'lucide-react'
+import {
+  Mail,
+  Linkedin,
+  Github,
+  MessageCircle,
+  ArrowUpRight,
+} from 'lucide-react'
 import { Typography, Section } from '@components/common'
 import { useI18n } from '@src/i18n'
 import { useAppConfig } from '@context/AppConfigContext'
@@ -28,8 +34,8 @@ const Contact: React.FC = () => {
     {
       type: 'whatsapp',
       label: t.whatsappLabel,
-      value: '+55 (54) 9 96206-8111',
-      href: 'https://wa.me/5549962068111',
+      value: profile.whatsappLabel,
+      href: `https://wa.me/${profile.whatsappNumber}`,
       icon: MessageCircle,
     },
     {
@@ -104,7 +110,7 @@ const Contact: React.FC = () => {
                 </Typography>
               </div>
               <div className={styles.contactCardArrow}>
-                <MessageCircle size={16} />
+                <ArrowUpRight size={16} aria-hidden="true" />
               </div>
             </a>
           ))}

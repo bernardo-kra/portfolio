@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from './styles.module.css';
+import React, { useState, useEffect, useRef } from 'react'
+import styles from './styles.module.css'
 
 interface ReplyModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSend: (reply: string) => void;
-  originalMessage: string;
-  senderName: string;
+  isOpen: boolean
+  onClose: () => void
+  onSend: (reply: string) => void
+  originalMessage: string
+  senderName: string
 }
 
 const ReplyModal: React.FC<ReplyModalProps> = ({
@@ -14,33 +14,33 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
   onClose,
   onSend,
   originalMessage,
-  senderName
+  senderName,
 }) => {
-  const [reply, setReply] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [reply, setReply] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (isOpen && textareaRef.current) {
-      textareaRef.current.focus();
+      textareaRef.current.focus()
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (reply.trim()) {
-      onSend(reply.trim());
-      setReply('');
-      onClose();
+      onSend(reply.trim())
+      setReply('')
+      onClose()
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      onClose();
+      onClose()
     }
-  };
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -51,7 +51,7 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
             ×
           </button>
         </div>
-        
+
         <div className={styles.originalMessage}>
           <span className={styles.label}>Mensagem original:</span>
           <p>{originalMessage}</p>
@@ -68,7 +68,7 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
             rows={4}
             required
           />
-          
+
           <div className={styles.actions}>
             <button
               type="button"
@@ -88,10 +88,7 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReplyModal;
-
-
-
+export default ReplyModal

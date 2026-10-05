@@ -20,7 +20,10 @@ const readExpiration = (value: unknown): Date | null => {
   return null;
 };
 
-export const createSession = async (email: string): Promise<string> => {
+export const createSession = async (
+  email: string,
+  googleSub?: string
+): Promise<string> => {
   const token = randomBytes(32).toString('base64url');
   await db
     .collection('sessions')
@@ -28,15 +31,16 @@ export const createSession = async (email: string): Promise<string> => {
     .set({
       version: 2,
       email,
+      ...(googleSub ? { googleSub } : {}),
       expiresAt: new Date(Date.now() + SESSION_TTL_MS),
       createdAt: new Date(),
     });
   return token;
 };
 
-export const getSessionEmail = async (
+export const getSessionIdentity = async (
   token: string
-): Promise<string | null> => {
+): Promise<{ email: string; googleSub?: string } | null> => {
   if (!/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
 
   const sessionRef = db.collection('sessions').doc(hashToken(token));
@@ -58,5 +62,12 @@ export const getSessionEmail = async (
     return null;
   }
 
-  return email;
+  return {
+    email,
+    googleSub:
+      typeof session?.googleSub === 'string' ? session.googleSub : undefined,
+  };
 };
+
+export const getSessionEmail = async (token: string): Promise<string | null> =>
+  (await getSessionIdentity(token))?.email ?? null;

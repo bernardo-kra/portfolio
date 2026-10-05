@@ -72,3 +72,20 @@
   background: #16211f;
   color: #eff5ee;
 }
+
+@media (max-width: 600px) {
+  .banner {
+    padding: 1rem;
+    gap: 0.6rem;
+    bottom: 0.75rem;
+  }
+  .banner > div:first-child {
+    flex-basis: 100%;
+  }
+  .actions {
+    width: 100%;
+  }
+  .actions button {
+    flex: 1;
+  }
+}

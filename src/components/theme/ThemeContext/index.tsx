@@ -1,39 +1,54 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { THEME_KEY, type Theme } from '@theme/themeUtils'
 import { ThemeContext } from '../ThemeContextDef'
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('dark')
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark'
+    } catch {
+      return 'dark'
+    }
+  })
   const themeTransitionCallback = useRef<((theme: Theme) => void) | null>(null)
 
   useEffect(() => {
-    const saved = localStorage.getItem(THEME_KEY) as Theme | null
-    if (saved) setTheme(saved)
-  }, [])
-
-  useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem(THEME_KEY, theme)
+    try {
+      localStorage.setItem(THEME_KEY, theme)
+    } catch {
+      /* Theme works without persistent storage. */
+    }
   }, [theme])
 
   const setThemeWithTransition = (newTheme: Theme) => {
-    if (themeTransitionCallback.current) {
-      themeTransitionCallback.current(newTheme)
-      setTimeout(() => setTheme(newTheme), 1800)
-    } else {
-      setTheme(newTheme)
-    }
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      themeTransitionCallback.current?.(newTheme)
+    setTheme(newTheme)
   }
 
-  const toggleTheme = () => setThemeWithTransition(theme === 'dark' ? 'light' : 'dark')
-  
-  const registerThemeTransitionCallback = (cb: (theme: Theme) => void) => {
-    themeTransitionCallback.current = cb
-  }
+  const toggleTheme = () =>
+    setThemeWithTransition(theme === 'dark' ? 'light' : 'dark')
+
+  const registerThemeTransitionCallback = useCallback(
+    (cb: (theme: Theme) => void) => {
+      themeTransitionCallback.current = cb
+    },
+    []
+  )
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setThemeWithTransition, registerThemeTransitionCallback }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+        setThemeWithTransition,
+        registerThemeTransitionCallback,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   )
-} 
+}

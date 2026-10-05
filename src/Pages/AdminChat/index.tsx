@@ -1,102 +1,63 @@
-import React from 'react'
+import themeStyles from '@components/chat/chatTheme.module.css'
 import { useAuth } from '@hooks/useAuth'
 import { useAppConfig } from '@context'
 import { ModernChat } from '@components/chat'
 import { Link } from 'react-router-dom'
+import { useI18n } from '@src/i18n'
+import { Inbox, ArrowLeft } from 'lucide-react'
 import styles from './styles.module.css'
-
-const AdminChat: React.FC = () => {
+export default function AdminChat() {
   const { user, isAuthenticated } = useAuth()
   const { isFeatureEnabled, isBackendEnabled } = useAppConfig()
-  const isAdmin = user?.role === 'admin'
-
-  if (!isAuthenticated) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loginRequired}>
-          <h2>🔒 Acesso Restrito</h2>
-          <p>Você precisa fazer login para acessar esta página.</p>
-          <Link to="/portfolio" className={styles.backButton}>
-            Voltar ao portfólio
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.accessDenied}>
-          <h2>🚫 Acesso Negado</h2>
-          <p>Esta página é restrita apenas para administradores.</p>
-          <p>
-            Seu perfil: <strong>{user?.role || 'user'}</strong>
-          </p>
-          <Link to="/portfolio" className={styles.backButton}>
-            Voltar ao portfólio
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  if (!isBackendEnabled || !isFeatureEnabled('chat')) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.serviceUnavailable}>
-          <h2>⚠️ Serviço Indisponível</h2>
-          <p>O sistema de chat está temporariamente indisponível.</p>
-          <Link to="/portfolio" className={styles.backButton}>
-            Voltar ao portfólio
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
+  const { lang } = useI18n()
+  const pt = lang === 'pt'
+  const allowed = isAuthenticated && user?.isChatOwner === true
+  const available = isBackendEnabled && isFeatureEnabled('chat')
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <main className={styles.container + ' ' + themeStyles.chatTheme}>
+      <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerText}>
-            <h1>💬 Painel de Administração - Chat</h1>
-            <p>Gerencie todas as conversas e mensagens dos usuários</p>
-          </div>
-          <div className={styles.headerActions}>
-            <Link to="/portfolio" className={styles.backButton}>
-              ← Voltar ao Portfolio
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.adminPanel}>
-        <div className={styles.stats}>
-          <div className={styles.statCard}>
-            <h3>👤 Usuário Logado</h3>
+            <h1>
+              <Inbox size={26} aria-hidden="true" />{' '}
+              {pt ? 'Caixa de entrada' : 'Inbox'}
+            </h1>
             <p>
-              {user?.firstName} {user?.lastName}
+              {pt
+                ? 'Conversas privadas. Selecione uma pessoa para responder.'
+                : 'Private conversations. Select a person to reply.'}
             </p>
-            <span className={styles.role}>Admin</span>
           </div>
-          <div className={styles.statCard}>
-            <h3>📧 Email</h3>
-            <p>{user?.email}</p>
-          </div>
-          <div className={styles.statCard}>
-            <h3>🔐 Permissões</h3>
-            <p>Visualizar todas as mensagens</p>
-            <p>Responder usuários</p>
+          <Link to="/portfolio" className={styles.backButton}>
+            <ArrowLeft size={18} />
+            {pt ? 'Voltar ao portfólio' : 'Back to portfolio'}
+          </Link>
+        </div>
+      </header>
+      {!allowed ? (
+        <div className={styles.accessDenied}>
+          <h2>{pt ? 'Acesso restrito' : 'Restricted access'}</h2>
+          <p>
+            {pt
+              ? 'Entre com a conta Google do proprietário para acessar as conversas.'
+              : 'Sign in with the owner’s Google account to access conversations.'}
+          </p>
+        </div>
+      ) : !available ? (
+        <div className={styles.serviceUnavailable}>
+          <h2>{pt ? 'Chat indisponível' : 'Chat unavailable'}</h2>
+          <p>
+            {pt ? 'Tente novamente mais tarde.' : 'Please try again later.'}
+          </p>
+        </div>
+      ) : (
+        <div className={styles.adminPanel}>
+          <p>{user.email}</p>
+          <div className={styles.chatContainer}>
+            <ModernChat />
           </div>
         </div>
-
-        <div className={styles.chatContainer}>
-          <ModernChat />
-        </div>
-      </div>
-    </div>
+      )}
+    </main>
   )
 }
-
-export default AdminChat

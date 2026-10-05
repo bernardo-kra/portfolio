@@ -4,6 +4,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { db } from '../config/firebase.js';
 import { authRateLimit } from '../middleware/rateLimiter.js';
 import { createSession } from '../services/sessionService.js';
+import { isChatOwner } from '../services/chatPolicy.js';
 import {
   googleIdentity,
   canUseGoogleAccount,
@@ -92,6 +93,10 @@ router.post('/', authRateLimit, async (req, res) => {
           firstName: existing?.firstName || verifiedIdentity.firstName,
           lastName: existing?.lastName || verifiedIdentity.lastName,
           role: existing?.role || 'user',
+          isChatOwner: isChatOwner({
+            email: verifiedIdentity.email,
+            googleSub: verifiedIdentity.sub,
+          }),
         },
       };
     });
@@ -99,7 +104,7 @@ router.post('/', authRateLimit, async (req, res) => {
       return res
         .status(409)
         .json({ success: false, error: { code: result.error } });
-    const token = await createSession(identity.email);
+    const token = await createSession(identity.email, identity.sub);
     return res.json({ success: true, data: { token, user: result.user } });
   } catch {
     return res

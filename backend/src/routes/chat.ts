@@ -1,89 +1,107 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { db } from '../config/firebase.js';
-import { requireAdmin } from '../middleware/adminAuth.js';
-import { verifyToken } from '../middleware/auth.js';
+import { verifyToken, type AuthenticatedRequest } from '../middleware/auth.js';
+import { requireChatOwner } from '../middleware/chatOwnerAuth.js';
 import {
   messageRateLimit,
   loadMessagesRateLimit,
 } from '../middleware/rateLimiter.js';
-
-interface AuthenticatedRequest extends Request {
-  user?: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-}
-
-interface ChatRecord {
-  id?: string;
-  message?: string;
-  senderEmail: string;
-  senderName?: string;
-  recipientEmail?: string;
-  replyTo?: string;
-  isAdmin?: boolean;
-  read?: boolean;
-  timestamp?: unknown;
-}
+import { chatOwnerEmail, conversationEmail } from '../services/chatPolicy.js';
+import type { DocumentData } from 'firebase-admin/firestore';
+import { streamChatEvents } from '../services/chatEvents.js';
 
 const router = Router();
+router.get('/events', verifyToken, loadMessagesRateLimit, streamChatEvents);
+const validEmail = (value: unknown): value is string =>
+  typeof value === 'string' &&
+  value.length <= 254 &&
+  /^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(value);
+const validMessage = (value: unknown): value is string =>
+  typeof value === 'string' && !!value.trim() && value.trim().length <= 500;
+const time = (value: unknown): number => {
+  if (value && typeof value === 'object' && 'toMillis' in value)
+    return (value as { toMillis: () => number }).toMillis();
+  return value instanceof Date ? value.getTime() : 0;
+};
+async function readConversation(email: string) {
+  // Separate equality queries preserve old messages without requiring composite indexes.
+  const snapshots = await Promise.all([
+    db.collection('chats').where('conversationUserEmail', '==', email).get(),
+    db.collection('chats').where('senderEmail', '==', email).get(),
+    db.collection('chats').where('recipientEmail', '==', email).get(),
+    db.collection('chats').where('replyTo', '==', email).get(),
+  ]);
+  const records = new Map<string, DocumentData>();
+  for (const snapshot of snapshots)
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      if (conversationEmail(data) === email)
+        records.set(doc.id, { ...data, id: doc.id });
+    }
+  return [...records.values()].sort(
+    (a, b) => time(a.timestamp) - time(b.timestamp)
+  );
+}
+async function send(
+  user: NonNullable<AuthenticatedRequest['user']>,
+  message: string,
+  email: string
+) {
+  const data = {
+    message: message.trim(),
+    senderEmail: user.email,
+    senderName: [user.firstName, user.lastName].filter(Boolean).join(' '),
+    recipientEmail: user.isChatOwner ? email : chatOwnerEmail(),
+    conversationUserEmail: user.isChatOwner ? email : user.email,
+    isAdmin: user.isChatOwner,
+    timestamp: new Date(),
+    read: false,
+  };
+  const ref = db.collection('chats').doc();
+  const batch = db.batch();
+  batch.set(ref, data);
+  // Atomically notify both endpoints, across backend instances, without exposing messages.
+  for (const participant of new Set([
+    chatOwnerEmail(),
+    data.conversationUserEmail,
+  ]))
+    batch.set(db.collection('chatActivity').doc(participant), {
+      messageId: ref.id,
+    });
+  await batch.commit();
+  return { id: ref.id, ...data };
+}
 
 router.post(
   '/send',
   messageRateLimit,
   verifyToken,
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res) => {
     try {
-      const { message, recipientEmail } = req.body;
       const user = req.user!;
-
-      if (!message || !message.trim()) {
+      if (!validMessage(req.body.message))
         return res.status(400).json({
           success: false,
-          error: { message: 'Mensagem é obrigatória' },
+          error: { message: 'Use uma mensagem de até 500 caracteres.' },
         });
+      let recipient = user.email;
+      if (user.isChatOwner) {
+        if (!validEmail(req.body.recipientEmail))
+          return res.status(400).json({ success: false });
+        recipient = req.body.recipientEmail.trim().toLowerCase();
+        if (
+          recipient === chatOwnerEmail() ||
+          !(await db.collection('users').doc(recipient).get()).exists
+        )
+          return res.status(400).json({ success: false });
       }
-
-      const sanitizedMessage = message.trim().substring(0, 1000);
-
-      let targetRecipient: string | null = null;
-
-      if (user.role === 'admin') {
-        targetRecipient = recipientEmail || null;
-      } else {
-        targetRecipient = 'bernardo@kraczkowski.com';
-      }
-
-      const chatData = {
-        message: sanitizedMessage,
-        senderEmail: user.email,
-        senderName: `${user.firstName} ${user.lastName}`,
-        recipientEmail: targetRecipient,
-        isAdmin: user.role === 'admin',
-        timestamp: new Date(),
-        read: false,
-      };
-
-      const chatRef = await db.collection('chats').add(chatData);
-
-      const messageResponse = {
-        id: chatRef.id,
-        ...chatData,
-      };
-
-      res.status(201).json({
+      // Ordinary accounts cannot select recipients or impersonate an administrator.
+      return res.status(201).json({
         success: true,
-        data: messageResponse,
-        message: 'Mensagem enviada com sucesso!',
+        data: await send(user, req.body.message, recipient),
       });
-    } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
-      res.status(500).json({
-        success: false,
-        error: { message: 'Erro ao enviar mensagem' },
-      });
+    } catch {
+      return res.status(500).json({ success: false });
     }
   }
 );
@@ -92,47 +110,15 @@ router.get(
   '/user/:email',
   loadMessagesRateLimit,
   verifyToken,
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res) => {
     try {
-      const { email } = req.params;
-      const user = req.user!;
-      const adminEmail = 'bernardo@kraczkowski.com';
-
-      if (user.role !== 'admin' && user.email !== email) {
-        return res.status(403).json({
-          success: false,
-          error: {
-            message: 'Acesso negado: você só pode ver suas próprias mensagens',
-          },
-        });
-      }
-
-      const chatsQuery = db.collection('chats').orderBy('timestamp', 'asc');
-
-      const snapshot = await chatsQuery.get();
-      const messages: ChatRecord[] = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      } as ChatRecord));
-
-      const conversationMessages = messages.filter(
-        msg =>
-          (msg.senderEmail === email && msg.recipientEmail === adminEmail) ||
-          (msg.senderEmail === adminEmail && msg.recipientEmail === email) ||
-          (msg.senderEmail === email && !msg.recipientEmail) ||
-          (msg.senderEmail === adminEmail && msg.replyTo === email)
-      );
-
-      res.json({
-        success: true,
-        data: conversationMessages,
-      });
-    } catch (error) {
-      console.error('Erro ao buscar mensagens do usuário:', error);
-      res.status(500).json({
-        success: false,
-        error: { message: 'Erro ao buscar mensagens' },
-      });
+      const email = String(req.params.email).trim().toLowerCase();
+      if (!validEmail(email)) return res.status(400).json({ success: false });
+      if (!req.user!.isChatOwner && req.user!.email !== email)
+        return res.status(403).json({ success: false });
+      return res.json({ success: true, data: await readConversation(email) });
+    } catch {
+      return res.status(500).json({ success: false });
     }
   }
 );
@@ -140,174 +126,127 @@ router.get(
 router.get(
   '/all',
   loadMessagesRateLimit,
-  requireAdmin,
-  async (req: Request, res: Response) => {
+  requireChatOwner,
+  async (req, res) => {
     try {
-      const { limit = 100, offset = 0 } = req.query;
-
-      const chatsQuery = db
+      const limit = Math.min(200, Math.max(1, Number(req.query.limit || 200)));
+      const offset = Math.max(0, Number(req.query.offset || 0));
+      if (!Number.isInteger(limit) || !Number.isInteger(offset))
+        return res.status(400).json({ success: false });
+      const snapshot = await db
         .collection('chats')
         .orderBy('timestamp', 'desc')
-        .limit(Number(limit))
-        .offset(Number(offset));
-
-      const snapshot = await chatsQuery.get();
-      const messages: ChatRecord[] = snapshot.docs.map(doc => ({
-        id: doc.id,
+        .limit(limit)
+        .offset(offset)
+        .get();
+      const messagesByUser: Record<string, DocumentData[]> =
+        Object.create(null);
+      const messages: DocumentData[] = snapshot.docs.map((doc) => ({
         ...doc.data(),
-      } as ChatRecord));
-
-      const messagesByUser: Record<string, ChatRecord[]> = {};
-      messages.forEach(msg => {
-        if (!messagesByUser[msg.senderEmail]) {
-          messagesByUser[msg.senderEmail] = [];
-        }
-        messagesByUser[msg.senderEmail].push(msg);
-      });
-
-      res.json({
+        id: doc.id,
+      }));
+      for (const message of messages) {
+        const email = conversationEmail(message);
+        if (!email || email === chatOwnerEmail()) continue;
+        (messagesByUser[email] ||= []).push(message);
+      }
+      return res.json({
         success: true,
         data: {
           messages,
           messagesByUser,
           total: messages.length,
+          hasMore: messages.length === limit,
         },
       });
-    } catch (error) {
-      console.error('Erro ao buscar todas as mensagens:', error);
-      res.status(500).json({
-        success: false,
-        error: { message: 'Erro ao buscar mensagens' },
-      });
+    } catch {
+      return res.status(500).json({ success: false });
     }
   }
 );
 
-router.put(
-  '/mark-read/:messageId',
-  requireAdmin,
-  async (req: Request, res: Response) => {
-    try {
-      const messageId = String(req.params.messageId);
-
-      await db.collection('chats').doc(messageId).update({
-        read: true,
-        readAt: new Date(),
-      });
-
-      res.json({
-        success: true,
-        message: 'Mensagem marcada como lida',
-      });
-    } catch (error) {
-      console.error('Erro ao marcar mensagem como lida:', error);
-      res.status(500).json({
-        success: false,
-        error: { message: 'Erro ao marcar mensagem como lida' },
-      });
-    }
-  }
-);
-
-router.post('/reply', requireAdmin, async (req: Request, res: Response) => {
+router.put('/mark-read/:messageId', requireChatOwner, async (req, res) => {
   try {
-    const { originalMessageId, reply } = req.body;
-    const user = (req as AuthenticatedRequest).user!;
-    const adminEmail = user.email;
-    const adminName = `${user.firstName} ${user.lastName}`;
-
-    if (!originalMessageId || !reply || !adminEmail || !adminName) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          message:
-            'ID da mensagem original, resposta, email e nome do admin são obrigatórios',
-        },
-      });
-    }
-
-    const originalMessageDoc = await db
+    await db
       .collection('chats')
-      .doc(originalMessageId)
-      .get();
-
-    if (!originalMessageDoc.exists) {
-      return res.status(404).json({
-        success: false,
-        error: { message: 'Mensagem original não encontrada' },
-      });
-    }
-
-    const originalMessage = originalMessageDoc.data();
-    if (!originalMessage) {
-      return res.status(404).json({
-        success: false,
-        error: { message: 'Mensagem original não encontrada' },
-      });
-    }
-
-    const replyData = {
-      message: reply,
-      senderEmail: adminEmail,
-      senderName: adminName,
-      isAdmin: true,
-      timestamp: new Date(),
-      read: false,
-      originalMessageId,
-      replyTo: originalMessage.senderEmail,
-    };
-
-    const replyRef = await db.collection('chats').add(replyData);
-
-    await db.collection('chats').doc(originalMessageId).update({
-      replied: true,
-      repliedAt: new Date(),
-    });
-
-    const replyResponse = {
-      id: replyRef.id,
-      ...replyData,
-    };
-
-    res.status(201).json({
-      success: true,
-      data: replyResponse,
-      message: 'Resposta enviada com sucesso!',
-    });
-  } catch (error) {
-    console.error('Erro ao responder mensagem:', error);
-    res.status(500).json({
-      success: false,
-      error: { message: 'Erro ao responder mensagem' },
-    });
+      .doc(String(req.params.messageId))
+      .update({ read: true, readAt: new Date() });
+    return res.json({ success: true });
+  } catch {
+    return res.status(500).json({ success: false });
   }
 });
 
-router.get('/stats', requireAdmin, async (req: Request, res: Response) => {
+router.post('/read/:email', requireChatOwner, async (req, res) => {
+  try {
+    const email = String(req.params.email).trim().toLowerCase();
+    if (!validEmail(email)) return res.status(400).json({ success: false });
+    const unread = (await readConversation(email)).filter(
+      (message) => !message.isAdmin && !message.read
+    );
+    for (let start = 0; start < unread.length; start += 400) {
+      const batch = db.batch();
+      for (const message of unread.slice(start, start + 400)) {
+        batch.update(db.collection('chats').doc(message.id), {
+          read: true,
+          readAt: new Date(),
+        });
+      }
+      await batch.commit();
+    }
+    return res.json({ success: true });
+  } catch {
+    return res.status(500).json({ success: false });
+  }
+});
+
+router.post(
+  '/reply',
+  messageRateLimit,
+  requireChatOwner,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      if (
+        typeof req.body.originalMessageId !== 'string' ||
+        req.body.originalMessageId.includes('/') ||
+        !validMessage(req.body.reply)
+      )
+        return res.status(400).json({ success: false });
+      const original = await db
+        .collection('chats')
+        .doc(req.body.originalMessageId)
+        .get();
+      if (!original.exists) return res.status(404).json({ success: false });
+      const recipient = conversationEmail(original.data()!);
+      if (!validEmail(recipient) || recipient === chatOwnerEmail())
+        return res.status(400).json({ success: false });
+      return res.status(201).json({
+        success: true,
+        data: await send(req.user!, req.body.reply, recipient),
+      });
+    } catch {
+      return res.status(500).json({ success: false });
+    }
+  }
+);
+
+router.get('/stats', requireChatOwner, async (_req, res) => {
   try {
     const snapshot = await db.collection('chats').get();
-    const messages = snapshot.docs.map(doc => doc.data() as ChatRecord);
-
-    const stats = {
-      totalMessages: messages.length,
-      unreadMessages: messages.filter(msg => !msg.read).length,
-      adminMessages: messages.filter(msg => msg.isAdmin).length,
-      userMessages: messages.filter(msg => !msg.isAdmin).length,
-      uniqueUsers: [...new Set(messages.map(msg => msg.senderEmail))]
-        .length,
-    };
-
-    res.json({
+    const messages = snapshot.docs.map((doc) => doc.data());
+    return res.json({
       success: true,
-      data: stats,
+      data: {
+        totalMessages: messages.length,
+        unreadMessages: messages.filter(
+          (message) => !message.isAdmin && !message.read
+        ).length,
+        uniqueUsers: new Set(messages.map(conversationEmail).filter(Boolean))
+          .size,
+      },
     });
-  } catch (error) {
-    console.error('Erro ao buscar estatísticas de chat:', error);
-    res.status(500).json({
-      success: false,
-      error: { message: 'Erro ao buscar estatísticas' },
-    });
+  } catch {
+    return res.status(500).json({ success: false });
   }
 });
-
 export default router;

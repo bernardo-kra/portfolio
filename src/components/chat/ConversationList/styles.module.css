@@ -93,7 +93,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--brand-orange);
+  background: var(--chat-accent);
   color: white;
   display: flex;
   align-items: center;
@@ -168,7 +168,7 @@
   min-width: 20px;
   height: 20px;
   border-radius: 10px;
-  background: var(--brand-orange);
+  background: var(--chat-accent);
   color: white;
   font-size: 0.7rem;
   font-weight: 600;
@@ -254,4 +254,53 @@
   .lastMessage {
     font-size: 0.8rem;
   }
+}
+
+.conversationItem {
+  width: 100%;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: var(--text-primary);
+}
+
+.filters {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-light);
+}
+.filters input[type='search'] {
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem;
+  font-size: 1rem;
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+}
+.filters label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.error {
+  color: var(--chat-warning);
+  background: var(--card-background);
+  padding: 0.75rem 1rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.refreshButton {
+  width: 44px;
+  height: 44px;
+}
+.conversationItem {
+  min-height: 64px;
 }

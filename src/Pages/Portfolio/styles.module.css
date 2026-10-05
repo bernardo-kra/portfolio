@@ -184,7 +184,7 @@
 
 .studyVisual[data-kind='agency'] {
   background: #d6eadc;
-  color: #267b48;
+  color: #205f39;
 }
 .studyBody p {
   color: var(--text-muted);
@@ -236,5 +236,40 @@
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+
+.content {
+  --brand-orange: var(--portfolio-accent);
+}
+.studyEntry {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.studyEntry > a {
+  flex: 1;
+}
+.studyDetails {
+  padding: 0.9rem 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.studyDetails summary {
+  cursor: pointer;
+  color: var(--text-default);
+  padding-block: 0.3rem;
+}
+.studyDetails summary:focus-visible {
+  outline: 2px solid var(--portfolio-accent);
+  outline-offset: 4px;
+}
+.studyDetails p {
+  margin-top: 0.75rem;
+}
+@media (max-width: 600px) {
+  .content {
+    padding-bottom: 5rem;
   }
 }

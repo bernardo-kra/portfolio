@@ -22,7 +22,6 @@ export const SimpleAuthModal = ({
 }: SimpleAuthModalProps) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
-  const [isLogin, setIsLogin] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)
@@ -53,12 +52,15 @@ export const SimpleAuthModal = ({
     request.current = controller
     try {
       const response = await fetch(
-        `${appConfig.backend.baseUrl}/api/auth/${isLogin ? 'login' : 'register'}`,
+        `${appConfig.backend.baseUrl}/api/auth/login`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
-          signal: controller.signal,
+          signal: AbortSignal.any([
+            controller.signal,
+            AbortSignal.timeout(15000),
+          ]),
         }
       )
       const data = await response.json()
@@ -94,13 +96,7 @@ export const SimpleAuthModal = ({
           </button>
           <div className={styles.header}>
             <h2 id="auth-title">
-              {isLogin
-                ? pt
-                  ? 'Bem-vindo de volta'
-                  : 'Welcome back'
-                : pt
-                  ? 'Crie sua conta'
-                  : 'Create your account'}
+              {pt ? 'Converse com Bernardo' : 'Talk to Bernardo'}
             </h2>
           </div>
           <p className={styles.privacyNote}>
@@ -113,146 +109,57 @@ export const SimpleAuthModal = ({
           </p>
           <GoogleLogin onSuccess={success} />
           <p className={styles.divider}>
-            {pt ? 'ou use seu email' : 'or use your email'}
+            {pt
+              ? 'Já tem uma conta por senha? Entre abaixo.'
+              : 'Already have a password account? Sign in below.'}
           </p>
-          {isLogin && (
-            <form
-              key={isLogin ? 'login' : 'register'}
-              className={styles.form}
-              onSubmit={submit}
-            >
-              {!isLogin && (
-                <div className={styles.row}>
-                  <label>
-                    {pt ? 'Nome' : 'First name'}
-                    <input
-                      className={styles.input}
-                      name="firstName"
-                      autoComplete="given-name"
-                      maxLength={100}
-                      required
-                    />
-                  </label>
-                  <label>
-                    {pt ? 'Sobrenome' : 'Last name'}
-                    <input
-                      className={styles.input}
-                      name="lastName"
-                      autoComplete="family-name"
-                      maxLength={100}
-                      required
-                    />
-                  </label>
-                </div>
-              )}
-              <label>
-                Email
-                <input
-                  className={styles.input}
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  maxLength={254}
-                  required
-                />
-              </label>
-              <label>
-                {pt ? 'Senha' : 'Password'}
-                <input
-                  className={styles.input}
-                  name="password"
-                  type="password"
-                  autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  minLength={isLogin ? undefined : 8}
-                  maxLength={72}
-                  required
-                />
-              </label>
-              {!isLogin && (
-                <>
-                  <label>
-                    {pt ? 'Confirmar senha' : 'Confirm password'}
-                    <input
-                      className={styles.input}
-                      name="confirmPassword"
-                      type="password"
-                      autoComplete="new-password"
-                      minLength={8}
-                      maxLength={72}
-                      required
-                      onInput={(event) => {
-                        const field = event.currentTarget
-                        const password = (
-                          field.form?.elements.namedItem(
-                            'password'
-                          ) as HTMLInputElement
-                        )?.value
-                        field.setCustomValidity(
-                          field.value !== password
-                            ? pt
-                              ? 'As senhas devem ser iguais.'
-                              : 'Passwords must match.'
-                            : ''
-                        )
-                      }}
-                    />
-                  </label>
-                  <p className={styles.privacyNote}>
-                    {pt
-                      ? 'Mínimo de 8 caracteres. Não solicitamos telefone para criar sua conta.'
-                      : 'At least 8 characters. A phone number is not required to create your account.'}
-                  </p>
-                </>
-              )}
-              {error && (
-                <p role="alert" className={styles.error}>
-                  {isLogin
-                    ? pt
-                      ? 'Não foi possível entrar. Confira suas credenciais e a conexão.'
-                      : 'Could not sign in. Check your credentials and connection.'
-                    : pt
-                      ? 'Não foi possível criar a conta. Confira os campos; se já tiver uma conta, entre com sua senha.'
-                      : 'Could not create an account. Check the fields; if you already have an account, sign in with your password.'}
-                </p>
-              )}
-              <button className={styles.submitButton} disabled={loading}>
-                {loading
-                  ? pt
-                    ? 'Aguarde…'
-                    : 'Please wait…'
-                  : isLogin
-                    ? pt
-                      ? 'Entrar'
-                      : 'Sign in'
-                    : pt
-                      ? 'Criar conta'
-                      : 'Create account'}
-              </button>
-            </form>
-          )}
-          {!isLogin && (
-            <p className={styles.privacyNote}>
-              {pt
-                ? 'Crie sua conta usando o Google acima. O cadastro por senha está temporariamente indisponível.'
-                : 'Create your account with Google above. Password registration is temporarily unavailable.'}
-            </p>
-          )}
-          <button
-            className={styles.switchButton}
-            disabled={loading}
-            onClick={() => {
-              setIsLogin(!isLogin)
-              setError(false)
-            }}
-          >
-            {isLogin
-              ? pt
-                ? 'Ainda não tem conta? Cadastre-se'
-                : 'Need an account? Sign up'
-              : pt
-                ? 'Já tem conta? Entre'
-                : 'Already have an account? Sign in'}
-          </button>
+          <form className={styles.form} onSubmit={submit}>
+            <label>
+              Email
+              <input
+                className={styles.input}
+                name="email"
+                type="email"
+                autoComplete="email"
+                maxLength={254}
+                required
+              />
+            </label>
+            <label>
+              {pt ? 'Senha' : 'Password'}
+              <input
+                className={styles.input}
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                maxLength={72}
+                required
+              />
+            </label>
+
+            {error && (
+              <p role="alert" className={styles.error}>
+                {pt
+                  ? 'Não foi possível entrar. Confira suas credenciais e a conexão.'
+                  : 'Could not sign in. Check your credentials and connection.'}
+              </p>
+            )}
+            <button className={styles.submitButton} disabled={loading}>
+              {loading
+                ? pt
+                  ? 'Aguarde…'
+                  : 'Please wait…'
+                : pt
+                  ? 'Entrar'
+                  : 'Sign in'}
+            </button>
+          </form>
+
+          <p className={styles.privacyNote}>
+            {pt
+              ? 'No Google, a conta é criada automaticamente no primeiro acesso. Por segurança, recarregar a página encerra esta sessão.'
+              : 'Google creates your account automatically on first sign-in. For security, refreshing the page ends this session.'}
+          </p>
         </div>
       )}
     </dialog>

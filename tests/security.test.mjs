@@ -6,20 +6,39 @@ import { createHash } from 'node:crypto'
 // Exercise real HTTP handlers with synthetic records, never production data.
 const records = new Map()
 let writes = 0
+let nextDoc = 0
+const listeners = new Map()
+const notifyDocument = (key) => {
+  for (const callback of listeners.get(key) || []) callback(snapshot(key))
+}
 const snapshot = (key) => ({
   exists: records.has(key),
   data: () => records.get(key),
 })
 globalThis.__securityTestDb = {
   collection(name) {
+    const filters = []
+    let limit = Infinity
+    let offset = 0
     return {
-      doc(id) {
+      doc(id = `generated-${++nextDoc}`) {
         const key = `${name}/${id}`
         return {
+          id,
+          onSnapshot(callback) {
+            const callbacks = listeners.get(key) || new Set()
+            listeners.set(key, callbacks)
+            callbacks.add(callback)
+            queueMicrotask(() => {
+              if (callbacks.has(callback)) callback(snapshot(key))
+            })
+            return () => callbacks.delete(callback)
+          },
           get: async () => snapshot(key),
           set: async (data) => {
             writes++
             records.set(key, data)
+            notifyDocument(key)
           },
           create: async (data) => {
             writes++
@@ -38,16 +57,42 @@ globalThis.__securityTestDb = {
       orderBy() {
         return this
       },
+      where(field, _operator, value) {
+        filters.push([field, value])
+        return this
+      },
+      limit(value) {
+        limit = value
+        return this
+      },
+      offset(value) {
+        offset = value
+        return this
+      },
       get: async () => ({
         docs: [...records]
-          .filter(([key]) => key.startsWith(`${name}/`))
+          .filter(
+            ([key, value]) =>
+              key.startsWith(`${name}/`) &&
+              filters.every(([field, expected]) => value[field] === expected)
+          )
+          .slice(offset, offset + limit)
           .map(([key, data]) => ({ id: key.split('/')[1], data: () => data })),
       }),
       add: async (data) => {
         writes++
-        records.set(`${name}/new`, data)
-        return { id: 'new' }
+        const id = `new-${writes}`
+        records.set(`${name}/${id}`, data)
+        return { id }
       },
+    }
+  },
+  batch() {
+    const operations = []
+    return {
+      set: (ref, data) => operations.push(() => ref.set(data)),
+      update: (ref, data) => operations.push(() => ref.update(data)),
+      commit: async () => Promise.all(operations.map((fn) => fn())),
     }
   },
   async runTransaction(callback) {
@@ -74,7 +119,7 @@ const { default: express } = await import(
   '../backend/node_modules/express/index.js'
 )
 const { default: routes } = await import('../backend/dist/routes/index.js')
-const { createSession, getSessionEmail } = await import(
+const { createSession, getSessionEmail, revokeSession } = await import(
   '../backend/dist/services/sessionService.js'
 )
 const { accountRateLimit } = await import(
@@ -277,5 +322,203 @@ test('sessions from old deployments and invalid expiration timestamps are reject
     corrupt(records.get(`sessions/${hash}`))
     assert.equal(await getSessionEmail(token), null)
     assert.equal((await request('/api/contact/messages', token)).status, 401)
+  }
+})
+
+test('private chat routes every visitor to the owner and isolates replies by conversation', async () => {
+  process.env.CHAT_OWNER_EMAIL = 'admin@example.com'
+  try {
+    records.set('users/bernardokrac@gmail.com', {
+      email: 'bernardokrac@gmail.com',
+      role: 'user',
+      googleSub: 'verified-owner',
+    })
+    records.set('users/bob@example.com', {
+      email: 'bob@example.com',
+      role: 'user',
+    })
+    const alice = await createSession('alice@example.com')
+    const bob = await createSession('bob@example.com')
+    const owner = await createSession(
+      'bernardokrac@gmail.com',
+      'verified-owner'
+    )
+    const otherAdmin = await createSession('admin@example.com')
+    const passwordOwner = await createSession('bernardokrac@gmail.com')
+    const wrongIdentity = await createSession(
+      'bernardokrac@gmail.com',
+      'different-sub'
+    )
+    assert.equal((await request('/api/chat/all', passwordOwner)).status, 403)
+    assert.equal((await request('/api/chat/all', wrongIdentity)).status, 403)
+    records.get('users/bernardokrac@gmail.com').role = 'admin'
+    assert.equal((await request('/api/chat/all', passwordOwner)).status, 403)
+    records.get('users/bernardokrac@gmail.com').role = 'user'
+    const incoming = await request('/api/chat/send', alice, 'POST', {
+      message: 'Alice private question',
+      recipientEmail: 'bob@example.com',
+      isAdmin: true,
+      senderEmail: 'bernardokrac@gmail.com',
+    })
+    assert.equal(incoming.status, 201)
+    const message = (await incoming.json()).data
+    assert.equal(message.senderEmail, 'alice@example.com')
+    assert.equal(message.recipientEmail, 'bernardokrac@gmail.com')
+    assert.equal(message.conversationUserEmail, 'alice@example.com')
+    assert.equal(message.isAdmin, false)
+    assert.equal((await request('/api/chat/all', alice)).status, 403)
+    assert.equal((await request('/api/chat/all', otherAdmin)).status, 403)
+    assert.equal(
+      (await request('/api/chat/user/alice@example.com', bob)).status,
+      403
+    )
+    const answer = await request('/api/chat/send', owner, 'POST', {
+      message: 'Answer only for Alice',
+      recipientEmail: 'alice@example.com',
+    })
+    assert.equal(answer.status, 201)
+    const aliceMessages = (
+      await (await request('/api/chat/user/alice@example.com', alice)).json()
+    ).data
+    assert.deepEqual(
+      aliceMessages.map((message) => message.message),
+      ['Alice private question', 'Answer only for Alice']
+    )
+    const bobMessages = (
+      await (await request('/api/chat/user/bob@example.com', bob)).json()
+    ).data
+    assert.equal(bobMessages.length, 0)
+    const inbox = (await (await request('/api/chat/all', owner)).json()).data
+      .messagesByUser
+    assert.equal(inbox['alice@example.com'].length, 2)
+    assert.equal(inbox['bernardokrac@gmail.com'], undefined)
+    assert.equal(
+      (await request('/api/chat/read/alice@example.com', alice, 'POST')).status,
+      403
+    )
+    assert.equal(
+      (await request('/api/chat/read/alice@example.com', owner, 'POST')).status,
+      200
+    )
+    assert.equal(records.get(`chats/${message.id}`).read, true)
+    assert.equal(
+      (
+        await request('/api/chat/send', owner, 'POST', {
+          message: 'No broadcast',
+        })
+      ).status,
+      400
+    )
+    records.set('chats/legacy-question', {
+      senderEmail: 'alice@example.com',
+      recipientEmail: 'bernardo@kraczkowski.com',
+      message: 'Legacy private question',
+      isAdmin: false,
+    })
+    records.set('chats/legacy-answer', {
+      senderEmail: 'bernardo@kraczkowski.com',
+      replyTo: 'alice@example.com',
+      message: 'Legacy private answer',
+      isAdmin: true,
+    })
+    const legacy = (
+      await (await request('/api/chat/user/alice@example.com', alice)).json()
+    ).data
+    assert.ok(
+      legacy.some((message) => message.message === 'Legacy private answer')
+    )
+    assert.equal(
+      (await request('/api/chat/user/alice@example.com', otherAdmin)).status,
+      403
+    )
+  } finally {
+    delete process.env.CHAT_OWNER_EMAIL
+  }
+})
+
+test('chat event streams are authenticated, isolated, notify both participants and release listeners', async (context) => {
+  context.mock.timers.enable({ apis: ['setInterval'] })
+  assert.equal((await request('/api/chat/events')).status, 401)
+  const alice = await createSession('alice@example.com')
+  const bob = await createSession('bob@example.com')
+  const owner = await createSession('bernardokrac@gmail.com', 'verified-owner')
+  const streams = []
+  const waitFor = async (predicate) => {
+    const deadline = Date.now() + 2000
+    while (!predicate()) {
+      if (Date.now() >= deadline) throw new Error('Expected SSE notification')
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    }
+  }
+  try {
+    for (const token of [alice, bob, owner]) {
+      const controller = new AbortController()
+      const response = await fetch(
+        base + '/api/chat/events?email=bob@example.com',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        }
+      )
+      assert.equal(response.status, 200)
+      assert.match(response.headers.get('content-type'), /text\/event-stream/)
+      assert.match(response.headers.get('cache-control'), /no-store/)
+      const stream = { controller, count: 0, text: '' }
+      streams.push(stream)
+      stream.pump = (async () => {
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+        try {
+          while (true) {
+            const chunk = await reader.read()
+            if (chunk.done) break
+            stream.text += decoder.decode(chunk.value, { stream: true })
+            stream.count = (stream.text.match(/"type":"refresh"/g) || []).length
+          }
+        } catch (error) {
+          if (!controller.signal.aborted) throw error
+        } finally {
+          await reader.cancel().catch(() => {})
+          stream.done = true
+        }
+      })()
+    }
+    await waitFor(() => streams.every((s) => s.count === 1))
+    const response = await request('/api/chat/send', alice, 'POST', {
+      message: 'Private realtime question',
+    })
+    assert.equal(response.status, 201)
+    await waitFor(() => streams[0].count === 2 && streams[2].count === 2)
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    assert.equal(
+      streams[1].count,
+      1,
+      'Bob receives no Alice event, even with a forged query email'
+    )
+    assert.equal(
+      (
+        await request('/api/chat/send', owner, 'POST', {
+          message: 'Private realtime answer',
+          recipientEmail: 'alice@example.com',
+        })
+      ).status,
+      201
+    )
+    await waitFor(() => streams[0].count === 3 && streams[2].count === 3)
+    assert.equal(streams[1].count, 1)
+    for (const stream of streams) {
+      assert.doesNotMatch(stream.text, /example\.com|Private realtime|Bearer/)
+    }
+    await revokeSession(alice)
+    context.mock.timers.tick(30_000)
+    await waitFor(() => streams[0].done)
+    assert.equal(listeners.get('chatActivity/alice@example.com').size, 0)
+    assert.equal(streams[1].done, undefined, 'Other sessions remain connected')
+  } finally {
+    for (const stream of streams) stream.controller.abort()
+    await Promise.all(streams.map((s) => s.pump))
+    await waitFor(() =>
+      [...listeners.values()].every((callbacks) => callbacks.size === 0)
+    )
   }
 })

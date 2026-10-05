@@ -99,7 +99,7 @@
 
 .typography--muted {
   color: var(--text-muted);
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .typography--brand {
@@ -213,15 +213,15 @@
   .typography--h1 {
     font-size: var(--font-size-4xl);
   }
-  
+
   .typography--h2 {
     font-size: var(--font-size-3xl);
   }
-  
+
   .typography--h3 {
     font-size: var(--font-size-2xl);
   }
-  
+
   .typography--h4 {
     font-size: var(--font-size-xl);
   }
@@ -231,19 +231,19 @@
   .typography--h1 {
     font-size: var(--font-size-3xl);
   }
-  
+
   .typography--h2 {
     font-size: var(--font-size-2xl);
   }
-  
+
   .typography--h3 {
     font-size: var(--font-size-xl);
   }
-  
+
   .typography--h4 {
     font-size: var(--font-size-lg);
   }
-  
+
   .typography--body1 {
     font-size: var(--font-size-sm);
   }
@@ -253,16 +253,16 @@
   .typography--h1 {
     font-size: var(--font-size-2xl);
   }
-  
+
   .typography--h2 {
     font-size: var(--font-size-xl);
   }
-  
+
   .typography--h3 {
     font-size: var(--font-size-lg);
   }
-  
+
   .typography--body1 {
     font-size: var(--font-size-xs);
   }
-} 
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography, Card } from '@components/common'
 import { useI18n } from '@src/i18n'
 import { profile } from '@src/config/profile'
@@ -6,6 +6,7 @@ import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
 
 const AboutMe: React.FC = () => {
+  const [showAll, setShowAll] = useState(false)
   const { t, lang } = useI18n()
 
   const metrics = [
@@ -13,26 +14,33 @@ const AboutMe: React.FC = () => {
       icon: Calendar,
       value: '5+',
       label: t.aboutMeMetrics.experience,
-      description: t.aboutMeMetrics.experienceDesc
+      description: t.aboutMeMetrics.experienceDesc,
     },
     {
       icon: Code,
-      value: '15+',
-      label: t.aboutMeMetrics.technologies,
-      description: t.aboutMeMetrics.technologiesDesc
+      value: 'React / TS',
+      label: lang === 'pt' ? 'Stack principal' : 'Core stack',
+      description:
+        lang === 'pt'
+          ? 'Interfaces e integração de APIs'
+          : 'Interfaces and API integration',
     },
     {
       icon: Briefcase,
-      value: '20+',
-      label: t.aboutMeMetrics.projects,
-      description: t.aboutMeMetrics.projectsDesc
+      value: 'E-commerce',
+      label:
+        lang === 'pt' ? 'Experiência profissional' : 'Professional experience',
+      description:
+        lang === 'pt'
+          ? 'React e Oracle Commerce Cloud'
+          : 'React and Oracle Commerce Cloud',
     },
     {
       icon: Users,
       value: '3+',
       label: t.aboutMeMetrics.qa,
-      description: t.aboutMeMetrics.qaDesc
-    }
+      description: t.aboutMeMetrics.qaDesc,
+    },
   ]
 
   const specializations = [
@@ -48,35 +56,35 @@ const AboutMe: React.FC = () => {
     { name: 'CI/CD', color: '#00c7b7' },
     { name: 'Storybook', color: '#ff4785' },
     { name: 'Oracle Commerce Cloud', color: '#ff6b35' },
-    { name: 'SQL', color: '#336791' }
+    { name: 'SQL', color: '#336791' },
   ]
 
   const achievements = [
     {
       title: t.aboutMeAchievements.frontend,
       description: t.aboutMeAchievements.frontendDesc,
-      icon: Code
+      icon: Code,
     },
     {
       title: t.aboutMeAchievements.architecture,
       description: t.aboutMeAchievements.architectureDesc,
-      icon: Award
+      icon: Award,
     },
     {
       title: t.aboutMeAchievements.apis,
       description: t.aboutMeAchievements.apisDesc,
-      icon: Users
+      icon: Users,
     },
     {
       title: t.aboutMeAchievements.testing,
       description: t.aboutMeAchievements.testingDesc,
-      icon: Award
+      icon: Award,
     },
     {
       title: t.aboutMeAchievements.documentation,
       description: t.aboutMeAchievements.documentationDesc,
-      icon: Code
-    }
+      icon: Code,
+    },
   ]
 
   return (
@@ -85,12 +93,18 @@ const AboutMe: React.FC = () => {
         <Typography variant="h2" className={styles.aboutmeTitle}>
           {t.aboutTitle}
         </Typography>
-        <Typography variant="body1" color="muted" className={styles.aboutmeSubtitle}>
+        <Typography
+          variant="body1"
+          color="muted"
+          className={styles.aboutmeSubtitle}
+        >
           {t.aboutDescription}
         </Typography>
         <div className={styles.aboutmeLocation}>
           <MapPin size={16} />
-          <span>{profile.location} - {lang === 'pt' ? 'Brasil' : 'Brazil'}</span>
+          <span>
+            {profile.location} - {lang === 'pt' ? 'Brasil' : 'Brazil'}
+          </span>
         </div>
       </div>
 
@@ -107,7 +121,11 @@ const AboutMe: React.FC = () => {
               <Typography variant="body2" className={styles.metricLabel}>
                 {metric.label}
               </Typography>
-              <Typography variant="caption" color="muted" className={styles.metricDescription}>
+              <Typography
+                variant="caption"
+                color="muted"
+                className={styles.metricDescription}
+              >
                 {metric.description}
               </Typography>
             </div>
@@ -120,18 +138,36 @@ const AboutMe: React.FC = () => {
           <Typography variant="h4" className={styles.columnTitle}>
             {t.aboutMeSpecializations.title}
           </Typography>
+          <button
+            className={styles.expandButton}
+            aria-expanded={showAll}
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll
+              ? lang === 'pt'
+                ? 'Mostrar menos'
+                : 'Show less'
+              : lang === 'pt'
+                ? 'Ver todas as tecnologias'
+                : 'View all technologies'}
+          </button>
           <div className={styles.specializationsList}>
-            {specializations.map((spec, index) => (
-              <div key={index} className={styles.specializationTag}>
-                <div 
-                  className={styles.specializationColor}
-                  style={{ backgroundColor: spec.color }}
-                />
-                <Typography variant="body2" className={styles.specializationName}>
-                  {spec.name}
-                </Typography>
-              </div>
-            ))}
+            {specializations
+              .slice(0, showAll ? undefined : 6)
+              .map((spec, index) => (
+                <div key={index} className={styles.specializationTag}>
+                  <div
+                    className={styles.specializationColor}
+                    style={{ backgroundColor: spec.color }}
+                  />
+                  <Typography
+                    variant="body2"
+                    className={styles.specializationName}
+                  >
+                    {spec.name}
+                  </Typography>
+                </div>
+              ))}
           </div>
         </div>
 
@@ -146,10 +182,17 @@ const AboutMe: React.FC = () => {
                   <achievement.icon size={20} />
                 </div>
                 <div className={styles.achievementContent}>
-                  <Typography variant="body2" className={styles.achievementTitle}>
+                  <Typography
+                    variant="body2"
+                    className={styles.achievementTitle}
+                  >
                     {achievement.title}
                   </Typography>
-                  <Typography variant="caption" color="muted" className={styles.achievementDescription}>
+                  <Typography
+                    variant="caption"
+                    color="muted"
+                    className={styles.achievementDescription}
+                  >
                     {achievement.description}
                   </Typography>
                 </div>

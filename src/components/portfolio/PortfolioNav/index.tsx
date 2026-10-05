@@ -140,7 +140,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                   className={styles.loginBtn}
                   onClick={() => setIsAuthModalOpen(true)}
                 >
-                  Login
+                  {lang === 'pt' ? 'Entrar' : 'Sign in'}
                 </button>
               )}
             {isAuthenticated && (
@@ -197,7 +197,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                         {lang === 'pt' ? 'Configurações' : 'Settings'}
                       </button>
 
-                      {user?.role === 'admin' && (
+                      {user?.isChatOwner === true && (
                         <button
                           className={styles.dropdownItem}
                           onClick={() => {
@@ -206,7 +206,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                           }}
                         >
                           <span className={styles.dropdownIcon}>💬</span>
-                          Admin Chat
+                          {lang === 'pt' ? 'Caixa de entrada' : 'Inbox'}
                         </button>
                       )}
 

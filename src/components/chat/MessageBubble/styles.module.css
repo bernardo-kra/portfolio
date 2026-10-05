@@ -38,16 +38,16 @@
 }
 
 .ownBubble {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--chat-accent);
   color: white;
   border-bottom-right-radius: 6px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(35, 91, 72, 0.3);
 }
 
 .otherBubble {
-  background: rgba(255, 255, 255, 0.95);
-  color: #2d3748;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
   border-bottom-left-radius: 6px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
@@ -61,14 +61,14 @@
 
 .messageTime {
   font-size: 0.75rem;
-  opacity: 0.8;
+  opacity: 1;
   text-align: right;
   margin-top: 6px;
   font-weight: 400;
 }
 
 .ownMessage .messageTime {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--chat-on-accent);
 }
 
 .otherMessage .messageTime {
@@ -79,12 +79,12 @@
   .messageContainer {
     max-width: 85%;
   }
-  
+
   .messageBubble {
     padding: var(--spacing-sm);
   }
-  
+
   .messageText {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
   }
 }

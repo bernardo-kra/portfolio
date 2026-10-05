@@ -98,6 +98,7 @@ router.post(
             lastName: userData.lastName,
             phone: userData.phone,
             role: userData.role,
+            isChatOwner: false,
           },
         },
         message: 'Login realizado com sucesso!',

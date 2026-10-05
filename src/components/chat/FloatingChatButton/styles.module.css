@@ -3,7 +3,7 @@
   bottom: 24px;
   right: 24px;
   background: var(--brand-orange);
-  color: white;
+  color: #182b23;
   border: none;
   border-radius: 50px;
   padding: 16px 20px;
@@ -16,13 +16,14 @@
   z-index: 1000;
   font-weight: 600;
   font-size: var(--font-size-sm);
-  max-width: 200px;
+  max-width: 240px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 
 .floatingButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-  background: #e67e22;
+  background: #ffd699;
 }
 
 .chatIcon {
@@ -123,10 +124,9 @@
 }
 
 .closeButton:hover {
-  background: var(--brand-orange);
-  color: white;
-  border-color: var(--brand-orange);
-  transform: scale(1.1);
+  background: var(--chat-accent);
+  color: var(--chat-on-accent);
+  border-color: var(--chat-accent);
 }
 
 @media (max-width: 768px) {
@@ -145,5 +145,22 @@
     margin: 0;
     border-radius: 0;
     max-height: 100vh;
+  }
+}
+
+.chatIcon {
+  animation: none;
+  display: flex;
+}
+@media (max-width: 600px) {
+  .floatingButton {
+    bottom: 64px;
+    right: 12px;
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floatingButton {
+    transition: none;
   }
 }

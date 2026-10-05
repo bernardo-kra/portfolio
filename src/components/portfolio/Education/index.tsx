@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useI18n } from '@src/i18n'
 import { Typography, Section, Card } from '@components/common'
 import styles from './styles.module.css'
 
 const Education: React.FC = () => {
-  const { t } = useI18n()
+  const [showAll, setShowAll] = useState(false)
+  const { t, lang } = useI18n()
   const education = t.education
   return (
     <Section id="educacao" spacing="lg">
@@ -58,43 +59,60 @@ const Education: React.FC = () => {
             {education.coursesLabel}
           </Typography>
           <div className={styles.coursesGrid}>
-            {education.courses.map((course, index) => (
-              <Card key={index} className={styles.courseCard}>
-                <div className={styles.courseHeader}>
-                  <Typography
-                    variant="h6"
-                    weight="semibold"
-                    className={styles.courseTitle}
-                  >
-                    {course.title}
-                  </Typography>
-                  <div className={styles.courseMeta}>
+            {education.courses
+              .slice(0, showAll ? undefined : 3)
+              .map((course, index) => (
+                <Card key={index} className={styles.courseCard}>
+                  <div className={styles.courseHeader}>
                     <Typography
-                      variant="caption"
-                      color="brand"
-                      className={styles.platform}
+                      variant="h6"
+                      weight="semibold"
+                      className={styles.courseTitle}
                     >
-                      {course.platform}
+                      {course.title}
                     </Typography>
-                    <Typography
-                      variant="caption"
-                      color="muted"
-                      className={styles.duration}
-                    >
-                      {course.duration} • {course.lessons}
-                    </Typography>
+                    <div className={styles.courseMeta}>
+                      <Typography
+                        variant="caption"
+                        color="brand"
+                        className={styles.platform}
+                      >
+                        {course.platform}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="muted"
+                        className={styles.duration}
+                      >
+                        {course.duration} • {course.lessons}
+                      </Typography>
+                    </div>
                   </div>
-                </div>
-                <Typography
-                  variant="body2"
-                  color="muted"
-                  className={styles.courseDescription}
-                >
-                  {course.description}
-                </Typography>
-              </Card>
-            ))}
+                  <Typography
+                    variant="body2"
+                    color="muted"
+                    className={styles.courseDescription}
+                  >
+                    {course.description}
+                  </Typography>
+                </Card>
+              ))}
           </div>
+          {education.courses.length > 3 && (
+            <button
+              className={styles.expandButton}
+              aria-expanded={showAll}
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll
+                ? lang === 'pt'
+                  ? 'Mostrar menos'
+                  : 'Show less'
+                : lang === 'pt'
+                  ? 'Ver todos os cursos'
+                  : 'View all courses'}
+            </button>
+          )}
         </div>
       </div>
     </Section>
