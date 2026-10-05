@@ -211,7 +211,10 @@ router.put(
 
 router.post('/reply', requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { originalMessageId, reply, adminEmail, adminName } = req.body;
+    const { originalMessageId, reply } = req.body;
+    const user = (req as AuthenticatedRequest).user!;
+    const adminEmail = user.email;
+    const adminName = `${user.firstName} ${user.lastName}`;
 
     if (!originalMessageId || !reply || !adminEmail || !adminName) {
       return res.status(400).json({

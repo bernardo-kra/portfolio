@@ -1,10 +1,15 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { db } from '../config/firebase.js';
 
-const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const SESSION_TTL_MS = 60 * 60 * 1000;
 
 const hashToken = (token: string) =>
   createHash('sha256').update(token).digest('hex');
+
+export const revokeSession = async (token: string): Promise<void> => {
+  if (/^[A-Za-z0-9_-]{43}$/.test(token))
+    await db.collection('sessions').doc(hashToken(token)).delete();
+};
 
 const readExpiration = (value: unknown): Date | null => {
   if (value instanceof Date) return value;
@@ -17,16 +22,22 @@ const readExpiration = (value: unknown): Date | null => {
 
 export const createSession = async (email: string): Promise<string> => {
   const token = randomBytes(32).toString('base64url');
-  await db.collection('sessions').doc(hashToken(token)).set({
-    email,
-    expiresAt: new Date(Date.now() + SESSION_TTL_MS),
-    createdAt: new Date(),
-  });
+  await db
+    .collection('sessions')
+    .doc(hashToken(token))
+    .set({
+      version: 2,
+      email,
+      expiresAt: new Date(Date.now() + SESSION_TTL_MS),
+      createdAt: new Date(),
+    });
   return token;
 };
 
-export const getSessionEmail = async (token: string): Promise<string | null> => {
-  if (token.length < 32) return null;
+export const getSessionEmail = async (
+  token: string
+): Promise<string | null> => {
+  if (!/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
 
   const sessionRef = db.collection('sessions').doc(hashToken(token));
   const sessionDoc = await sessionRef.get();
@@ -36,7 +47,13 @@ export const getSessionEmail = async (token: string): Promise<string | null> => 
   const email = session?.email;
   const expiresAt = readExpiration(session?.expiresAt);
 
-  if (typeof email !== 'string' || !expiresAt || expiresAt.getTime() <= Date.now()) {
+  if (
+    session?.version !== 2 ||
+    typeof email !== 'string' ||
+    !expiresAt ||
+    !Number.isFinite(expiresAt.getTime()) ||
+    expiresAt.getTime() <= Date.now()
+  ) {
     await sessionRef.delete();
     return null;
   }

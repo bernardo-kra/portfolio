@@ -91,7 +91,7 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
         <figcaption>
           <span className={styles.location}>
             <MapPin size={15} aria-hidden="true" />
-            Bento Gonçalves, RS
+            {profile.location}
           </span>
           <strong>{t.recruiter.portraitNote}</strong>
         </figcaption>

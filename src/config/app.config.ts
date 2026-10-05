@@ -23,7 +23,7 @@ const defaultConfig: AppConfig = {
       import.meta.env.VITE_BACKEND_URL ||
       (import.meta.env.DEV
         ? 'http://localhost:3001'
-        : 'https://portfolio-08my.onrender.com'),
+        : 'https://portfolio-backed-ll6j.onrender.com'),
   },
   features: {
     authentication: import.meta.env.VITE_AUTH_ENABLED !== 'false',
@@ -40,10 +40,6 @@ const defaultConfig: AppConfig = {
 
 const getConfig = (): AppConfig => {
   const config = { ...defaultConfig }
-
-  if (window.location.hostname === 'bernardo-kra.github.io') {
-    config.backend.baseUrl = 'https://portfolio-08my.onrender.com'
-  }
 
   if (import.meta.env.DEV) {
     console.log('App Config:', config)

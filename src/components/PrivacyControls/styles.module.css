@@ -1,0 +1,74 @@
+.banner {
+  position: fixed;
+  z-index: 9900;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  margin: auto;
+  max-width: 1050px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.3rem;
+  border-radius: 12px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #182321);
+  border: 1px solid var(--border-color, #78938c);
+  box-shadow: 0 8px 35px #0004;
+  max-height: 55dvh;
+  overflow-y: auto;
+}
+.banner > div:first-child {
+  flex: 1 1 400px;
+}
+.banner h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+}
+.banner p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0.4rem 0;
+}
+.banner a {
+  text-decoration: underline;
+  color: inherit;
+  font-size: 0.8rem;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.actions button,
+.reopen {
+  padding: 0.7rem 1rem;
+  min-height: 44px;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #182321);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+.reopen {
+  position: fixed;
+  bottom: 0.65rem;
+  left: 0.65rem;
+  z-index: 1000;
+  font-size: 0.7rem;
+  box-shadow: 0 2px 8px #0002;
+}
+.banner button:focus-visible,
+.reopen:focus-visible {
+  outline: 3px solid #d08039;
+  outline-offset: 3px;
+}
+:global([data-theme='dark']) .banner,
+:global([data-theme='dark']) .actions button,
+:global([data-theme='dark']) .reopen {
+  background: #16211f;
+  color: #eff5ee;
+}

@@ -1,3 +1,4 @@
+import { requireAdmin } from '../middleware/adminAuth.js';
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
 
@@ -39,7 +40,7 @@ router.post('/messages', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/messages', async (req: Request, res: Response) => {
+router.get('/messages', requireAdmin, async (req: Request, res: Response) => {
   try {
     const messagesSnapshot = await db.collection('messages')
       .orderBy('createdAt', 'desc')
@@ -63,7 +64,7 @@ router.get('/messages', async (req: Request, res: Response) => {
   }
 });
 
-router.patch('/messages/:id/read', async (req: Request, res: Response) => {
+router.patch('/messages/:id/read', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
     

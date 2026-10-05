@@ -17,6 +17,7 @@ const RouteEffects = () => {
       '/landing': t.landingTitle,
       '/experimental3d': 'Neon Bay — Intelligence Bureau',
       '/agency': 'Forma — Creative Studio',
+      '/privacy': lang === 'pt' ? 'Privacidade' : 'Privacy',
     }
     const route = pathname.replace(/\/$/, '') || '/'
     const isPublicRoute = Object.hasOwn(titles, route)

@@ -5,11 +5,11 @@ import { useAnalytics, trackPageView } from '@hooks/useAnalytics'
 const Analytics: React.FC = () => {
   const location = useLocation()
 
-  useAnalytics()
+  const consent = useAnalytics()
 
   useEffect(() => {
     trackPageView(location.pathname, document.title)
-  }, [location])
+  }, [location, consent])
 
   return null
 }

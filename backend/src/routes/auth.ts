@@ -1,194 +1,168 @@
+import { accountRateLimit } from '../middleware/accountRateLimiter.js';
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
 import bcrypt from 'bcryptjs';
 import { authRateLimit } from '../middleware/rateLimiter.js';
-import { createSession } from '../services/sessionService.js';
+import { createSession, revokeSession } from '../services/sessionService.js';
 import { verifyToken, type AuthenticatedRequest } from '../middleware/auth.js';
+import googleRoutes from './googleAuth.js';
 
 const router = Router();
-
-router.post('/register', authRateLimit, async (req: Request, res: Response) => {
+router.use('/google', googleRoutes);
+router.post('/logout', async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.replace(/^Bearer\s+/i, '');
   try {
-    const { firstName, lastName, email, password, confirmPassword, phone } = req.body;
+    if (token) await revokeSession(token);
+    return res.json({ success: true });
+  } catch {
+    return res.status(500).json({ success: false });
+  }
+});
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        error: { message: 'Nome, sobrenome, email, senha e confirmação são obrigatórios' },
-      });
-    }
+router.post('/register', authRateLimit, (_req: Request, res: Response) => {
+  return res.status(403).json({
+    success: false,
+    error: {
+      code: 'EMAIL_VERIFICATION_REQUIRED',
+      message:
+        'Crie sua conta com Google. Cadastro por senha aguarda confirmação de email.',
+    },
+  });
+});
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        error: { message: 'Senhas não coincidem' },
-      });
-    }
+router.post(
+  '/login',
+  authRateLimit,
+  accountRateLimit,
+  async (req: Request, res: Response) => {
+    try {
+      const email =
+        typeof req.body.email === 'string'
+          ? req.body.email.trim().toLowerCase()
+          : '';
+      const { password } = req.body;
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        error: { message: 'Senha deve ter pelo menos 6 caracteres' },
-      });
-    }
+      if (
+        email.length > 254 ||
+        !/^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(email) ||
+        typeof password !== 'string' ||
+        !password ||
+        Buffer.byteLength(password, 'utf8') > 72
+      ) {
+        return res.status(400).json({
+          success: false,
+          error: { message: 'Email e senha são obrigatórios' },
+        });
+      }
 
-    const userRef = db.collection('users').doc(email);
-    const userDoc = await userRef.get();
+      const userRef = db.collection('users').doc(email);
+      const userDoc = await userRef.get();
 
-    if (userDoc.exists) {
-      return res.status(400).json({
-        success: false,
-        error: { message: 'Usuário já existe com este email' },
-      });
-    }
+      if (!userDoc.exists) {
+        return res.status(401).json({
+          success: false,
+          error: { message: 'Credenciais inválidas' },
+        });
+      }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      const userData = userDoc.data();
+      if (!userData) {
+        return res.status(401).json({
+          success: false,
+          error: { message: 'Credenciais inválidas' },
+        });
+      }
 
-    const isAdmin = email === 'bernardo@kraczkowski.com' || email === 'admin@portfolio.com';
-    
-    const userData = {
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-      phone: phone || '',
-      role: isAdmin ? 'admin' : 'user',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      // Administrative accounts must not keep using historical default/short passwords.
+      const isValidPassword =
+        !(userData.role === 'admin' && password.length < 16) &&
+        typeof userData.password === 'string' &&
+        (await bcrypt.compare(password, userData.password));
 
-    await userRef.set(userData);
+      if (!isValidPassword) {
+        return res.status(401).json({
+          success: false,
+          error: { message: 'Credenciais inválidas' },
+        });
+      }
 
-    const token = await createSession(email);
+      const token = await createSession(userData.email);
 
-    res.status(201).json({
-      success: true,
-      data: {
-        token,
-        user: {
-          email,
-          firstName,
-          lastName,
-          phone: phone || '',
-          role: userData.role,
+      res.json({
+        success: true,
+        data: {
+          token,
+          user: {
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            phone: userData.phone,
+            role: userData.role,
+          },
         },
-      },
-      message: 'Usuário criado com sucesso!',
-    });
-  } catch (error) {
-    console.error('Erro ao registrar usuário:', error);
-    res.status(500).json({
-      success: false,
-      error: { message: 'Erro ao registrar usuário' },
-    });
+        message: 'Login realizado com sucesso!',
+      });
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      res.status(500).json({
+        success: false,
+        error: { message: 'Erro ao fazer login' },
+      });
+    }
   }
-});
+);
 
-router.post('/login', authRateLimit, async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+router.get(
+  '/profile/:email',
+  verifyToken,
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const email = String(req.params.email);
 
-    if (!email || !password) {
-      return res.status(400).json({
+      if (req.user?.email !== email && req.user?.role !== 'admin') {
+        return res.status(403).json({
+          success: false,
+          error: { message: 'Acesso negado' },
+        });
+      }
+
+      const userRef = db.collection('users').doc(email);
+      const userDoc = await userRef.get();
+
+      if (!userDoc.exists) {
+        return res.status(404).json({
+          success: false,
+          error: { message: 'Usuário não encontrado' },
+        });
+      }
+
+      const userData = userDoc.data();
+      if (!userData) {
+        return res.status(404).json({
+          success: false,
+          error: { message: 'Usuário não encontrado' },
+        });
+      }
+
+      const profile = {
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        role: userData.role,
+      };
+
+      res.json({
+        success: true,
+        data: profile,
+      });
+    } catch (error) {
+      console.error('Erro ao buscar perfil:', error);
+      res.status(500).json({
         success: false,
-        error: { message: 'Email e senha são obrigatórios' },
+        error: { message: 'Erro ao buscar perfil' },
       });
     }
-
-    const userRef = db.collection('users').doc(email);
-    const userDoc = await userRef.get();
-
-    if (!userDoc.exists) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Credenciais inválidas' },
-      });
-    }
-
-    const userData = userDoc.data();
-    if (!userData) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Credenciais inválidas' },
-      });
-    }
-
-    const isValidPassword = await bcrypt.compare(password, userData.password);
-
-    if (!isValidPassword) {
-      return res.status(401).json({
-        success: false,
-        error: { message: 'Credenciais inválidas' },
-      });
-    }
-
-    const token = await createSession(userData.email);
-
-    res.json({
-      success: true,
-      data: {
-        token,
-        user: {
-          email: userData.email,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          phone: userData.phone,
-          role: userData.role,
-        },
-      },
-      message: 'Login realizado com sucesso!',
-    });
-  } catch (error) {
-    console.error('Erro ao fazer login:', error);
-    res.status(500).json({
-      success: false,
-      error: { message: 'Erro ao fazer login' },
-    });
   }
-});
-
-router.get('/profile/:email', verifyToken, async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const email = String(req.params.email);
-
-    if (req.user?.email !== email && req.user?.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        error: { message: 'Acesso negado' },
-      });
-    }
-
-    const userRef = db.collection('users').doc(email);
-    const userDoc = await userRef.get();
-
-    if (!userDoc.exists) {
-      return res.status(404).json({
-        success: false,
-        error: { message: 'Usuário não encontrado' },
-      });
-    }
-
-    const userData = userDoc.data();
-    if (!userData) {
-      return res.status(404).json({
-        success: false,
-        error: { message: 'Usuário não encontrado' },
-      });
-    }
-
-    delete userData.password;
-
-    res.json({
-      success: true,
-      data: userData,
-    });
-  } catch (error) {
-    console.error('Erro ao buscar perfil:', error);
-    res.status(500).json({
-      success: false,
-      error: { message: 'Erro ao buscar perfil' },
-    });
-  }
-});
+);
 
 export default router;

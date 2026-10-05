@@ -1,3 +1,4 @@
+import { getAuthToken, getAuthUser } from './authSession'
 import { appConfig } from '../config/app.config'
 
 export type ChatTimestamp =
@@ -200,17 +201,16 @@ class ChatService {
   }
 
   private getAuthHeaders(): Record<string, string> | null {
-    const token = localStorage.getItem('token')
-    const storedUser = localStorage.getItem('user')
+    const token = getAuthToken()
+    const storedUser = getAuthUser()
     if (!token || !storedUser) return null
 
     try {
-      const user = JSON.parse(storedUser) as StoredUser
+      const user = storedUser as StoredUser
       if (!user.email) return null
 
       return {
         Authorization: `Bearer ${token}`,
-        'x-user-email': user.email,
       }
     } catch {
       return null

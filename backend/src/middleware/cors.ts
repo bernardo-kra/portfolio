@@ -6,10 +6,9 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:3000',
+      ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173', 'http://localhost:3000'] : []),
       'https://bernardo-kra.github.io',
-      'https://bernardo-kra.github.io/portfolio'
+      ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5174'] : [])
     ];
     
     if (allowedOrigins.includes(origin)) {

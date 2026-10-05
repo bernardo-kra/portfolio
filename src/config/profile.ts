@@ -1,6 +1,7 @@
 import resumeUrl from '@src/CV_-_Bernardo_Kraczkowski.pdf?url'
 
 export const profile = {
+  location: 'Sertão, RS',
   resumeUrl,
   resumeFilename: 'Bernardo-Kraczkowski-CV.pdf',
   github: 'https://github.com/bernardo-kra',

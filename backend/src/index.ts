@@ -8,6 +8,8 @@ import routes from './routes/index.js';
 import './config/firebase.js';
 
 const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', process.env.NODE_ENV === 'production' ? 1 : false);
 const PORT = process.env.PORT || 3001;
 
 app.use(corsMiddleware);
@@ -15,8 +17,9 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: false,
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '32kb' }));
+app.use(express.urlencoded({ extended: false, limit: '32kb' }));
+app.use('/api/auth', (_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
 
 // Middlewares de segurança
 app.use(suspiciousActivityDetector);

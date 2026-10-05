@@ -1,3 +1,4 @@
+import { requireAdmin } from '../middleware/adminAuth.js';
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
 
@@ -24,7 +25,7 @@ router.get('/projects', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/projects', async (req: Request, res: Response) => {
+router.post('/projects', requireAdmin, async (req: Request, res: Response) => {
   try {
     const { title, description, technologies, githubUrl, liveUrl, imageUrl } = req.body;
 
@@ -86,7 +87,7 @@ router.get('/projects/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/projects/:id', async (req: Request, res: Response) => {
+router.put('/projects/:id', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
     const updateData = {
@@ -111,7 +112,7 @@ router.put('/projects/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/projects/:id', async (req: Request, res: Response) => {
+router.delete('/projects/:id', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
     await db.collection('projects').doc(id).delete();

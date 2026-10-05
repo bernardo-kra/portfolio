@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, Card } from '@components/common'
 import { useI18n } from '@src/i18n'
+import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
 
@@ -89,7 +90,7 @@ const AboutMe: React.FC = () => {
         </Typography>
         <div className={styles.aboutmeLocation}>
           <MapPin size={16} />
-          <span>Bento Gonçalves, RS - {lang === 'pt' ? 'Brasil' : 'Brazil'}</span>
+          <span>{profile.location} - {lang === 'pt' ? 'Brasil' : 'Brazil'}</span>
         </div>
       </div>
 

@@ -49,10 +49,14 @@ async function setupAdmin() {
     
     // Coletar dados do admin
     console.log('\n📝 Dados do Administrador:');
-    const email = await question('Email: ');
+    const email = (await question('Email: ')).trim().toLowerCase();
     const firstName = await question('Nome: ');
     const lastName = await question('Sobrenome: ');
-    const password = await question('Senha: ');
+    const password = process.env.PORTFOLIO_ADMIN_PASSWORD;
+    if (!password || password.length < 16 || Buffer.byteLength(password, 'utf8') > 72) {
+      throw new Error('Configure PORTFOLIO_ADMIN_PASSWORD com 16 caracteres ou mais (máximo 72 bytes). Sem senha padrão.');
+    }
+    if (!/^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(email)) throw new Error('Email inválido');
     
     // Hash da senha
     console.log('\n🔐 Criptografando senha...');
@@ -60,7 +64,7 @@ async function setupAdmin() {
     
     // Salvar no Firestore
     console.log('💾 Salvando dados no Firestore...');
-    await db.collection('users').doc(email).set({
+    await db.collection('users').doc(email).create({
       email,
       firstName,
       lastName,

@@ -1,59 +1,65 @@
-import React, { useState } from 'react';
-import Button from '@components/common/Button';
-import Input from '@components/common/Input';
-import { appConfig } from '../../../config/app.config';
-import styles from './styles.module.css';
-import type { AuthUser } from '@hooks/useAuth';
+import { setAuthSession } from '@src/services/authSession'
+import React, { useState } from 'react'
+import Button from '@components/common/Button'
+import Input from '@components/common/Input'
+import { appConfig } from '../../../config/app.config'
+import styles from './styles.module.css'
+import type { AuthUser } from '@hooks/useAuth'
 
 interface LoginFormProps {
-  onSuccess: (user: AuthUser) => void;
-  onSwitchToRegister: () => void;
+  onSuccess: (user: AuthUser) => void
+  onSwitchToRegister: () => void
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegister }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({
+  onSuccess,
+  onSwitchToRegister,
+}) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+    e.preventDefault()
+    setLoading(true)
+    setError('')
 
     try {
-      const response = await fetch(`${appConfig.backend.baseUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${appConfig.backend.baseUrl}/api/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      )
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.success) {
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem('token', data.data.token);
-        onSuccess(data.data.user);
+        setAuthSession(data.data.token, data.data.user)
+        onSuccess(data.data.user)
       } else {
-        setError(data.error.message);
+        setError(data.error.message)
       }
     } catch {
-      setError('Erro ao fazer login');
+      setError('Erro ao fazer login')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className={styles.container}>
@@ -84,10 +90,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onSwitchToRegis
       </form>
       <p className={styles.switch}>
         Não tem conta?{' '}
-        <button type="button" onClick={onSwitchToRegister} className={styles.link}>
+        <button
+          type="button"
+          onClick={onSwitchToRegister}
+          className={styles.link}
+        >
           Cadastre-se
         </button>
       </p>
     </div>
-  );
-};
+  )
+}

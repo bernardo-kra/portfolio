@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, type NextFunction } from 'express';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -8,10 +8,18 @@ export interface AppError extends Error {
 export const errorHandler = (
   err: AppError,
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Erro interno do servidor';
+  if (res.headersSent) return next(err);
+  const statusCode =
+    err.statusCode || (err as AppError & { status?: number }).status || 500;
+  const message =
+    process.env.NODE_ENV === 'development'
+      ? err.message || 'Erro interno do servidor'
+      : statusCode === 413
+        ? 'Requisição muito grande'
+        : 'Não foi possível concluir a requisição';
 
   console.error('Erro:', {
     message: err.message,
@@ -38,8 +46,3 @@ export const notFound = (req: Request, res: Response) => {
     },
   });
 };
-
-
-
-
-

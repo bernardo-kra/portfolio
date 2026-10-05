@@ -1,12 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
 import type { DocumentData, Query } from 'firebase-admin/firestore';
+import { requireAdmin } from '../middleware/adminAuth.js';
 
 const router = Router();
 
 router.post('/page-view', async (req: Request, res: Response) => {
   try {
-    const { page, timestamp, userAgent, referrer } = req.body;
+    const { page } = req.body;
+    if (req.body.analyticsConsent !== true) return res.status(403).json({ success: false, error: { message: 'Consentimento de análise necessário' } });
 
     if (!page) {
       return res.status(400).json({
@@ -16,11 +18,8 @@ router.post('/page-view', async (req: Request, res: Response) => {
     }
 
     const analyticsData = {
-      page,
-      timestamp: timestamp || new Date(),
-      userAgent: userAgent || req.get('User-Agent'),
-      referrer: referrer || req.get('Referer'),
-      ip: req.ip,
+      page: String(page).split(/[?#]/)[0].slice(0, 200),
+      timestamp: new Date(),
       createdAt: new Date(),
     };
 
@@ -39,7 +38,7 @@ router.post('/page-view', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/stats', async (req: Request, res: Response) => {
+router.get('/stats', requireAdmin, async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
 

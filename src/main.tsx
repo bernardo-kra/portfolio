@@ -14,6 +14,7 @@ import { AppConfigProvider } from '@context'
 import TransitionThemeEffect from '@theme/TransitionThemeEffect'
 import { I18nProvider } from '@src/i18n'
 import Analytics from '@components/Analytics'
+import PrivacyControls from '@components/PrivacyControls'
 import RouteEffects from '@components/RouteEffects'
 import RouteLoading from '@components/common/RouteLoading'
 
@@ -25,6 +26,7 @@ const Experimental3D = lazy(() => import('@pages/Experimental3D'))
 const AdminChat = lazy(() => import('@pages/AdminChat'))
 const NotFound = lazy(() => import('@pages/NotFound'))
 const AgencyStudio = lazy(() => import('@pages/AgencyStudio'))
+const Privacy = lazy(() => import('@pages/Privacy'))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +37,7 @@ createRoot(document.getElementById('root')!).render(
           <I18nProvider>
             <BrowserRouter>
               <Analytics />
+              <PrivacyControls />
               <Suspense fallback={<RouteLoading />}>
                 <RouteEffects />
                 <Routes>
@@ -46,6 +49,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="/generative" element={<GenerativeArt />} />
                   <Route path="/experimental3d" element={<Experimental3D />} />
                   <Route path="/admin/chat" element={<AdminChat />} />
+                  <Route path="/privacy" element={<Privacy />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

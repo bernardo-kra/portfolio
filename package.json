@@ -15,6 +15,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test:tasks": "node --experimental-strip-types --test tests/taskHistory.test.mjs",
     "test:neon": "node --experimental-strip-types --test tests/neonConsole.test.mjs tests/neonRender.test.mjs tests/neonMission.test.mjs",
+    "test:privacy": "node --experimental-strip-types --test tests/privacy.test.mjs",
+    "test:security": "npm run build:backend && node --experimental-strip-types --test tests/security.test.mjs tests/authSession.test.mjs",
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

@@ -17,6 +17,18 @@
   --ribbon-ink: #afe6cb;
   --ribbon-bg: #142c26;
 }
+:global([data-theme='light']) .ribbon {
+  --ribbon-ink: #694014;
+  --ribbon-bg: #fff0d9;
+}
+:global([data-theme='light']) .ribbon[data-tone='violet'] {
+  --ribbon-ink: #563580;
+  --ribbon-bg: #f1e9ff;
+}
+:global([data-theme='light']) .ribbon[data-tone='mint'] {
+  --ribbon-ink: #205340;
+  --ribbon-bg: #e4f5ec;
+}
 .viewport {
   overflow: hidden;
   flex: 1;
@@ -65,7 +77,7 @@
   gap: 0.4rem;
   padding: 0.6rem 0.8rem;
   border: 0;
-  border-left: 1px solid #ffffff24;
+  border-left: 1px solid color-mix(in srgb, var(--ribbon-ink) 20%, transparent);
   border-radius: 0;
   color: inherit;
   background: var(--ribbon-bg);
