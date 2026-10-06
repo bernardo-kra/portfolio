@@ -3,6 +3,27 @@ import { db } from '../config/firebase.js';
 
 const SESSION_TTL_MS = 60 * 60 * 1000;
 
+interface SessionRecord {
+  version?: unknown;
+  email?: unknown;
+  expiresAt?: unknown;
+  googleSub?: unknown;
+}
+
+function validSession(
+  session: SessionRecord | undefined,
+  email: unknown,
+  expiresAt: Date | null
+): email is string {
+  return !(
+    session?.version !== 2 ||
+    typeof email !== 'string' ||
+    !expiresAt ||
+    !Number.isFinite(expiresAt.getTime()) ||
+    expiresAt.getTime() <= Date.now()
+  );
+}
+
 const hashToken = (token: string) =>
   createHash('sha256').update(token).digest('hex');
 
@@ -47,17 +68,11 @@ export const getSessionIdentity = async (
   const sessionDoc = await sessionRef.get();
   if (!sessionDoc.exists) return null;
 
-  const session = sessionDoc.data();
+  const session = sessionDoc.data() as SessionRecord | undefined;
   const email = session?.email;
   const expiresAt = readExpiration(session?.expiresAt);
 
-  if (
-    session?.version !== 2 ||
-    typeof email !== 'string' ||
-    !expiresAt ||
-    !Number.isFinite(expiresAt.getTime()) ||
-    expiresAt.getTime() <= Date.now()
-  ) {
+  if (!validSession(session, email, expiresAt)) {
     await sessionRef.delete();
     return null;
   }

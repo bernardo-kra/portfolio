@@ -1,7 +1,15 @@
+import { logger } from '../services/logger.js';
 import type { NextFunction, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
 import { getSessionIdentity } from '../services/sessionService.js';
 import { isChatOwner } from '../services/chatPolicy.js';
+
+function matchesGoogleAccount(
+  identity: { googleSub?: string },
+  user: { googleSub?: string }
+) {
+  return !identity.googleSub || identity.googleSub === user.googleSub;
+}
 
 export interface AuthenticatedUser {
   email: string;
@@ -11,7 +19,8 @@ export interface AuthenticatedUser {
   isChatOwner: boolean;
 }
 
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest
+  extends Request<Record<string, string>, unknown, Record<string, unknown>> {
   user?: AuthenticatedUser;
 }
 
@@ -37,7 +46,7 @@ export const authenticateRequest = async (
   const userDoc = await db.collection('users').doc(email).get();
   const userData = userDoc.data();
   if (!userDoc.exists || !userData) return null;
-  if (identity.googleSub && identity.googleSub !== userData.googleSub) return null;
+  if (!matchesGoogleAccount(identity, userData)) return null;
 
   return {
     email,
@@ -66,7 +75,7 @@ export const verifyToken = async (
     req.user = user;
     next();
   } catch (error) {
-    console.error('Erro na verificação da sessão:', error);
+    logger.error('Erro na verificação da sessão:', error);
     res.status(401).json({
       success: false,
       error: { message: 'Sessão inválida' },

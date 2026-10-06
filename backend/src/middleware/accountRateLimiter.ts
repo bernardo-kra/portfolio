@@ -2,9 +2,14 @@ import { createHash } from 'node:crypto';
 import type { Request, Response, NextFunction } from 'express';
 import { db } from '../config/firebase.js';
 
+interface AccountAttempts {
+  resetAt?: string | number | Date;
+  attempts?: unknown;
+}
+
 // Shared across instances and restarts; failures block authentication.
 export async function accountRateLimit(
-  req: Request,
+  req: Request<Record<string, string>, unknown, { email?: unknown }>,
   res: Response,
   next: NextFunction
 ) {
@@ -17,12 +22,14 @@ export async function accountRateLimit(
   try {
     const allowed = await db.runTransaction(async (transaction) => {
       const ref = db.collection('authAttempts').doc(key);
-      const previous = (await transaction.get(ref)).data();
+      const previous = (await transaction.get(ref)).data() as
+        | AccountAttempts
+        | undefined;
       const now = Date.now();
       const active = Number(previous?.resetAt) > now;
       const attempts = active ? Number(previous?.attempts || 0) : 0;
       if (attempts >= 10) return false;
-      const resetAt = active ? previous!.resetAt : now + 15 * 60 * 1000;
+      const resetAt = active ? previous!.resetAt! : now + 15 * 60 * 1000;
       transaction.set(ref, {
         attempts: attempts + 1,
         resetAt,
@@ -31,19 +38,15 @@ export async function accountRateLimit(
       return true;
     });
     if (!allowed)
-      return res
-        .status(429)
-        .json({
-          success: false,
-          error: { message: 'Tente novamente mais tarde.' },
-        });
+      return res.status(429).json({
+        success: false,
+        error: { message: 'Tente novamente mais tarde.' },
+      });
     next();
   } catch {
-    return res
-      .status(503)
-      .json({
-        success: false,
-        error: { message: 'Login temporariamente indisponível.' },
-      });
+    return res.status(503).json({
+      success: false,
+      error: { message: 'Login temporariamente indisponível.' },
+    });
   }
 }

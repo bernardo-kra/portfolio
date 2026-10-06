@@ -1,3 +1,4 @@
+import { logger } from '../services/logger.js';
 import { Request, Response, type NextFunction } from 'express';
 
 export interface AppError extends Error {
@@ -21,7 +22,7 @@ export const errorHandler = (
         ? 'Requisição muito grande'
         : 'Não foi possível concluir a requisição';
 
-  console.error('Erro:', {
+  logger.error('Erro:', {
     message: err.message,
     stack: err.stack,
     statusCode,

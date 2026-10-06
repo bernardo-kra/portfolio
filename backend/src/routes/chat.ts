@@ -1,6 +1,18 @@
 import { Router } from 'express';
-import { createHash } from 'node:crypto';
-import { db } from '../config/firebase.js';
+import {
+  readConversation,
+  incomingVisitorMessages,
+  sendMessage,
+  listRecentMessages,
+  markMessageRead,
+  markConversationRead,
+  findMessage,
+  allMessageData,
+  messageTime as time,
+  type ChatRecord,
+} from '../repositories/chatRepository.js';
+import { userExists } from '../repositories/userRepository.js';
+import { validReadMessageIds } from '../services/chatReadPolicy.js';
 import { verifyToken, type AuthenticatedRequest } from '../middleware/auth.js';
 import { requireChatOwner } from '../middleware/chatOwnerAuth.js';
 import {
@@ -10,7 +22,6 @@ import {
   chatReadRateLimit,
 } from '../middleware/rateLimiter.js';
 import { chatOwnerEmail, conversationEmail } from '../services/chatPolicy.js';
-import type { DocumentData } from 'firebase-admin/firestore';
 import { streamChatEvents } from '../services/chatEvents.js';
 
 const router = Router();
@@ -21,31 +32,6 @@ const validEmail = (value: unknown): value is string =>
   /^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(value);
 const validMessage = (value: unknown): value is string =>
   typeof value === 'string' && !!value.trim() && value.trim().length <= 500;
-const time = (value: unknown): number => {
-  if (value && typeof value === 'object' && 'toMillis' in value)
-    return (value as { toMillis: () => number }).toMillis();
-  return value instanceof Date ? value.getTime() : 0;
-};
-async function readConversation(email: string) {
-  // Separate equality queries preserve old messages without requiring composite indexes.
-  const snapshots = await Promise.all([
-    db.collection('chats').where('conversationUserEmail', '==', email).get(),
-    db.collection('chats').where('senderEmail', '==', email).get(),
-    db.collection('chats').where('recipientEmail', '==', email).get(),
-    db.collection('chats').where('replyTo', '==', email).get(),
-  ]);
-  const records = new Map<string, DocumentData>();
-  for (const snapshot of snapshots)
-    for (const doc of snapshot.docs) {
-      const data = doc.data();
-      if (conversationEmail(data) === email)
-        records.set(doc.id, { ...data, id: doc.id });
-    }
-  return [...records.values()].sort(
-    (a, b) => time(a.timestamp) - time(b.timestamp)
-  );
-}
-
 router.get(
   '/notifications',
   verifyToken,
@@ -54,12 +40,7 @@ router.get(
     try {
       const user = req.user!;
       const messages = user.isChatOwner
-        ? ((
-            await db.collection('chats').where('isAdmin', '==', false).get()
-          ).docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          })) as DocumentData[])
+        ? await incomingVisitorMessages()
         : await readConversation(user.email);
       const incoming = messages.filter(
         (message) =>
@@ -85,69 +66,6 @@ router.get(
     }
   }
 );
-async function send(
-  user: NonNullable<AuthenticatedRequest['user']>,
-  message: string,
-  email: string,
-  clientMessageId?: string
-) {
-  const data = {
-    message: message.trim(),
-    senderEmail: user.email,
-    senderName: [user.firstName, user.lastName].filter(Boolean).join(' '),
-    recipientEmail: user.isChatOwner ? email : chatOwnerEmail(),
-    conversationUserEmail: user.isChatOwner ? email : user.email,
-    isAdmin: user.isChatOwner,
-    timestamp: new Date(),
-    read: false,
-  };
-  const ref = clientMessageId
-    ? db
-        .collection('chats')
-        .doc(
-          createHash('sha256')
-            .update(`${user.email}\0${clientMessageId}`)
-            .digest('hex')
-        )
-    : db.collection('chats').doc();
-  if (clientMessageId) {
-    return db.runTransaction(async (transaction) => {
-      const existing = await transaction.get(ref);
-      if (existing.exists) {
-        const saved = existing.data()!;
-        if (
-          saved.message !== data.message ||
-          saved.conversationUserEmail !== data.conversationUserEmail ||
-          saved.senderEmail !== data.senderEmail
-        )
-          throw new Error('MESSAGE_ID_CONFLICT');
-        return { ...saved, id: ref.id };
-      }
-      transaction.create(ref, data);
-      for (const participant of new Set([
-        chatOwnerEmail(),
-        data.conversationUserEmail,
-      ]))
-        transaction.set(db.collection('chatActivity').doc(participant), {
-          messageId: ref.id,
-        });
-      return { id: ref.id, ...data };
-    });
-  }
-  const batch = db.batch();
-  batch.set(ref, data);
-  // Atomically notify both endpoints, across backend instances, without exposing messages.
-  for (const participant of new Set([
-    chatOwnerEmail(),
-    data.conversationUserEmail,
-  ]))
-    batch.set(db.collection('chatActivity').doc(participant), {
-      messageId: ref.id,
-    });
-  await batch.commit();
-  return { id: ref.id, ...data };
-}
-
 router.post(
   '/send',
   messageRateLimit,
@@ -174,16 +92,18 @@ router.post(
         if (!validEmail(req.body.recipientEmail))
           return res.status(400).json({ success: false });
         recipient = req.body.recipientEmail.trim().toLowerCase();
-        if (
-          recipient === chatOwnerEmail() ||
-          !(await db.collection('users').doc(recipient).get()).exists
-        )
+        if (recipient === chatOwnerEmail() || !(await userExists(recipient)))
           return res.status(400).json({ success: false });
       }
       // Ordinary accounts cannot select recipients or impersonate an administrator.
       return res.status(201).json({
         success: true,
-        data: await send(user, req.body.message, recipient, clientMessageId),
+        data: await sendMessage(
+          user,
+          req.body.message,
+          recipient,
+          clientMessageId
+        ),
       });
     } catch (error) {
       if (error instanceof Error && error.message === 'MESSAGE_ID_CONFLICT')
@@ -222,18 +142,12 @@ router.get(
       const offset = Math.max(0, Number(req.query.offset || 0));
       if (!Number.isInteger(limit) || !Number.isInteger(offset))
         return res.status(400).json({ success: false });
-      const snapshot = await db
-        .collection('chats')
-        .orderBy('timestamp', 'desc')
-        .limit(limit)
-        .offset(offset)
-        .get();
-      const messagesByUser: Record<string, DocumentData[]> =
-        Object.create(null);
-      const messages: DocumentData[] = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const messages = await listRecentMessages(limit, offset);
+      const messagesByUser = Object.create(null) as Record<
+        string,
+        ChatRecord[]
+      >;
+
       for (const message of messages) {
         const email = conversationEmail(message);
         if (!email || email === chatOwnerEmail()) continue;
@@ -256,10 +170,7 @@ router.get(
 
 router.put('/mark-read/:messageId', requireChatOwner, async (req, res) => {
   try {
-    await db
-      .collection('chats')
-      .doc(String(req.params.messageId))
-      .update({ read: true, readAt: new Date() });
+    await markMessageRead(String(req.params.messageId));
     return res.json({ success: true });
   } catch {
     return res.status(500).json({ success: false });
@@ -279,19 +190,7 @@ router.post(
         return res.status(403).json({ success: false });
       const ids = req.body?.messageIds;
       // Keep older owner clients compatible; visitors must identify messages they saw.
-      if (
-        (!user.isChatOwner && ids === undefined) ||
-        (ids !== undefined &&
-          (!Array.isArray(ids) ||
-            ids.length > 100 ||
-            ids.some(
-              (id) =>
-                typeof id !== 'string' ||
-                !id ||
-                id.length > 200 ||
-                id.includes('/')
-            )))
-      )
+      if (!validReadMessageIds(ids, user.isChatOwner))
         return res.status(400).json({ success: false });
       const unread = (await readConversation(email)).filter(
         (message) =>
@@ -299,16 +198,7 @@ router.post(
           (user.isChatOwner ? !message.isAdmin : message.isAdmin === true) &&
           (ids === undefined || ids.includes(message.id))
       );
-      for (let start = 0; start < unread.length; start += 400) {
-        const batch = db.batch();
-        for (const message of unread.slice(start, start + 400)) {
-          batch.update(db.collection('chats').doc(message.id), {
-            read: true,
-            readAt: new Date(),
-          });
-        }
-        await batch.commit();
-      }
+      await markConversationRead(unread);
       return res.json({ success: true });
     } catch {
       return res.status(500).json({ success: false });
@@ -328,17 +218,14 @@ router.post(
         !validMessage(req.body.reply)
       )
         return res.status(400).json({ success: false });
-      const original = await db
-        .collection('chats')
-        .doc(req.body.originalMessageId)
-        .get();
+      const original = await findMessage(req.body.originalMessageId);
       if (!original.exists) return res.status(404).json({ success: false });
-      const recipient = conversationEmail(original.data()!);
+      const recipient = conversationEmail(original.data);
       if (!validEmail(recipient) || recipient === chatOwnerEmail())
         return res.status(400).json({ success: false });
       return res.status(201).json({
         success: true,
-        data: await send(req.user!, req.body.reply, recipient),
+        data: await sendMessage(req.user!, req.body.reply, recipient),
       });
     } catch {
       return res.status(500).json({ success: false });
@@ -348,8 +235,7 @@ router.post(
 
 router.get('/stats', requireChatOwner, async (_req, res) => {
   try {
-    const snapshot = await db.collection('chats').get();
-    const messages = snapshot.docs.map((doc) => doc.data());
+    const messages = await allMessageData();
     return res.json({
       success: true,
       data: {

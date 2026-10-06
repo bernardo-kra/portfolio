@@ -1,3 +1,4 @@
+import { logger } from '../services/logger.js';
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
 import type { AuthenticatedRequest } from './auth.js';
@@ -34,8 +35,8 @@ export const messageRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req: Request, res: Response) => {
-    console.warn(
-      `Rate limit excedido para IP: ${req.ip}, User: ${req.headers['x-user-email']}`
+    logger.warn(
+      `Rate limit excedido para IP: ${req.ip}, User: ${String(req.headers['x-user-email'])}`
     );
     res.status(429).json({
       success: false,
@@ -57,8 +58,8 @@ export const loadMessagesRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req: Request, res: Response) => {
-    console.warn(
-      `Rate limit excedido para carregamento - IP: ${req.ip}, User: ${req.headers['x-user-email']}`
+    logger.warn(
+      `Rate limit excedido para carregamento - IP: ${req.ip}, User: ${String(req.headers['x-user-email'])}`
     );
     res.status(429).json({
       success: false,
@@ -88,7 +89,7 @@ export const authRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req: Request, res: Response) => {
-    console.warn(`Rate limit excedido para autenticação - IP: ${req.ip}`);
+    logger.warn(`Rate limit excedido para autenticação - IP: ${req.ip}`);
     res.status(429).json({
       success: false,
       error: {
@@ -109,9 +110,7 @@ export const generalRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req: Request, res: Response) => {
-    console.warn(
-      `Rate limit geral excedido - IP: ${req.ip}, Path: ${req.path}`
-    );
+    logger.warn(`Rate limit geral excedido - IP: ${req.ip}, Path: ${req.path}`);
     res.status(429).json({
       success: false,
       error: { message: 'Muitas requisições. Tente novamente em 15 minutos.' },

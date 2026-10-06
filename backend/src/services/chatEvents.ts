@@ -11,8 +11,8 @@ export function streamChatEvents(req: AuthenticatedRequest, res: Response) {
   let closed = false;
   let unsubscribe: (() => void) | undefined;
   let checking = false;
-  let heartbeat: ReturnType<typeof setInterval> | undefined;
-  let validation: ReturnType<typeof setInterval> | undefined;
+  let heartbeat: ReturnType<typeof setInterval> | undefined,
+    validation: ReturnType<typeof setInterval> | undefined;
   const close = () => {
     if (closed) return;
     closed = true;
@@ -43,7 +43,7 @@ export function streamChatEvents(req: AuthenticatedRequest, res: Response) {
     }
     heartbeat = setInterval(() => write(': heartbeat\n\n'), 15_000);
     // Revoked/expired sessions and changed ownership close existing connections too.
-    validation = setInterval(async () => {
+    const validateSession = async () => {
       if (closed || checking) return;
       checking = true;
       try {
@@ -59,6 +59,9 @@ export function streamChatEvents(req: AuthenticatedRequest, res: Response) {
       } finally {
         checking = false;
       }
+    };
+    validation = setInterval(() => {
+      validateSession().catch(close);
     }, 30_000);
   } catch {
     close();

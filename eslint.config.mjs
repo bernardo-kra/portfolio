@@ -100,7 +100,7 @@ export default defineConfig([
         },
       ],
       'import-x-debt/no-restricted-paths': [
-        'warn', // Baseline: 6 route-to-database imports.
+        'error', // Baseline: 6; migrated to repositories.
         {
           zones: [
             {
@@ -134,7 +134,7 @@ export default defineConfig([
         { logger: 'a dedicated logger adapter (none exists yet)' },
       ],
       'quality/no-direct-data-access': [
-        'warn', // Baseline: 6.
+        'error', // Baseline: 6; migrated to repositories.
         {
           modules: [
             '../config/firebase.js',
@@ -167,6 +167,11 @@ export default defineConfig([
   {
     files: ['eslint-rules/**/*.cjs'],
     languageOptions: { sourceType: 'commonjs', globals: globals.node },
+  },
+  {
+    // This is the actual console adapter, not an exception for callers.
+    files: ['backend/src/services/logger.ts'],
+    rules: { 'quality/no-direct-console': 'off' },
   },
   // Remaining pre-existing exceptions are preserved without expanding scope.
   {

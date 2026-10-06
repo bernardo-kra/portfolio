@@ -1,8 +1,13 @@
+import { logger } from '../services/logger.js';
 import { Request, Response, NextFunction } from 'express';
 
 export interface SecurityEvent {
   timestamp: Date;
-  type: 'RATE_LIMIT' | 'AUTH_FAILURE' | 'SUSPICIOUS_ACTIVITY' | 'UNAUTHORIZED_ACCESS';
+  type:
+    | 'RATE_LIMIT'
+    | 'AUTH_FAILURE'
+    | 'SUSPICIOUS_ACTIVITY'
+    | 'UNAUTHORIZED_ACCESS';
   ip: string;
   userAgent: string;
   userEmail?: string;
@@ -26,17 +31,17 @@ class SecurityLogger {
   public log(event: Omit<SecurityEvent, 'timestamp'>): void {
     const securityEvent: SecurityEvent = {
       ...event,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.logs.push(securityEvent);
-    
-    console.warn(`🚨 SECURITY EVENT [${event.type}]:`, {
+
+    logger.warn(`🚨 SECURITY EVENT [${event.type}]:`, {
       timestamp: securityEvent.timestamp.toISOString(),
       ip: event.ip,
       userEmail: event.userEmail || 'N/A',
       endpoint: event.endpoint,
-      details: event.details
+      details: event.details,
     });
 
     if (this.logs.length > 1000) {
@@ -48,25 +53,28 @@ class SecurityLogger {
     return this.logs.slice(-limit);
   }
 
-  public getLogsByType(type: SecurityEvent['type'], limit: number = 50): SecurityEvent[] {
-    return this.logs
-      .filter(log => log.type === type)
-      .slice(-limit);
+  public getLogsByType(
+    type: SecurityEvent['type'],
+    limit: number = 50
+  ): SecurityEvent[] {
+    return this.logs.filter((log) => log.type === type).slice(-limit);
   }
 
   public getLogsByIP(ip: string, limit: number = 50): SecurityEvent[] {
-    return this.logs
-      .filter(log => log.ip === ip)
-      .slice(-limit);
+    return this.logs.filter((log) => log.ip === ip).slice(-limit);
   }
 }
 
 export const securityLogger = SecurityLogger.getInstance();
 
-export const securityLoggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const securityLoggerMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const originalSend = res.send;
-  
-  res.send = function(data) {
+
+  res.send = function (data) {
     if (res.statusCode === 401 || res.statusCode === 403) {
       securityLogger.log({
         type: 'UNAUTHORIZED_ACCESS',
@@ -74,7 +82,7 @@ export const securityLoggerMiddleware = (req: Request, res: Response, next: Next
         userAgent: req.get('User-Agent') || 'unknown',
         userEmail: req.headers['x-user-email'] as string,
         endpoint: req.path,
-        details: `Status: ${res.statusCode}, Method: ${req.method}`
+        details: `Status: ${res.statusCode}, Method: ${req.method}`,
       });
     }
 
@@ -85,7 +93,7 @@ export const securityLoggerMiddleware = (req: Request, res: Response, next: Next
         userAgent: req.get('User-Agent') || 'unknown',
         userEmail: req.headers['x-user-email'] as string,
         endpoint: req.path,
-        details: `Rate limit excedido para ${req.path}`
+        details: `Rate limit excedido para ${req.path}`,
       });
     }
 
@@ -95,10 +103,14 @@ export const securityLoggerMiddleware = (req: Request, res: Response, next: Next
   next();
 };
 
-export const suspiciousActivityDetector = (req: Request, res: Response, next: NextFunction) => {
+export const suspiciousActivityDetector = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const userAgent = req.get('User-Agent') || '';
   const ip = req.ip || 'unknown';
-  
+
   const suspiciousPatterns = [
     /bot/i,
     /crawler/i,
@@ -108,11 +120,13 @@ export const suspiciousActivityDetector = (req: Request, res: Response, next: Ne
     /wget/i,
     /python/i,
     /java/i,
-    /php/i
+    /php/i,
   ];
 
-  const isSuspicious = suspiciousPatterns.some(pattern => pattern.test(userAgent));
-  
+  const isSuspicious = suspiciousPatterns.some((pattern) =>
+    pattern.test(userAgent)
+  );
+
   if (isSuspicious) {
     securityLogger.log({
       type: 'SUSPICIOUS_ACTIVITY',
@@ -120,12 +134,9 @@ export const suspiciousActivityDetector = (req: Request, res: Response, next: Ne
       userAgent,
       userEmail: req.headers['x-user-email'] as string,
       endpoint: req.path,
-      details: `User agent suspeito detectado: ${userAgent}`
+      details: `User agent suspeito detectado: ${userAgent}`,
     });
   }
 
   next();
 };
-
-
-

@@ -1,6 +1,8 @@
+import { logger } from '../services/logger.js';
 import { accountRateLimit } from '../middleware/accountRateLimiter.js';
 import { Router, Request, Response } from 'express';
-import { db } from '../config/firebase.js';
+import { findUser } from '../repositories/userRepository.js';
+import { validLoginCredentials } from '../services/passwordCredentials.js';
 import bcrypt from 'bcryptjs';
 import { authRateLimit } from '../middleware/rateLimiter.js';
 import { createSession, revokeSession } from '../services/sessionService.js';
@@ -34,7 +36,14 @@ router.post(
   '/login',
   authRateLimit,
   accountRateLimit,
-  async (req: Request, res: Response) => {
+  async (
+    req: Request<
+      Record<string, string>,
+      unknown,
+      { email?: unknown; password?: unknown }
+    >,
+    res: Response
+  ) => {
     try {
       const email =
         typeof req.body.email === 'string'
@@ -42,21 +51,14 @@ router.post(
           : '';
       const { password } = req.body;
 
-      if (
-        email.length > 254 ||
-        !/^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(email) ||
-        typeof password !== 'string' ||
-        !password ||
-        Buffer.byteLength(password, 'utf8') > 72
-      ) {
+      if (!validLoginCredentials(email, password)) {
         return res.status(400).json({
           success: false,
           error: { message: 'Email e senha são obrigatórios' },
         });
       }
 
-      const userRef = db.collection('users').doc(email);
-      const userDoc = await userRef.get();
+      const userDoc = await findUser(email);
 
       if (!userDoc.exists) {
         return res.status(401).json({
@@ -65,7 +67,7 @@ router.post(
         });
       }
 
-      const userData = userDoc.data();
+      const userData = userDoc.data;
       if (!userData) {
         return res.status(401).json({
           success: false,
@@ -104,7 +106,7 @@ router.post(
         message: 'Login realizado com sucesso!',
       });
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      logger.error('Erro ao fazer login:', error);
       res.status(500).json({
         success: false,
         error: { message: 'Erro ao fazer login' },
@@ -127,8 +129,7 @@ router.get(
         });
       }
 
-      const userRef = db.collection('users').doc(email);
-      const userDoc = await userRef.get();
+      const userDoc = await findUser(email);
 
       if (!userDoc.exists) {
         return res.status(404).json({
@@ -137,7 +138,7 @@ router.get(
         });
       }
 
-      const userData = userDoc.data();
+      const userData = userDoc.data;
       if (!userData) {
         return res.status(404).json({
           success: false,
@@ -157,7 +158,7 @@ router.get(
         data: profile,
       });
     } catch (error) {
-      console.error('Erro ao buscar perfil:', error);
+      logger.error('Erro ao buscar perfil:', error);
       res.status(500).json({
         success: false,
         error: { message: 'Erro ao buscar perfil' },

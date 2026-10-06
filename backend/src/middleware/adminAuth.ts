@@ -1,8 +1,6 @@
+import { logger } from '../services/logger.js';
 import type { NextFunction, Response } from 'express';
-import {
-  authenticateRequest,
-  type AuthenticatedRequest,
-} from './auth.js';
+import { authenticateRequest, type AuthenticatedRequest } from './auth.js';
 
 export const requireAdmin = async (
   req: AuthenticatedRequest,
@@ -29,7 +27,7 @@ export const requireAdmin = async (
     req.user = user;
     next();
   } catch (error) {
-    console.error('Erro na verificação de administrador:', error);
+    logger.error('Erro na verificação de administrador:', error);
     res.status(500).json({
       success: false,
       error: { message: 'Erro interno do servidor' },
