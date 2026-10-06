@@ -10,12 +10,14 @@ interface MessageBubbleProps {
   message: ChatMessage
   isOwnMessage: boolean
   showSenderName?: boolean
+  workspace?: boolean
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
   isOwnMessage,
   showSenderName = false,
+  workspace = false,
 }) => {
   const { lang } = useI18n()
   const formatTime = (timestamp: ChatTimestamp) => {
@@ -32,9 +34,36 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   return (
     <div
-      className={`${styles.messageContainer} ${isOwnMessage ? styles.ownMessage : styles.otherMessage}`}
+      className={`${styles.messageContainer} ${isOwnMessage ? styles.ownMessage : styles.otherMessage} ${workspace ? styles.workspace : ''}`}
     >
-      {showSenderName && !isOwnMessage && (
+      {workspace && (
+        <div className={styles.avatar} aria-hidden="true">
+          {message.senderName
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((part) => part.charAt(0))
+            .join('')
+            .toUpperCase() || '?'}
+        </div>
+      )}
+      {workspace && (
+        <div className={styles.messageMeta}>
+          <strong>
+            {isOwnMessage
+              ? lang === 'pt'
+                ? 'Você'
+                : 'You'
+              : message.senderName}
+          </strong>
+          <span>{formatTime(message.timestamp)}</span>
+          {isOwnMessage && (
+            <span className={styles.authorLabel}>
+              {lang === 'pt' ? 'PROPRIETÁRIO' : 'OWNER'}
+            </span>
+          )}
+        </div>
+      )}
+      {showSenderName && !isOwnMessage && !workspace && (
         <div className={styles.senderName}>{message.senderName}</div>
       )}
 

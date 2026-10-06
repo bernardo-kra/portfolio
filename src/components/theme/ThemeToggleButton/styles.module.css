@@ -1,38 +1,25 @@
 .themeToggleButton {
-  border: none;
-  border-radius: 6px;
-  padding: 4px;
+  border: 1px solid var(--border-default, transparent);
+  border-radius: 7px;
+  padding: 0;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-  background: var(--toggle-bg-dark, rgba(35,38,58,0.7));
+  color: var(--text-default);
+  background: var(--card-background, var(--card-bg, var(--bg-default)));
+  transition: border-color 0.2s;
 }
-
-:root[data-theme='light'] .themeToggleButton {
-  background: var(--toggle-bg-dark, rgba(255,255,255,0.7));
+.themeToggleButton:hover {
+  border-color: var(--text-default);
 }
-
-.themeToggleButtonActive {
-  background: var(--toggle-bg-active, rgba(100, 108, 255, 0.15));
+.themeToggleButton:focus-visible {
+  outline: 2px solid var(--text-default);
+  outline-offset: 3px;
 }
-
-/* Responsive */
-@media (max-width: 600px) {
-  .themeToggleButton {
-    width: 24px;
-    height: 24px;
-    padding: 3px;
-  }
-}
-
-@media (max-width: 400px) {
-  .themeToggleButton {
-    width: 20px;
-    height: 20px;
-    padding: 2px;
-  }
+.themeToggleButton svg {
+  flex-shrink: 0;
 }

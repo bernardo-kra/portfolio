@@ -75,6 +75,83 @@
   color: var(--text-muted);
 }
 
+.messageText {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.messageContainer.workspace {
+  align-self: stretch;
+  align-items: initial;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  column-gap: 12px;
+  margin-bottom: 12px;
+  padding: 6px 0;
+}
+.avatar {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: var(--chat-accent);
+  background: var(--workspace-avatar);
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.messageMeta {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+.messageMeta strong {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.messageMeta span {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.messageMeta .authorLabel {
+  color: var(--chat-accent);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
+  padding: 1px 5px;
+  background: var(--workspace-selection);
+}
+.workspace .messageBubble {
+  grid-column: 2;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.workspace .messageBubble:hover {
+  transform: none;
+  box-shadow: none;
+}
+.workspace .messageText {
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 0;
+  font-weight: 400;
+}
+.workspace .messageTime {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .messageContainer {
     max-width: 85%;

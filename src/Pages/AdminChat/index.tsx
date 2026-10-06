@@ -1,23 +1,26 @@
 import themeStyles from '@components/chat/chatTheme.module.css'
+import workspaceStyles from '@components/chat/workspaceTheme.module.css'
 import { useAuth } from '@hooks/useAuth'
 import { useAppConfig } from '@context'
 import { ModernChat } from '@components/chat'
 import { Link } from 'react-router-dom'
 import { useI18n } from '@src/i18n'
-import { Inbox, ArrowLeft } from 'lucide-react'
+import { Inbox, ArrowLeft, ShieldCheck } from 'lucide-react'
+import ThemeToggleButton from '@components/theme/ThemeToggleButton'
 import styles from './styles.module.css'
 export default function AdminChat() {
   const { user, isAuthenticated } = useAuth()
   const { isFeatureEnabled, isBackendEnabled } = useAppConfig()
-  const { lang } = useI18n()
+  const { lang, setLang } = useI18n()
   const pt = lang === 'pt'
   const allowed = isAuthenticated && user?.isChatOwner === true
   const available = isBackendEnabled && isFeatureEnabled('chat')
   return (
-    <main className={styles.container + ' ' + themeStyles.chatTheme}>
+    <main className={`${styles.container} ${themeStyles.chatTheme} ${workspaceStyles.workspaceTheme}`}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerText}>
+            <span className={styles.eyebrow}>BERNARDO / MESSAGES</span>
             <h1>
               <Inbox size={26} aria-hidden="true" />{' '}
               {pt ? 'Caixa de entrada' : 'Inbox'}
@@ -28,10 +31,20 @@ export default function AdminChat() {
                 : 'Private conversations. Select a person to reply.'}
             </p>
           </div>
-          <Link to="/portfolio" className={styles.backButton}>
-            <ArrowLeft size={18} />
-            {pt ? 'Voltar ao portfólio' : 'Back to portfolio'}
-          </Link>
+          <div className={styles.headerActions}>
+            <button
+              className={styles.languageButton}
+              onClick={() => setLang(pt ? 'en' : 'pt')}
+              aria-label={pt ? 'Mudar para inglês' : 'Switch to Portuguese'}
+            >
+              {pt ? 'EN' : 'PT'}
+            </button>
+            <ThemeToggleButton />
+            <Link to="/portfolio" className={styles.backButton}>
+              <ArrowLeft size={18} />
+              {pt ? 'Voltar ao portfólio' : 'Back to portfolio'}
+            </Link>
+          </div>
         </div>
       </header>
       {!allowed ? (
@@ -52,9 +65,15 @@ export default function AdminChat() {
         </div>
       ) : (
         <div className={styles.adminPanel}>
-          <p>{user.email}</p>
+          <div className={styles.accountBar}>
+            <span>
+              <ShieldCheck size={15} />
+              {pt ? 'Espaço do proprietário' : 'Owner workspace'}
+            </span>
+            <span>{user.email}</span>
+          </div>
           <div className={styles.chatContainer}>
-            <ModernChat />
+            <ModernChat workspace />
           </div>
         </div>
       )}

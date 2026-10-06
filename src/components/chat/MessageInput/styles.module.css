@@ -11,6 +11,62 @@
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.messageInputContainer.workspace {
+  padding: 10px 26px 14px;
+  background: var(--background-primary);
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.workspace .inputWrapper {
+  padding: 10px 12px 10px 16px;
+  background: var(--card-background);
+  border-radius: 12px;
+  box-shadow: none;
+  border: 1px solid var(--border-light);
+  gap: 10px;
+}
+.workspace .inputWrapper:focus-within {
+  transform: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chat-accent) 15%, transparent);
+  border-color: var(--chat-accent);
+}
+.workspace .messageTextarea {
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 5px 0;
+}
+.workspace .sendButton {
+  width: 37px;
+  height: 37px;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: none;
+  color: var(--chat-on-accent);
+}
+.workspace .sendButton:hover:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+.workspace .sendButton:disabled {
+  color: var(--text-muted);
+}
+.workspace .inputFooter {
+  margin: 8px 2px 0;
+  font-size: 9px;
+}
+.shortcut {
+  margin-right: auto;
+}
+@media (max-width: 760px) {
+  .messageInputContainer.workspace {
+    padding: 8px 12px 12px;
+  }
+  .shortcut {
+    display: none;
+  }
+}
+
 .inputWrapper {
   display: flex;
   align-items: flex-end;

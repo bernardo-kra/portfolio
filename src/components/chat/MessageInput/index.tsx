@@ -17,6 +17,7 @@ interface MessageInputProps {
   maxLength?: number
   cooldownRemaining?: number
   draftKey: string
+  workspace?: boolean
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -26,6 +27,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   maxLength = 500,
   cooldownRemaining = 0,
   draftKey,
+  workspace = false,
 }) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
@@ -79,7 +81,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const isNearLimit = charactersLeft < 50
 
   return (
-    <form onSubmit={handleSubmit} className={styles.messageInputContainer}>
+    <form
+      onSubmit={handleSubmit}
+      className={`${styles.messageInputContainer} ${workspace ? styles.workspace : ''}`}
+    >
       <div className={styles.inputWrapper}>
         <textarea
           ref={textareaRef}
@@ -121,6 +126,13 @@ const MessageInput: React.FC<MessageInputProps> = ({
       </div>
 
       <div className={styles.inputFooter}>
+        {workspace && (
+          <span className={styles.shortcut}>
+            {pt
+              ? 'Enter para enviar · Shift + Enter para nova linha'
+              : 'Enter to send · Shift + Enter for a new line'}
+          </span>
+        )}
         <div className={styles.characterCount}>
           <span className={isNearLimit ? styles.nearLimit : ''}>
             {charactersLeft}

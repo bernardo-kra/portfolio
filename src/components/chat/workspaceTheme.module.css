@@ -1,0 +1,35 @@
+.workspaceTheme.workspaceTheme {
+  --text-primary: #233247;
+  --text-default: #233247;
+  --text-muted: #596b84;
+  --card-background: #ffffff;
+  --background-primary: #f7f9fc;
+  --bg-secondary: #edf1f8;
+  --bg-default: #f7f9fc;
+  --border-default: #c7d2e0;
+  --border-light: #e6ebf2;
+  --chat-accent: #3c60ca;
+  --chat-accent-hover: #3054be;
+  --chat-on-accent: #ffffff;
+  --workspace-rail: #edf1f8;
+  --workspace-selection: #eaf0ff;
+  --workspace-avatar: #e3eafa;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+:global([data-theme='dark']) .workspaceTheme.workspaceTheme {
+  --text-primary: #e6eaf2;
+  --text-default: #e6eaf2;
+  --text-muted: #9aa8bf;
+  --card-background: #192131;
+  --background-primary: #1d2738;
+  --bg-secondary: #192131;
+  --bg-default: #1d2738;
+  --border-default: #43526b;
+  --border-light: #2c374a;
+  --chat-accent: #91acff;
+  --chat-accent-hover: #b0c4ff;
+  --chat-on-accent: #17243f;
+  --workspace-rail: #111a29;
+  --workspace-selection: #2b3a56;
+  --workspace-avatar: #2b3b5a;
+}

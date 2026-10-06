@@ -9,6 +9,7 @@ import styles from './styles.module.css'
 import { profile } from '@src/config/profile'
 import { Download } from 'lucide-react'
 import Ribbon from '@components/common/Ribbon'
+import AccountControl from '@components/auth/AccountControl'
 
 type Project = {
   id: string
@@ -288,6 +289,7 @@ const ModernHomePage: React.FC = () => {
       <div className={styles.ambientBackdrop} aria-hidden="true" />
       <div className={styles.cursorLight} aria-hidden="true" />
       <div className={styles.themeControls}>
+        <AccountControl />
         <ThemeToggleButton />
         <button
           className={styles.languageToggle}

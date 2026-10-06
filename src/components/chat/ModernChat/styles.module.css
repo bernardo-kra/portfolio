@@ -12,6 +12,174 @@
   border: 1px solid var(--border-default);
 }
 
+.chatContainer.workspace {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+.workspaceLayout {
+  display: grid;
+  grid-template-columns: 66px minmax(270px, 320px) minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+}
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 0 14px;
+  background: var(--workspace-rail);
+  border-right: 1px solid var(--border-light);
+}
+.brand {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.1em;
+  margin: 0 0 12px;
+}
+.brand span {
+  color: var(--chat-accent);
+}
+.rail button,
+.rail a {
+  height: 44px;
+  width: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+}
+.rail button.railActive {
+  background: var(--chat-accent);
+  color: var(--chat-on-accent);
+}
+.rail a:hover {
+  color: var(--chat-accent);
+  background: var(--workspace-selection);
+}
+.ownerAvatar {
+  margin-top: auto;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--workspace-avatar);
+  color: var(--chat-accent);
+  border: 1px solid var(--border-default);
+}
+.sidebar,
+.thread {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+.thread {
+  background: var(--background-primary);
+}
+.welcome {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    var(--workspace-selection),
+    transparent 65%
+  );
+}
+.welcomeArt {
+  position: relative;
+  color: var(--chat-accent);
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  border-radius: 32px;
+  background: var(--card-background);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 15px 45px #0000000a;
+  transform: rotate(-8deg);
+  margin-bottom: 35px;
+}
+.welcomeArt svg {
+  transform: rotate(8deg);
+}
+.welcomeArt span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--chat-accent);
+  border-radius: 50%;
+  right: -25px;
+  top: 18px;
+  opacity: 0.6;
+}
+.welcomeArt span:last-child {
+  left: -23px;
+  top: auto;
+  bottom: 18px;
+  width: 5px;
+  height: 5px;
+}
+.welcomeLabel {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--chat-accent);
+  font-weight: 700;
+}
+.welcome h2 {
+  font-size: clamp(23px, 2.2vw, 32px);
+  max-width: 370px;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+  margin: 13px 0;
+}
+.welcome p {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 360px;
+  margin: 0;
+}
+.privateNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-top: 35px;
+}
+@media (max-width: 1000px) {
+  .workspaceLayout {
+    grid-template-columns: 58px 270px minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .workspaceLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rail {
+    display: none;
+  }
+  .mobileHidden {
+    display: none;
+  }
+}
+
 .adminLayout {
   display: flex;
   height: 100%;

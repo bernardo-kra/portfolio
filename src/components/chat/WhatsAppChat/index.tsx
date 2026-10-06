@@ -4,7 +4,7 @@ import { useChatPermissions } from '../../../hooks/useChatPermissions'
 import MessageBubble from '../MessageBubble'
 import MessageInput from '../MessageInput'
 import { useI18n } from '@src/i18n'
-import { MessageCircle, ArrowLeft } from 'lucide-react'
+import { MessageCircle, ArrowLeft, Search, X, LockKeyhole } from 'lucide-react'
 import { format, isSameDay } from 'date-fns'
 import { ptBR, enUS } from 'date-fns/locale'
 import styles from './styles.module.css'
@@ -12,11 +12,15 @@ import styles from './styles.module.css'
 interface WhatsAppChatProps {
   selectedUserId?: string
   onBack?: () => void
+  workspace?: boolean
+  selectedName?: string
 }
 
 const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   selectedUserId,
   onBack,
+  workspace = false,
+  selectedName,
 }) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
@@ -31,6 +35,15 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   const [sending, setSending] = useState(false)
   const [sendError, setSendError] = useState('')
   const [cooldownRemaining, setCooldownRemaining] = useState(0)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const displayedMessages = messages.filter(
+    (message) =>
+      !search.trim() ||
+      message.message
+        .toLocaleLowerCase()
+        .includes(search.trim().toLocaleLowerCase())
+  )
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -116,7 +129,9 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   }
 
   return (
-    <div className={styles.chatContainer}>
+    <div
+      className={`${styles.chatContainer} ${workspace ? styles.workspace : ''}`}
+    >
       <div className={styles.chatHeader}>
         {onBack && (
           <button
@@ -127,15 +142,27 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
             <ArrowLeft size={20} />
           </button>
         )}
+        {workspace && (
+          <div className={styles.avatar}>
+            {(selectedName || selectedUserId || '?')
+              .split(/\s+/)
+              .slice(0, 2)
+              .map((part) => part.charAt(0))
+              .join('')
+              .toUpperCase()}
+          </div>
+        )}
         <div className={styles.chatInfo}>
           <h3 className={styles.chatTitle}>
-            {isAdmin
-              ? pt
-                ? 'Conversa privada'
-                : 'Private conversation'
-              : pt
-                ? 'Converse com Bernardo'
-                : 'Talk to Bernardo'}
+            {workspace
+              ? selectedName
+              : isAdmin
+                ? pt
+                  ? 'Conversa privada'
+                  : 'Private conversation'
+                : pt
+                  ? 'Converse com Bernardo'
+                  : 'Talk to Bernardo'}
           </h3>
           <p className={styles.chatSubtitle}>
             {isAdmin
@@ -145,8 +172,52 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
                 : 'Only you and Bernardo can see this conversation'}
           </p>
         </div>
-        <div className={styles.chatStatus} />
+        {workspace && (
+          <div className={styles.headerTools}>
+            <span className={styles.privacyTag}>
+              <LockKeyhole size={13} />
+              {pt ? 'Privada' : 'Private'}
+            </span>
+            <button
+              className={styles.searchButton}
+              aria-label={
+                searchOpen
+                  ? pt
+                    ? 'Fechar busca'
+                    : 'Close search'
+                  : pt
+                    ? 'Buscar nesta conversa'
+                    : 'Search this conversation'
+              }
+              aria-expanded={searchOpen}
+              onClick={() => {
+                setSearchOpen(!searchOpen)
+                setSearch('')
+              }}
+            >
+              {searchOpen ? <X size={19} /> : <Search size={19} />}
+            </button>
+          </div>
+        )}
       </div>
+      {searchOpen && (
+        <div className={styles.threadSearch}>
+          <Search size={16} />
+          <input
+            autoFocus
+            type="search"
+            aria-label={pt ? 'Buscar mensagem' : 'Search messages'}
+            placeholder={
+              pt ? 'Buscar nesta conversa...' : 'Search this conversation...'
+            }
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <span>
+            {displayedMessages.length} {pt ? 'resultados' : 'results'}
+          </span>
+        </div>
+      )}
 
       <div
         className={styles.messagesContainer}
@@ -173,12 +244,12 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
             </p>
           </div>
         ) : (
-          messages.map((message, index) => (
+          displayedMessages.map((message, index) => (
             <React.Fragment key={message.id}>
               {(index === 0 ||
                 !isSameDay(
                   chatService.toDate(message.timestamp),
-                  chatService.toDate(messages[index - 1].timestamp)
+                  chatService.toDate(displayedMessages[index - 1].timestamp)
                 )) && (
                 <p className={styles.dateLabel}>
                   {chatService.toDate(message.timestamp).getTime()
@@ -195,9 +266,15 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
                 message={message}
                 isOwnMessage={message.senderEmail === userEmail}
                 showSenderName={isAdmin && message.senderEmail !== userEmail}
+                workspace={workspace}
               />
             </React.Fragment>
           ))
+        )}
+        {search.trim() && displayedMessages.length === 0 && (
+          <p className={styles.searchEmpty}>
+            {pt ? 'Nenhuma mensagem encontrada.' : 'No messages found.'}
+          </p>
         )}
 
         <div ref={messagesEndRef} />
@@ -240,6 +317,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
         onSendMessage={handleSendMessage}
         disabled={sending}
         cooldownRemaining={cooldownRemaining}
+        workspace={workspace}
         placeholder={
           isAdmin
             ? pt

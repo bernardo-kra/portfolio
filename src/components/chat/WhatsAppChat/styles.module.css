@@ -243,6 +243,150 @@
   font-size: 0.875rem;
 }
 
+.chatContainer.workspace {
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.workspace .chatHeader {
+  min-height: 83px;
+  padding: 16px 24px;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: none;
+  background: var(--card-background);
+}
+.avatar {
+  flex-shrink: 0;
+  height: 39px;
+  width: 39px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: var(--workspace-avatar);
+  color: var(--chat-accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+.workspace .chatTitle {
+  font-size: 15px;
+  margin: 0 0 2px;
+  letter-spacing: -0.02em;
+}
+.workspace .chatSubtitle {
+  font-size: 11px;
+  font-weight: 400;
+}
+.headerTools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.privacyTag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.searchButton {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 9px;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.searchButton:hover {
+  background: var(--workspace-selection);
+  color: var(--chat-accent);
+}
+.workspace .backButton {
+  display: none;
+  box-shadow: none;
+}
+.workspace .messagesContainer {
+  padding: 24px clamp(18px, 3vw, 45px);
+  gap: 4px;
+  background: var(--background-primary);
+  scroll-padding: 20px;
+}
+.workspace .dateLabel {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 10px;
+  margin: 18px 0;
+  white-space: nowrap;
+}
+.workspace .dateLabel::before,
+.workspace .dateLabel::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: var(--border-light);
+}
+.threadSearch {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 10px 24px;
+  background: var(--card-background);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-muted);
+}
+.threadSearch input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px;
+  border: 0;
+  background: var(--background-primary);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.threadSearch span {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.searchEmpty {
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 13px;
+  padding: 30px;
+}
+@media (max-width: 760px) {
+  .workspace .backButton {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    width: 32px;
+    height: 38px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .workspace .chatHeader {
+    min-height: 72px;
+    padding: 12px;
+    gap: 8px;
+  }
+  .privacyTag {
+    display: none;
+  }
+  .workspace .messagesContainer {
+    padding: 12px 15px;
+  }
+  .threadSearch {
+    padding: 10px 12px;
+  }
+}
+
 .dateLabel {
   text-align: center;
   font-size: 0.8rem;

@@ -8,17 +8,22 @@ import { format } from 'date-fns'
 import { ptBR, enUS } from 'date-fns/locale'
 import { chatDate } from '../../../services/chatTimestamp'
 import { useI18n } from '@src/i18n'
-import { RefreshCw, MessageCircle } from 'lucide-react'
+import { RefreshCw, MessageCircle, Search } from 'lucide-react'
 import styles from './styles.module.css'
 
 interface ConversationListProps {
-  onSelectConversation: (userId: string) => void
+  onSelectConversation: (
+    userId: string,
+    conversation?: ChatConversation
+  ) => void
   selectedUserId?: string
+  workspace?: boolean
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   onSelectConversation,
   selectedUserId,
+  workspace = false,
 }) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
@@ -117,9 +122,19 @@ const ConversationList: React.FC<ConversationListProps> = ({
   }
 
   return (
-    <div className={styles.conversationList}>
+    <div
+      className={`${styles.conversationList} ${workspace ? styles.workspace : ''}`}
+    >
       <div className={styles.header}>
-        <h3>{pt ? 'Conversas' : 'Conversations'}</h3>
+        <div>
+          <span className={styles.kicker}>
+            {pt ? 'MENSAGENS DIRETAS' : 'DIRECT MESSAGES'}
+          </span>
+          <h3>
+            {pt ? 'Conversas' : 'Conversations'}{' '}
+            <span className={styles.total}>{conversations.length}</span>
+          </h3>
+        </div>
         <button
           onClick={loadConversations}
           className={styles.refreshButton}
@@ -132,21 +147,31 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </div>
 
       <div className={styles.filters}>
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label={pt ? 'Buscar conversa' : 'Search conversations'}
-          placeholder={pt ? 'Buscar nome ou email' : 'Search name or email'}
-        />
-        <label>
+        <div className={styles.searchField}>
+          <Search size={17} aria-hidden="true" />
           <input
-            type="checkbox"
-            checked={unreadOnly}
-            onChange={(e) => setUnreadOnly(e.target.checked)}
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label={pt ? 'Buscar conversa' : 'Search conversations'}
+            placeholder={pt ? 'Buscar nome ou email' : 'Search name or email'}
           />
-          {pt ? 'Somente não lidas' : 'Unread only'}
-        </label>
+        </div>
+        <div
+          className={styles.filterTabs}
+          aria-label={pt ? 'Filtrar conversas' : 'Filter conversations'}
+        >
+          <button
+            aria-pressed={!unreadOnly}
+            onClick={() => setUnreadOnly(false)}
+          >
+            {pt ? 'Todas' : 'All'}
+          </button>
+          <button aria-pressed={unreadOnly} onClick={() => setUnreadOnly(true)}>
+            {pt ? 'Não lidas' : 'Unread'}
+            <span>{conversations.filter((c) => c.unreadCount > 0).length}</span>
+          </button>
+        </div>
       </div>
       {error && (
         <p role="alert" className={styles.error}>
@@ -183,10 +208,22 @@ const ConversationList: React.FC<ConversationListProps> = ({
               className={`${styles.conversationItem} ${
                 selectedUserId === conversation.userId ? styles.selected : ''
               }`}
-              onClick={() => onSelectConversation(conversation.userId)}
+              onClick={() =>
+                onSelectConversation(conversation.userId, conversation)
+              }
+              aria-current={
+                selectedUserId === conversation.userId ? 'true' : undefined
+              }
             >
               <div className={styles.conversationAvatar}>
-                <span>{conversation.userName.charAt(0).toUpperCase()}</span>
+                <span>
+                  {conversation.userName
+                    .split(/\s+/)
+                    .slice(0, 2)
+                    .map((part) => part.charAt(0))
+                    .join('')
+                    .toUpperCase()}
+                </span>
                 {conversation.isOnline && (
                   <div className={styles.onlineIndicator}></div>
                 )}
@@ -219,6 +256,14 @@ const ConversationList: React.FC<ConversationListProps> = ({
           ))
         )}
       </div>
+      {workspace && (
+        <div className={styles.listFooter}>
+          <span />
+          {pt
+            ? 'Atualização automática das conversas'
+            : 'Conversations refresh automatically'}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,18 +1,24 @@
 import themeStyles from '../chatTheme.module.css'
+import workspaceStyles from '../workspaceTheme.module.css'
 import React, { useState } from 'react'
 import { useChatPermissions } from '../../../hooks/useChatPermissions'
 import ConversationList from '../ConversationList'
 import WhatsAppChat from '../WhatsAppChat'
 import { useI18n } from '@src/i18n'
-import { LockKeyhole } from 'lucide-react'
+import { LockKeyhole, MessagesSquare, Inbox, ArrowUpRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import type { ChatConversation } from '../../../services/chatService'
 import styles from './styles.module.css'
 
-const ModernChat: React.FC = () => {
+const ModernChat: React.FC<{ workspace?: boolean }> = ({
+  workspace = false,
+}) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
   const { canAccessChat, canViewAllChats, isAdmin } = useChatPermissions()
   const [selectedUserId, setSelectedUserId] = useState<string | undefined>()
   const [showConversationList, setShowConversationList] = useState(false)
+  const [selectedName, setSelectedName] = useState('')
 
   if (!canAccessChat) {
     return (
@@ -32,8 +38,12 @@ const ModernChat: React.FC = () => {
     )
   }
 
-  const handleSelectConversation = (userId: string) => {
+  const handleSelectConversation = (
+    userId: string,
+    conversation?: ChatConversation
+  ) => {
     setSelectedUserId(userId)
+    setSelectedName(conversation?.userName || userId)
     setShowConversationList(false)
   }
 
@@ -43,21 +53,108 @@ const ModernChat: React.FC = () => {
   }
 
   return (
-    <div className={`${styles.chatContainer} ${themeStyles.chatTheme}`}>
+    <div
+      className={`${styles.chatContainer} ${themeStyles.chatTheme} ${workspace ? `${styles.workspace} ${workspaceStyles.workspaceTheme}` : ''}`}
+    >
       {isAdmin && canViewAllChats ? (
-        <div className={styles.adminLayout}>
-          {showConversationList || !selectedUserId ? (
-            <ConversationList
-              onSelectConversation={handleSelectConversation}
-              selectedUserId={selectedUserId}
-            />
-          ) : (
-            <WhatsAppChat
-              selectedUserId={selectedUserId}
-              onBack={handleBackToList}
-            />
-          )}
-        </div>
+        workspace ? (
+          <div className={styles.workspaceLayout}>
+            <nav
+              className={styles.rail}
+              aria-label={pt ? 'Navegação do chat' : 'Chat navigation'}
+            >
+              <span className={styles.brand}>
+                bk<span>.</span>
+              </span>
+              <button
+                className={styles.railActive}
+                onClick={handleBackToList}
+                aria-label={pt ? 'Caixa de entrada' : 'Inbox'}
+                title={pt ? 'Caixa de entrada' : 'Inbox'}
+              >
+                <Inbox size={22} />
+              </button>
+              <Link
+                to="/portfolio"
+                aria-label={pt ? 'Abrir portfólio' : 'Open portfolio'}
+                title={pt ? 'Abrir portfólio' : 'Open portfolio'}
+              >
+                <ArrowUpRight size={21} />
+              </Link>
+              <span
+                className={styles.ownerAvatar}
+                title={pt ? 'Proprietário' : 'Owner'}
+              >
+                BK
+              </span>
+            </nav>
+            <aside
+              className={`${styles.sidebar} ${selectedUserId ? styles.mobileHidden : ''}`}
+              aria-label={pt ? 'Lista de conversas' : 'Conversation list'}
+            >
+              <ConversationList
+                onSelectConversation={handleSelectConversation}
+                selectedUserId={selectedUserId}
+                workspace
+              />
+            </aside>
+            <section
+              className={`${styles.thread} ${!selectedUserId ? styles.mobileHidden : ''}`}
+              aria-label={pt ? 'Conversa selecionada' : 'Selected conversation'}
+            >
+              {selectedUserId ? (
+                <WhatsAppChat
+                  key={selectedUserId}
+                  selectedUserId={selectedUserId}
+                  selectedName={selectedName}
+                  onBack={handleBackToList}
+                  workspace
+                />
+              ) : (
+                <div className={styles.welcome}>
+                  <div className={styles.welcomeArt}>
+                    <MessagesSquare size={42} strokeWidth={1.3} />
+                    <span />
+                    <span />
+                  </div>
+                  <span className={styles.welcomeLabel}>
+                    {pt ? 'SEU ESPAÇO DE CONVERSA' : 'YOUR CONVERSATION SPACE'}
+                  </span>
+                  <h2>
+                    {pt
+                      ? 'Boas conversas começam aqui.'
+                      : 'Good conversations start here.'}
+                  </h2>
+                  <p>
+                    {pt
+                      ? 'Escolha alguém na lista ao lado. O histórico e suas respostas ficam juntos, em um só lugar.'
+                      : 'Choose someone from the list. Their history and your replies stay together, in one place.'}
+                  </p>
+                  <span className={styles.privateNote}>
+                    <LockKeyhole size={14} />
+                    {pt
+                      ? 'Conversas privadas entre você e cada visitante'
+                      : 'Private conversations between you and each visitor'}
+                  </span>
+                </div>
+              )}
+            </section>
+          </div>
+        ) : (
+          <div className={styles.adminLayout}>
+            {showConversationList || !selectedUserId ? (
+              <ConversationList
+                onSelectConversation={handleSelectConversation}
+                selectedUserId={selectedUserId}
+              />
+            ) : (
+              <WhatsAppChat
+                selectedUserId={selectedUserId}
+                onBack={handleBackToList}
+              />
+            )}
+          </div>
+        )
       ) : (
         <div className={styles.userLayout}>
           <WhatsAppChat />

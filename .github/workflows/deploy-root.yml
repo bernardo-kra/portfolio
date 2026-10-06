@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -49,24 +50,34 @@ jobs:
         shell: bash
         run: |
           node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
           const base = new URL(process.env.BACKEND_URL || 'https://portfolio-backed-ll6j.onrender.com');
           if (base.protocol !== 'https:') throw new Error('Backend must use HTTPS');
           const health = new URL('/api/health', base);
+          const requiredBackendRevision = execFileSync('git', ['log', '-1', '--format=%H', '--', 'backend'], { encoding: 'utf8' }).trim();
+          const containsBackendChanges = revision => {
+            if (!/^[a-f0-9]{40}$/.test(revision || '')) return false;
+            try {
+              execFileSync('git', ['merge-base', '--is-ancestor', requiredBackendRevision, revision], { stdio: 'ignore' });
+              execFileSync('git', ['merge-base', '--is-ancestor', revision, process.env.EXPECTED_REVISION], { stdio: 'ignore' });
+              return true;
+            } catch { return false; }
+          };
           const deadline = Date.now() + 10 * 60 * 1000;
           while (Date.now() < deadline) {
             try {
               const response = await fetch(health, { signal: AbortSignal.timeout(15000) });
               if (response.ok) {
                 const data = await response.json();
-                if (data.status === 'ok' && data.revision === process.env.EXPECTED_REVISION) {
-                  console.log('Backend revision confirmed; frontend can be published.');
+                if (data.status === 'ok' && containsBackendChanges(data.revision)) {
+                  console.log('Backend contains the required changes; frontend can be published.');
                   process.exit(0);
                 }
               }
             } catch { /* Allow Render to finish building or wake up. */ }
             await new Promise(resolve => setTimeout(resolve, 10000));
           }
-          throw new Error('Backend did not deploy this revision. Check the Render deployment before publishing the frontend.');
+          throw new Error('Backend is missing required changes. Check the Render deployment before publishing the frontend.');
           NODE
 
       - name: Publish to GitHub Pages

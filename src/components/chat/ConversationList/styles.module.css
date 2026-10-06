@@ -304,3 +304,158 @@
 .conversationItem {
   min-height: 64px;
 }
+
+.kicker {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.total {
+  font-size: 11px;
+  color: var(--text-muted);
+  border-radius: 6px;
+  background: var(--background-primary);
+  padding: 3px 6px;
+  margin-left: 4px;
+}
+.searchField {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.searchField > svg {
+  position: absolute;
+  left: 11px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.filters .searchField input {
+  padding-left: 35px;
+}
+.filterTabs {
+  display: flex;
+  gap: 6px;
+}
+.filterTabs button {
+  border: 0;
+  border-radius: 7px;
+  padding: 7px 11px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+}
+.filterTabs button[aria-pressed='true'] {
+  background: var(--workspace-selection, var(--background-primary));
+  color: var(--chat-accent);
+  font-weight: 700;
+}
+.filterTabs button span {
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-left: 6px;
+  background: var(--background-primary);
+  font-size: 10px;
+}
+.workspace .header {
+  padding: 22px 19px 12px;
+  border: none;
+  background: var(--card-background);
+}
+.workspace .header h3 {
+  font-size: 22px;
+  letter-spacing: -0.04em;
+  margin: 3px 0 0;
+}
+.workspace .filters {
+  padding: 4px 19px 16px;
+}
+.workspace .filters input[type='search'] {
+  background: var(--background-primary);
+  border-color: transparent;
+  font-size: 12px;
+  border-radius: 9px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.workspace .refreshButton {
+  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+}
+.workspace .refreshButton:hover {
+  transform: none;
+  background: var(--background-primary);
+}
+.workspace .conversationsContainer {
+  padding: 9px;
+}
+.workspace .conversationItem {
+  gap: 11px;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px 10px;
+  margin-bottom: 3px;
+  min-height: 79px;
+}
+.workspace .conversationItem.selected {
+  background: var(--workspace-selection);
+  box-shadow: inset 3px 0 var(--chat-accent);
+}
+.workspace .conversationAvatar {
+  width: 43px;
+  height: 43px;
+  background: var(--workspace-avatar);
+  color: var(--chat-accent);
+  font-size: 13px;
+  letter-spacing: -0.03em;
+}
+.workspace .conversationItem:nth-child(3n + 2) .conversationAvatar {
+  background: color-mix(
+    in srgb,
+    var(--chat-accent) 10%,
+    var(--card-background)
+  );
+}
+.workspace .conversationName {
+  font-size: 13px;
+}
+.workspace .conversationTime {
+  font-size: 10px;
+}
+.workspace .lastMessage {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.workspace .unreadBadge {
+  color: var(--chat-on-accent);
+  min-width: 19px;
+  height: 19px;
+  font-size: 10px;
+}
+.listFooter {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 15px 9px;
+  border-top: 1px solid var(--border-light);
+  color: var(--text-muted);
+  font-size: 9px;
+}
+.listFooter span {
+  width: 5px;
+  height: 5px;
+  background: var(--text-muted);
+  border-radius: 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loadingSpinner {
+    animation: none;
+  }
+}
