@@ -8,7 +8,7 @@ As três regras CommonJS foram copiadas sem alteração de [vibe-coding-toolkit]
 
 - Teto de 350 linhas físicas, incluindo comentários e linhas vazias; testes incluídos explicitamente. Nenhum teto foi aumentado.
 - O fornecedor ignora TODOS os arquivos chamados index.*, types.*, interfaces.*, constants.*, dtos.*, enums.* e vo.*, mesmo que contenham implementação. Isso é uma limitação real da regra copiada, não prova de que esses arquivos são pequenos. Não alteramos o plugin para esconder essa limitação.
-- UI em src/Pages e src/components não pode importar backend/src. Rotas backend não podem importar diretamente config/firebase.ts; devem usar repositórios. quality/no-direct-data-access reforça os nomes relativos/aliases atuais, import-x verifica a resolução real.
+- UI em src/Pages, src/components e a entrada src/main.tsx não pode importar backend/src. Rotas backend e api/ não podem importar diretamente config/firebase.ts; devem usar repositórios. quality/no-direct-data-access reforça os nomes relativos/aliases atuais, import-x verifica a resolução real.
 - Único cliente do banco: db em backend/src/config/firebase.ts. Middleware e serviços de infraestrutura continuam consumidores legítimos.
 - Nenhum adaptador de logging existia na instalação. A etapa de refatoração criará adaptadores explícitos para browser, backend e serverless; só esses arquivos podem usar console.
 - O lint rápido não monta programa TypeScript. npm run lint:types é a etapa separada com projectService, nunca adicionada ao pre-commit.
@@ -158,6 +158,8 @@ Seguir [parallel wave dispatch](https://raw.githubusercontent.com/soumatheusgome
 | 4 | T06 | eslint.config.mjs, eslint.typed.config.mjs, docs/QUALITY_GATES.md | T03 e revisão | orquestrador/tooling |
 
 T01, T04 e T05 são disjuntos; commits na ordem T01, T04, T05. Antes de ampliar um escopo incerto, serializar e registrar. Revisores: TypeScript/Canvas para T01, segurança/Node para T04, React/TypeScript para T05/T02, segurança/testes para T03. Revisão integral final por React/TypeScript e segurança/Node.
+
+Revisão independente de T00: fechou uma lacuna de imports resolvidos em src/main.tsx e api/. O teste tests/qualityBoundaries.test.mjs cobre extensões .js/.ts/sem extensão, aliases de binding, namespace, repositórios legítimos e assets existentes/ausentes do Vite. A adaptação não altera fontes de produção ou a contagem de baseline. .gitattributes protege as cópias CommonJS e o verificador também no checkout Windows.
 
 ## Pegadinhas (copiar em cada briefing)
 

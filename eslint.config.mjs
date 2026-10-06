@@ -89,7 +89,11 @@ export default defineConfig([
         {
           zones: [
             {
-              target: ['./src/Pages/**/*', './src/components/**/*'],
+              target: [
+                './src/Pages/**/*',
+                './src/components/**/*',
+                './src/main.tsx',
+              ],
               from: './backend/src/**/*',
             },
           ],
@@ -100,7 +104,7 @@ export default defineConfig([
         {
           zones: [
             {
-              target: './backend/src/routes/**/*',
+              target: ['./backend/src/routes/**/*', './api/**/*'],
               from: './backend/src/config/firebase.ts',
             },
           ],
