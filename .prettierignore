@@ -1,0 +1,6 @@
+# Toolkit rules and their verification are copied byte for byte.
+eslint-rules/
+tests/qualityRules.verify.mjs
+node_modules/
+dist/
+backend/dist/
