@@ -3,12 +3,12 @@
 Pendências registradas para uma etapa posterior. A atualização em tempo real
 é uma tarefa separada e não resolve automaticamente os pontos abaixo.
 
-- [ ] **Alta — limite do Google:** separar `/challenge` das tentativas de login.
+- [x] **Alta — limite do Google:** separar `/challenge` das tentativas de login.
       Abrir o modal cinco vezes consome o limite de autenticação, sem tentar entrar.
-- [ ] **Alta — duplicação:** adicionar um identificador de envio e deduplicação
+- [x] **Alta — duplicação:** adicionar um identificador de envio e deduplicação
       no backend. Se a mensagem for salva e a resposta se perder, tentar novamente
       pode criar outra mensagem.
-- [ ] **Média — rascunho após envio:** limpar o rascunho também se o componente
+- [x] **Média — rascunho após envio:** limpar o rascunho também se o componente
       for fechado ou a conversa mudar enquanto a requisição está em andamento.
 - [ ] **Média — leitura prematura:** marcar apenas mensagens realmente vistas.
       Hoje a consulta marca mensagens como lidas mesmo com o histórico rolado para cima.
@@ -23,3 +23,13 @@ Reprodução: Chrome com dados simulados confirmou rascunho mantido após envio,
 leitura antecipada e reenvio sem identificador. Rotas reais com Firebase
 simulado confirmaram `429` na sexta preparação do Google. Os 49 testes então
 existentes, lint e build passaram, mas não cobriam esses comportamentos.
+
+## Etapa 1 — correções locais após a publicação
+
+A versão `d653b77` foi publicada. As correções marcadas acima pertencem à etapa
+seguinte: limite separado para preparar Google, identificador UUID
+por envio com deduplicação por usuário em transação Firestore, e rascunho
+compartilhado que é limpo mesmo após fechar a conversa. Uma tentativa repetida
+com o mesmo ID e conteúdo retorna a mensagem original; conteúdo alterado com
+esse ID recebe 409. Clientes antigos sem ID continuam compatíveis, mas não
+têm deduplicação. Os demais itens seguem pendentes.

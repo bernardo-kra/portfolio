@@ -42,6 +42,33 @@ jobs:
           ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         run: test -n "$ACTIONS_DEPLOY_KEY"
 
+      - name: Wait for backend revision
+        env:
+          BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
+          EXPECTED_REVISION: ${{ github.sha }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base = new URL(process.env.BACKEND_URL || 'https://portfolio-backed-ll6j.onrender.com');
+          if (base.protocol !== 'https:') throw new Error('Backend must use HTTPS');
+          const health = new URL('/api/health', base);
+          const deadline = Date.now() + 10 * 60 * 1000;
+          while (Date.now() < deadline) {
+            try {
+              const response = await fetch(health, { signal: AbortSignal.timeout(15000) });
+              if (response.ok) {
+                const data = await response.json();
+                if (data.status === 'ok' && data.revision === process.env.EXPECTED_REVISION) {
+                  console.log('Backend revision confirmed; frontend can be published.');
+                  process.exit(0);
+                }
+              }
+            } catch { /* Allow Render to finish building or wake up. */ }
+            await new Promise(resolve => setTimeout(resolve, 10000));
+          }
+          throw new Error('Backend did not deploy this revision. Check the Render deployment before publishing the frontend.');
+          NODE
+
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

@@ -1,14 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useSyncExternalStore } from 'react'
+import {
+  getChatDraft,
+  subscribeChatDraft,
+  editChatDraft,
+  beginChatSend,
+  finishChatSend,
+} from '@src/services/chatDrafts'
 import { useI18n } from '@src/i18n'
 import { Send } from 'lucide-react'
 import styles from './styles.module.css'
 
-// Drafts stay in memory and never enter persistent browser storage.
-const drafts = new Map<string, string>()
-window.addEventListener('portfolio:auth', () => drafts.clear())
-
 interface MessageInputProps {
-  onSendMessage: (message: string) => Promise<boolean>
+  onSendMessage: (message: string, clientMessageId: string) => Promise<boolean>
   disabled?: boolean
   placeholder?: string
   maxLength?: number
@@ -26,17 +29,24 @@ const MessageInput: React.FC<MessageInputProps> = ({
 }) => {
   const { lang } = useI18n()
   const pt = lang === 'pt'
-  const [message, setMessage] = useState(() => drafts.get(draftKey) || '')
-  useEffect(() => {
-    drafts.set(draftKey, message)
-  }, [draftKey, message])
+  const draft = useSyncExternalStore(
+    (callback) => subscribeChatDraft(draftKey, callback),
+    () => getChatDraft(draftKey)
+  )
+  const message = draft.text
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (message.trim() && !disabled && cooldownRemaining === 0) {
-      const sent = await onSendMessage(message.trim())
-      if (sent) setMessage('')
+      const attempt = beginChatSend(draftKey)
+      if (!attempt) return
+      let sent = false
+      try {
+        sent = await onSendMessage(attempt.text.trim(), attempt.id)
+      } finally {
+        finishChatSend(draftKey, attempt.id, sent)
+      }
     }
   }
 
@@ -50,7 +60,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     if (value.length <= maxLength) {
-      setMessage(value)
+      editChatDraft(draftKey, value)
     }
   }
 
@@ -83,7 +93,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
               ? `${pt ? 'Aguarde' : 'Wait'} ${cooldownRemaining}s...`
               : placeholder
           }
-          disabled={disabled || cooldownRemaining > 0}
+          disabled={disabled || draft.pending || cooldownRemaining > 0}
           className={styles.messageTextarea}
           rows={1}
         />
@@ -91,7 +101,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
         <button
           type="submit"
           aria-label={pt ? 'Enviar mensagem' : 'Send message'}
-          disabled={!message.trim() || disabled || cooldownRemaining > 0}
+          disabled={
+            !message.trim() ||
+            disabled ||
+            draft.pending ||
+            cooldownRemaining > 0
+          }
           className={styles.sendButton}
           title={
             cooldownRemaining > 0

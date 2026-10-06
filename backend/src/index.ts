@@ -19,7 +19,7 @@ app.use(helmet({
 }));
 app.use(express.json({ limit: '32kb' }));
 app.use(express.urlencoded({ extended: false, limit: '32kb' }));
-app.use('/api/auth', (_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
+app.use('/api', (_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
 
 // Middlewares de segurança
 app.use(suspiciousActivityDetector);
@@ -29,6 +29,9 @@ app.use(securityLoggerMiddleware);
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
+    revision: /^[a-f0-9]{40}$/.test(process.env.RENDER_GIT_COMMIT || '')
+      ? process.env.RENDER_GIT_COMMIT
+      : null,
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
@@ -48,5 +51,3 @@ app.listen(PORT, () => {
 });
 
 export default app;
-
-

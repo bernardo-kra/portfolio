@@ -2,7 +2,10 @@ import { Router } from 'express';
 import { randomBytes } from 'node:crypto';
 import { OAuth2Client } from 'google-auth-library';
 import { db } from '../config/firebase.js';
-import { authRateLimit } from '../middleware/rateLimiter.js';
+import {
+  authRateLimit,
+  googleChallengeRateLimit,
+} from '../middleware/rateLimiter.js';
 import { createSession } from '../services/sessionService.js';
 import { isChatOwner } from '../services/chatPolicy.js';
 import {
@@ -13,7 +16,7 @@ import {
 const router = Router();
 const verifier = new OAuth2Client();
 const clientId = () => process.env.GOOGLE_CLIENT_ID;
-router.post('/challenge', authRateLimit, async (_req, res) => {
+router.post('/challenge', googleChallengeRateLimit, async (_req, res) => {
   if (!clientId())
     return res
       .status(503)

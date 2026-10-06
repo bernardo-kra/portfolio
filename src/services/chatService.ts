@@ -78,7 +78,8 @@ class ChatService {
   async sendMessage(
     userId: string,
     message: string,
-    isAdmin = false
+    isAdmin = false,
+    clientMessageId: string = crypto.randomUUID()
   ): Promise<{ success: boolean; error?: string }> {
     try {
       if (!this.canSendMessage()) {
@@ -106,6 +107,7 @@ class ChatService {
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: message.trim(),
+            clientMessageId,
             recipientEmail: isAdmin ? userId : undefined,
           }),
         }

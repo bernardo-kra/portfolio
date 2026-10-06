@@ -1,14 +1,19 @@
 import { requireAdmin } from '../middleware/adminAuth.js';
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
+import { messageRateLimit } from '../middleware/rateLimiter.js';
+import { validText, validDocumentId } from '../services/inputValidation.js';
 
 const router = Router();
 
-router.post('/messages', async (req: Request, res: Response) => {
+router.post('/messages', messageRateLimit, async (req: Request, res: Response) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    if (!name || !email || !message) {
+    if (!validText(name, 200) || !validText(email, 254) ||
+        !/^[^\s/@]+@[^\s/@]+\.[^\s/@]+$/.test(email) ||
+        !validText(message, 5000) ||
+        (subject !== undefined && (typeof subject !== 'string' || subject.length > 200))) {
       return res.status(400).json({
         success: false,
         error: { message: 'Nome, email e mensagem são obrigatórios' },
@@ -67,6 +72,7 @@ router.get('/messages', requireAdmin, async (req: Request, res: Response) => {
 router.patch('/messages/:id/read', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
+    if (!validDocumentId(id)) return res.status(400).json({ success: false });
     
     await db.collection('messages').doc(id).update({
       read: true,

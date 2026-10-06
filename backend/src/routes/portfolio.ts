@@ -1,6 +1,7 @@
 import { requireAdmin } from '../middleware/adminAuth.js';
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase.js';
+import { projectInput, validDocumentId } from '../services/inputValidation.js';
 
 const router = Router();
 
@@ -27,9 +28,8 @@ router.get('/projects', async (req: Request, res: Response) => {
 
 router.post('/projects', requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { title, description, technologies, githubUrl, liveUrl, imageUrl } = req.body;
-
-    if (!title || !description) {
+    const input = projectInput(req.body);
+    if (!input) {
       return res.status(400).json({
         success: false,
         error: { message: 'Título e descrição são obrigatórios' },
@@ -37,12 +37,11 @@ router.post('/projects', requireAdmin, async (req: Request, res: Response) => {
     }
 
     const projectData = {
-      title,
-      description,
-      technologies: technologies || [],
-      githubUrl: githubUrl || '',
-      liveUrl: liveUrl || '',
-      imageUrl: imageUrl || '',
+      technologies: [],
+      githubUrl: '',
+      liveUrl: '',
+      imageUrl: '',
+      ...input,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -65,6 +64,7 @@ router.post('/projects', requireAdmin, async (req: Request, res: Response) => {
 router.get('/projects/:id', async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
+    if (!validDocumentId(id)) return res.status(400).json({ success: false });
     const doc = await db.collection('projects').doc(id).get();
 
     if (!doc.exists) {
@@ -90,8 +90,10 @@ router.get('/projects/:id', async (req: Request, res: Response) => {
 router.put('/projects/:id', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
+    const input = projectInput(req.body, true);
+    if (!validDocumentId(id) || !input) return res.status(400).json({ success: false });
     const updateData = {
-      ...req.body,
+      ...input,
       updatedAt: new Date(),
     };
 
@@ -115,6 +117,7 @@ router.put('/projects/:id', requireAdmin, async (req: Request, res: Response) =>
 router.delete('/projects/:id', requireAdmin, async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
+    if (!validDocumentId(id)) return res.status(400).json({ success: false });
     await db.collection('projects').doc(id).delete();
 
     res.json({

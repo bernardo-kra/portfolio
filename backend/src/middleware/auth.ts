@@ -37,6 +37,7 @@ export const authenticateRequest = async (
   const userDoc = await db.collection('users').doc(email).get();
   const userData = userDoc.data();
   if (!userDoc.exists || !userData) return null;
+  if (identity.googleSub && identity.googleSub !== userData.googleSub) return null;
 
   return {
     email,

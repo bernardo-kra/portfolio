@@ -46,7 +46,13 @@ Como o site usa `base: '/'`, ele deve ser servido na raiz do domínio. Não conf
 
 ## Backend no Render
 
-O backend de produção é referenciado pelo frontend como `https://portfolio-08my.onrender.com`. A configuração está em `backend/render.yaml`.
+O backend de produção é referenciado pelo frontend como `https://portfolio-backed-ll6j.onrender.com`, configurado pela variável de repositório `VITE_BACKEND_URL`. A configuração está em `backend/render.yaml`.
+
+O workflow aguarda até dez minutos pela mesma revisão Git no `/api/health`
+do backend antes de publicar o frontend. Render deve estar ligado à branch
+`main` com deploy automático habilitado. O campo público `revision` vem de
+`RENDER_GIT_COMMIT`, sem expor credenciais. Se o backend não atualizar, o
+workflow falha e mantém a publicação anterior do GitHub Pages.
 
 Ao criar o serviço no Render:
 

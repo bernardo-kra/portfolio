@@ -74,13 +74,21 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     }
   }, [messages])
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = async (
+    message: string,
+    clientMessageId: string
+  ) => {
     if (!chatUserId || sending) return false
 
     setSending(true)
     setSendError('')
 
-    const result = await chatService.sendMessage(chatUserId, message, isAdmin)
+    const result = await chatService.sendMessage(
+      chatUserId,
+      message,
+      isAdmin,
+      clientMessageId
+    )
 
     if (result.success) {
       setCooldownRemaining(3)

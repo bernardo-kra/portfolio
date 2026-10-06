@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { createHash } from 'node:crypto';
 import { db } from '../config/firebase.js';
 import { verifyToken, type AuthenticatedRequest } from '../middleware/auth.js';
 import { requireChatOwner } from '../middleware/chatOwnerAuth.js';
@@ -45,7 +46,8 @@ async function readConversation(email: string) {
 async function send(
   user: NonNullable<AuthenticatedRequest['user']>,
   message: string,
-  email: string
+  email: string,
+  clientMessageId?: string
 ) {
   const data = {
     message: message.trim(),
@@ -57,7 +59,39 @@ async function send(
     timestamp: new Date(),
     read: false,
   };
-  const ref = db.collection('chats').doc();
+  const ref = clientMessageId
+    ? db
+        .collection('chats')
+        .doc(
+          createHash('sha256')
+            .update(`${user.email}\0${clientMessageId}`)
+            .digest('hex')
+        )
+    : db.collection('chats').doc();
+  if (clientMessageId) {
+    return db.runTransaction(async (transaction) => {
+      const existing = await transaction.get(ref);
+      if (existing.exists) {
+        const saved = existing.data()!;
+        if (
+          saved.message !== data.message ||
+          saved.conversationUserEmail !== data.conversationUserEmail ||
+          saved.senderEmail !== data.senderEmail
+        )
+          throw new Error('MESSAGE_ID_CONFLICT');
+        return { ...saved, id: ref.id };
+      }
+      transaction.create(ref, data);
+      for (const participant of new Set([
+        chatOwnerEmail(),
+        data.conversationUserEmail,
+      ]))
+        transaction.set(db.collection('chatActivity').doc(participant), {
+          messageId: ref.id,
+        });
+      return { id: ref.id, ...data };
+    });
+  }
   const batch = db.batch();
   batch.set(ref, data);
   // Atomically notify both endpoints, across backend instances, without exposing messages.
@@ -79,6 +113,15 @@ router.post(
   async (req: AuthenticatedRequest, res) => {
     try {
       const user = req.user!;
+      const clientMessageId = req.body.clientMessageId;
+      if (
+        clientMessageId !== undefined &&
+        (typeof clientMessageId !== 'string' ||
+          !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+            clientMessageId
+          ))
+      )
+        return res.status(400).json({ success: false });
       if (!validMessage(req.body.message))
         return res.status(400).json({
           success: false,
@@ -98,9 +141,13 @@ router.post(
       // Ordinary accounts cannot select recipients or impersonate an administrator.
       return res.status(201).json({
         success: true,
-        data: await send(user, req.body.message, recipient),
+        data: await send(user, req.body.message, recipient, clientMessageId),
       });
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.message === 'MESSAGE_ID_CONFLICT')
+        return res
+          .status(409)
+          .json({ success: false, error: { code: 'MESSAGE_ID_CONFLICT' } });
       return res.status(500).json({ success: false });
     }
   }

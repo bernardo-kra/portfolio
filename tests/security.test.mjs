@@ -1,7 +1,7 @@
 import { test, after } from 'node:test'
 import assert from 'node:assert/strict'
 import { registerHooks } from 'node:module'
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 
 // Exercise real HTTP handlers with synthetic records, never production data.
 const records = new Map()
@@ -15,6 +15,7 @@ const snapshot = (key) => ({
   exists: records.has(key),
   data: () => records.get(key),
 })
+
 globalThis.__securityTestDb = {
   collection(name) {
     const filters = []
@@ -106,6 +107,16 @@ globalThis.__securityTestDb = {
 }
 const hook = registerHooks({
   load(url, context, next) {
+    if (url.includes('/google-auth-library/') && url.endsWith('/build/src/index.js'))
+      return {
+        format: 'module', shortCircuit: true,
+        source: `export class OAuth2Client {
+          async verifyIdToken() {
+            if (!globalThis.__googleTestClaims) throw new Error('Invalid token');
+            return { getPayload: () => globalThis.__googleTestClaims };
+          }
+        }`,
+      }
     if (url.endsWith('/backend/dist/config/firebase.js'))
       return {
         format: 'module',
@@ -350,7 +361,7 @@ test('private chat routes every visitor to the owner and isolates replies by con
       'different-sub'
     )
     assert.equal((await request('/api/chat/all', passwordOwner)).status, 403)
-    assert.equal((await request('/api/chat/all', wrongIdentity)).status, 403)
+    assert.equal((await request('/api/chat/all', wrongIdentity)).status, 401)
     records.get('users/bernardokrac@gmail.com').role = 'admin'
     assert.equal((await request('/api/chat/all', passwordOwner)).status, 403)
     records.get('users/bernardokrac@gmail.com').role = 'user'
@@ -520,5 +531,139 @@ test('chat event streams are authenticated, isolated, notify both participants a
     await waitFor(() =>
       [...listeners.values()].every((callbacks) => callbacks.size === 0)
     )
+  }
+})
+
+test('opening Google repeatedly does not consume authentication attempts', async () => {
+  const { authRateLimit, googleChallengeRateLimit } = await import(
+    '../backend/dist/middleware/rateLimiter.js'
+  )
+  authRateLimit.resetKey('127.0.0.1')
+  googleChallengeRateLimit.resetKey('127.0.0.1')
+  process.env.GOOGLE_CLIENT_ID = 'synthetic-client.apps.googleusercontent.com'
+  try {
+    for (let i = 0; i < 6; i++)
+      assert.equal(
+        (await request('/api/auth/google/challenge', null, 'POST')).status,
+        200
+      )
+    assert.equal(
+      (
+        await request('/api/auth/google', null, 'POST', {
+          credential: 'forged',
+        })
+      ).status,
+      401
+    )
+  } finally {
+    delete process.env.GOOGLE_CLIENT_ID
+    authRateLimit.resetKey('127.0.0.1')
+  }
+})
+
+test('retry IDs deduplicate messages, reject changed payloads and remain scoped to the sender', async () => {
+  const { messageRateLimit } = await import(
+    '../backend/dist/middleware/rateLimiter.js'
+  )
+  messageRateLimit.resetKey('127.0.0.1')
+  records.set('users/retry-a@example.com', {
+    email: 'retry-a@example.com',
+    role: 'user',
+  })
+  records.set('users/retry-b@example.com', {
+    email: 'retry-b@example.com',
+    role: 'user',
+  })
+  const a = await createSession('retry-a@example.com'),
+    b = await createSession('retry-b@example.com')
+  const clientMessageId = randomUUID(),
+    body = { message: 'Only once', clientMessageId }
+  const first = await request('/api/chat/send', a, 'POST', body)
+  assert.equal(first.status, 201)
+  const saved = (await first.json()).data
+  const before = writes
+  const retry = await request('/api/chat/send', a, 'POST', body)
+  assert.equal(retry.status, 201)
+  assert.equal((await retry.json()).data.id, saved.id)
+  assert.equal(writes, before)
+  assert.equal(
+    (
+      await request('/api/chat/send', a, 'POST', {
+        ...body,
+        message: 'Changed',
+      })
+    ).status,
+    409
+  )
+  assert.equal(writes, before)
+  const other = await request('/api/chat/send', b, 'POST', body)
+  assert.equal(other.status, 201)
+  assert.notEqual((await other.json()).data.id, saved.id)
+  assert.equal(
+    (
+      await request('/api/chat/send', a, 'POST', {
+        message: 'bad',
+        clientMessageId: '../invalid',
+      })
+    ).status,
+    400
+  )
+  messageRateLimit.resetKey('127.0.0.1')
+})
+
+test('contact input rejects objects and oversized fields before writing', async () => {
+  const { messageRateLimit } = await import('../backend/dist/middleware/rateLimiter.js')
+  messageRateLimit.resetKey('127.0.0.1')
+  const before = writes
+  for (const patch of [{ name: {} }, { message: 'a'.repeat(5001) }, { email: 'invalid' }, { subject: [] }]) {
+    assert.equal((await request('/api/contact/messages', null, 'POST', {
+      name: 'Visitor', email: 'visitor@example.com', message: 'Hello', ...patch,
+    })).status, 400)
+  }
+  assert.equal(writes, before)
+  assert.equal((await request('/api/contact/messages', null, 'POST', {
+    name: 'Visitor', email: 'visitor@example.com', message: 'Hello',
+  })).status, 201)
+  messageRateLimit.resetKey('127.0.0.1')
+})
+
+test('project writes reject unknown fields and executable URLs even for admin', async () => {
+  const token = await createSession('admin@example.com')
+  const before = writes
+  for (const body of [{ role: 'admin' }, { title: {} }, { liveUrl: 'javascript:alert(1)' }, { technologies: [{}] }, { createdAt: 'forged' }]) {
+    assert.equal((await request('/api/portfolio/projects/private', token, 'PUT', body)).status, 400)
+  }
+  assert.equal(writes, before)
+  records.set('projects/private', { title: 'Original' })
+  assert.equal((await request('/api/portfolio/projects/private', token, 'PUT', { title: 'Updated', liveUrl: 'https://example.com' })).status, 200)
+  assert.equal(records.get('projects/private').title, 'Updated')
+})
+
+test('Google challenge expires, is consumed once and account identity changes revoke access', async () => {
+  const { authRateLimit } = await import('../backend/dist/middleware/rateLimiter.js')
+  process.env.GOOGLE_CLIENT_ID = 'synthetic-client.apps.googleusercontent.com'
+  const nonce = 'b'.repeat(64)
+  globalThis.__googleTestClaims = {
+    sub: 'synthetic-google-sub', email: 'google-test@example.com',
+    email_verified: true, nonce,
+  }
+  try {
+    authRateLimit.resetKey('127.0.0.1')
+    records.set(`googleChallenges/${nonce}`, { expiresAt: { toMillis: () => Date.now() - 1 } })
+    assert.equal((await request('/api/auth/google', null, 'POST', { credential: 'synthetic' })).status, 409)
+    assert.equal(records.has('users/google-test@example.com'), false)
+    records.set(`googleChallenges/${nonce}`, { expiresAt: { toMillis: () => Date.now() + 60000 } })
+    const response = await request('/api/auth/google', null, 'POST', { credential: 'synthetic' })
+    assert.equal(response.status, 200)
+    const { token } = (await response.json()).data
+    assert.equal(records.has(`googleChallenges/${nonce}`), false)
+    assert.equal((await request('/api/auth/google', null, 'POST', { credential: 'synthetic' })).status, 409)
+    assert.equal((await request('/api/auth/profile/google-test@example.com', token)).status, 200)
+    records.get('users/google-test@example.com').googleSub = 'different-sub'
+    assert.equal((await request('/api/auth/profile/google-test@example.com', token)).status, 401)
+  } finally {
+    delete globalThis.__googleTestClaims
+    delete process.env.GOOGLE_CLIENT_ID
+    authRateLimit.resetKey('127.0.0.1')
   }
 })

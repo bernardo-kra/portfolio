@@ -107,6 +107,16 @@ maliciosos executados na origem ainda podem agir durante uma sessão ativa.
 Cookies persistentes entre GitHub Pages e Render exigem atenção a bloqueio de
 cookies de terceiros; para adotá-los, prefira frontend/API sob o mesmo site.
 
+O build de produção adiciona Content-Security-Policy ao HTML, incluindo cópias
+de entrada das rotas. Scripts inline existentes são autorizados pelo hash exato;
+handlers inline e eval não são autorizados. Scripts externos ficam limitados ao
+Google Identity Services e Analytics. A origem da API vem de VITE_BACKEND_URL.
+Mudanças em provedores externos exigem rever a política e testar no navegador.
+Todas as respostas da API recebem Cache-Control: no-store. Projetos aceitam
+somente campos explícitos, URLs HTTPS sem credenciais e tamanhos limitados;
+contatos validam tipos/tamanhos e limitam envios por IP. Sessões Google deixam
+de autenticar se o identificador vinculado à conta mudar.
+
 Novas contas usam Google com email verificado. Cadastro por senha está bloqueado
 até existir um serviço de confirmação de email; contas existentes ainda entram
 com senha. Configure os dois Client IDs antes de disponibilizar cadastro Google.
