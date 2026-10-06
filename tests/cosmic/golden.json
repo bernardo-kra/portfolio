@@ -1,0 +1,134 @@
+{
+  "initial-state": {
+    "commands": 0,
+    "trace": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "state": "01b94a6c9d56390ff6133995ca775581066e40983eda10b03c4d483e481b9af1",
+    "draws": 2451
+  },
+  "public-frames": {
+    "commands": 5079,
+    "trace": "4c9bc836f0a33ab22393ef23234c7fb65f5d5af7ae4c4fecf01ea58588755fe4",
+    "state": "11fca3c8cf427e025f0997a1d9b5ff71961da5d328c01b007206c08dd8c027b4",
+    "draws": 2649
+  },
+  "pause-remains-current-no-op": {
+    "commands": 981,
+    "trace": "c37be7f4e5a5368bf30ea466aa24e03569bb50948a344cf00233dae6f6367b40",
+    "state": "dc4a8e5a30de634bff2eb9f1b037d7fd9e0e98ac8a7e9db76c13561bfca924b5",
+    "draws": 2498
+  },
+  "palette-nebula": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "83971a8c5984953e50fa919e3c0270e34fb5496e9dba4dbe12e88edf4ecaeb31",
+    "draws": 3975
+  },
+  "palette-aurora": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "160850c4393019fb2bcd538b67c1807a5285e047dda9da88f079b10a9387a018",
+    "draws": 3975
+  },
+  "palette-supernova": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "c5d90cd8a0f13cb6840d01fef202e79dcf2b08c7cf20fad66639f9d62b499d6a",
+    "draws": 3975
+  },
+  "palette-cosmic": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "4b3890db92d5cc5525890557267ea371274795241736b220d33098e087b4ebf1",
+    "draws": 3975
+  },
+  "palette-galaxy": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "ecdd703a6bc17798ee78c0192a4b84b4e7e899bd682e79661d44783c0fa5da5d",
+    "draws": 3975
+  },
+  "palette-stellar": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "eefa00edb283dd1717dfc398ca661dabba90e22ac379fd07666ca017dc32bd3a",
+    "draws": 3975
+  },
+  "unknown-palette-fallback": {
+    "commands": 5271,
+    "trace": "7e8ac833d633b55db505613bca7887f02cfbab6082e1f2d801f77e92f5a69021",
+    "state": "526c251118c2dbb8ef09a2f87ba81ae1de342d4dbeba02190d911017f5b668a3",
+    "draws": 3975
+  },
+  "zero-density": {
+    "commands": 760,
+    "trace": "c45cc3772695997d968806254ec51767564dc349d19e9cca530445bb75e11520",
+    "state": "ad15fae2714d962951b1cc91f26aefbed835e254d787f4dc2fd4f029905d4a02",
+    "draws": 4550
+  },
+  "high-density-fast-time": {
+    "commands": 8565,
+    "trace": "5794ebe1fe5e2ccc7f3e924646f9d2d6fede1c7d6a6742b317bfdd636818472b",
+    "state": "f1e7b7701ba6cc5f0b9039aef9ab1e5a9125c1e8aa8faf9131d2f5c792caacf0",
+    "draws": 4950
+  },
+  "reconstructed-resize": {
+    "commands": 5079,
+    "trace": "36a62c0f26ed09fb1904c56f7c9498f21671c922ef9b63adf53bfeb0927736a5",
+    "state": "5198f0d321772b2413aebe81314d734a710bbdfd7343b57d08825618ec670a16",
+    "draws": 2649
+  },
+  "all-event-renderers": {
+    "commands": 2070,
+    "trace": "fca55a274f1b614e22effdc3b6ade5a2ad1dca1762d3c7d0cf7f312e6bb2fd93",
+    "state": "0547c3cdb3edc789ffd02310707a900d3bd596f4a9bdff1db58c911c948355e4",
+    "draws": 2947
+  },
+  "event-update-phases-and-expiry": {
+    "commands": 2936,
+    "trace": "ba3deef0ad3ea2dc4a7b92168cd77dd3b7dab90a3ac2edc4c76291b3602e3abf",
+    "state": "01b94a6c9d56390ff6133995ca775581066e40983eda10b03c4d483e481b9af1",
+    "draws": 2905
+  },
+  "meteor-types-and-shower": {
+    "commands": 1717,
+    "trace": "e2ef5590fd53885200afc303450e6b712d572f0049b17d7b0ebbbd777fb40c86",
+    "state": "856e28b9952e10740bb209cfb7ef080e3cd74e37486069aa07dbd2696fff511f",
+    "draws": 2544
+  },
+  "astronomical-populations": {
+    "commands": 1770,
+    "trace": "eacad3d5bc1f5d5f75b98a49c713944f4f2ed04ca81e853a977ebf7d3287de0e",
+    "state": "7f8ea8d8b5774bb2d2b6af739ea2bc20e7742ecea96cf667c413f844410c6156",
+    "draws": 2558
+  },
+  "black-hole-absorption-explosion": {
+    "commands": 2397,
+    "trace": "f525726391981b183db1692bc34dbde549970943e606224fd38ed44b003de7b2",
+    "state": "0b249d28635fda4850eab35fd50e2e6197ac2ada0a69b8d38f282626f2d49849",
+    "draws": 2498
+  },
+  "all-25-shapes": {
+    "commands": 1225,
+    "trace": "cb5b61ac73271e783d19cd3376f8ecb77711c399f2289fffa6a2786c798385c9",
+    "state": "65daa491141d83b9bb86c46c4da941a40e96edd30e42a05050cee91af450615a",
+    "draws": 2784
+  },
+  "collision-both-limits-and-motion": {
+    "commands": 895,
+    "trace": "a0b7071effae8d5eef2951150eae6f20f379638034e209c43945ffcfccd0b33d",
+    "state": "142a4565f9bebff9f410a2b1fae9dcd4a6e8723e9e2132ba6f3e26d84c418ee8",
+    "draws": 3087
+  },
+  "offspring-and-fusion": {
+    "commands": 1133,
+    "trace": "a2e7e5663957f227a39268b07caced90430219e66bcdb6c2b018bbfe413b8497",
+    "state": "74f652a71472aeef4ec365531c585525e703da958169d58c4c6330cc93a44d00",
+    "draws": 2912
+  },
+  "orbital-lifetimes-boundaries": {
+    "commands": 28620,
+    "trace": "1c36f48468d2cba178d9b63f680b0c3e9d60341eaefbb1739af88c629fb90ca1",
+    "state": "d732ed7d36419f76bff6772fff24d69248103e1b6b972a67343fcd046b2bdaa2",
+    "draws": 3286
+  }
+}

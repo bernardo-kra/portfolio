@@ -168,15 +168,7 @@ export default defineConfig([
     files: ['eslint-rules/**/*.cjs'],
     languageOptions: { sourceType: 'commonjs', globals: globals.node },
   },
-  // Existing exceptions are preserved, not expanded to hide new warnings.
-  {
-    files: ['src/components/generative/PatternCanvas/InfiniteGenerator.ts'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'no-case-declarations': 'off',
-    },
-  },
+  // Remaining pre-existing exceptions are preserved without expanding scope.
   {
     files: [
       'src/context/**/*.tsx',
