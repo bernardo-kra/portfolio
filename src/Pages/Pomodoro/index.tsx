@@ -22,6 +22,73 @@ import styles from './styles.module.css'
 import StarParallaxToggle from '@theme/StarParallaxToggle'
 import DarkBackground from '@theme/DarkBackground'
 import StudyGuide from '@components/common/StudyGuide'
+function renderPomodoroGrid() {
+  return (
+    <div className={styles.pomodoroGrid}>
+      <ScrollAnimation animation="fade-in" delay={400}>
+        <div className={styles.timerColumn}>
+          <div className={styles.timerCard}>
+            <div className={styles.cardHeader}>
+              <Typography
+                variant="h4"
+                weight="semibold"
+                className={styles.cardTitle}
+              >
+                ⏱️ Timer Pomodoro
+              </Typography>
+            </div>
+            <TimerDisplay />
+            <TimerControls />
+          </div>
+        </div>
+      </ScrollAnimation>
+
+      <div className={styles.controlsCard}>
+        <div className={styles.cardHeader}>
+          <Typography
+            variant="h4"
+            weight="semibold"
+            className={styles.cardTitle}
+          >
+            ⚙️ Controles
+          </Typography>
+        </div>
+        <ControlsPanel />
+      </div>
+
+      <ScrollAnimation animation="slide-left" delay={500}>
+        <div className={styles.tasksColumn}>
+          <div className={styles.cardHeader}>
+            <Typography
+              variant="h4"
+              weight="semibold"
+              className={styles.cardTitle}
+            >
+              📋 Tarefas
+            </Typography>
+          </div>
+          <TaskList />
+        </div>
+      </ScrollAnimation>
+
+      <ScrollAnimation animation="slide-right" delay={600}>
+        <div className={styles.statsColumn}>
+          <div className={styles.cardHeader}>
+            <Typography
+              variant="h4"
+              weight="semibold"
+              className={styles.cardTitle}
+            >
+              📊 Estatísticas
+            </Typography>
+          </div>
+          <TimerStats />
+          <CyclesHistory />
+        </div>
+      </ScrollAnimation>
+    </div>
+  )
+}
 
 const STORAGE_KEY = 'starfield-disable-parallax'
 
@@ -114,69 +181,7 @@ const PomodoroContent: React.FC = () => {
           <p className={styles.quickStart}>
             1. Escolha uma tarefa · 2. Inicie o timer · 3. Faça uma pausa
           </p>
-          <div className={styles.pomodoroGrid}>
-            <ScrollAnimation animation="fade-in" delay={400}>
-              <div className={styles.timerColumn}>
-                <div className={styles.timerCard}>
-                  <div className={styles.cardHeader}>
-                    <Typography
-                      variant="h4"
-                      weight="semibold"
-                      className={styles.cardTitle}
-                    >
-                      ⏱️ Timer Pomodoro
-                    </Typography>
-                  </div>
-                  <TimerDisplay />
-                  <TimerControls />
-                </div>
-              </div>
-            </ScrollAnimation>
-
-            <div className={styles.controlsCard}>
-              <div className={styles.cardHeader}>
-                <Typography
-                  variant="h4"
-                  weight="semibold"
-                  className={styles.cardTitle}
-                >
-                  ⚙️ Controles
-                </Typography>
-              </div>
-              <ControlsPanel />
-            </div>
-
-            <ScrollAnimation animation="slide-left" delay={500}>
-              <div className={styles.tasksColumn}>
-                <div className={styles.cardHeader}>
-                  <Typography
-                    variant="h4"
-                    weight="semibold"
-                    className={styles.cardTitle}
-                  >
-                    📋 Tarefas
-                  </Typography>
-                </div>
-                <TaskList />
-              </div>
-            </ScrollAnimation>
-
-            <ScrollAnimation animation="slide-right" delay={600}>
-              <div className={styles.statsColumn}>
-                <div className={styles.cardHeader}>
-                  <Typography
-                    variant="h4"
-                    weight="semibold"
-                    className={styles.cardTitle}
-                  >
-                    📊 Estatísticas
-                  </Typography>
-                </div>
-                <TimerStats />
-                <CyclesHistory />
-              </div>
-            </ScrollAnimation>
-          </div>
+          {renderPomodoroGrid()}
           <StudyGuide study="pomodoro" />
         </div>
       </Container>

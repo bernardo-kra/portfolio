@@ -21,6 +21,234 @@ type NavLabelKey =
   | 'educationTitle'
   | 'contactTitle'
   | 'projectsTitle'
+type RenderPortfolioAccountTriggerProps = {
+  setShowUserDropdown: React.Dispatch<React.SetStateAction<boolean>>
+  showUserDropdown: boolean
+  lang: Lang
+  user: import('../../../hooks/useAuth').AuthUser | null
+  navigate: import('react-router-dom').NavigateFunction
+  logout: () => void
+}
+
+function renderPortfolioAccountTrigger({
+  setShowUserDropdown,
+  showUserDropdown,
+  lang,
+  user,
+  navigate,
+  logout,
+}: RenderPortfolioAccountTriggerProps) {
+  return (
+    <div className={styles.userInfo}>
+      <button
+        className={styles.userButton}
+        onClick={() => setShowUserDropdown(!showUserDropdown)}
+      >
+        <span className={styles.userName}>
+          {lang === 'pt' ? 'Olá' : 'Hello'}, {user?.firstName}
+        </span>
+        <span
+          className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}
+        >
+          ▼
+        </span>
+      </button>
+
+      {renderPortfolioAccountMenu({
+        showUserDropdown,
+        user,
+        setShowUserDropdown,
+        lang,
+        navigate,
+        logout,
+      })}
+    </div>
+  )
+}
+
+type ObservePortfolioSectionsProps = {
+  setActive: React.Dispatch<React.SetStateAction<string>>
+  setScrollProgress: React.Dispatch<React.SetStateAction<number>>
+  setShowUserDropdown: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function observePortfolioSections({
+  setActive,
+  setScrollProgress,
+  setShowUserDropdown,
+}: ObservePortfolioSectionsProps) {
+  const handleScroll = () => {
+    let found = ''
+    for (const item of navItems) {
+      const el = document.getElementById(item.id)
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        if (rect.top <= 120) found = item.id
+      }
+    }
+    setActive(found)
+
+    const scrollTop = window.pageYOffset
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    const progress =
+      docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0
+    setScrollProgress(progress)
+
+    if (scrollTop > 100) {
+      setShowUserDropdown(false)
+    }
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  handleScroll()
+
+  return () => window.removeEventListener('scroll', handleScroll)
+}
+
+type RenderPortfolioAccountMenuProps = {
+  showUserDropdown: boolean
+  user: import('../../../hooks/useAuth').AuthUser | null
+  setShowUserDropdown: React.Dispatch<React.SetStateAction<boolean>>
+  lang: Lang
+  navigate: import('react-router-dom').NavigateFunction
+  logout: () => void
+}
+
+function renderPortfolioAccountMenu({
+  showUserDropdown,
+  user,
+  setShowUserDropdown,
+  lang,
+  navigate,
+  logout,
+}: RenderPortfolioAccountMenuProps) {
+  return (
+    showUserDropdown && (
+      <div className={styles.userDropdown}>
+        <div className={styles.dropdownHeader}>
+          <div className={styles.dropdownUserInfo}>
+            <div className={styles.dropdownDetails}>
+              <span className={styles.dropdownName}>
+                {user?.firstName} {user?.lastName}
+              </span>
+              <span className={styles.dropdownEmail}>{user?.email}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.dropdownDivider}></div>
+
+        <div className={styles.dropdownMenu}>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => {
+              setShowUserDropdown(false)
+            }}
+          >
+            <span className={styles.dropdownIcon}>👤</span>
+            {lang === 'pt' ? 'Meu Perfil' : 'My Profile'}
+          </button>
+
+          <button
+            className={styles.dropdownItem}
+            onClick={() => {
+              setShowUserDropdown(false)
+            }}
+          >
+            <span className={styles.dropdownIcon}>⚙️</span>
+            {lang === 'pt' ? 'Configurações' : 'Settings'}
+          </button>
+
+          {user?.isChatOwner === true && (
+            <button
+              className={styles.dropdownItem}
+              onClick={() => {
+                setShowUserDropdown(false)
+                void navigate('/admin/chat')
+              }}
+            >
+              <span className={styles.dropdownIcon}>💬</span>
+              {lang === 'pt' ? 'Caixa de entrada' : 'Inbox'}
+            </button>
+          )}
+
+          <div className={styles.dropdownDivider}></div>
+
+          <button
+            className={styles.dropdownItem}
+            onClick={() => {
+              logout()
+              setShowUserDropdown(false)
+            }}
+          >
+            <span className={styles.dropdownIcon}>🚪</span>
+            {lang === 'pt' ? 'Sair' : 'Sign out'}
+          </button>
+        </div>
+      </div>
+    )
+  )
+}
+
+type RenderPortfolioMobileMenuProps = {
+  isMobileMenuOpen: boolean
+  setIsMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+  active: string
+  scrollToSection: (id: string) => void
+  t: PortfolioI18n
+  setLang: (lang: Lang) => void
+  lang: Lang
+}
+
+function renderPortfolioMobileMenu({
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
+  active,
+  scrollToSection,
+  t,
+  setLang,
+  lang,
+}: RenderPortfolioMobileMenuProps) {
+  return (
+    isMobileMenuOpen && (
+      <div
+        className={styles.mobileMenuOverlay}
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        <div
+          id="portfolio-mobile-menu"
+          className={styles.mobileMenu}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <ul className={styles.mobileNavList}>
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  className={`${styles.mobileNavLink} ${active === item.id ? styles.active : ''}`}
+                  onClick={() => scrollToSection(item.id)}
+                >
+                  <span className={styles.navIcon}>{item.icon}</span>
+                  <span className={styles.navLabel}>
+                    {t[item.labelKey] || item.id}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.mobileActions}>
+            <button
+              className={styles.mobileLangToggle}
+              onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
+            >
+              {lang === 'pt' ? 'English' : 'Português'}
+            </button>
+            <ThemeToggleButton />
+          </div>
+        </div>
+      </div>
+    )
+  )
+}
 
 const navItems: Array<{ id: string; labelKey: NavLabelKey; icon: string }> = [
   { id: 'experiencia', labelKey: 'experienceTitle', icon: '💼' },
@@ -40,35 +268,15 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   const { user, login, logout, isAuthenticated } = useAuth()
   const { isFeatureEnabled, config } = useAppConfig()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      let found = ''
-      for (const item of navItems) {
-        const el = document.getElementById(item.id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 120) found = item.id
-        }
-      }
-      setActive(found)
-
-      const scrollTop = window.pageYOffset
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight
-      const progress =
-        docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0
-      setScrollProgress(progress)
-
-      if (scrollTop > 100) {
-        setShowUserDropdown(false)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  useEffect(
+    () =>
+      observePortfolioSections({
+        setActive,
+        setScrollProgress,
+        setShowUserDropdown,
+      }),
+    []
+  )
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -143,90 +351,15 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
                   {lang === 'pt' ? 'Entrar' : 'Sign in'}
                 </button>
               )}
-            {isAuthenticated && (
-              <div className={styles.userInfo}>
-                <button
-                  className={styles.userButton}
-                  onClick={() => setShowUserDropdown(!showUserDropdown)}
-                >
-                  <span className={styles.userName}>
-                    {lang === 'pt' ? 'Olá' : 'Hello'}, {user?.firstName}
-                  </span>
-                  <span
-                    className={`${styles.dropdownArrow} ${showUserDropdown ? styles.open : ''}`}
-                  >
-                    ▼
-                  </span>
-                </button>
-
-                {showUserDropdown && (
-                  <div className={styles.userDropdown}>
-                    <div className={styles.dropdownHeader}>
-                      <div className={styles.dropdownUserInfo}>
-                        <div className={styles.dropdownDetails}>
-                          <span className={styles.dropdownName}>
-                            {user?.firstName} {user?.lastName}
-                          </span>
-                          <span className={styles.dropdownEmail}>
-                            {user?.email}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.dropdownDivider}></div>
-
-                    <div className={styles.dropdownMenu}>
-                      <button
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setShowUserDropdown(false)
-                        }}
-                      >
-                        <span className={styles.dropdownIcon}>👤</span>
-                        {lang === 'pt' ? 'Meu Perfil' : 'My Profile'}
-                      </button>
-
-                      <button
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          setShowUserDropdown(false)
-                        }}
-                      >
-                        <span className={styles.dropdownIcon}>⚙️</span>
-                        {lang === 'pt' ? 'Configurações' : 'Settings'}
-                      </button>
-
-                      {user?.isChatOwner === true && (
-                        <button
-                          className={styles.dropdownItem}
-                          onClick={() => {
-                            setShowUserDropdown(false)
-                            navigate('/admin/chat')
-                          }}
-                        >
-                          <span className={styles.dropdownIcon}>💬</span>
-                          {lang === 'pt' ? 'Caixa de entrada' : 'Inbox'}
-                        </button>
-                      )}
-
-                      <div className={styles.dropdownDivider}></div>
-
-                      <button
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                          logout()
-                          setShowUserDropdown(false)
-                        }}
-                      >
-                        <span className={styles.dropdownIcon}>🚪</span>
-                        {lang === 'pt' ? 'Sair' : 'Sign out'}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            {isAuthenticated &&
+              renderPortfolioAccountTrigger({
+                setShowUserDropdown,
+                showUserDropdown,
+                lang,
+                user,
+                navigate,
+                logout,
+              })}
             {isAuthenticated && <NotificationCenter />}
             <button
               className={styles.langToggle}
@@ -256,43 +389,15 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
         </button>
       </nav>
 
-      {isMobileMenuOpen && (
-        <div
-          className={styles.mobileMenuOverlay}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <div
-            id="portfolio-mobile-menu"
-            className={styles.mobileMenu}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ul className={styles.mobileNavList}>
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <button
-                    className={`${styles.mobileNavLink} ${active === item.id ? styles.active : ''}`}
-                    onClick={() => scrollToSection(item.id)}
-                  >
-                    <span className={styles.navIcon}>{item.icon}</span>
-                    <span className={styles.navLabel}>
-                      {t[item.labelKey] || item.id}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.mobileActions}>
-              <button
-                className={styles.mobileLangToggle}
-                onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-              >
-                {lang === 'pt' ? 'English' : 'Português'}
-              </button>
-              <ThemeToggleButton />
-            </div>
-          </div>
-        </div>
-      )}
+      {renderPortfolioMobileMenu({
+        isMobileMenuOpen,
+        setIsMobileMenuOpen,
+        active,
+        scrollToSection,
+        t,
+        setLang,
+        lang,
+      })}
 
       <SimpleAuthModal
         isOpen={isAuthModalOpen}

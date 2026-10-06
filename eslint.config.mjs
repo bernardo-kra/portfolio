@@ -131,7 +131,7 @@ export default defineConfig([
       'quality/max-lines': ['warn', { max: 350 }], // Baseline: 8 including tests.
       'quality/no-direct-console': [
         'warn', // Baseline: 39.
-        { logger: 'a dedicated logger adapter (none exists yet)' },
+        { logger: 'the logger in src/services or backend/src/services' },
       ],
       'quality/no-direct-data-access': [
         'error', // Baseline: 6; migrated to repositories.
@@ -170,7 +170,7 @@ export default defineConfig([
   },
   {
     // This is the actual console adapter, not an exception for callers.
-    files: ['backend/src/services/logger.ts'],
+    files: ['backend/src/services/logger.ts', 'src/services/logger.ts'],
     rules: { 'quality/no-direct-console': 'off' },
   },
   // Remaining pre-existing exceptions are preserved without expanding scope.

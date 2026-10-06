@@ -1,3 +1,4 @@
+import { readAuthResponse } from '@src/services/authResponse'
 import { setAuthSession } from '@src/services/authSession'
 import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
@@ -13,6 +14,68 @@ interface SimpleAuthModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: (user: AuthUser) => void
+}
+type RenderPasswordFormProps = {
+  submit: (event: FormEvent<HTMLFormElement>) => Promise<void>
+  pt: boolean
+  error: boolean
+  loading: boolean
+}
+
+function renderPasswordForm({
+  submit,
+  pt,
+  error,
+  loading,
+}: RenderPasswordFormProps) {
+  return (
+    <form
+      className={styles.form}
+      onSubmit={(event) => {
+        void submit(event)
+      }}
+    >
+      <label>
+        Email
+        <input
+          className={styles.input}
+          name="email"
+          type="email"
+          autoComplete="email"
+          maxLength={254}
+          required
+        />
+      </label>
+      <label>
+        {pt ? 'Senha' : 'Password'}
+        <input
+          className={styles.input}
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          maxLength={72}
+          required
+        />
+      </label>
+
+      {error && (
+        <p role="alert" className={styles.error}>
+          {pt
+            ? 'Não foi possível entrar. Confira suas credenciais e a conexão.'
+            : 'Could not sign in. Check your credentials and connection.'}
+        </p>
+      )}
+      <button className={styles.submitButton} disabled={loading}>
+        {loading
+          ? pt
+            ? 'Aguarde…'
+            : 'Please wait…'
+          : pt
+            ? 'Entrar'
+            : 'Sign in'}
+      </button>
+    </form>
+  )
 }
 
 export const SimpleAuthModal = ({
@@ -63,7 +126,7 @@ export const SimpleAuthModal = ({
           ]),
         }
       )
-      const data = await response.json()
+      const data = await readAuthResponse(response)
       if (!response.ok || !data.success) throw new Error('AUTH_FAILED')
       if (controller.signal.aborted) return
       setAuthSession(data.data.token, data.data.user)
@@ -113,47 +176,7 @@ export const SimpleAuthModal = ({
               ? 'Já tem uma conta por senha? Entre abaixo.'
               : 'Already have a password account? Sign in below.'}
           </p>
-          <form className={styles.form} onSubmit={submit}>
-            <label>
-              Email
-              <input
-                className={styles.input}
-                name="email"
-                type="email"
-                autoComplete="email"
-                maxLength={254}
-                required
-              />
-            </label>
-            <label>
-              {pt ? 'Senha' : 'Password'}
-              <input
-                className={styles.input}
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                maxLength={72}
-                required
-              />
-            </label>
-
-            {error && (
-              <p role="alert" className={styles.error}>
-                {pt
-                  ? 'Não foi possível entrar. Confira suas credenciais e a conexão.'
-                  : 'Could not sign in. Check your credentials and connection.'}
-              </p>
-            )}
-            <button className={styles.submitButton} disabled={loading}>
-              {loading
-                ? pt
-                  ? 'Aguarde…'
-                  : 'Please wait…'
-                : pt
-                  ? 'Entrar'
-                  : 'Sign in'}
-            </button>
-          </form>
+          {renderPasswordForm({ submit, pt, error, loading })}
 
           <p className={styles.privacyNote}>
             {pt

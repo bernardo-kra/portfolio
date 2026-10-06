@@ -1,3 +1,4 @@
+import { logger } from '@src/services/logger'
 export interface AppConfig {
   backend: {
     enabled: boolean
@@ -42,7 +43,7 @@ const getConfig = (): AppConfig => {
   const config = { ...defaultConfig }
 
   if (import.meta.env.DEV) {
-    console.log('App Config:', config)
+    logger.log('App Config:', config)
   }
   return config
 }

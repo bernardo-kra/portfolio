@@ -1,3 +1,10 @@
+import {
+  readMessageResponse,
+  readChatError,
+  fetchConversationGroups,
+  summarizeConversation,
+} from './chatApi'
+import { logger } from '@src/services/logger'
 import { getAuthToken, getAuthUser, clearAuthSession } from './authSession'
 import { appConfig } from '../config/app.config'
 
@@ -33,18 +40,6 @@ interface StoredUser {
   email?: string
 }
 
-interface ChatApiMessage {
-  id: string
-  message: string
-  senderEmail: string
-  senderName: string
-  timestamp: ChatTimestamp
-  isAdmin: boolean
-  recipientEmail?: string
-  conversationUserEmail?: string
-  read?: boolean
-}
-
 const POLL_INTERVAL_MS = 10_000
 const events = createChatEventFeed({
   url: `${appConfig.backend.baseUrl}/api/chat/events`,
@@ -69,8 +64,8 @@ class ChatService {
     )
     if (response.status === 401 || response.status === 403) clearAuthSession()
     if (!response.ok) throw new Error('CHAT_LOAD_FAILED')
-    const data = await response.json()
-    return (data.data as ChatApiMessage[]).map((message) => ({
+    const data = await readMessageResponse(response)
+    return data.data!.map((message) => ({
       ...message,
       isRead: Boolean(message.read),
       conversationUserEmail: message.conversationUserEmail || '',
@@ -169,7 +164,7 @@ class ChatService {
       )
 
       if (!response.ok) {
-        const data = await response.json()
+        const data = await readChatError(response)
         throw new Error(data.error?.message || 'Erro ao enviar mensagem')
       }
 
@@ -177,7 +172,7 @@ class ChatService {
       this.lastMessageTime = Date.now()
       return { success: true }
     } catch (error) {
-      console.error('Erro ao enviar mensagem:', error)
+      logger.error('Erro ao enviar mensagem:', error)
       return { success: false, error: 'Erro ao enviar mensagem' }
     }
   }
@@ -212,7 +207,9 @@ class ChatService {
         inFlight = false
         if (!stopped)
           timeoutId = window.setTimeout(
-            poll,
+            () => {
+              void poll()
+            },
             refreshRequested ? 0 : POLL_INTERVAL_MS
           )
         refreshRequested = false
@@ -250,43 +247,14 @@ class ChatService {
       const headers = this.getAuthHeaders()
       if (!headers) throw new Error('CHAT_AUTH_REQUIRED')
 
-      const grouped: Record<string, ChatApiMessage[]> = Object.create(null)
-      let offset = 0
-      let hasMore = true
-      while (hasMore) {
-        const response = await fetch(
-          `${appConfig.backend.baseUrl}/api/chat/all?limit=200&offset=${offset}`,
-          { headers, signal: AbortSignal.timeout(15000) }
-        )
-        if (!response.ok) throw new Error('CHAT_LOAD_FAILED')
-        const data = await response.json()
-        for (const [email, messages] of Object.entries(
-          data.data?.messagesByUser ?? {}
-        ) as [string, ChatApiMessage[]][]) {
-          ;(grouped[email] ||= []).push(...messages)
-        }
-        hasMore = data.data?.hasMore === true
-        offset += 200
-      }
+      const grouped = await fetchConversationGroups(
+        appConfig.backend.baseUrl,
+        headers
+      )
       const conversations: ChatConversation[] = []
-      const entries = Object.entries(grouped)
-
-      for (const [email, messages] of entries) {
-        const lastMessage = messages[0]
-        if (!lastMessage) continue
-
-        conversations.push({
-          userId: email,
-          userEmail: email,
-          userName:
-            messages.find((message) => !message.isAdmin)?.senderName || email,
-          lastMessage: lastMessage.message,
-          lastMessageTime: lastMessage.timestamp,
-          unreadCount: messages.filter(
-            (message) => !message.read && !message.isAdmin
-          ).length,
-          isOnline: false,
-        })
+      for (const [email, messages] of Object.entries(grouped)) {
+        const conversation = summarizeConversation(email, messages)
+        if (conversation) conversations.push(conversation)
       }
 
       return conversations.sort(
@@ -295,7 +263,7 @@ class ChatService {
           this.toDate(first.lastMessageTime).getTime()
       )
     } catch (error) {
-      console.error('Erro ao obter conversas:', error)
+      logger.error('Erro ao obter conversas:', error)
       throw error
     }
   }
@@ -330,8 +298,8 @@ class ChatService {
       )
       if (!response.ok) return null
 
-      const data = await response.json()
-      return ((data.data ?? []) as ChatApiMessage[]).map((message) => ({
+      const data = await readMessageResponse(response)
+      return (data.data ?? []).map((message) => ({
         id: message.id,
         message: message.message,
         senderEmail: message.senderEmail,
@@ -341,7 +309,7 @@ class ChatService {
         isRead: Boolean(message.read),
       }))
     } catch (error) {
-      console.error('Erro ao buscar mensagens:', error)
+      logger.error('Erro ao buscar mensagens:', error)
       return null
     }
   }

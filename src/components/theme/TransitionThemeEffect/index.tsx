@@ -12,14 +12,12 @@ const TransitionThemeEffect: React.FC = React.memo(() => {
 
   useEffect(() => {
     if (!registerThemeTransitionCallback) return
+    const hide = () => setShow(false)
     registerThemeTransitionCallback((newTheme) => {
       setDirection(newTheme === 'dark' ? 'to-dark' : 'to-light')
       setShow(true)
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
-      timeoutRef.current = window.setTimeout(
-        () => setShow(false),
-        ANIMATION_DURATION
-      )
+      timeoutRef.current = window.setTimeout(hide, ANIMATION_DURATION)
     })
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current)

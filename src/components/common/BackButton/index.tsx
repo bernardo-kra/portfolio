@@ -8,23 +8,23 @@ interface BackButtonProps {
   className?: string
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ 
-  to = '/portfolio', 
+const BackButton: React.FC<BackButtonProps> = ({
+  to = '/portfolio',
   label = '← Voltar ao Portfólio',
-  className = ''
+  className = '',
 }) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
     if (to === 'back') {
-      navigate(-1)
+      void navigate(-1)
     } else {
-      navigate(to)
+      void navigate(to)
     }
   }
 
   return (
-    <button 
+    <button
       className={`${styles.backButton} ${className}`}
       onClick={handleClick}
     >

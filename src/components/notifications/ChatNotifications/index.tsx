@@ -16,12 +16,208 @@ import { chatService, type ChatNotification } from '@src/services/chatService'
 import { getAuthToken } from '@src/services/authSession'
 import workspaceStyles from '@components/chat/workspaceTheme.module.css'
 import styles from './styles.module.css'
+function isNotificationMessageVisible(id: string) {
+  return (
+    !document.hidden &&
+    document.hasFocus() &&
+    [...document.querySelectorAll<HTMLElement>('[data-chat-message]')].some(
+      (element) => {
+        if (element.dataset.chatMessage !== id) return false
+        const rect = (
+          element.querySelector('[data-chat-message-text]') || element
+        ).getBoundingClientRect()
+        const root = element.parentElement?.getBoundingClientRect()
+        return (
+          root &&
+          rect.bottom > Math.max(root.top, 0) &&
+          rect.top < Math.min(root.bottom, innerHeight)
+        )
+      }
+    )
+  )
+}
+
+type ConnectChatNotificationsProps = {
+  setNotice: import('react').Dispatch<
+    import('react').SetStateAction<{
+      email: string
+      notification: ChatNotification
+    } | null>
+  >
+  setState: import('react').Dispatch<
+    import('react').SetStateAction<{
+      email?: string
+      notifications: ChatNotification[]
+      loadError: boolean
+    }>
+  >
+  email: string | undefined
+  enabled: boolean
+  sessionToken: string | null
+  navigation: import('react').RefObject<
+    import('react-router-dom').NavigateFunction
+  >
+  owner: boolean
+}
+
+function initializeNotificationState({
+  setNotice,
+  setState,
+  email,
+}: Pick<ConnectChatNotificationsProps, 'setNotice' | 'setState' | 'email'>) {
+  setNotice(null)
+  setState({ email, notifications: [], loadError: false })
+}
+
+function connectChatNotifications({
+  setNotice,
+  setState,
+  email,
+  enabled,
+  sessionToken,
+  navigation,
+  owner,
+}: ConnectChatNotificationsProps) {
+  initializeNotificationState({ setNotice, setState, email })
+  if (!email || !enabled) return
+  const token = sessionToken
+  let stopped = false,
+    inFlight = false,
+    requested = false,
+    initialized = false
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let noticeTimer: ReturnType<typeof setTimeout> | undefined
+  const [seen, read] = [new Set<string>(), new Set<string>()]
+  const nativeNotifications = new Set<Notification>()
+  const current = () => !stopped && getAuthToken() === token
+  function rememberIncoming(
+    incoming: ChatNotification[],
+    notifications: ChatNotification[]
+  ) {
+    const fresh = notifications.filter((message) => !seen.has(message.id))
+    incoming.forEach((message) => seen.add(message.id))
+    setState({ email, notifications, loadError: false })
+    return fresh
+  }
+  const poll = async () => {
+    if (!current()) return
+    if (inFlight) {
+      requested = true
+      return
+    }
+    clearTimeout(timer)
+    inFlight = true
+    try {
+      const incoming = await chatService.getNotifications()
+      if (!current()) return
+      const notifications = incoming.filter((message) => !read.has(message.id))
+      const fresh = rememberIncoming(incoming, notifications)
+
+      if (initialized && fresh.length) {
+        const latest = fresh[0]
+        clearTimeout(noticeTimer)
+        noticeTimer = setTimeout(() => {
+          if (!current() || read.has(latest.id)) return
+          const visible = isNotificationMessageVisible(latest.id)
+          if (visible) return
+          setNotice({ email, notification: latest })
+          if (
+            (document.hidden || !document.hasFocus()) &&
+            'Notification' in window &&
+            Notification.permission === 'granted'
+          ) {
+            try {
+              const english = document.documentElement.lang === 'en'
+              const notification = new Notification(
+                english ? 'New chat message' : 'Nova mensagem no chat',
+                {
+                  body: english
+                    ? 'Open your conversation to read the reply.'
+                    : 'Abra sua conversa para ler a resposta.',
+                  icon: '/favicon.ico',
+                  tag: 'portfolio-chat',
+                }
+              )
+              nativeNotifications.add(notification)
+              notification.onclick = () => {
+                if (current()) {
+                  window.focus()
+                  void navigation.current(owner ? '/admin/chat' : '/chat')
+                }
+                notification.close()
+              }
+              notification.onclose = () =>
+                nativeNotifications.delete(notification)
+            } catch {
+              /* In-site notices still work when desktop notifications are unsupported. */
+            }
+          }
+        }, 350)
+      }
+      initialized = true
+    } catch {
+      if (current())
+        setState((previous) => ({
+          email,
+          notifications: previous.email === email ? previous.notifications : [],
+          loadError: true,
+        }))
+    } finally {
+      inFlight = false
+      if (current())
+        timer = setTimeout(
+          () => {
+            void poll()
+          },
+          requested ? 0 : 10000
+        )
+      requested = false
+    }
+  }
+  const refresh = () => {
+    void poll()
+  }
+  const receivedRead = (event: Event) => {
+    const ids = (event as CustomEvent<{ messageIds: string[] }>).detail
+      .messageIds
+    ids.forEach((id) => read.add(id))
+    setState((previous) => ({
+      ...previous,
+      notifications: previous.notifications.filter(
+        (message) => !read.has(message.id)
+      ),
+    }))
+    setNotice((previous) =>
+      previous && read.has(previous.notification.id) ? null : previous
+    )
+    refresh()
+  }
+  const stopEvents = chatService.subscribeToUpdates(refresh)
+  window.addEventListener('portfolio:chat-refresh', refresh)
+  window.addEventListener('portfolio:chat-read', receivedRead)
+  window.addEventListener('focus', refresh)
+  document.addEventListener('visibilitychange', refresh)
+  void poll()
+  return () => {
+    stopped = true
+    clearTimeout(timer)
+    clearTimeout(noticeTimer)
+    nativeNotifications.forEach((notification) => notification.close())
+    stopEvents()
+    window.removeEventListener('portfolio:chat-refresh', refresh)
+    window.removeEventListener('portfolio:chat-read', receivedRead)
+    window.removeEventListener('focus', refresh)
+    document.removeEventListener('visibilitychange', refresh)
+  }
+}
+
+type ChatNotificationsProps = {
+  children: ReactNode
+}
 
 export default function ChatNotifications({
   children,
-}: {
-  children: ReactNode
-}) {
+}: ChatNotificationsProps) {
   const { user } = useAuth()
   const { isFeatureEnabled } = useAppConfig()
   const { lang } = useI18n()
@@ -49,148 +245,19 @@ export default function ChatNotifications({
     []
   )
 
-  useEffect(() => {
-    setNotice(null)
-    setState({ email, notifications: [], loadError: false })
-    if (!email || !enabled) return
-    const token = sessionToken
-    let stopped = false,
-      inFlight = false,
-      requested = false,
-      initialized = false
-    let timer: ReturnType<typeof setTimeout> | undefined
-    let noticeTimer: ReturnType<typeof setTimeout> | undefined
-    const seen = new Set<string>(),
-      read = new Set<string>()
-    const nativeNotifications = new Set<Notification>()
-    const current = () => !stopped && getAuthToken() === token
-    const poll = async () => {
-      if (!current()) return
-      if (inFlight) {
-        requested = true
-        return
-      }
-      clearTimeout(timer)
-      inFlight = true
-      try {
-        const incoming = await chatService.getNotifications()
-        if (!current()) return
-        const notifications = incoming.filter(
-          (message) => !read.has(message.id)
-        )
-        const fresh = notifications.filter((message) => !seen.has(message.id))
-        incoming.forEach((message) => seen.add(message.id))
-        setState({ email, notifications, loadError: false })
-        if (initialized && fresh.length) {
-          const latest = fresh[0]
-          clearTimeout(noticeTimer)
-          noticeTimer = setTimeout(() => {
-            if (!current() || read.has(latest.id)) return
-            const visible =
-              !document.hidden &&
-              document.hasFocus() &&
-              [
-                ...document.querySelectorAll<HTMLElement>(
-                  '[data-chat-message]'
-                ),
-              ].some((element) => {
-                if (element.dataset.chatMessage !== latest.id) return false
-                const rect = (
-                  element.querySelector('[data-chat-message-text]') || element
-                ).getBoundingClientRect()
-                const root = element.parentElement?.getBoundingClientRect()
-                return (
-                  root &&
-                  rect.bottom > Math.max(root.top, 0) &&
-                  rect.top < Math.min(root.bottom, innerHeight)
-                )
-              })
-            if (visible) return
-            setNotice({ email, notification: latest })
-            if (
-              (document.hidden || !document.hasFocus()) &&
-              'Notification' in window &&
-              Notification.permission === 'granted'
-            ) {
-              try {
-                const english = document.documentElement.lang === 'en'
-                const notification = new Notification(
-                  english ? 'New chat message' : 'Nova mensagem no chat',
-                  {
-                    body: english
-                      ? 'Open your conversation to read the reply.'
-                      : 'Abra sua conversa para ler a resposta.',
-                    icon: '/favicon.ico',
-                    tag: 'portfolio-chat',
-                  }
-                )
-                nativeNotifications.add(notification)
-                notification.onclick = () => {
-                  if (current()) {
-                    window.focus()
-                    navigation.current(owner ? '/admin/chat' : '/chat')
-                  }
-                  notification.close()
-                }
-                notification.onclose = () =>
-                  nativeNotifications.delete(notification)
-              } catch {
-                /* In-site notices still work when desktop notifications are unsupported. */
-              }
-            }
-          }, 350)
-        }
-        initialized = true
-      } catch {
-        if (current())
-          setState((previous) => ({
-            email,
-            notifications:
-              previous.email === email ? previous.notifications : [],
-            loadError: true,
-          }))
-      } finally {
-        inFlight = false
-        if (current()) timer = setTimeout(poll, requested ? 0 : 10000)
-        requested = false
-      }
-    }
-    const refresh = () => {
-      void poll()
-    }
-    const receivedRead = (event: Event) => {
-      const ids = (event as CustomEvent<{ messageIds: string[] }>).detail
-        .messageIds
-      ids.forEach((id) => read.add(id))
-      setState((previous) => ({
-        ...previous,
-        notifications: previous.notifications.filter(
-          (message) => !read.has(message.id)
-        ),
-      }))
-      setNotice((previous) =>
-        previous && read.has(previous.notification.id) ? null : previous
-      )
-      refresh()
-    }
-    const stopEvents = chatService.subscribeToUpdates(refresh)
-    window.addEventListener('portfolio:chat-refresh', refresh)
-    window.addEventListener('portfolio:chat-read', receivedRead)
-    window.addEventListener('focus', refresh)
-    document.addEventListener('visibilitychange', refresh)
-    void poll()
-    return () => {
-      stopped = true
-      clearTimeout(timer)
-      clearTimeout(noticeTimer)
-      nativeNotifications.forEach((notification) => notification.close())
-      stopEvents()
-      window.removeEventListener('portfolio:chat-refresh', refresh)
-      window.removeEventListener('portfolio:chat-read', receivedRead)
-      window.removeEventListener('focus', refresh)
-      document.removeEventListener('visibilitychange', refresh)
-    }
-  }, [email, enabled, owner, sessionToken])
+  useEffect(
+    () =>
+      connectChatNotifications({
+        setNotice,
+        setState,
+        email,
+        enabled,
+        sessionToken,
+        navigation,
+        owner,
+      }),
+    [email, enabled, owner, sessionToken]
+  )
 
   const notifications = useMemo(
     () => (enabled && state.email === email ? state.notifications : []),

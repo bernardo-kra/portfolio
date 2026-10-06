@@ -12,6 +12,37 @@ interface MessageBubbleProps {
   showSenderName?: boolean
   workspace?: boolean
 }
+type RenderMessageIdentityProps = {
+  workspace: boolean
+  isOwnMessage: boolean
+  lang: import('../../../i18n/index').Lang
+  message: ChatMessage
+  formatTime: (timestamp: ChatTimestamp) => string
+}
+
+function renderMessageIdentity({
+  workspace,
+  isOwnMessage,
+  lang,
+  message,
+  formatTime,
+}: RenderMessageIdentityProps) {
+  return (
+    workspace && (
+      <div className={styles.messageMeta}>
+        <strong>
+          {isOwnMessage ? (lang === 'pt' ? 'Você' : 'You') : message.senderName}
+        </strong>
+        <span>{formatTime(message.timestamp)}</span>
+        {message.isAdmin && (
+          <span className={styles.authorLabel}>
+            {lang === 'pt' ? 'PROPRIETÁRIO' : 'OWNER'}
+          </span>
+        )}
+      </div>
+    )
+  )
+}
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
@@ -47,23 +78,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
             .toUpperCase() || '?'}
         </div>
       )}
-      {workspace && (
-        <div className={styles.messageMeta}>
-          <strong>
-            {isOwnMessage
-              ? lang === 'pt'
-                ? 'Você'
-                : 'You'
-              : message.senderName}
-          </strong>
-          <span>{formatTime(message.timestamp)}</span>
-          {message.isAdmin && (
-            <span className={styles.authorLabel}>
-              {lang === 'pt' ? 'PROPRIETÁRIO' : 'OWNER'}
-            </span>
-          )}
-        </div>
-      )}
+      {renderMessageIdentity({
+        workspace,
+        isOwnMessage,
+        lang,
+        message,
+        formatTime,
+      })}
       {showSenderName && !isOwnMessage && !workspace && (
         <div className={styles.senderName}>{message.senderName}</div>
       )}

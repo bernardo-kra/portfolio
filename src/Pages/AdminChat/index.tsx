@@ -9,6 +9,47 @@ import { Inbox, ArrowLeft, ShieldCheck } from 'lucide-react'
 import ThemeToggleButton from '@components/theme/ThemeToggleButton'
 import { NotificationCenter } from '@components/notifications'
 import styles from './styles.module.css'
+type RenderAdminHeaderProps = {
+  pt: boolean
+  setLang: (lang: import('../../i18n/index').Lang) => void
+}
+
+function renderAdminHeader({ pt, setLang }: RenderAdminHeaderProps) {
+  return (
+    <header className={styles.header}>
+      <div className={styles.headerContent}>
+        <div className={styles.headerText}>
+          <span className={styles.eyebrow}>BERNARDO / MESSAGES</span>
+          <h1>
+            <Inbox size={26} aria-hidden="true" />{' '}
+            {pt ? 'Caixa de entrada' : 'Inbox'}
+          </h1>
+          <p>
+            {pt
+              ? 'Conversas privadas. Selecione uma pessoa para responder.'
+              : 'Private conversations. Select a person to reply.'}
+          </p>
+        </div>
+        <div className={styles.headerActions}>
+          <NotificationCenter />
+          <button
+            className={styles.languageButton}
+            onClick={() => setLang(pt ? 'en' : 'pt')}
+            aria-label={pt ? 'Mudar para inglês' : 'Switch to Portuguese'}
+          >
+            {pt ? 'EN' : 'PT'}
+          </button>
+          <ThemeToggleButton />
+          <Link to="/portfolio" className={styles.backButton}>
+            <ArrowLeft size={18} />
+            {pt ? 'Voltar ao portfólio' : 'Back to portfolio'}
+          </Link>
+        </div>
+      </div>
+    </header>
+  )
+}
+
 export default function AdminChat() {
   const { user, isAuthenticated } = useAuth()
   const { isFeatureEnabled, isBackendEnabled } = useAppConfig()
@@ -20,37 +61,7 @@ export default function AdminChat() {
     <main
       className={`${styles.container} ${themeStyles.chatTheme} ${workspaceStyles.workspaceTheme}`}
     >
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.headerText}>
-            <span className={styles.eyebrow}>BERNARDO / MESSAGES</span>
-            <h1>
-              <Inbox size={26} aria-hidden="true" />{' '}
-              {pt ? 'Caixa de entrada' : 'Inbox'}
-            </h1>
-            <p>
-              {pt
-                ? 'Conversas privadas. Selecione uma pessoa para responder.'
-                : 'Private conversations. Select a person to reply.'}
-            </p>
-          </div>
-          <div className={styles.headerActions}>
-            <NotificationCenter />
-            <button
-              className={styles.languageButton}
-              onClick={() => setLang(pt ? 'en' : 'pt')}
-              aria-label={pt ? 'Mudar para inglês' : 'Switch to Portuguese'}
-            >
-              {pt ? 'EN' : 'PT'}
-            </button>
-            <ThemeToggleButton />
-            <Link to="/portfolio" className={styles.backButton}>
-              <ArrowLeft size={18} />
-              {pt ? 'Voltar ao portfólio' : 'Back to portfolio'}
-            </Link>
-          </div>
-        </div>
-      </header>
+      {renderAdminHeader({ pt, setLang })}
       {!allowed ? (
         <div className={styles.accessDenied}>
           <h2>{pt ? 'Acesso restrito' : 'Restricted access'}</h2>

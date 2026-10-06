@@ -1,13 +1,28 @@
 import React from 'react'
 import styles from './styles.module.css'
 
-type TypographyVariant = 
-  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  | 'body1' | 'body2' | 'caption' | 'overline'
-  | 'button' | 'link'
+type TypographyVariant =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'body1'
+  | 'body2'
+  | 'caption'
+  | 'overline'
+  | 'button'
+  | 'link'
 
-type TypographyColor = 
-  | 'primary' | 'secondary' | 'muted' | 'brand' | 'success' | 'warning' | 'error'
+type TypographyColor =
+  | 'primary'
+  | 'secondary'
+  | 'muted'
+  | 'brand'
+  | 'success'
+  | 'warning'
+  | 'error'
 
 interface TypographyProps {
   variant?: TypographyVariant
@@ -38,7 +53,7 @@ const Typography: React.FC<TypographyProps> = ({
   ...props
 }) => {
   const Component = as || getDefaultElement(variant)
-  
+
   const typographyClassName = [
     styles.typography,
     styles[`typography--${variant}`],
@@ -48,37 +63,33 @@ const Typography: React.FC<TypographyProps> = ({
     size && styles[`typography--${size}`],
     truncate && styles['typography--truncate'],
     noWrap && styles['typography--nowrap'],
-    className
-  ].filter(Boolean).join(' ')
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
-    <Component 
-      className={typographyClassName}
-      style={style}
-      {...props}
-    >
+    <Component className={typographyClassName} style={style} {...props}>
       {children}
     </Component>
   )
 }
 
-const getDefaultElement = (variant: TypographyVariant): React.ElementType => {
-  switch (variant) {
-    case 'h1': return 'h1'
-    case 'h2': return 'h2'
-    case 'h3': return 'h3'
-    case 'h4': return 'h4'
-    case 'h5': return 'h5'
-    case 'h6': return 'h6'
-    case 'body1':
-    case 'body2':
-    case 'caption':
-    case 'overline':
-    case 'button':
-    case 'link':
-    default:
-      return 'p'
-  }
+const defaultElements: Record<TypographyVariant, React.ElementType> = {
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+  body1: 'p',
+  body2: 'p',
+  caption: 'p',
+  overline: 'p',
+  button: 'p',
+  link: 'p',
 }
+const getDefaultElement = (variant: TypographyVariant): React.ElementType =>
+  Object.hasOwn(defaultElements, variant) ? defaultElements[variant] : 'p'
 
-export default Typography 
+export default Typography

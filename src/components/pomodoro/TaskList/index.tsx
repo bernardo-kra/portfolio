@@ -1,3 +1,4 @@
+import { logger } from '@src/services/logger'
 import React, { useState, useEffect, useRef } from 'react'
 import { Typography, Button, Input, Card, Tag } from '@components/common'
 import { Plus, Check, Trash2, Target, Play } from 'lucide-react'
@@ -12,6 +13,265 @@ interface Task {
   completedCycles: number
   isCompleted: boolean
   createdAt: Date
+}
+type UpdateCompletedTaskProps = {
+  state: Pick<ReturnType<typeof usePomodoro>['state'], 'cycles'>
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+}
+type AddPomodoroTaskProps = {
+  newTaskName: string
+  newTaskCycles: number
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+  setNewTaskName: React.Dispatch<React.SetStateAction<string>>
+  setNewTaskCycles: React.Dispatch<React.SetStateAction<number>>
+  setIsAddingTask: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function addPomodoroTask({
+  newTaskName,
+  newTaskCycles,
+  setTasks,
+  setNewTaskName,
+  setNewTaskCycles,
+  setIsAddingTask,
+}: AddPomodoroTaskProps) {
+  if (
+    newTaskName.trim() &&
+    Number.isInteger(newTaskCycles) &&
+    newTaskCycles >= 1 &&
+    newTaskCycles <= 20
+  ) {
+    const newTask: Task = {
+      id: Date.now().toString(),
+      name: newTaskName.trim(),
+      estimatedCycles: newTaskCycles,
+      completedCycles: 0,
+      isCompleted: false,
+      createdAt: new Date(),
+    }
+
+    setTasks((prev) => [newTask, ...prev])
+    setNewTaskName('')
+    setNewTaskCycles(1)
+    setIsAddingTask(false)
+  }
+}
+
+function updateCompletedTask({ state, setTasks }: UpdateCompletedTaskProps) {
+  if (state.cycles.length > 0) {
+    const lastCycle = state.cycles[0]
+    if (lastCycle.mode === 'focus' && lastCycle.completedAt) {
+      const lastProcessedCycle = localStorage.getItem('last-processed-cycle')
+      if (lastProcessedCycle !== lastCycle.id) {
+        localStorage.setItem('last-processed-cycle', lastCycle.id)
+
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => {
+            if (task.id !== lastCycle.taskId || task.isCompleted) return task
+            const completedCycles = task.completedCycles + 1
+            return {
+              ...task,
+              completedCycles,
+              isCompleted: completedCycles >= task.estimatedCycles,
+            }
+          })
+        )
+      }
+    }
+  }
+}
+
+type RenderAddTaskFormProps = {
+  isAddingTask: boolean
+  newTaskName: string
+  setNewTaskName: React.Dispatch<React.SetStateAction<string>>
+  newTaskCycles: number
+  setNewTaskCycles: React.Dispatch<React.SetStateAction<number>>
+  setIsAddingTask: React.Dispatch<React.SetStateAction<boolean>>
+  addTask: () => void
+}
+
+function renderAddTaskForm({
+  isAddingTask,
+  newTaskName,
+  setNewTaskName,
+  newTaskCycles,
+  setNewTaskCycles,
+  setIsAddingTask,
+  addTask,
+}: RenderAddTaskFormProps) {
+  return (
+    isAddingTask && (
+      <Card variant="outlined" className={styles.addTaskCard}>
+        <div className={styles.addTaskForm}>
+          <Input
+            label="Nome da Tarefa"
+            value={newTaskName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setNewTaskName(e.target.value)
+            }
+            placeholder="Digite o nome da tarefa..."
+            className={styles.taskInput}
+          />
+          <Input
+            label="Ciclos Estimados"
+            type="number"
+            min="1"
+            max="20"
+            value={newTaskCycles}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setNewTaskCycles(Number(e.target.value))
+            }
+            className={styles.cyclesInput}
+          />
+          <div className={styles.addTaskActions}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAddingTask(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={addTask}
+              disabled={
+                !newTaskName.trim() ||
+                !Number.isInteger(newTaskCycles) ||
+                newTaskCycles < 1 ||
+                newTaskCycles > 20
+              }
+            >
+              Adicionar
+            </Button>
+          </div>
+        </div>
+      </Card>
+    )
+  )
+}
+
+type RenderTaskCardsProps = {
+  tasks: Task[]
+  toggleTaskCompletion: (taskId: string) => void
+  startTask: (task: Task) => void
+  state: ReturnType<typeof usePomodoro>['state']
+  deleteTask: (taskId: string) => void
+  getProgressPercentage: (task: Task) => number
+  getProgressColor: (task: Task) => 'success' | 'brand' | 'default'
+}
+
+function renderTaskCards({
+  tasks,
+  toggleTaskCompletion,
+  startTask,
+  state,
+  deleteTask,
+  getProgressPercentage,
+  getProgressColor,
+}: RenderTaskCardsProps) {
+  return (
+    <div className={styles.tasksContainer}>
+      {tasks.length === 0 ? (
+        <div className={styles.emptyTasks}>
+          <Target size={48} className={styles.emptyIcon} />
+          <Typography variant="body1" color="muted">
+            Nenhuma tarefa criada
+          </Typography>
+          <Typography variant="body2" color="muted">
+            Crie tarefas para acompanhar seu progresso durante os ciclos de foco
+          </Typography>
+        </div>
+      ) : (
+        tasks.map((task) => (
+          <Card
+            key={task.id}
+            variant="default"
+            className={`${styles.taskCard} ${task.isCompleted ? styles.completedTask : ''}`}
+          >
+            <div className={styles.taskContent}>
+              <div className={styles.taskInfo}>
+                <div className={styles.taskNameRow}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleTaskCompletion(task.id)}
+                    className={styles.completeButton}
+                    aria-label={`${task.isCompleted ? 'Reabrir' : 'Concluir'} tarefa: ${task.name}`}
+                    aria-pressed={task.isCompleted}
+                    icon={task.isCompleted ? <Check size={16} /> : undefined}
+                  >
+                    {!task.isCompleted && <div className={styles.checkbox} />}
+                  </Button>
+
+                  <Typography
+                    variant="h6"
+                    className={styles.taskName}
+                    style={{
+                      textDecoration: task.isCompleted
+                        ? 'line-through'
+                        : 'none',
+                    }}
+                  >
+                    {task.name}
+                  </Typography>
+
+                  <div className={styles.taskButtons}>
+                    {!task.isCompleted && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => startTask(task)}
+                        className={styles.startButton}
+                        icon={<Play size={16} />}
+                      >
+                        {state.activeTaskId === task.id
+                          ? 'Selecionada'
+                          : 'Selecionar'}
+                      </Button>
+                    )}
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => deleteTask(task.id)}
+                      className={styles.deleteButton}
+                      icon={<Trash2 size={16} />}
+                    >
+                      Deletar
+                    </Button>
+                  </div>
+                </div>
+
+                <div className={styles.taskProgress}>
+                  <div className={styles.progressBar}>
+                    <div
+                      className={styles.progressFill}
+                      style={{
+                        width: `${getProgressPercentage(task)}%`,
+                        backgroundColor: `var(--${getProgressColor(task)})`,
+                      }}
+                    />
+                  </div>
+                  <div className={styles.progressText}>
+                    <Tag variant={getProgressColor(task)} size="sm">
+                      {task.completedCycles}/{task.estimatedCycles} ciclos
+                    </Tag>
+                    {task.isCompleted && (
+                      <Tag variant="success" size="sm">
+                        Concluída
+                      </Tag>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))
+      )}
+    </div>
+  )
 }
 
 const TaskList: React.FC = () => {
@@ -44,56 +304,24 @@ const TaskList: React.FC = () => {
     try {
       localStorage.setItem('pomodoro-tasks', JSON.stringify(tasks))
     } catch {
-      console.error('Unable to save tasks on this device')
+      logger.error('Unable to save tasks on this device')
     }
   }, [tasks])
 
-  useEffect(() => {
-    if (state.cycles.length > 0) {
-      const lastCycle = state.cycles[0]
-      if (lastCycle.mode === 'focus' && lastCycle.completedAt) {
-        const lastProcessedCycle = localStorage.getItem('last-processed-cycle')
-        if (lastProcessedCycle !== lastCycle.id) {
-          localStorage.setItem('last-processed-cycle', lastCycle.id)
+  useEffect(
+    () => updateCompletedTask({ state: { cycles: state.cycles }, setTasks }),
+    [state.cycles]
+  )
 
-          setTasks((prevTasks) =>
-            prevTasks.map((task) => {
-              if (task.id !== lastCycle.taskId || task.isCompleted) return task
-              const completedCycles = task.completedCycles + 1
-              return {
-                ...task,
-                completedCycles,
-                isCompleted: completedCycles >= task.estimatedCycles,
-              }
-            })
-          )
-        }
-      }
-    }
-  }, [state.cycles])
-
-  const addTask = () => {
-    if (
-      newTaskName.trim() &&
-      Number.isInteger(newTaskCycles) &&
-      newTaskCycles >= 1 &&
-      newTaskCycles <= 20
-    ) {
-      const newTask: Task = {
-        id: Date.now().toString(),
-        name: newTaskName.trim(),
-        estimatedCycles: newTaskCycles,
-        completedCycles: 0,
-        isCompleted: false,
-        createdAt: new Date(),
-      }
-
-      setTasks((prev) => [newTask, ...prev])
-      setNewTaskName('')
-      setNewTaskCycles(1)
-      setIsAddingTask(false)
-    }
-  }
+  const addTask = () =>
+    addPomodoroTask({
+      newTaskName,
+      newTaskCycles,
+      setTasks,
+      setNewTaskName,
+      setNewTaskCycles,
+      setIsAddingTask,
+    })
 
   const toggleTaskCompletion = (taskId: string) => {
     setTasks((prev) =>
@@ -185,155 +413,25 @@ const TaskList: React.FC = () => {
         )}
       </div>
 
-      {isAddingTask && (
-        <Card variant="outlined" className={styles.addTaskCard}>
-          <div className={styles.addTaskForm}>
-            <Input
-              label="Nome da Tarefa"
-              value={newTaskName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNewTaskName(e.target.value)
-              }
-              placeholder="Digite o nome da tarefa..."
-              className={styles.taskInput}
-            />
-            <Input
-              label="Ciclos Estimados"
-              type="number"
-              min="1"
-              max="20"
-              value={newTaskCycles}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNewTaskCycles(Number(e.target.value))
-              }
-              className={styles.cyclesInput}
-            />
-            <div className={styles.addTaskActions}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsAddingTask(false)}
-              >
-                Cancelar
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={addTask}
-                disabled={
-                  !newTaskName.trim() ||
-                  !Number.isInteger(newTaskCycles) ||
-                  newTaskCycles < 1 ||
-                  newTaskCycles > 20
-                }
-              >
-                Adicionar
-              </Button>
-            </div>
-          </div>
-        </Card>
-      )}
+      {renderAddTaskForm({
+        isAddingTask,
+        newTaskName,
+        setNewTaskName,
+        newTaskCycles,
+        setNewTaskCycles,
+        setIsAddingTask,
+        addTask,
+      })}
 
-      <div className={styles.tasksContainer}>
-        {tasks.length === 0 ? (
-          <div className={styles.emptyTasks}>
-            <Target size={48} className={styles.emptyIcon} />
-            <Typography variant="body1" color="muted">
-              Nenhuma tarefa criada
-            </Typography>
-            <Typography variant="body2" color="muted">
-              Crie tarefas para acompanhar seu progresso durante os ciclos de
-              foco
-            </Typography>
-          </div>
-        ) : (
-          tasks.map((task) => (
-            <Card
-              key={task.id}
-              variant="default"
-              className={`${styles.taskCard} ${task.isCompleted ? styles.completedTask : ''}`}
-            >
-              <div className={styles.taskContent}>
-                <div className={styles.taskInfo}>
-                  <div className={styles.taskNameRow}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleTaskCompletion(task.id)}
-                      className={styles.completeButton}
-                      aria-label={`${task.isCompleted ? 'Reabrir' : 'Concluir'} tarefa: ${task.name}`}
-                      aria-pressed={task.isCompleted}
-                      icon={task.isCompleted ? <Check size={16} /> : undefined}
-                    >
-                      {!task.isCompleted && <div className={styles.checkbox} />}
-                    </Button>
-
-                    <Typography
-                      variant="h6"
-                      className={styles.taskName}
-                      style={{
-                        textDecoration: task.isCompleted
-                          ? 'line-through'
-                          : 'none',
-                      }}
-                    >
-                      {task.name}
-                    </Typography>
-
-                    <div className={styles.taskButtons}>
-                      {!task.isCompleted && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => startTask(task)}
-                          className={styles.startButton}
-                          icon={<Play size={16} />}
-                        >
-                          {state.activeTaskId === task.id
-                            ? 'Selecionada'
-                            : 'Selecionar'}
-                        </Button>
-                      )}
-
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => deleteTask(task.id)}
-                        className={styles.deleteButton}
-                        icon={<Trash2 size={16} />}
-                      >
-                        Deletar
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className={styles.taskProgress}>
-                    <div className={styles.progressBar}>
-                      <div
-                        className={styles.progressFill}
-                        style={{
-                          width: `${getProgressPercentage(task)}%`,
-                          backgroundColor: `var(--${getProgressColor(task)})`,
-                        }}
-                      />
-                    </div>
-                    <div className={styles.progressText}>
-                      <Tag variant={getProgressColor(task)} size="sm">
-                        {task.completedCycles}/{task.estimatedCycles} ciclos
-                      </Tag>
-                      {task.isCompleted && (
-                        <Tag variant="success" size="sm">
-                          Concluída
-                        </Tag>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))
-        )}
-      </div>
+      {renderTaskCards({
+        tasks,
+        toggleTaskCompletion,
+        startTask,
+        state,
+        deleteTask,
+        getProgressPercentage,
+        getProgressColor,
+      })}
     </div>
   )
 }

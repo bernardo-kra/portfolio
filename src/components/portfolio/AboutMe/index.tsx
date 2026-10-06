@@ -4,6 +4,98 @@ import { useI18n } from '@src/i18n'
 import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
+type RenderAboutDetailsProps = {
+  t: import('../../../i18n/index').PortfolioI18n
+  showAll: boolean
+  setShowAll: React.Dispatch<React.SetStateAction<boolean>>
+  lang: import('../../../i18n/index').Lang
+  specializations: { name: string; color: string }[]
+  achievements: {
+    title: string
+    description: string
+    icon: React.ForwardRefExoticComponent<
+      Omit<import('lucide-react').LucideProps, 'ref'> &
+        React.RefAttributes<SVGSVGElement>
+    >
+  }[]
+}
+
+function renderAboutDetails({
+  t,
+  showAll,
+  setShowAll,
+  lang,
+  specializations,
+  achievements,
+}: RenderAboutDetailsProps) {
+  return (
+    <div className={styles.aboutmeContent}>
+      <div className={styles.specializationsColumn}>
+        <Typography variant="h4" className={styles.columnTitle}>
+          {t.aboutMeSpecializations.title}
+        </Typography>
+        <button
+          className={styles.expandButton}
+          aria-expanded={showAll}
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll
+            ? lang === 'pt'
+              ? 'Mostrar menos'
+              : 'Show less'
+            : lang === 'pt'
+              ? 'Ver todas as tecnologias'
+              : 'View all technologies'}
+        </button>
+        <div className={styles.specializationsList}>
+          {specializations
+            .slice(0, showAll ? undefined : 6)
+            .map((spec, index) => (
+              <div key={index} className={styles.specializationTag}>
+                <div
+                  className={styles.specializationColor}
+                  style={{ backgroundColor: spec.color }}
+                />
+                <Typography
+                  variant="body2"
+                  className={styles.specializationName}
+                >
+                  {spec.name}
+                </Typography>
+              </div>
+            ))}
+        </div>
+      </div>
+
+      <div className={styles.achievementsColumn}>
+        <Typography variant="h4" className={styles.columnTitle}>
+          {t.aboutMeAchievements.title}
+        </Typography>
+        <div className={styles.achievementsList}>
+          {achievements.map((achievement, index) => (
+            <Card key={index} className={styles.achievementCard}>
+              <div className={styles.achievementIcon}>
+                <achievement.icon size={20} />
+              </div>
+              <div className={styles.achievementContent}>
+                <Typography variant="body2" className={styles.achievementTitle}>
+                  {achievement.title}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="muted"
+                  className={styles.achievementDescription}
+                >
+                  {achievement.description}
+                </Typography>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const AboutMe: React.FC = () => {
   const [showAll, setShowAll] = useState(false)
@@ -133,74 +225,14 @@ const AboutMe: React.FC = () => {
         ))}
       </div>
 
-      <div className={styles.aboutmeContent}>
-        <div className={styles.specializationsColumn}>
-          <Typography variant="h4" className={styles.columnTitle}>
-            {t.aboutMeSpecializations.title}
-          </Typography>
-          <button
-            className={styles.expandButton}
-            aria-expanded={showAll}
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll
-              ? lang === 'pt'
-                ? 'Mostrar menos'
-                : 'Show less'
-              : lang === 'pt'
-                ? 'Ver todas as tecnologias'
-                : 'View all technologies'}
-          </button>
-          <div className={styles.specializationsList}>
-            {specializations
-              .slice(0, showAll ? undefined : 6)
-              .map((spec, index) => (
-                <div key={index} className={styles.specializationTag}>
-                  <div
-                    className={styles.specializationColor}
-                    style={{ backgroundColor: spec.color }}
-                  />
-                  <Typography
-                    variant="body2"
-                    className={styles.specializationName}
-                  >
-                    {spec.name}
-                  </Typography>
-                </div>
-              ))}
-          </div>
-        </div>
-
-        <div className={styles.achievementsColumn}>
-          <Typography variant="h4" className={styles.columnTitle}>
-            {t.aboutMeAchievements.title}
-          </Typography>
-          <div className={styles.achievementsList}>
-            {achievements.map((achievement, index) => (
-              <Card key={index} className={styles.achievementCard}>
-                <div className={styles.achievementIcon}>
-                  <achievement.icon size={20} />
-                </div>
-                <div className={styles.achievementContent}>
-                  <Typography
-                    variant="body2"
-                    className={styles.achievementTitle}
-                  >
-                    {achievement.title}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="muted"
-                    className={styles.achievementDescription}
-                  >
-                    {achievement.description}
-                  </Typography>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
+      {renderAboutDetails({
+        t,
+        showAll,
+        setShowAll,
+        lang,
+        specializations,
+        achievements,
+      })}
     </div>
   )
 }

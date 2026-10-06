@@ -1,3 +1,4 @@
+import { logger } from '@src/services/logger'
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Card, Checkbox } from '@components/common'
 import { Music } from 'lucide-react'
@@ -12,19 +13,28 @@ const MusicSettings: React.FC = () => {
     const savedSettings = localStorage.getItem('music-settings')
     if (savedSettings) {
       try {
-        const parsedSettings = JSON.parse(savedSettings)
-        setLocalSettings(prev => ({ 
-          ...prev, 
+        // Storage contains settings written by this app; preserve the original partial spread.
+        const rawSettings: unknown = JSON.parse(savedSettings)
+        const parsedSettings = rawSettings as Partial<
+          ReturnType<typeof usePomodoro>['state']['musicSettings']
+        >
+        setLocalSettings((prev) => ({
+          ...prev,
           ...parsedSettings,
-          isEnabled: parsedSettings.isEnabled !== undefined ? parsedSettings.isEnabled : true
+          isEnabled:
+            parsedSettings.isEnabled !== undefined
+              ? parsedSettings.isEnabled
+              : true,
         }))
       } catch (error) {
-        console.error('Error loading music settings:', error)
+        logger.error('Error loading music settings:', error)
       }
     }
   }, [])
-  
-  const currentTrack = state.musicSettings.tracks.find(track => track.id === state.musicSettings.currentTrackId)
+
+  const currentTrack = state.musicSettings.tracks.find(
+    (track) => track.id === state.musicSettings.currentTrackId
+  )
 
   const handleSave = () => {
     setMusicSettings(localSettings)
@@ -43,13 +53,16 @@ const MusicSettings: React.FC = () => {
       backgroundMode: false,
       volume: 0.3,
       shuffleMode: false,
-      repeatMode: 'none' as const
+      repeatMode: 'none' as const,
     }
     setLocalSettings(defaultSettings)
   }
 
-  const updateLocalSetting = <K extends keyof typeof localSettings>(key: K, value: typeof localSettings[K]) => {
-    setLocalSettings(prev => ({ ...prev, [key]: value }))
+  const updateLocalSetting = <K extends keyof typeof localSettings>(
+    key: K,
+    value: (typeof localSettings)[K]
+  ) => {
+    setLocalSettings((prev) => ({ ...prev, [key]: value }))
   }
 
   return (
@@ -73,10 +86,14 @@ const MusicSettings: React.FC = () => {
         )}
 
         <div className={styles.settingGroup}>
-          <Typography variant="body2" weight="semibold" className={styles.groupTitle}>
+          <Typography
+            variant="body2"
+            weight="semibold"
+            className={styles.groupTitle}
+          >
             Comportamento
           </Typography>
-          
+
           <div className={styles.checkboxGroup}>
             <Checkbox
               label="Habilitar música"
@@ -86,17 +103,23 @@ const MusicSettings: React.FC = () => {
             <Checkbox
               label="Tocar ao iniciar timer"
               checked={localSettings.autoPlayOnTimerStart}
-              onChange={(checked) => updateLocalSetting('autoPlayOnTimerStart', checked)}
+              onChange={(checked) =>
+                updateLocalSetting('autoPlayOnTimerStart', checked)
+              }
             />
             <Checkbox
               label="Parar ao finalizar timer"
               checked={localSettings.autoStopOnTimerEnd}
-              onChange={(checked) => updateLocalSetting('autoStopOnTimerEnd', checked)}
+              onChange={(checked) =>
+                updateLocalSetting('autoStopOnTimerEnd', checked)
+              }
             />
             <Checkbox
               label="Sincronizar controles manuais"
               checked={localSettings.syncManualControls}
-              onChange={(checked) => updateLocalSetting('syncManualControls', checked)}
+              onChange={(checked) =>
+                updateLocalSetting('syncManualControls', checked)
+              }
             />
           </div>
         </div>
@@ -111,12 +134,8 @@ const MusicSettings: React.FC = () => {
         >
           Padrão
         </Button>
-        
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={handleSave}
-        >
+
+        <Button variant="primary" size="sm" onClick={handleSave}>
           Salvar
         </Button>
       </div>

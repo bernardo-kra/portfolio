@@ -1,9 +1,112 @@
+import { logger } from '@src/services/logger'
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Typography } from '@components/common'
 import { Music, ExternalLink, Settings, Play, Pause } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
 import MusicSettings from '../MusicSettings'
 import styles from './styles.module.css'
+type RenderCompactPlayerProps = {
+  currentTrack:
+    | ReturnType<typeof usePomodoro>['state']['musicSettings']['tracks'][number]
+    | undefined
+  togglePlayPause: () => void
+  isPlaying: boolean
+  musicSettings: ReturnType<typeof usePomodoro>['state']['musicSettings']
+  iframeRef: React.RefObject<HTMLIFrameElement | null>
+}
+type RenderLofiHeaderProps = {
+  openYouTube: () => void
+  setShowSettings: React.Dispatch<React.SetStateAction<boolean>>
+  showSettings: boolean
+}
+
+function renderLofiHeader({
+  openYouTube,
+  setShowSettings,
+  showSettings,
+}: RenderLofiHeaderProps) {
+  return (
+    <div className={styles.playerHeader}>
+      <div className={styles.playerTitle}>
+        <Music size={16} className={styles.musicIcon} />
+        <Typography variant="body2" weight="semibold">
+          Música
+        </Typography>
+      </div>
+      <div className={styles.playerActions}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={openYouTube}
+          className={styles.youtubeButton}
+          icon={<ExternalLink size={14} />}
+        >
+          YouTube
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowSettings(!showSettings)}
+          icon={<Settings size={14} />}
+        >
+          Config
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function renderCompactPlayer({
+  currentTrack,
+  togglePlayPause,
+  isPlaying,
+  musicSettings,
+  iframeRef,
+}: RenderCompactPlayerProps) {
+  return (
+    currentTrack &&
+    isValidYouTubeUrl(currentTrack.url) && (
+      <div className={styles.compactPlayer}>
+        <div className={styles.playerControls}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={togglePlayPause}
+            className={styles.playButton}
+            icon={isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          >
+            {isPlaying ? 'Pausar' : 'Tocar'}
+          </Button>
+
+          <div className={styles.trackInfo}>
+            <Typography variant="body2" weight="semibold">
+              {currentTrack.name}
+            </Typography>
+            {musicSettings.syncManualControls && (
+              <Typography variant="caption" color="muted">
+                Sincronizado com timer
+              </Typography>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.youtubeContainer}>
+          <div className={styles.youtubeWrapper}>
+            <iframe
+              ref={iframeRef}
+              src={getEmbedUrl(currentTrack.url)}
+              title="Background Music"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className={styles.youtubeIframe}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  )
+}
 
 const extractVideoId = (url: string): string => {
   const patterns = [
@@ -11,7 +114,7 @@ const extractVideoId = (url: string): string => {
     /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
     /youtu\.be\/([a-zA-Z0-9_-]{11})/,
     /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+    /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/,
   ]
 
   for (const pattern of patterns) {
@@ -39,17 +142,25 @@ const LofiPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const { musicSettings } = state
-  
-  const currentTrack = musicSettings.tracks.find(track => track.id === musicSettings.currentTrackId)
+
+  const currentTrack = musicSettings.tracks.find(
+    (track) => track.id === musicSettings.currentTrackId
+  )
 
   useEffect(() => {
-    if (!musicSettings.isEnabled || !iframeRef.current || !currentTrack || !isValidYouTubeUrl(currentTrack.url)) return
+    if (
+      !musicSettings.isEnabled ||
+      !iframeRef.current ||
+      !currentTrack ||
+      !isValidYouTubeUrl(currentTrack.url)
+    )
+      return
 
     const sendCommand = (command: string) => {
       try {
         iframeRef.current?.contentWindow?.postMessage(command, '*')
       } catch (error) {
-        console.warn('Failed to send command to YouTube iframe:', error)
+        logger.warn('Failed to send command to YouTube iframe:', error)
       }
     }
 
@@ -64,7 +175,14 @@ const LofiPlayer: React.FC = () => {
         setIsPlaying(false)
       }
     }
-  }, [state.isRunning, state.mode, musicSettings.isEnabled, musicSettings.autoPlayOnTimerStart, musicSettings.autoStopOnTimerEnd, currentTrack])
+  }, [
+    state.isRunning,
+    state.mode,
+    musicSettings.isEnabled,
+    musicSettings.autoPlayOnTimerStart,
+    musicSettings.autoStopOnTimerEnd,
+    currentTrack,
+  ])
 
   useEffect(() => {
     if (!musicSettings.syncManualControls || !musicSettings.isEnabled) return
@@ -74,16 +192,25 @@ const LofiPlayer: React.FC = () => {
     } else {
       setIsPlaying(false)
     }
-  }, [state.isRunning, musicSettings.syncManualControls, musicSettings.isEnabled])
+  }, [
+    state.isRunning,
+    musicSettings.syncManualControls,
+    musicSettings.isEnabled,
+  ])
 
   const togglePlayPause = () => {
-    if (!iframeRef.current || !currentTrack || !isValidYouTubeUrl(currentTrack.url)) return
+    if (
+      !iframeRef.current ||
+      !currentTrack ||
+      !isValidYouTubeUrl(currentTrack.url)
+    )
+      return
 
     const sendCommand = (command: string) => {
       try {
         iframeRef.current?.contentWindow?.postMessage(command, '*')
       } catch (error) {
-        console.warn('Failed to send command to YouTube iframe:', error)
+        logger.warn('Failed to send command to YouTube iframe:', error)
       }
     }
 
@@ -128,84 +255,27 @@ const LofiPlayer: React.FC = () => {
 
   return (
     <div className={styles.lofiPlayer}>
-      <div className={styles.playerHeader}>
-        <div className={styles.playerTitle}>
-          <Music size={16} className={styles.musicIcon} />
-          <Typography variant="body2" weight="semibold">
-            Música
-          </Typography>
-        </div>
-        <div className={styles.playerActions}>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={openYouTube}
-            className={styles.youtubeButton}
-            icon={<ExternalLink size={14} />}
-          >
-            YouTube
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowSettings(!showSettings)}
-            icon={<Settings size={14} />}
-          >
-            Config
-          </Button>
-        </div>
-      </div>
+      {renderLofiHeader({ openYouTube, setShowSettings, showSettings })}
 
       {showSettings && <MusicSettings />}
 
-      {currentTrack && isValidYouTubeUrl(currentTrack.url) && (
-        <div className={styles.compactPlayer}>
-          <div className={styles.playerControls}>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={togglePlayPause}
-              className={styles.playButton}
-              icon={isPlaying ? <Pause size={16} /> : <Play size={16} />}
-            >
-              {isPlaying ? 'Pausar' : 'Tocar'}
-            </Button>
-            
-            <div className={styles.trackInfo}>
-              <Typography variant="body2" weight="semibold">
-                {currentTrack.name}
-              </Typography>
-              {musicSettings.syncManualControls && (
-                <Typography variant="caption" color="muted">
-                  Sincronizado com timer
-                </Typography>
-              )}
-            </div>
-          </div>
-          
-          <div className={styles.youtubeContainer}>
-            <div className={styles.youtubeWrapper}>
-              <iframe
-                ref={iframeRef}
-                src={getEmbedUrl(currentTrack.url)}
-                title="Background Music"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className={styles.youtubeIframe}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {renderCompactPlayer({
+        currentTrack,
+        togglePlayPause,
+        isPlaying,
+        musicSettings,
+        iframeRef,
+      })}
 
-      {musicSettings.isEnabled && currentTrack && !isValidYouTubeUrl(currentTrack.url) && (
-        <div className={styles.urlWarning}>
-          <Typography variant="body2" color="error" align="center">
-            ⚠️ URL do YouTube inválida
-          </Typography>
-        </div>
-      )}
+      {musicSettings.isEnabled &&
+        currentTrack &&
+        !isValidYouTubeUrl(currentTrack.url) && (
+          <div className={styles.urlWarning}>
+            <Typography variant="body2" color="error" align="center">
+              ⚠️ URL do YouTube inválida
+            </Typography>
+          </div>
+        )}
     </div>
   )
 }

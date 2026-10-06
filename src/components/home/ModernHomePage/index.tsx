@@ -31,6 +31,301 @@ type ProjectCardProps = {
   project: Project
   index: number
 }
+type HomeProjectsProps = {
+  lang: import('../../../i18n/index').Lang
+  t: import('../../../i18n/index').PortfolioI18n
+}
+
+function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
+  return [
+    {
+      id: 'agency',
+      title: 'Forma — Creative Studio',
+      subtitle: lang === 'pt' ? 'Estudo de agência' : 'Agency study',
+      description:
+        lang === 'pt'
+          ? 'Design editorial, formas orgânicas e uma galeria interativa. Um estúdio criativo do conceito ao código.'
+          : 'Editorial design, organic shapes and an interactive gallery. A creative studio from concept to code.',
+      icon: 'f.',
+      color: '#267b48',
+      route: '/agency',
+      features: [
+        'Design',
+        'CSS Grid',
+        lang === 'pt' ? 'Responsivo' : 'Responsive',
+        'UX',
+      ],
+      previewImage: '/images/forma/studio.webp',
+    },
+    {
+      id: 'portfolio',
+      title: t.portfolioTitle,
+      subtitle: t.portfolioSubtitle,
+      description: t.portfolioDescription,
+      icon: 'DEV',
+      color: 'var(--brand-orange)',
+      route: '/portfolio',
+      features:
+        lang === 'pt'
+          ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
+          : ['Projects', 'Experience', 'Skills', 'Contact'],
+      previewImage: '/preview-fullpage-portfolio.png',
+      isFeatured: true,
+      featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
+    },
+    {
+      id: 'pomodoro',
+      title: t.pomodoroTitle,
+      subtitle: t.pomodoroSubtitle,
+      description: t.pomodoroDescription,
+      icon: 'TIME',
+      color: '#10b981',
+      route: '/pomodoro',
+      features:
+        lang === 'pt'
+          ? ['Timer', 'Tarefas', 'Estatísticas', 'Música']
+          : ['Timer', 'Tasks', 'Statistics', 'Music'],
+      previewImage: '/preview-fullpage-pomodoro.png',
+    },
+    {
+      id: 'generative',
+      title: t.generativeTitle,
+      subtitle: t.generativeSubtitle,
+      description: t.generativeDescription,
+      icon: 'ART',
+      color: '#8b5cf6',
+      route: '/generative',
+      features:
+        lang === 'pt'
+          ? ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas']
+          : ['Algorithms', 'Patterns', 'Interactivity', 'Canvas'],
+      previewImage: '/preview-fullpage-generative.png',
+    },
+    {
+      id: 'landing',
+      title: t.landingTitle,
+      subtitle: t.landingSubtitle,
+      description: t.landingDescription,
+      icon: 'LAUNCH',
+      color: '#f59e0b',
+      route: '/landing',
+      features: ['Design', 'Performance', 'SEO', 'Analytics'],
+      previewImage: '/preview-fullpage-landing.png',
+    },
+    {
+      id: 'experimental3d',
+      title: 'Neon Bay',
+      subtitle: lang === 'pt' ? 'Ficção interativa' : 'Interactive fiction',
+      description:
+        lang === 'pt'
+          ? 'Uma missão cinematográfica: explore um servidor, intercepte sinais e abra os portões da baía.'
+          : 'A cinematic mission: explore a server, intercept signals and open the gates of the bay.',
+      icon: 'NEON',
+      color: '#f97316',
+      route: '/experimental3d',
+      features: ['SVG', 'React', 'TypeScript', 'UX'],
+      previewImage: '/neon-bay-preview.svg',
+    },
+  ]
+}
+
+type RenderHomeHeroProps = {
+  t: import('../../../i18n/index').PortfolioI18n
+  showConversation: boolean
+  lang: import('../../../i18n/index').Lang
+  projectsRef: React.RefObject<HTMLElement | null>
+  setLightEnabled: React.Dispatch<React.SetStateAction<boolean>>
+  setLightBlown: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function renderHomeHero({
+  t,
+  showConversation,
+  lang,
+  projectsRef,
+  setLightEnabled,
+  setLightBlown,
+}: RenderHomeHeroProps) {
+  return (
+    <section className={styles.heroSection}>
+      <div className={styles.heroBackground} aria-hidden="true" />
+      <Container className={styles.heroContainer}>
+        <FadeInOnScroll delay={100}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroText}>
+              <div className={styles.greeting}>
+                <span className={styles.greetingLine} />
+                <span className={styles.greetingText}>{t.greeting}</span>
+              </div>
+
+              <Typography variant="h1" className={styles.heroTitle}>
+                {t.heroTitle}
+              </Typography>
+
+              <Typography variant="h2" className={styles.heroSubtitle}>
+                {t.heroSubtitle}
+              </Typography>
+
+              <Typography variant="body1" className={styles.heroDescription}>
+                {t.heroDescription}
+              </Typography>
+
+              <div className={styles.heroPrompt}>
+                {showConversation && (
+                  <Link to="/chat" className={styles.conversationLink}>
+                    <MessageCircle size={17} aria-hidden="true" />
+                    {lang === 'pt'
+                      ? 'Conversar com Bernardo'
+                      : 'Talk to Bernardo'}
+                  </Link>
+                )}
+                <button
+                  className={styles.heroExplore}
+                  onClick={() =>
+                    projectsRef.current?.scrollIntoView({
+                      behavior: 'smooth',
+                    })
+                  }
+                >
+                  {t.recruiter.exploreStudies}
+                </button>
+                <Link to="/portfolio" className={styles.profileLink}>
+                  {t.recruiter.professionalProfile} →
+                </Link>
+                <a
+                  href={profile.resumeUrl}
+                  download={profile.resumeFilename}
+                  className={styles.resumeLink}
+                  title={t.recruiter.pdfLanguage}
+                >
+                  <Download size={16} aria-hidden="true" />
+                  {t.downloadCV}
+                  <small>PDF</small>
+                </a>
+                <span
+                  className={styles.heroHint}
+                  onMouseEnter={() => {
+                    setLightEnabled(true)
+                    setLightBlown(false)
+                  }}
+                >
+                  {lang === 'pt'
+                    ? 'Passe o mouse para ativar a luz (movimento rápido apaga)'
+                    : 'Hover to turn on the light (fast movement turns it off)'}
+                </span>
+              </div>
+            </div>
+
+            <div className={styles.heroImage}></div>
+          </div>
+        </FadeInOnScroll>
+      </Container>
+    </section>
+  )
+}
+
+type RenderHomeStudiesProps = {
+  projectsRef: React.RefObject<HTMLElement | null>
+  t: import('../../../i18n/index').PortfolioI18n
+  projects: Project[]
+}
+
+function renderHomeStudies({
+  projectsRef,
+  t,
+  projects,
+}: RenderHomeStudiesProps) {
+  return (
+    <section id="estudos" className={styles.projectsSection} ref={projectsRef}>
+      <Container className={styles.projectsContainer}>
+        <FadeInOnScroll delay={200}>
+          <div className={styles.sectionHeader}>
+            <Typography variant="h2" className={styles.sectionTitle}>
+              {t.myProjects}
+            </Typography>
+            <Typography
+              variant="body1"
+              color="muted"
+              className={styles.sectionSubtitle}
+            >
+              {t.projectsSubtitle}
+            </Typography>
+            <div className={styles.sectionHint}>
+              {t.recruiter.professionalProfile}
+            </div>
+          </div>
+        </FadeInOnScroll>
+
+        <div className={styles.projectsGrid}>
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
+}
+
+type RenderHomeContactProps = {
+  t: import('../../../i18n/index').PortfolioI18n
+  navigate: import('react-router-dom').NavigateFunction
+}
+
+function renderHomeContact({ t, navigate }: RenderHomeContactProps) {
+  return (
+    <section className={styles.ctaSection}>
+      <Container className={styles.ctaContainer}>
+        <FadeInOnScroll delay={650}>
+          <div className={styles.ctaCard}>
+            <div className={styles.ctaGlow} aria-hidden="true" />
+            <div className={styles.ctaContent}>
+              <Typography variant="h2" className={styles.ctaTitle}>
+                {t.recruiter.homeCta}
+              </Typography>
+              <Typography variant="body1" className={styles.ctaText}>
+                {t.recruiter.homeCopy}
+              </Typography>
+              <div className={styles.ctaActions}>
+                <button
+                  className={styles.ctaPrimary}
+                  onClick={() => {
+                    void navigate('/portfolio')
+                  }}
+                >
+                  {t.explorePortfolio}
+                </button>
+                <a
+                  className={styles.ctaSecondary}
+                  href={profile.resumeUrl}
+                  download={profile.resumeFilename}
+                  title={t.recruiter.pdfLanguage}
+                >
+                  {t.downloadCV} ↓
+                </a>
+              </div>
+            </div>
+            <div className={styles.ctaStats}>
+              <div>
+                <span className={styles.ctaStatNumber}>React</span>
+                <span className={styles.ctaStatLabel}>Frontend</span>
+              </div>
+              <div>
+                <span className={styles.ctaStatNumber}>TypeScript</span>
+                <span className={styles.ctaStatLabel}>JavaScript</span>
+              </div>
+              <div>
+                <span className={styles.ctaStatNumber}>QA</span>
+                <span className={styles.ctaStatLabel}>
+                  {t.recruiter.learning}
+                </span>
+              </div>
+            </div>
+          </div>
+        </FadeInOnScroll>
+      </Container>
+    </section>
+  )
+}
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const { lang } = useI18n()
@@ -190,96 +485,7 @@ const ModernHomePage: React.FC = () => {
     }
   }, [lightEnabled])
 
-  const projects: Project[] = [
-    {
-      id: 'agency',
-      title: 'Forma — Creative Studio',
-      subtitle: lang === 'pt' ? 'Estudo de agência' : 'Agency study',
-      description:
-        lang === 'pt'
-          ? 'Design editorial, formas orgânicas e uma galeria interativa. Um estúdio criativo do conceito ao código.'
-          : 'Editorial design, organic shapes and an interactive gallery. A creative studio from concept to code.',
-      icon: 'f.',
-      color: '#267b48',
-      route: '/agency',
-      features: [
-        'Design',
-        'CSS Grid',
-        lang === 'pt' ? 'Responsivo' : 'Responsive',
-        'UX',
-      ],
-      previewImage: '/images/forma/studio.webp',
-    },
-    {
-      id: 'portfolio',
-      title: t.portfolioTitle,
-      subtitle: t.portfolioSubtitle,
-      description: t.portfolioDescription,
-      icon: 'DEV',
-      color: 'var(--brand-orange)',
-      route: '/portfolio',
-      features:
-        lang === 'pt'
-          ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
-          : ['Projects', 'Experience', 'Skills', 'Contact'],
-      previewImage: '/preview-fullpage-portfolio.png',
-      isFeatured: true,
-      featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
-    },
-    {
-      id: 'pomodoro',
-      title: t.pomodoroTitle,
-      subtitle: t.pomodoroSubtitle,
-      description: t.pomodoroDescription,
-      icon: 'TIME',
-      color: '#10b981',
-      route: '/pomodoro',
-      features:
-        lang === 'pt'
-          ? ['Timer', 'Tarefas', 'Estatísticas', 'Música']
-          : ['Timer', 'Tasks', 'Statistics', 'Music'],
-      previewImage: '/preview-fullpage-pomodoro.png',
-    },
-    {
-      id: 'generative',
-      title: t.generativeTitle,
-      subtitle: t.generativeSubtitle,
-      description: t.generativeDescription,
-      icon: 'ART',
-      color: '#8b5cf6',
-      route: '/generative',
-      features:
-        lang === 'pt'
-          ? ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas']
-          : ['Algorithms', 'Patterns', 'Interactivity', 'Canvas'],
-      previewImage: '/preview-fullpage-generative.png',
-    },
-    {
-      id: 'landing',
-      title: t.landingTitle,
-      subtitle: t.landingSubtitle,
-      description: t.landingDescription,
-      icon: 'LAUNCH',
-      color: '#f59e0b',
-      route: '/landing',
-      features: ['Design', 'Performance', 'SEO', 'Analytics'],
-      previewImage: '/preview-fullpage-landing.png',
-    },
-    {
-      id: 'experimental3d',
-      title: 'Neon Bay',
-      subtitle: lang === 'pt' ? 'Ficção interativa' : 'Interactive fiction',
-      description:
-        lang === 'pt'
-          ? 'Uma missão cinematográfica: explore um servidor, intercepte sinais e abra os portões da baía.'
-          : 'A cinematic mission: explore a server, intercept signals and open the gates of the bay.',
-      icon: 'NEON',
-      color: '#f97316',
-      route: '/experimental3d',
-      features: ['SVG', 'React', 'TypeScript', 'UX'],
-      previewImage: '/neon-bay-preview.svg',
-    },
-  ]
+  const projects: Project[] = homeProjects({ lang, t })
 
   return (
     <div
@@ -306,80 +512,14 @@ const ModernHomePage: React.FC = () => {
           {lang === 'pt' ? 'EN' : 'PT'}
         </button>
       </div>
-      <section className={styles.heroSection}>
-        <div className={styles.heroBackground} aria-hidden="true" />
-        <Container className={styles.heroContainer}>
-          <FadeInOnScroll delay={100}>
-            <div className={styles.heroContent}>
-              <div className={styles.heroText}>
-                <div className={styles.greeting}>
-                  <span className={styles.greetingLine} />
-                  <span className={styles.greetingText}>{t.greeting}</span>
-                </div>
-
-                <Typography variant="h1" className={styles.heroTitle}>
-                  {t.heroTitle}
-                </Typography>
-
-                <Typography variant="h2" className={styles.heroSubtitle}>
-                  {t.heroSubtitle}
-                </Typography>
-
-                <Typography variant="body1" className={styles.heroDescription}>
-                  {t.heroDescription}
-                </Typography>
-
-                <div className={styles.heroPrompt}>
-                  {showConversation && (
-                    <Link to="/chat" className={styles.conversationLink}>
-                      <MessageCircle size={17} aria-hidden="true" />
-                      {lang === 'pt'
-                        ? 'Conversar com Bernardo'
-                        : 'Talk to Bernardo'}
-                    </Link>
-                  )}
-                  <button
-                    className={styles.heroExplore}
-                    onClick={() =>
-                      projectsRef.current?.scrollIntoView({
-                        behavior: 'smooth',
-                      })
-                    }
-                  >
-                    {t.recruiter.exploreStudies}
-                  </button>
-                  <Link to="/portfolio" className={styles.profileLink}>
-                    {t.recruiter.professionalProfile} →
-                  </Link>
-                  <a
-                    href={profile.resumeUrl}
-                    download={profile.resumeFilename}
-                    className={styles.resumeLink}
-                    title={t.recruiter.pdfLanguage}
-                  >
-                    <Download size={16} aria-hidden="true" />
-                    {t.downloadCV}
-                    <small>PDF</small>
-                  </a>
-                  <span
-                    className={styles.heroHint}
-                    onMouseEnter={() => {
-                      setLightEnabled(true)
-                      setLightBlown(false)
-                    }}
-                  >
-                    {lang === 'pt'
-                      ? 'Passe o mouse para ativar a luz (movimento rápido apaga)'
-                      : 'Hover to turn on the light (fast movement turns it off)'}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.heroImage}></div>
-            </div>
-          </FadeInOnScroll>
-        </Container>
-      </section>
+      {renderHomeHero({
+        t,
+        showConversation,
+        lang,
+        projectsRef,
+        setLightEnabled,
+        setLightBlown,
+      })}
       <Ribbon
         items={
           lang === 'pt'
@@ -399,87 +539,9 @@ const ModernHomePage: React.FC = () => {
               ]
         }
       />
-      <section
-        id="estudos"
-        className={styles.projectsSection}
-        ref={projectsRef}
-      >
-        <Container className={styles.projectsContainer}>
-          <FadeInOnScroll delay={200}>
-            <div className={styles.sectionHeader}>
-              <Typography variant="h2" className={styles.sectionTitle}>
-                {t.myProjects}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="muted"
-                className={styles.sectionSubtitle}
-              >
-                {t.projectsSubtitle}
-              </Typography>
-              <div className={styles.sectionHint}>
-                {t.recruiter.professionalProfile}
-              </div>
-            </div>
-          </FadeInOnScroll>
+      {renderHomeStudies({ projectsRef, t, projects })}
 
-          <div className={styles.projectsGrid}>
-            {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className={styles.ctaSection}>
-        <Container className={styles.ctaContainer}>
-          <FadeInOnScroll delay={650}>
-            <div className={styles.ctaCard}>
-              <div className={styles.ctaGlow} aria-hidden="true" />
-              <div className={styles.ctaContent}>
-                <Typography variant="h2" className={styles.ctaTitle}>
-                  {t.recruiter.homeCta}
-                </Typography>
-                <Typography variant="body1" className={styles.ctaText}>
-                  {t.recruiter.homeCopy}
-                </Typography>
-                <div className={styles.ctaActions}>
-                  <button
-                    className={styles.ctaPrimary}
-                    onClick={() => navigate('/portfolio')}
-                  >
-                    {t.explorePortfolio}
-                  </button>
-                  <a
-                    className={styles.ctaSecondary}
-                    href={profile.resumeUrl}
-                    download={profile.resumeFilename}
-                    title={t.recruiter.pdfLanguage}
-                  >
-                    {t.downloadCV} ↓
-                  </a>
-                </div>
-              </div>
-              <div className={styles.ctaStats}>
-                <div>
-                  <span className={styles.ctaStatNumber}>React</span>
-                  <span className={styles.ctaStatLabel}>Frontend</span>
-                </div>
-                <div>
-                  <span className={styles.ctaStatNumber}>TypeScript</span>
-                  <span className={styles.ctaStatLabel}>JavaScript</span>
-                </div>
-                <div>
-                  <span className={styles.ctaStatNumber}>QA</span>
-                  <span className={styles.ctaStatLabel}>
-                    {t.recruiter.learning}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </FadeInOnScroll>
-        </Container>
-      </section>
+      {renderHomeContact({ t, navigate })}
 
       <section className={styles.statsSection}>
         <Container className={styles.statsContainer}>

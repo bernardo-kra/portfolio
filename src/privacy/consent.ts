@@ -1,3 +1,4 @@
+import { isRecord, parseJson } from '../services/jsonValue.ts'
 export const PRIVACY_VERSION = '2026-09-29'
 export const CONSENT_KEY = 'portfolio-privacy-v1'
 export type Consent = 'accepted' | 'rejected' | 'unset'
@@ -5,10 +6,12 @@ const eventName = 'portfolio:privacy'
 
 export function readConsent(): Consent {
   try {
-    const saved = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null')
+    const raw = parseJson(localStorage.getItem(CONSENT_KEY) || 'null')
+    const saved = isRecord(raw) ? raw : undefined
     if (
       saved?.version !== PRIVACY_VERSION ||
-      !Number.isFinite(saved?.at) ||
+      typeof saved?.at !== 'number' ||
+      !Number.isFinite(saved.at) ||
       Date.now() - saved.at > 180 * 86400000
     )
       return 'unset'

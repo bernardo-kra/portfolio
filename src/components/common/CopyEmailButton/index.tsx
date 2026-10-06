@@ -5,6 +5,48 @@ import { profile } from '@src/config/profile'
 import styles from './styles.module.css'
 
 type Status = 'idle' | 'copying' | 'copied' | 'manual'
+type RenderCopyEmailButtonProps = {
+  copy: () => Promise<void>
+  status: Status
+  id: string
+  pt: boolean
+}
+
+function renderCopyEmailButton({
+  copy,
+  status,
+  id,
+  pt,
+}: RenderCopyEmailButtonProps) {
+  return (
+    <button
+      type="button"
+      className={styles.button}
+      onClick={() => {
+        void copy()
+      }}
+      disabled={status === 'copying'}
+      aria-describedby={id}
+    >
+      {status === 'copied' ? (
+        <Check size={17} aria-hidden="true" />
+      ) : (
+        <Copy size={17} aria-hidden="true" />
+      )}
+      {status === 'copied'
+        ? pt
+          ? 'Email copiado'
+          : 'Email copied'
+        : status === 'copying'
+          ? pt
+            ? 'Copiando…'
+            : 'Copying…'
+          : pt
+            ? 'Copiar email'
+            : 'Copy email'}
+    </button>
+  )
+}
 
 const CopyEmailButton = ({
   email = profile.email,
@@ -58,30 +100,7 @@ const CopyEmailButton = ({
 
   return (
     <div className={styles.copyEmail}>
-      <button
-        type="button"
-        className={styles.button}
-        onClick={copy}
-        disabled={status === 'copying'}
-        aria-describedby={id}
-      >
-        {status === 'copied' ? (
-          <Check size={17} aria-hidden="true" />
-        ) : (
-          <Copy size={17} aria-hidden="true" />
-        )}
-        {status === 'copied'
-          ? pt
-            ? 'Email copiado'
-            : 'Email copied'
-          : status === 'copying'
-            ? pt
-              ? 'Copiando…'
-              : 'Copying…'
-            : pt
-              ? 'Copiar email'
-              : 'Copy email'}
-      </button>
+      {renderCopyEmailButton({ copy, status, id, pt })}
       <span id={id} className={styles.message} role="status" aria-atomic="true">
         {status === 'copied'
           ? pt

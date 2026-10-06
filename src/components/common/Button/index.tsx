@@ -21,6 +21,66 @@ interface ButtonProps {
   rel?: string
   style?: React.CSSProperties
 }
+type GetButtonClassNameProps = {
+  variant: ButtonVariant
+  size: ButtonSize
+  fullWidth: boolean
+  disabled: boolean
+  loading: boolean
+  className: string
+}
+
+function getButtonClassName({
+  variant,
+  size,
+  fullWidth,
+  disabled,
+  loading,
+  className,
+}: GetButtonClassNameProps) {
+  return [
+    styles.button,
+    styles[`button--${variant}`],
+    styles[`button--${size}`],
+    fullWidth && styles['button--fullWidth'],
+    disabled && styles['button--disabled'],
+    loading && styles['button--loading'],
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
+type ButtonContentProps = {
+  icon: React.ReactNode
+  iconPosition: 'left' | 'right'
+  children: React.ReactNode
+  loading: boolean
+}
+
+function renderButtonContent({
+  icon,
+  iconPosition,
+  children,
+  loading,
+}: ButtonContentProps) {
+  return (
+    <>
+      {icon && iconPosition === 'left' && (
+        <span className={styles.button__icon}>{icon}</span>
+      )}
+      <span className={styles.button__text}>{children}</span>
+      {icon && iconPosition === 'right' && (
+        <span className={styles.button__icon}>{icon}</span>
+      )}
+      {loading && (
+        <span className={styles.button__loader}>
+          <div className={styles.button__spinner}></div>
+        </span>
+      )}
+    </>
+  )
+}
 
 const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
@@ -40,32 +100,16 @@ const Button: React.FC<ButtonProps> = ({
   style,
   ...props
 }) => {
-  const buttonClassName = [
-    styles.button,
-    styles[`button--${variant}`],
-    styles[`button--${size}`],
-    fullWidth && styles['button--fullWidth'],
-    disabled && styles['button--disabled'],
-    loading && styles['button--loading'],
-    className
-  ].filter(Boolean).join(' ')
+  const buttonClassName = getButtonClassName({
+    variant,
+    size,
+    fullWidth,
+    disabled,
+    loading,
+    className,
+  })
 
-  const content = (
-    <>
-      {icon && iconPosition === 'left' && (
-        <span className={styles.button__icon}>{icon}</span>
-      )}
-      <span className={styles.button__text}>{children}</span>
-      {icon && iconPosition === 'right' && (
-        <span className={styles.button__icon}>{icon}</span>
-      )}
-      {loading && (
-        <span className={styles.button__loader}>
-          <div className={styles.button__spinner}></div>
-        </span>
-      )}
-    </>
-  )
+  const content = renderButtonContent({ icon, iconPosition, children, loading })
 
   if (href) {
     return (
@@ -96,4 +140,4 @@ const Button: React.FC<ButtonProps> = ({
   )
 }
 
-export default Button 
+export default Button

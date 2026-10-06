@@ -13,6 +13,73 @@ import { useAppConfig } from '@context'
 import { useI18n } from '@src/i18n'
 import { SimpleAuthModal } from '../SimpleAuthModal'
 import styles from './styles.module.css'
+type RenderAccountIdentityProps = {
+  user: import('../../../hooks/useAuth').AuthUser | null
+}
+
+function renderAccountIdentity({ user }: RenderAccountIdentityProps) {
+  return (
+    <div className={styles.identity}>
+      <strong>
+        {user?.firstName} {user?.lastName}
+      </strong>
+      <span>{user?.email}</span>
+    </div>
+  )
+}
+
+type RenderAccountMenuProps = {
+  accountOpen: boolean
+  panelId: string
+  user: import('../../../hooks/useAuth').AuthUser | null
+  setAccountOpen: import('react').Dispatch<
+    import('react').SetStateAction<boolean>
+  >
+  pt: boolean
+  isFeatureEnabled: (
+    feature: keyof import('../../../config/app.config').AppConfig['features']
+  ) => boolean
+  logout: () => void
+}
+
+function renderAccountMenu({
+  accountOpen,
+  panelId,
+  user,
+  setAccountOpen,
+  pt,
+  isFeatureEnabled,
+  logout,
+}: RenderAccountMenuProps) {
+  return (
+    accountOpen && (
+      <div className={styles.panel} id={panelId}>
+        {renderAccountIdentity({ user })}
+        {user?.isChatOwner && (
+          <Link to="/admin/chat" onClick={() => setAccountOpen(false)}>
+            <Inbox size={16} />
+            {pt ? 'Caixa de entrada' : 'Inbox'}
+          </Link>
+        )}
+        {!user?.isChatOwner && isFeatureEnabled('chat') && (
+          <Link to="/chat" onClick={() => setAccountOpen(false)}>
+            <MessageCircle size={16} />
+            {pt ? 'Minha conversa' : 'My conversation'}
+          </Link>
+        )}
+        <button
+          onClick={() => {
+            setAccountOpen(false)
+            logout()
+          }}
+        >
+          <LogOut size={16} />
+          {pt ? 'Sair' : 'Sign out'}
+        </button>
+      </div>
+    )
+  )
+}
 
 export default function AccountControl() {
   const { user, isAuthenticated, login, logout } = useAuth()
@@ -73,37 +140,15 @@ export default function AccountControl() {
             </span>
             <ChevronDown size={13} aria-hidden="true" />
           </button>
-          {accountOpen && (
-            <div className={styles.panel} id={panelId}>
-              <div className={styles.identity}>
-                <strong>
-                  {user?.firstName} {user?.lastName}
-                </strong>
-                <span>{user?.email}</span>
-              </div>
-              {user?.isChatOwner && (
-                <Link to="/admin/chat" onClick={() => setAccountOpen(false)}>
-                  <Inbox size={16} />
-                  {pt ? 'Caixa de entrada' : 'Inbox'}
-                </Link>
-              )}
-              {!user?.isChatOwner && isFeatureEnabled('chat') && (
-                <Link to="/chat" onClick={() => setAccountOpen(false)}>
-                  <MessageCircle size={16} />
-                  {pt ? 'Minha conversa' : 'My conversation'}
-                </Link>
-              )}
-              <button
-                onClick={() => {
-                  setAccountOpen(false)
-                  logout()
-                }}
-              >
-                <LogOut size={16} />
-                {pt ? 'Sair' : 'Sign out'}
-              </button>
-            </div>
-          )}
+          {renderAccountMenu({
+            accountOpen,
+            panelId,
+            user,
+            setAccountOpen,
+            pt,
+            isFeatureEnabled,
+            logout,
+          })}
         </>
       ) : (
         <button

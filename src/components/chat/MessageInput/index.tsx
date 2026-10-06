@@ -19,6 +19,86 @@ interface MessageInputProps {
   draftKey: string
   workspace?: boolean
 }
+type RenderMessageTextareaProps = {
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>
+  pt: boolean
+  maxLength: number
+  message: string
+  handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  handleKeyDown: (e: React.KeyboardEvent) => void
+  cooldownRemaining: number
+  placeholder: string
+  disabled: boolean
+  draft: import('../../../services/chatDrafts').ChatDraft
+}
+
+function renderMessageTextarea({
+  textareaRef,
+  pt,
+  maxLength,
+  message,
+  handleChange,
+  handleKeyDown,
+  cooldownRemaining,
+  placeholder,
+  disabled,
+  draft,
+}: RenderMessageTextareaProps) {
+  return (
+    <textarea
+      ref={textareaRef}
+      aria-label={pt ? 'Sua mensagem' : 'Your message'}
+      maxLength={maxLength}
+      value={message}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      placeholder={
+        cooldownRemaining > 0
+          ? `${pt ? 'Aguarde' : 'Wait'} ${cooldownRemaining}s...`
+          : placeholder
+      }
+      disabled={disabled || draft.pending || cooldownRemaining > 0}
+      className={styles.messageTextarea}
+      rows={1}
+    />
+  )
+}
+
+type RenderSendMessageButtonProps = {
+  pt: boolean
+  message: string
+  disabled: boolean
+  draft: import('../../../services/chatDrafts').ChatDraft
+  cooldownRemaining: number
+}
+
+function renderSendMessageButton({
+  pt,
+  message,
+  disabled,
+  draft,
+  cooldownRemaining,
+}: RenderSendMessageButtonProps) {
+  return (
+    <button
+      type="submit"
+      aria-label={pt ? 'Enviar mensagem' : 'Send message'}
+      disabled={
+        !message.trim() || disabled || draft.pending || cooldownRemaining > 0
+      }
+      className={styles.sendButton}
+      title={
+        cooldownRemaining > 0
+          ? `${pt ? 'Aguarde' : 'Wait'} ${cooldownRemaining}s`
+          : pt
+            ? 'Enviar mensagem (Enter)'
+            : 'Send message (Enter)'
+      }
+    >
+      <Send size={20} aria-hidden="true" />
+    </button>
+  )
+}
 
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
@@ -55,7 +135,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault()
-      handleSubmit(e)
+      void handleSubmit(e)
     }
   }
 
@@ -82,47 +162,32 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(event) => {
+        void handleSubmit(event)
+      }}
       className={`${styles.messageInputContainer} ${workspace ? styles.workspace : ''}`}
     >
       <div className={styles.inputWrapper}>
-        <textarea
-          ref={textareaRef}
-          aria-label={pt ? 'Sua mensagem' : 'Your message'}
-          maxLength={maxLength}
-          value={message}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder={
-            cooldownRemaining > 0
-              ? `${pt ? 'Aguarde' : 'Wait'} ${cooldownRemaining}s...`
-              : placeholder
-          }
-          disabled={disabled || draft.pending || cooldownRemaining > 0}
-          className={styles.messageTextarea}
-          rows={1}
-        />
+        {renderMessageTextarea({
+          textareaRef,
+          pt,
+          maxLength,
+          message,
+          handleChange,
+          handleKeyDown,
+          cooldownRemaining,
+          placeholder,
+          disabled,
+          draft,
+        })}
 
-        <button
-          type="submit"
-          aria-label={pt ? 'Enviar mensagem' : 'Send message'}
-          disabled={
-            !message.trim() ||
-            disabled ||
-            draft.pending ||
-            cooldownRemaining > 0
-          }
-          className={styles.sendButton}
-          title={
-            cooldownRemaining > 0
-              ? `${pt ? 'Aguarde' : 'Wait'} ${cooldownRemaining}s`
-              : pt
-                ? 'Enviar mensagem (Enter)'
-                : 'Send message (Enter)'
-          }
-        >
-          <Send size={20} aria-hidden="true" />
-        </button>
+        {renderSendMessageButton({
+          pt,
+          message,
+          disabled,
+          draft,
+          cooldownRemaining,
+        })}
       </div>
 
       <div className={styles.inputFooter}>

@@ -6,6 +6,109 @@ import PatternCanvas from '@components/generative/PatternCanvas'
 import CosmicControlPanel from '@components/generative/CosmicControlPanel'
 import type { CosmicSettings } from '@components/generative/PatternCanvas/InfiniteGenerator'
 import styles from './styles.module.css'
+type RenderCosmosToolbarProps = {
+  pt: boolean
+  setPaused: import('react').Dispatch<import('react').SetStateAction<boolean>>
+  paused: boolean
+  setShowControlPanel: import('react').Dispatch<
+    import('react').SetStateAction<boolean>
+  >
+  showControlPanel: boolean
+  setHideUI: import('react').Dispatch<import('react').SetStateAction<boolean>>
+  helpRef: import('react').RefObject<HTMLDialogElement | null>
+}
+
+function renderCosmosToolbar({
+  pt,
+  setPaused,
+  paused,
+  setShowControlPanel,
+  showControlPanel,
+  setHideUI,
+  helpRef,
+}: RenderCosmosToolbarProps) {
+  return (
+    <header className={styles.toolbar}>
+      <Link to="/">← {pt ? 'Estudos' : 'Studies'}</Link>
+      <div className={styles.actions}>
+        <button onClick={() => setPaused(!paused)} aria-pressed={paused}>
+          {paused ? (
+            <Play size={16} aria-hidden="true" />
+          ) : (
+            <Pause size={16} aria-hidden="true" />
+          )}
+          {paused
+            ? pt
+              ? 'Retomar animação'
+              : 'Resume animation'
+            : pt
+              ? 'Pausar animação'
+              : 'Pause animation'}
+        </button>
+        <button
+          onClick={() => setShowControlPanel(!showControlPanel)}
+          aria-expanded={showControlPanel}
+          aria-controls="cosmic-controls"
+        >
+          <Settings2 size={16} aria-hidden="true" />
+          {pt ? 'Ajustar cena' : 'Adjust scene'}
+        </button>
+        <button
+          onClick={() => {
+            setShowControlPanel(false)
+            setHideUI(true)
+          }}
+        >
+          <Maximize2 size={16} aria-hidden="true" />
+          {pt ? 'Modo imersivo' : 'Immersive mode'}
+        </button>
+        <button onClick={() => helpRef.current?.showModal()}>
+          <HelpCircle size={16} aria-hidden="true" />
+          {pt ? 'Como explorar' : 'How to explore'}
+        </button>
+      </div>
+    </header>
+  )
+}
+
+type RenderCosmosHelpProps = {
+  helpRef: import('react').RefObject<HTMLDialogElement | null>
+  pt: boolean
+}
+
+function renderCosmosHelp({ helpRef, pt }: RenderCosmosHelpProps) {
+  return (
+    <dialog
+      ref={helpRef}
+      className={styles.helpDialog}
+      aria-labelledby="cosmos-help-title"
+    >
+      <h2 id="cosmos-help-title">
+        {pt ? 'Explore no seu ritmo' : 'Explore at your own pace'}
+      </h2>
+      <ol>
+        <li>
+          {pt
+            ? 'Em Ajustar cena, escolha uma paleta e altere a densidade dos elementos.'
+            : 'In Adjust scene, choose a palette and change the element density.'}
+        </li>
+        <li>
+          {pt
+            ? 'Use Pausar animação para observar um quadro com calma.'
+            : 'Use Pause animation to take a closer look at a frame.'}
+        </li>
+        <li>
+          {pt
+            ? 'O modo imersivo esconde os controles. Esc os traz de volta.'
+            : 'Immersive mode hides the controls. Esc brings them back.'}
+        </li>
+      </ol>
+      <form method="dialog">
+        <button>{pt ? 'Entendi, explorar' : 'Got it, explore'}</button>
+      </form>
+    </dialog>
+  )
+}
 
 const GenerativeArt = () => {
   const { lang } = useI18n()
@@ -42,46 +145,15 @@ const GenerativeArt = () => {
       </div>
       {!hideUI ? (
         <>
-          <header className={styles.toolbar}>
-            <Link to="/">← {pt ? 'Estudos' : 'Studies'}</Link>
-            <div className={styles.actions}>
-              <button onClick={() => setPaused(!paused)} aria-pressed={paused}>
-                {paused ? (
-                  <Play size={16} aria-hidden="true" />
-                ) : (
-                  <Pause size={16} aria-hidden="true" />
-                )}
-                {paused
-                  ? pt
-                    ? 'Retomar animação'
-                    : 'Resume animation'
-                  : pt
-                    ? 'Pausar animação'
-                    : 'Pause animation'}
-              </button>
-              <button
-                onClick={() => setShowControlPanel(!showControlPanel)}
-                aria-expanded={showControlPanel}
-                aria-controls="cosmic-controls"
-              >
-                <Settings2 size={16} aria-hidden="true" />
-                {pt ? 'Ajustar cena' : 'Adjust scene'}
-              </button>
-              <button
-                onClick={() => {
-                  setShowControlPanel(false)
-                  setHideUI(true)
-                }}
-              >
-                <Maximize2 size={16} aria-hidden="true" />
-                {pt ? 'Modo imersivo' : 'Immersive mode'}
-              </button>
-              <button onClick={() => helpRef.current?.showModal()}>
-                <HelpCircle size={16} aria-hidden="true" />
-                {pt ? 'Como explorar' : 'How to explore'}
-              </button>
-            </div>
-          </header>
+          {renderCosmosToolbar({
+            pt,
+            setPaused,
+            paused,
+            setShowControlPanel,
+            showControlPanel,
+            setHideUI,
+            helpRef,
+          })}
           <div className={styles.intro}>
             <p>LAB / CANVAS</p>
             <h1>
@@ -117,35 +189,7 @@ const GenerativeArt = () => {
           onToggle={() => setShowControlPanel(false)}
         />
       )}
-      <dialog
-        ref={helpRef}
-        className={styles.helpDialog}
-        aria-labelledby="cosmos-help-title"
-      >
-        <h2 id="cosmos-help-title">
-          {pt ? 'Explore no seu ritmo' : 'Explore at your own pace'}
-        </h2>
-        <ol>
-          <li>
-            {pt
-              ? 'Em Ajustar cena, escolha uma paleta e altere a densidade dos elementos.'
-              : 'In Adjust scene, choose a palette and change the element density.'}
-          </li>
-          <li>
-            {pt
-              ? 'Use Pausar animação para observar um quadro com calma.'
-              : 'Use Pause animation to take a closer look at a frame.'}
-          </li>
-          <li>
-            {pt
-              ? 'O modo imersivo esconde os controles. Esc os traz de volta.'
-              : 'Immersive mode hides the controls. Esc brings them back.'}
-          </li>
-        </ol>
-        <form method="dialog">
-          <button>{pt ? 'Entendi, explorar' : 'Got it, explore'}</button>
-        </form>
-      </dialog>
+      {renderCosmosHelp({ helpRef, pt })}
     </main>
   )
 }

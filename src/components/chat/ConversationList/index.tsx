@@ -1,3 +1,4 @@
+import { logger } from '@src/services/logger'
 import React, { useState, useEffect, useRef } from 'react'
 import { chatService } from '../../../services/chatService'
 import type {
@@ -18,6 +19,193 @@ interface ConversationListProps {
   ) => void
   selectedUserId?: string
   workspace?: boolean
+}
+type RenderInboxHeaderProps = {
+  pt: boolean
+  conversations: ChatConversation[]
+  loadConversations: () => Promise<void>
+  refreshing: boolean
+}
+
+function renderInboxHeader({
+  pt,
+  conversations,
+  loadConversations,
+  refreshing,
+}: RenderInboxHeaderProps) {
+  return (
+    <div className={styles.header}>
+      <div>
+        <span className={styles.kicker}>
+          {pt ? 'MENSAGENS DIRETAS' : 'DIRECT MESSAGES'}
+        </span>
+        <h3>
+          {pt ? 'Conversas' : 'Conversations'}{' '}
+          <span className={styles.total}>{conversations.length}</span>
+        </h3>
+      </div>
+      <button
+        onClick={() => {
+          void loadConversations()
+        }}
+        className={styles.refreshButton}
+        disabled={refreshing}
+        aria-label={pt ? 'Atualizar conversas' : 'Refresh conversations'}
+        title={pt ? 'Atualizar conversas' : 'Refresh conversations'}
+      >
+        <RefreshCw size={20} />
+      </button>
+    </div>
+  )
+}
+
+type RenderInboxFiltersProps = {
+  query: string
+  setQuery: React.Dispatch<React.SetStateAction<string>>
+  pt: boolean
+  unreadOnly: boolean
+  setUnreadOnly: React.Dispatch<React.SetStateAction<boolean>>
+  conversations: ChatConversation[]
+}
+
+function renderInboxFilters({
+  query,
+  setQuery,
+  pt,
+  unreadOnly,
+  setUnreadOnly,
+  conversations,
+}: RenderInboxFiltersProps) {
+  return (
+    <div className={styles.filters}>
+      <div className={styles.searchField}>
+        <Search size={17} aria-hidden="true" />
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label={pt ? 'Buscar conversa' : 'Search conversations'}
+          placeholder={pt ? 'Buscar nome ou email' : 'Search name or email'}
+        />
+      </div>
+      <div
+        className={styles.filterTabs}
+        aria-label={pt ? 'Filtrar conversas' : 'Filter conversations'}
+      >
+        <button aria-pressed={!unreadOnly} onClick={() => setUnreadOnly(false)}>
+          {pt ? 'Todas' : 'All'}
+        </button>
+        <button aria-pressed={unreadOnly} onClick={() => setUnreadOnly(true)}>
+          {pt ? 'Não lidas' : 'Unread'}
+          <span>{conversations.filter((c) => c.unreadCount > 0).length}</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+type RenderInboxConversationsProps = {
+  conversations: ChatConversation[]
+  filtered: ChatConversation[]
+  pt: boolean
+  error: boolean
+  selectedUserId: string | undefined
+  onSelectConversation: (
+    userId: string,
+    conversation?: ChatConversation
+  ) => void
+  formatLastMessageTime: (timestamp: ChatTimestamp) => string
+  truncateMessage: (message: string, maxLength?: number) => string
+}
+
+function renderInboxConversations({
+  conversations,
+  filtered,
+  pt,
+  error,
+  selectedUserId,
+  onSelectConversation,
+  formatLastMessageTime,
+  truncateMessage,
+}: RenderInboxConversationsProps) {
+  return (
+    <div className={styles.conversationsContainer}>
+      {conversations.length > 0 && filtered.length === 0 && (
+        <p className={styles.emptyState}>
+          {pt
+            ? 'Nenhuma conversa corresponde aos filtros.'
+            : 'No conversations match these filters.'}
+        </p>
+      )}
+      {conversations.length === 0 && !error ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <MessageCircle size={28} />
+          </div>
+          <h4>{pt ? 'Nenhuma conversa' : 'No conversations'}</h4>
+          <p>
+            {pt
+              ? 'Ainda não há conversas iniciadas'
+              : 'No conversations have been started yet'}
+          </p>
+        </div>
+      ) : (
+        filtered.map((conversation) => (
+          <button
+            type="button"
+            key={conversation.userId}
+            className={`${styles.conversationItem} ${
+              selectedUserId === conversation.userId ? styles.selected : ''
+            }`}
+            onClick={() =>
+              onSelectConversation(conversation.userId, conversation)
+            }
+            aria-current={
+              selectedUserId === conversation.userId ? 'true' : undefined
+            }
+          >
+            <div className={styles.conversationAvatar}>
+              <span>
+                {conversation.userName
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((part) => part.charAt(0))
+                  .join('')
+                  .toUpperCase()}
+              </span>
+              {conversation.isOnline && (
+                <div className={styles.onlineIndicator}></div>
+              )}
+            </div>
+
+            <div className={styles.conversationContent}>
+              <div className={styles.conversationHeader}>
+                <h4 className={styles.conversationName}>
+                  {conversation.userName}
+                </h4>
+                <span className={styles.conversationTime}>
+                  {formatLastMessageTime(conversation.lastMessageTime)}
+                </span>
+              </div>
+
+              <div className={styles.conversationFooter}>
+                <p className={styles.lastMessage}>
+                  {truncateMessage(conversation.lastMessage)}
+                </p>
+                {conversation.unreadCount > 0 && (
+                  <div className={styles.unreadBadge}>
+                    {conversation.unreadCount > 99
+                      ? '99+'
+                      : conversation.unreadCount}
+                  </div>
+                )}
+              </div>
+            </div>
+          </button>
+        ))
+      )}
+    </div>
+  )
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
@@ -40,7 +228,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
     alive.current = true
     void loadConversations()
 
-    const interval = setInterval(loadConversations, 30000)
+    const interval = setInterval(() => {
+      void loadConversations()
+    }, 30000)
     const refresh = () => {
       void loadConversations()
     }
@@ -65,7 +255,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         setError(false)
       }
     } catch (error) {
-      console.error('Erro ao carregar conversas:', error)
+      logger.error('Erro ao carregar conversas:', error)
       if (alive.current) setError(true)
     } finally {
       inFlight.current = false
@@ -125,54 +315,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
     <div
       className={`${styles.conversationList} ${workspace ? styles.workspace : ''}`}
     >
-      <div className={styles.header}>
-        <div>
-          <span className={styles.kicker}>
-            {pt ? 'MENSAGENS DIRETAS' : 'DIRECT MESSAGES'}
-          </span>
-          <h3>
-            {pt ? 'Conversas' : 'Conversations'}{' '}
-            <span className={styles.total}>{conversations.length}</span>
-          </h3>
-        </div>
-        <button
-          onClick={loadConversations}
-          className={styles.refreshButton}
-          disabled={refreshing}
-          aria-label={pt ? 'Atualizar conversas' : 'Refresh conversations'}
-          title={pt ? 'Atualizar conversas' : 'Refresh conversations'}
-        >
-          <RefreshCw size={20} />
-        </button>
-      </div>
+      {renderInboxHeader({ pt, conversations, loadConversations, refreshing })}
 
-      <div className={styles.filters}>
-        <div className={styles.searchField}>
-          <Search size={17} aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label={pt ? 'Buscar conversa' : 'Search conversations'}
-            placeholder={pt ? 'Buscar nome ou email' : 'Search name or email'}
-          />
-        </div>
-        <div
-          className={styles.filterTabs}
-          aria-label={pt ? 'Filtrar conversas' : 'Filter conversations'}
-        >
-          <button
-            aria-pressed={!unreadOnly}
-            onClick={() => setUnreadOnly(false)}
-          >
-            {pt ? 'Todas' : 'All'}
-          </button>
-          <button aria-pressed={unreadOnly} onClick={() => setUnreadOnly(true)}>
-            {pt ? 'Não lidas' : 'Unread'}
-            <span>{conversations.filter((c) => c.unreadCount > 0).length}</span>
-          </button>
-        </div>
-      </div>
+      {renderInboxFilters({
+        query,
+        setQuery,
+        pt,
+        unreadOnly,
+        setUnreadOnly,
+        conversations,
+      })}
       {error && (
         <p role="alert" className={styles.error}>
           {pt
@@ -180,82 +332,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
             : 'Update failed. Use refresh to try again.'}
         </p>
       )}
-      <div className={styles.conversationsContainer}>
-        {conversations.length > 0 && filtered.length === 0 && (
-          <p className={styles.emptyState}>
-            {pt
-              ? 'Nenhuma conversa corresponde aos filtros.'
-              : 'No conversations match these filters.'}
-          </p>
-        )}
-        {conversations.length === 0 && !error ? (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>
-              <MessageCircle size={28} />
-            </div>
-            <h4>{pt ? 'Nenhuma conversa' : 'No conversations'}</h4>
-            <p>
-              {pt
-                ? 'Ainda não há conversas iniciadas'
-                : 'No conversations have been started yet'}
-            </p>
-          </div>
-        ) : (
-          filtered.map((conversation) => (
-            <button
-              type="button"
-              key={conversation.userId}
-              className={`${styles.conversationItem} ${
-                selectedUserId === conversation.userId ? styles.selected : ''
-              }`}
-              onClick={() =>
-                onSelectConversation(conversation.userId, conversation)
-              }
-              aria-current={
-                selectedUserId === conversation.userId ? 'true' : undefined
-              }
-            >
-              <div className={styles.conversationAvatar}>
-                <span>
-                  {conversation.userName
-                    .split(/\s+/)
-                    .slice(0, 2)
-                    .map((part) => part.charAt(0))
-                    .join('')
-                    .toUpperCase()}
-                </span>
-                {conversation.isOnline && (
-                  <div className={styles.onlineIndicator}></div>
-                )}
-              </div>
-
-              <div className={styles.conversationContent}>
-                <div className={styles.conversationHeader}>
-                  <h4 className={styles.conversationName}>
-                    {conversation.userName}
-                  </h4>
-                  <span className={styles.conversationTime}>
-                    {formatLastMessageTime(conversation.lastMessageTime)}
-                  </span>
-                </div>
-
-                <div className={styles.conversationFooter}>
-                  <p className={styles.lastMessage}>
-                    {truncateMessage(conversation.lastMessage)}
-                  </p>
-                  {conversation.unreadCount > 0 && (
-                    <div className={styles.unreadBadge}>
-                      {conversation.unreadCount > 99
-                        ? '99+'
-                        : conversation.unreadCount}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </button>
-          ))
-        )}
-      </div>
+      {renderInboxConversations({
+        conversations,
+        filtered,
+        pt,
+        error,
+        selectedUserId,
+        onSelectConversation,
+        formatLastMessageTime,
+        truncateMessage,
+      })}
       {workspace && (
         <div className={styles.listFooter}>
           <span />

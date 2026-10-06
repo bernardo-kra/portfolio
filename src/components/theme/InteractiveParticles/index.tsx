@@ -11,30 +11,58 @@ interface Particle {
   opacity: number
 }
 
+function drawParticle(ctx: CanvasRenderingContext2D, particle: Particle) {
+  ctx.beginPath()
+  ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+  ctx.fillStyle = particle.color
+  ctx.globalAlpha = particle.opacity
+  ctx.fill()
+}
+
+function attractParticle(
+  particle: Particle,
+  pointer: { x: number; y: number; isActive: boolean }
+) {
+  if (pointer.isActive) {
+    const dx = pointer.x - particle.x
+    const dy = pointer.y - particle.y
+    const distance = Math.sqrt(dx * dx + dy * dy)
+
+    if (distance < 100) {
+      const force = (100 - distance) / 100
+      particle.vx += (dx / distance) * force * 0.02
+      particle.vy += (dy / distance) * force * 0.02
+    }
+  }
+}
+
 const InteractiveParticles: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | null>(null)
   const particles = useRef<Particle[]>([])
   const mouse = useRef({ x: 0, y: 0, isActive: false })
 
-  const createParticles = useCallback((count: number, width: number, height: number) => {
-    const colors = [
-      'rgba(100, 108, 255, 0.6)',
-      'rgba(255, 255, 255, 0.4)',
-      'rgba(100, 108, 255, 0.3)',
-      'rgba(255, 255, 255, 0.2)',
-    ]
+  const createParticles = useCallback(
+    (count: number, width: number, height: number) => {
+      const colors = [
+        'rgba(100, 108, 255, 0.6)',
+        'rgba(255, 255, 255, 0.4)',
+        'rgba(100, 108, 255, 0.3)',
+        'rgba(255, 255, 255, 0.2)',
+      ]
 
-    particles.current = Array.from({ length: count }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      size: Math.random() * 3 + 1,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      opacity: Math.random() * 0.5 + 0.3,
-    }))
-  }, [])
+      particles.current = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        opacity: Math.random() * 0.5 + 0.3,
+      }))
+    },
+    []
+  )
 
   const animate = useCallback(() => {
     const canvas = canvasRef.current
@@ -48,17 +76,7 @@ const InteractiveParticles: React.FC = () => {
     ctx.clearRect(0, 0, width, height)
 
     particles.current.forEach((particle, index) => {
-      if (mouse.current.isActive) {
-        const dx = mouse.current.x - particle.x
-        const dy = mouse.current.y - particle.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        
-        if (distance < 100) {
-          const force = (100 - distance) / 100
-          particle.vx += (dx / distance) * force * 0.02
-          particle.vy += (dy / distance) * force * 0.02
-        }
-      }
+      attractParticle(particle, mouse.current)
 
       particle.x += particle.vx
       particle.y += particle.vy
@@ -69,19 +87,15 @@ const InteractiveParticles: React.FC = () => {
       particle.vx *= 0.99
       particle.vy *= 0.99
 
-      ctx.beginPath()
-      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-      ctx.fillStyle = particle.color
-      ctx.globalAlpha = particle.opacity
-      ctx.fill()
+      drawParticle(ctx, particle)
 
       if (index < particles.current.length - 1) {
         const nextParticle = particles.current[index + 1]
         const distance = Math.sqrt(
-          Math.pow(particle.x - nextParticle.x, 2) + 
-          Math.pow(particle.y - nextParticle.y, 2)
+          Math.pow(particle.x - nextParticle.x, 2) +
+            Math.pow(particle.y - nextParticle.y, 2)
         )
-        
+
         if (distance < 80) {
           ctx.beginPath()
           ctx.moveTo(particle.x, particle.y)

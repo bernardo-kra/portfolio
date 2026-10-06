@@ -8,6 +8,236 @@ interface CosmicControlPanelProps {
   isVisible: boolean
   onToggle: () => void
 }
+type RenderDensityControlsProps = {
+  activeTab: 'time' | 'density' | 'visual'
+  settings: CosmicSettings
+  handleSliderChange: (key: keyof CosmicSettings, value: number) => void
+}
+
+function renderDensityControls({
+  activeTab,
+  settings,
+  handleSliderChange,
+}: RenderDensityControlsProps) {
+  return (
+    activeTab === 'density' && (
+      <div className={styles.section}>
+        <h4 className={styles.sectionTitle}>Densidade dos Elementos</h4>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>⭐ Estrelas</span>
+            <span className={styles.value}>
+              {Math.round(settings.starDensity * 100)}%
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Densidade de estrelas"
+            min="0"
+            max="1"
+            step="0.1"
+            value={settings.starDensity}
+            onChange={(e) =>
+              handleSliderChange('starDensity', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>🌌 Nebulosas</span>
+            <span className={styles.value}>
+              {Math.round(settings.nebulaDensity * 100)}%
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Densidade de nebulosas"
+            min="0"
+            max="1"
+            step="0.1"
+            value={settings.nebulaDensity}
+            onChange={(e) =>
+              handleSliderChange('nebulaDensity', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>✨ Poeira Cósmica</span>
+            <span className={styles.value}>
+              {Math.round(settings.dustDensity * 100)}%
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Densidade de poeira"
+            min="0"
+            max="1"
+            step="0.1"
+            value={settings.dustDensity}
+            onChange={(e) =>
+              handleSliderChange('dustDensity', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>🪨 Asteroides</span>
+            <span className={styles.value}>
+              {Math.round(settings.asteroidDensity * 100)}%
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Densidade de asteroides"
+            min="0"
+            max="1"
+            step="0.1"
+            value={settings.asteroidDensity}
+            onChange={(e) =>
+              handleSliderChange('asteroidDensity', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>☄️ Cometas</span>
+            <span className={styles.value}>
+              {Math.round(settings.cometDensity * 100)}%
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Densidade de cometas"
+            min="0"
+            max="1"
+            step="0.1"
+            value={settings.cometDensity}
+            onChange={(e) =>
+              handleSliderChange('cometDensity', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+      </div>
+    )
+  )
+}
+
+type RenderPaletteControlsProps = {
+  activeTab: 'time' | 'density' | 'visual'
+  colorPalettes: { id: string; name: string; colors: string[] }[]
+  settings: CosmicSettings
+  handlePaletteChange: (paletteId: string) => void
+}
+
+function renderPaletteControls({
+  activeTab,
+  colorPalettes,
+  settings,
+  handlePaletteChange,
+}: RenderPaletteControlsProps) {
+  return (
+    activeTab === 'visual' && (
+      <div className={styles.section}>
+        <h4 className={styles.sectionTitle}>Paleta de Cores</h4>
+        <div className={styles.paletteGrid}>
+          {colorPalettes.map((palette) => (
+            <button
+              key={palette.id}
+              className={`${styles.paletteButton} ${settings.colorPalette === palette.id ? styles.active : ''}`}
+              onClick={() => handlePaletteChange(palette.id)}
+              title={palette.name}
+              aria-pressed={settings.colorPalette === palette.id}
+            >
+              <div className={styles.palettePreview}>
+                {palette.colors.map((color, index) => (
+                  <div
+                    key={index}
+                    className={styles.colorSwatch}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
+              </div>
+              <span className={styles.paletteName}>{palette.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  )
+}
+
+type RenderTimeControlsProps = {
+  activeTab: 'time' | 'density' | 'visual'
+  settings: CosmicSettings
+  handleSliderChange: (key: keyof CosmicSettings, value: number) => void
+}
+
+function renderTimeControls({
+  activeTab,
+  settings,
+  handleSliderChange,
+}: RenderTimeControlsProps) {
+  return (
+    activeTab === 'time' && (
+      <div className={styles.section}>
+        <h4 className={styles.sectionTitle}>Velocidade Temporal</h4>
+
+        <div className={styles.sliderGroup}>
+          <label className={styles.sliderLabel}>
+            <span>⏱️ Velocidade</span>
+            <span className={styles.value}>
+              {settings.timeSpeed.toFixed(1)}x
+            </span>
+          </label>
+          <input
+            type="range"
+            aria-label="Velocidade da animação"
+            min="0.1"
+            max="5"
+            step="0.1"
+            value={settings.timeSpeed}
+            onChange={(e) =>
+              handleSliderChange('timeSpeed', parseFloat(e.target.value))
+            }
+            className={styles.slider}
+          />
+        </div>
+
+        <div className={styles.timePresets}>
+          <button
+            className={styles.presetButton}
+            onClick={() => handleSliderChange('timeSpeed', 0.1)}
+          >
+            🐌 Lento
+          </button>
+          <button
+            className={styles.presetButton}
+            onClick={() => handleSliderChange('timeSpeed', 1.0)}
+          >
+            ⏯️ Normal
+          </button>
+          <button
+            className={styles.presetButton}
+            onClick={() => handleSliderChange('timeSpeed', 3.0)}
+          >
+            ⚡ Rápido
+          </button>
+        </div>
+      </div>
+    )
+  )
+}
 
 const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
   settings,
@@ -133,198 +363,16 @@ const CosmicControlPanel: React.FC<CosmicControlPanelProps> = ({
       </div>
 
       <div className={styles.tabContent}>
-        {activeTab === 'density' && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Densidade dos Elementos</h4>
+        {renderDensityControls({ activeTab, settings, handleSliderChange })}
 
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>⭐ Estrelas</span>
-                <span className={styles.value}>
-                  {Math.round(settings.starDensity * 100)}%
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Densidade de estrelas"
-                min="0"
-                max="1"
-                step="0.1"
-                value={settings.starDensity}
-                onChange={(e) =>
-                  handleSliderChange('starDensity', parseFloat(e.target.value))
-                }
-                className={styles.slider}
-              />
-            </div>
+        {renderPaletteControls({
+          activeTab,
+          colorPalettes,
+          settings,
+          handlePaletteChange,
+        })}
 
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>🌌 Nebulosas</span>
-                <span className={styles.value}>
-                  {Math.round(settings.nebulaDensity * 100)}%
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Densidade de nebulosas"
-                min="0"
-                max="1"
-                step="0.1"
-                value={settings.nebulaDensity}
-                onChange={(e) =>
-                  handleSliderChange(
-                    'nebulaDensity',
-                    parseFloat(e.target.value)
-                  )
-                }
-                className={styles.slider}
-              />
-            </div>
-
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>✨ Poeira Cósmica</span>
-                <span className={styles.value}>
-                  {Math.round(settings.dustDensity * 100)}%
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Densidade de poeira"
-                min="0"
-                max="1"
-                step="0.1"
-                value={settings.dustDensity}
-                onChange={(e) =>
-                  handleSliderChange('dustDensity', parseFloat(e.target.value))
-                }
-                className={styles.slider}
-              />
-            </div>
-
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>🪨 Asteroides</span>
-                <span className={styles.value}>
-                  {Math.round(settings.asteroidDensity * 100)}%
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Densidade de asteroides"
-                min="0"
-                max="1"
-                step="0.1"
-                value={settings.asteroidDensity}
-                onChange={(e) =>
-                  handleSliderChange(
-                    'asteroidDensity',
-                    parseFloat(e.target.value)
-                  )
-                }
-                className={styles.slider}
-              />
-            </div>
-
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>☄️ Cometas</span>
-                <span className={styles.value}>
-                  {Math.round(settings.cometDensity * 100)}%
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Densidade de cometas"
-                min="0"
-                max="1"
-                step="0.1"
-                value={settings.cometDensity}
-                onChange={(e) =>
-                  handleSliderChange('cometDensity', parseFloat(e.target.value))
-                }
-                className={styles.slider}
-              />
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'visual' && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Paleta de Cores</h4>
-            <div className={styles.paletteGrid}>
-              {colorPalettes.map((palette) => (
-                <button
-                  key={palette.id}
-                  className={`${styles.paletteButton} ${settings.colorPalette === palette.id ? styles.active : ''}`}
-                  onClick={() => handlePaletteChange(palette.id)}
-                  title={palette.name}
-                  aria-pressed={settings.colorPalette === palette.id}
-                >
-                  <div className={styles.palettePreview}>
-                    {palette.colors.map((color, index) => (
-                      <div
-                        key={index}
-                        className={styles.colorSwatch}
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
-                  </div>
-                  <span className={styles.paletteName}>{palette.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'time' && (
-          <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Velocidade Temporal</h4>
-
-            <div className={styles.sliderGroup}>
-              <label className={styles.sliderLabel}>
-                <span>⏱️ Velocidade</span>
-                <span className={styles.value}>
-                  {settings.timeSpeed.toFixed(1)}x
-                </span>
-              </label>
-              <input
-                type="range"
-                aria-label="Velocidade da animação"
-                min="0.1"
-                max="5"
-                step="0.1"
-                value={settings.timeSpeed}
-                onChange={(e) =>
-                  handleSliderChange('timeSpeed', parseFloat(e.target.value))
-                }
-                className={styles.slider}
-              />
-            </div>
-
-            <div className={styles.timePresets}>
-              <button
-                className={styles.presetButton}
-                onClick={() => handleSliderChange('timeSpeed', 0.1)}
-              >
-                🐌 Lento
-              </button>
-              <button
-                className={styles.presetButton}
-                onClick={() => handleSliderChange('timeSpeed', 1.0)}
-              >
-                ⏯️ Normal
-              </button>
-              <button
-                className={styles.presetButton}
-                onClick={() => handleSliderChange('timeSpeed', 3.0)}
-              >
-                ⚡ Rápido
-              </button>
-            </div>
-          </div>
-        )}
+        {renderTimeControls({ activeTab, settings, handleSliderChange })}
       </div>
 
       <div className={styles.panelFooter}>

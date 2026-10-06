@@ -8,6 +8,87 @@ import {
   subscribeConsent,
 } from '@src/privacy/consent'
 import styles from './styles.module.css'
+type RenderPrivacyActionsProps = {
+  choose: (analytics: boolean) => void
+  pt: boolean
+  consent: string
+  setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>
+}
+
+function renderPrivacyActions({
+  choose,
+  pt,
+  consent,
+  setOpen,
+}: RenderPrivacyActionsProps) {
+  return (
+    <div className={styles.actions}>
+      <button onClick={() => choose(false)}>
+        {pt ? 'Somente necessários' : 'Necessary only'}
+      </button>
+      <button onClick={() => choose(true)}>
+        {pt ? 'Permitir análise' : 'Allow analytics'}
+      </button>
+      {consent !== 'unset' && (
+        <button onClick={() => setOpen(false)}>
+          {pt ? 'Fechar' : 'Close'}
+        </button>
+      )}
+    </div>
+  )
+}
+
+type RenderPrivacyBannerProps = {
+  pt: boolean
+  consent: string
+  choose: (analytics: boolean) => void
+  setOpen: import('react').Dispatch<import('react').SetStateAction<boolean>>
+  error: boolean
+}
+
+function renderPrivacyBanner({
+  pt,
+  consent,
+  choose,
+  setOpen,
+  error,
+}: RenderPrivacyBannerProps) {
+  return (
+    <aside
+      className={styles.banner}
+      aria-label={pt ? 'Preferências de privacidade' : 'Privacy preferences'}
+    >
+      <div>
+        <h2>
+          {pt ? 'Sua privacidade, sua escolha.' : 'Your privacy, your choice.'}
+        </h2>
+        <p>
+          {pt
+            ? 'Permitir Google Analytics para entender as visitas? O site funciona sem ele. Você pode mudar sua escolha depois.'
+            : 'Allow Google Analytics to understand visits? The site works without it. You can change your choice later.'}
+        </p>
+        <Link to="/privacy">
+          {pt ? 'Política de privacidade' : 'Privacy policy'}
+        </Link>
+        {consent === 'accepted' && (
+          <p>
+            {pt
+              ? 'Ao revogar, a página será recarregada para interromper a análise.'
+              : 'Revoking consent reloads the page to stop analytics.'}
+          </p>
+        )}
+      </div>
+      {renderPrivacyActions({ choose, pt, consent, setOpen })}
+      {error && (
+        <p role="alert">
+          {pt
+            ? 'Não foi possível salvar a preferência. A análise permanece bloqueada sem autorização salva.'
+            : 'Could not save the preference. Analytics remains blocked without saved permission.'}
+        </p>
+      )}
+    </aside>
+  )
+}
 
 export default function PrivacyControls() {
   const { lang } = useI18n()
@@ -36,55 +117,7 @@ export default function PrivacyControls() {
   return (
     <>
       {consent === 'unset' || open ? (
-        <aside
-          className={styles.banner}
-          aria-label={
-            pt ? 'Preferências de privacidade' : 'Privacy preferences'
-          }
-        >
-          <div>
-            <h2>
-              {pt
-                ? 'Sua privacidade, sua escolha.'
-                : 'Your privacy, your choice.'}
-            </h2>
-            <p>
-              {pt
-                ? 'Permitir Google Analytics para entender as visitas? O site funciona sem ele. Você pode mudar sua escolha depois.'
-                : 'Allow Google Analytics to understand visits? The site works without it. You can change your choice later.'}
-            </p>
-            <Link to="/privacy">
-              {pt ? 'Política de privacidade' : 'Privacy policy'}
-            </Link>
-            {consent === 'accepted' && (
-              <p>
-                {pt
-                  ? 'Ao revogar, a página será recarregada para interromper a análise.'
-                  : 'Revoking consent reloads the page to stop analytics.'}
-              </p>
-            )}
-          </div>
-          <div className={styles.actions}>
-            <button onClick={() => choose(false)}>
-              {pt ? 'Somente necessários' : 'Necessary only'}
-            </button>
-            <button onClick={() => choose(true)}>
-              {pt ? 'Permitir análise' : 'Allow analytics'}
-            </button>
-            {consent !== 'unset' && (
-              <button onClick={() => setOpen(false)}>
-                {pt ? 'Fechar' : 'Close'}
-              </button>
-            )}
-          </div>
-          {error && (
-            <p role="alert">
-              {pt
-                ? 'Não foi possível salvar a preferência. A análise permanece bloqueada sem autorização salva.'
-                : 'Could not save the preference. Analytics remains blocked without saved permission.'}
-            </p>
-          )}
-        </aside>
+        renderPrivacyBanner({ pt, consent, choose, setOpen, error })
       ) : (
         <button className={styles.reopen} onClick={() => setOpen(true)}>
           {pt ? 'Privacidade e cookies' : 'Privacy & cookies'}

@@ -11,6 +11,89 @@ import Education from '@components/portfolio/Education'
 import Footer from '@components/portfolio/Footer'
 import styles from './styles.module.css'
 import Ribbon from '@components/common/Ribbon'
+type RenderPortfolioStudiesProps = {
+  t: import('../../i18n/index').PortfolioI18n
+  studies: {
+    context: string
+    route: string
+    title: string
+    text: string
+    tag: string
+    visual: string
+    kind: string
+  }[]
+  lang: import('../../i18n/index').Lang
+}
+
+function renderPortfolioStudies({
+  t,
+  studies,
+  lang,
+}: RenderPortfolioStudiesProps) {
+  return (
+    <section
+      id="projetos"
+      className={styles.studies}
+      aria-labelledby="studies-title"
+    >
+      <div className={styles.sectionHeading}>
+        <div>
+          <p className={styles.eyebrow}>02 / {t.recruiter.learning}</p>
+          <h2 id="studies-title">{t.myProjects}</h2>
+          <p>{t.projectsSubtitle}</p>
+        </div>
+        <a
+          href={profile.github + '/portfolio'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.sourceLink}
+        >
+          <Github size={18} aria-hidden="true" />
+          {t.recruiter.viewCode}
+          <ArrowUpRight size={16} aria-hidden="true" />
+        </a>
+      </div>
+      <div className={styles.studyGrid}>
+        {studies.map((study, index) => (
+          <article key={study.route} className={styles.studyEntry}>
+            <Link
+              to={study.route}
+              className={styles.studyCard}
+              key={study.route}
+            >
+              <div
+                className={styles.studyVisual}
+                data-kind={study.kind}
+                aria-hidden="true"
+              >
+                <span className={styles.studyIndex}>0{index + 1}</span>
+                <span className={styles.studyMark}>{study.visual}</span>
+                <span className={styles.studyTag}>{study.tag}</span>
+              </div>
+              <div className={styles.studyBody}>
+                <h3>
+                  {study.title}
+                  <ArrowUpRight size={20} aria-hidden="true" />
+                </h3>
+                <p>{study.text}</p>
+                <span className={styles.studyAction}>
+                  {t.recruiter.openStudy} →
+                </span>
+              </div>
+            </Link>
+            <details className={styles.studyDetails}>
+              <summary>
+                {lang === 'pt' ? 'Como foi construído' : 'How it was built'}
+              </summary>
+              <p>{study.context}</p>
+            </details>
+          </article>
+        ))}
+      </div>
+      <p className={styles.studyNote}>{t.recruiter.studyNote}</p>
+    </section>
+  )
+}
 
 const Portfolio = () => {
   const { t, lang, setLang } = useI18n()
@@ -98,69 +181,7 @@ const Portfolio = () => {
         />
         <div className={styles.content}>
           <WorkExperienceTimeline />
-          <section
-            id="projetos"
-            className={styles.studies}
-            aria-labelledby="studies-title"
-          >
-            <div className={styles.sectionHeading}>
-              <div>
-                <p className={styles.eyebrow}>02 / {t.recruiter.learning}</p>
-                <h2 id="studies-title">{t.myProjects}</h2>
-                <p>{t.projectsSubtitle}</p>
-              </div>
-              <a
-                href={profile.github + '/portfolio'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.sourceLink}
-              >
-                <Github size={18} aria-hidden="true" />
-                {t.recruiter.viewCode}
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
-            </div>
-            <div className={styles.studyGrid}>
-              {studies.map((study, index) => (
-                <article key={study.route} className={styles.studyEntry}>
-                  <Link
-                    to={study.route}
-                    className={styles.studyCard}
-                    key={study.route}
-                  >
-                    <div
-                      className={styles.studyVisual}
-                      data-kind={study.kind}
-                      aria-hidden="true"
-                    >
-                      <span className={styles.studyIndex}>0{index + 1}</span>
-                      <span className={styles.studyMark}>{study.visual}</span>
-                      <span className={styles.studyTag}>{study.tag}</span>
-                    </div>
-                    <div className={styles.studyBody}>
-                      <h3>
-                        {study.title}
-                        <ArrowUpRight size={20} aria-hidden="true" />
-                      </h3>
-                      <p>{study.text}</p>
-                      <span className={styles.studyAction}>
-                        {t.recruiter.openStudy} →
-                      </span>
-                    </div>
-                  </Link>
-                  <details className={styles.studyDetails}>
-                    <summary>
-                      {lang === 'pt'
-                        ? 'Como foi construído'
-                        : 'How it was built'}
-                    </summary>
-                    <p>{study.context}</p>
-                  </details>
-                </article>
-              ))}
-            </div>
-            <p className={styles.studyNote}>{t.recruiter.studyNote}</p>
-          </section>
+          {renderPortfolioStudies({ t, studies, lang })}
           <section id="sobre" className={styles.about}>
             <AboutMe />
           </section>

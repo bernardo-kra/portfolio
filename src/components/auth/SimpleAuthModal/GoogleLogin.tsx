@@ -1,3 +1,7 @@
+import {
+  readAuthResponse,
+  readGoogleChallenge,
+} from '@src/services/authResponse'
 import { setAuthSession } from '@src/services/authSession'
 import { useEffect, useRef, useState } from 'react'
 import { appConfig } from '@src/config/app.config'
@@ -5,12 +9,82 @@ import { loadGoogleSignIn } from '@src/services/googleSignIn'
 import type { AuthUser } from '@hooks/useAuth'
 import { useI18n } from '@src/i18n'
 import styles from './styles.module.css'
+type RenderGoogleRetryProps = {
+  clientId: string | undefined
+  state: 'preparing' | 'ready' | 'signing' | 'error'
+  setAttempt: import('react').Dispatch<import('react').SetStateAction<number>>
+  pt: boolean
+}
 
-export default function GoogleLogin({
-  onSuccess,
-}: {
+function renderGoogleRetry({
+  clientId,
+  state,
+  setAttempt,
+  pt,
+}: RenderGoogleRetryProps) {
+  return (
+    (!clientId || state === 'error') && (
+      <button
+        type="button"
+        className={styles.googleButton}
+        disabled={!clientId}
+        onClick={() => setAttempt((value) => value + 1)}
+      >
+        {clientId
+          ? pt
+            ? 'Tentar Google novamente'
+            : 'Retry Google sign-in'
+          : pt
+            ? 'Google indisponível'
+            : 'Google unavailable'}
+      </button>
+    )
+  )
+}
+
+type RenderGoogleControlProps = {
+  clientId: string | undefined
+  state: 'preparing' | 'ready' | 'signing' | 'error'
+  target: import('react').RefObject<HTMLDivElement | null>
+  pt: boolean
+  setAttempt: import('react').Dispatch<import('react').SetStateAction<number>>
+}
+
+function renderGoogleControl({
+  clientId,
+  state,
+  target,
+  pt,
+  setAttempt,
+}: RenderGoogleControlProps) {
+  return (
+    <div
+      className={styles.googleControl}
+      aria-busy={!!clientId && (state === 'preparing' || state === 'signing')}
+    >
+      <div ref={target} hidden={!clientId || state !== 'ready'} />
+      {clientId && (state === 'preparing' || state === 'signing') && (
+        <p className={styles.googleStatus} role="status">
+          <span className={styles.spinner} aria-hidden="true" />
+          {state === 'preparing'
+            ? pt
+              ? 'Preparando login Google…'
+              : 'Preparing Google sign-in…'
+            : pt
+              ? 'Validando sua conta…'
+              : 'Verifying your account…'}
+        </p>
+      )}
+      {renderGoogleRetry({ clientId, state, setAttempt, pt })}
+    </div>
+  )
+}
+
+type GoogleLoginProps = {
   onSuccess: (user: AuthUser) => void
-}) {
+}
+
+export default function GoogleLogin({ onSuccess }: GoogleLoginProps) {
   const { lang } = useI18n()
   const pt = lang === 'pt'
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
@@ -53,7 +127,7 @@ export default function GoogleLogin({
             ]),
           }
         )
-        const challenge = await response.json()
+        const challenge = await readGoogleChallenge(response)
         if (!response.ok || !challenge.data?.nonce)
           throw new Error('GOOGLE_UNAVAILABLE')
         const google = await loadGoogleSignIn()
@@ -62,37 +136,38 @@ export default function GoogleLogin({
           client_id: clientId,
           nonce: challenge.data.nonce,
           auto_select: false,
-          callback: async ({ credential }) => {
-            if (!live() || processing) return
-            processing = true
-            clearTimeout(expiredTimer)
-            setState('signing')
-            try {
-              const response = await fetch(
-                `${appConfig.backend.baseUrl}/api/auth/google`,
-                {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ credential }),
-                  signal: AbortSignal.any([
-                    controller.signal,
-                    AbortSignal.timeout(20000),
-                  ]),
-                }
-              )
-              const data = await response.json()
-              if (!response.ok || !data.success)
-                throw new Error(data.error?.code || 'GOOGLE_INVALID')
-              if (!live()) return
-              setAuthSession(data.data.token, data.data.user)
-              success.current(data.data.user)
-            } catch (error) {
-              fail(
-                error instanceof Error ? error.message : 'GOOGLE_UNAVAILABLE'
-              )
-            }
+          callback: ({ credential }) => {
+            void signIn(credential)
           },
         })
+        async function signIn(credential: string) {
+          if (!live() || processing) return
+          processing = true
+          clearTimeout(expiredTimer)
+          setState('signing')
+          try {
+            const response = await fetch(
+              `${appConfig.backend.baseUrl}/api/auth/google`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential }),
+                signal: AbortSignal.any([
+                  controller.signal,
+                  AbortSignal.timeout(20000),
+                ]),
+              }
+            )
+            const data = await readAuthResponse(response)
+            if (!response.ok || !data.success)
+              throw new Error(data.error?.code || 'GOOGLE_INVALID')
+            if (!live()) return
+            setAuthSession(data.data.token, data.data.user)
+            success.current(data.data.user)
+          } catch (error) {
+            fail(error instanceof Error ? error.message : 'GOOGLE_UNAVAILABLE')
+          }
+        }
         target.current.replaceChildren()
         google.renderButton(target.current, {
           theme: 'outline',
@@ -124,40 +199,7 @@ export default function GoogleLogin({
       className={styles.googleSection}
       aria-label={pt ? 'Login Google' : 'Google sign-in'}
     >
-      <div
-        className={styles.googleControl}
-        aria-busy={!!clientId && (state === 'preparing' || state === 'signing')}
-      >
-        <div ref={target} hidden={!clientId || state !== 'ready'} />
-        {clientId && (state === 'preparing' || state === 'signing') && (
-          <p className={styles.googleStatus} role="status">
-            <span className={styles.spinner} aria-hidden="true" />
-            {state === 'preparing'
-              ? pt
-                ? 'Preparando login Google…'
-                : 'Preparing Google sign-in…'
-              : pt
-                ? 'Validando sua conta…'
-                : 'Verifying your account…'}
-          </p>
-        )}
-        {(!clientId || state === 'error') && (
-          <button
-            type="button"
-            className={styles.googleButton}
-            disabled={!clientId}
-            onClick={() => setAttempt((value) => value + 1)}
-          >
-            {clientId
-              ? pt
-                ? 'Tentar Google novamente'
-                : 'Retry Google sign-in'
-              : pt
-                ? 'Google indisponível'
-                : 'Google unavailable'}
-          </button>
-        )}
-      </div>
+      {renderGoogleControl({ clientId, state, target, pt, setAttempt })}
       <p>
         {pt
           ? 'Usamos o serviço Google neste modal para entrar com seu nome e email verificado. Não acessamos Gmail ou Drive.'

@@ -1,3 +1,4 @@
+import { readAuthResponse } from '@src/services/authResponse'
 import { setAuthSession } from '@src/services/authSession'
 import React, { useState } from 'react'
 import Button from '@components/common/Button'
@@ -56,7 +57,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         }
       )
 
-      const data = await response.json()
+      const data = await readAuthResponse(response)
 
       if (data.success) {
         setAuthSession(data.data.token, data.data.user)
@@ -74,7 +75,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   return (
     <div className={styles.container}>
       <h2>Cadastro</h2>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form
+        onSubmit={(event) => {
+          void handleSubmit(event)
+        }}
+        className={styles.form}
+      >
         <div className={styles.row}>
           <Input
             type="text"

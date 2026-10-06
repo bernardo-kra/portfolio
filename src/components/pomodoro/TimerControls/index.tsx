@@ -1,222 +1,155 @@
+import { logger } from '@src/services/logger'
 import React, { useEffect, useRef } from 'react'
 import { Button } from '@components/common'
 import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react'
 import { usePomodoro } from '@src/context/PomodoroContext'
 import { toast } from 'react-toastify'
 import styles from './styles.module.css'
+type UpdateTimerTitleProps = {
+  state: Pick<
+    ReturnType<typeof usePomodoro>['state'],
+    'timeLeft' | 'isRunning' | 'mode'
+  >
+}
 
-const TimerControls: React.FC = () => {
-  const {
-    state,
-    dispatch,
-    startTimer,
-    pauseTimer,
-    resetTimer,
-    skipTimer,
-    setFocusDuration,
-    setBreakDuration,
-  } = usePomodoro()
-  const audioRef = useRef<HTMLAudioElement>(null)
-  const notificationRef = useRef<string | number | null>(null)
+function updateTimerTitle({ state }: UpdateTimerTitleProps) {
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+  }
 
-  useEffect(() => {
-    const formatTime = (seconds: number): string => {
-      const minutes = Math.floor(seconds / 60)
-      const remainingSeconds = seconds % 60
-      return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+  const getModeLabel = (mode: string): string => {
+    return mode === 'focus' ? 'Foco' : 'Pausa'
+  }
+
+  if (state.isRunning) {
+    document.title = `[⏳ ${formatTime(state.timeLeft)}] Pomodoro - ${getModeLabel(state.mode)}`
+  } else {
+    document.title = `Pomodoro Timer`
+  }
+}
+
+function ignoresTimerKeyboard(event: KeyboardEvent) {
+  return (
+    event.repeat ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    (event.target instanceof HTMLElement &&
+      event.target.closest(
+        'input, textarea, select, button, a, [contenteditable="true"], [role="slider"]'
+      ))
+  )
+}
+
+type InstallTimerKeyboardProps = {
+  state: Pick<
+    ReturnType<typeof usePomodoro>['state'],
+    'isRunning' | 'timeLeft' | 'mode' | 'focusDuration' | 'breakDuration'
+  >
+  pauseTimer: () => void
+  startTimer: () => void
+  resetTimer: () => void
+  skipTimer: () => void
+  setFocusDuration: (minutes: number) => void
+  setBreakDuration: (minutes: number) => void
+  showNotification: (message: string, type?: 'info' | 'success') => void
+}
+
+function installTimerKeyboard({
+  state,
+  pauseTimer,
+  startTimer,
+  resetTimer,
+  skipTimer,
+  setFocusDuration,
+  setBreakDuration,
+  showNotification,
+}: InstallTimerKeyboardProps) {
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (ignoresTimerKeyboard(event)) {
+      return
     }
 
-    const getModeLabel = (mode: string): string => {
-      return mode === 'focus' ? 'Foco' : 'Pausa'
+    switch (event.key.toLowerCase()) {
+      case ' ':
+        event.preventDefault()
+        if (state.isRunning) {
+          pauseTimer()
+        } else if (state.timeLeft > 0) {
+          startTimer()
+        }
+        break
+      case 'r':
+        event.preventDefault()
+        resetTimer()
+        break
+      case 's':
+        event.preventDefault()
+        skipTimer()
+        break
+      case 'arrowup':
+        increaseDuration(event)
+        break
+      case 'arrowdown':
+        decreaseDuration(event)
+        break
     }
+  }
 
-    if (state.isRunning) {
-      document.title = `[⏳ ${formatTime(state.timeLeft)}] Pomodoro - ${getModeLabel(state.mode)}`
+  function increaseDuration(event: KeyboardEvent) {
+    event.preventDefault()
+    const currentDuration =
+      state.mode === 'focus' ? state.focusDuration : state.breakDuration
+    const newDuration = Math.min(
+      currentDuration + 60,
+      state.mode === 'focus' ? 7200 : 3600
+    )
+    if (state.mode === 'focus') {
+      setFocusDuration(Math.floor(newDuration / 60))
     } else {
-      document.title = `Pomodoro Timer`
+      setBreakDuration(Math.floor(newDuration / 60))
     }
-  }, [state.timeLeft, state.isRunning, state.mode])
-
-  const showNotification = (
-    message: string,
-    type: 'info' | 'success' = 'info'
-  ) => {
-    if (notificationRef.current) {
-      toast.update(notificationRef.current, {
-        render: message,
-        type: type,
-        isLoading: false,
-        autoClose: 2000,
-      })
+    showNotification(
+      `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} aumentada para ${Math.floor(newDuration / 60)}min`
+    )
+  }
+  function decreaseDuration(event: KeyboardEvent) {
+    event.preventDefault()
+    const currentDurationDown =
+      state.mode === 'focus' ? state.focusDuration : state.breakDuration
+    const newDurationDown = Math.max(currentDurationDown - 60, 60)
+    if (state.mode === 'focus') {
+      setFocusDuration(Math.floor(newDurationDown / 60))
     } else {
-      notificationRef.current = toast[type](message, {
-        position: 'top-center',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        onClose: () => {
-          notificationRef.current = null
-        },
-      })
+      setBreakDuration(Math.floor(newDurationDown / 60))
     }
+    showNotification(
+      `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} diminuída para ${Math.floor(newDurationDown / 60)}min`
+    )
   }
+  document.addEventListener('keydown', handleKeyPress)
+  return () => document.removeEventListener('keydown', handleKeyPress)
+}
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (
-        event.repeat ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.metaKey ||
-        (event.target instanceof HTMLElement &&
-          event.target.closest(
-            'input, textarea, select, button, a, [contenteditable="true"], [role="slider"]'
-          ))
-      ) {
-        return
-      }
+type RenderTimerButtonsProps = {
+  state: ReturnType<typeof usePomodoro>['state']
+  handleStart: () => void
+  handlePause: () => void
+  handleReset: () => void
+  handleSkip: () => void
+  audioRef: React.RefObject<HTMLAudioElement | null>
+}
 
-      switch (event.key.toLowerCase()) {
-        case ' ':
-          event.preventDefault()
-          if (state.isRunning) {
-            pauseTimer()
-          } else if (state.timeLeft > 0) {
-            startTimer()
-          }
-          break
-        case 'r':
-          event.preventDefault()
-          resetTimer()
-          break
-        case 's':
-          event.preventDefault()
-          skipTimer()
-          break
-        case 'arrowup':
-          event.preventDefault()
-          const currentDuration =
-            state.mode === 'focus' ? state.focusDuration : state.breakDuration
-          const newDuration = Math.min(
-            currentDuration + 60,
-            state.mode === 'focus' ? 7200 : 3600
-          )
-          if (state.mode === 'focus') {
-            setFocusDuration(Math.floor(newDuration / 60))
-          } else {
-            setBreakDuration(Math.floor(newDuration / 60))
-          }
-          showNotification(
-            `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} aumentada para ${Math.floor(newDuration / 60)}min`
-          )
-          break
-        case 'arrowdown':
-          event.preventDefault()
-          const currentDurationDown =
-            state.mode === 'focus' ? state.focusDuration : state.breakDuration
-          const newDurationDown = Math.max(currentDurationDown - 60, 60)
-          if (state.mode === 'focus') {
-            setFocusDuration(Math.floor(newDurationDown / 60))
-          } else {
-            setBreakDuration(Math.floor(newDurationDown / 60))
-          }
-          showNotification(
-            `Duração do ${state.mode === 'focus' ? 'foco' : 'pausa'} diminuída para ${Math.floor(newDurationDown / 60)}min`
-          )
-          break
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyPress)
-    return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [
-    state.isRunning,
-    state.timeLeft,
-    state.mode,
-    state.focusDuration,
-    state.breakDuration,
-    startTimer,
-    pauseTimer,
-    resetTimer,
-    skipTimer,
-    setFocusDuration,
-    setBreakDuration,
-  ])
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-
-    if (state.isRunning && state.timeLeft > 0) {
-      interval = setInterval(() => {
-        dispatch({ type: 'TICK' })
-      }, 1000)
-    } else if (state.timeLeft === 0 && state.isRunning) {
-      dispatch({ type: 'SWITCH' })
-
-      if (audioRef.current) {
-        audioRef.current.play().catch(console.error)
-      }
-
-      const message =
-        state.mode === 'focus'
-          ? '🎯 Tempo de foco concluído! Hora da pausa.'
-          : '☕ Pausa concluída! Hora de focar novamente.'
-
-      toast.success(message, {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      })
-
-      if ('Notification' in window && Notification.permission === 'granted') {
-        const notificationTitle =
-          state.mode === 'focus' ? 'Hora da Pausa!' : 'Hora de Focar!'
-        const notificationBody =
-          state.mode === 'focus'
-            ? 'Parabéns! Você completou um ciclo de foco. Agora é hora de descansar.'
-            : 'Pausa concluída! Vamos voltar ao foco e continuar produtivo.'
-
-        new Notification(notificationTitle, {
-          body: notificationBody,
-          icon: '/favicon.ico',
-          badge: '/favicon.ico',
-          tag: 'pomodoro-notification',
-          requireInteraction: false,
-          silent: false,
-        })
-      }
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval)
-      }
-    }
-  }, [state.isRunning, state.timeLeft, state.mode, dispatch])
-
-  const handleStart = () => {
-    if (state.timeLeft > 0) {
-      startTimer()
-    }
-  }
-
-  const handlePause = () => {
-    pauseTimer()
-  }
-
-  const handleReset = () => {
-    resetTimer()
-  }
-
-  const handleSkip = () => {
-    skipTimer()
-  }
-
+function renderTimerButtons({
+  state,
+  handleStart,
+  handlePause,
+  handleReset,
+  handleSkip,
+  audioRef,
+}: RenderTimerButtonsProps) {
   return (
     <>
       <div className={styles.timerControls}>
@@ -281,6 +214,173 @@ const TimerControls: React.FC = () => {
       </audio>
     </>
   )
+}
+
+const TimerControls: React.FC = () => {
+  const {
+    state,
+    dispatch,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+    skipTimer,
+    setFocusDuration,
+    setBreakDuration,
+  } = usePomodoro()
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const notificationRef = useRef<string | number | null>(null)
+
+  useEffect(
+    () =>
+      updateTimerTitle({
+        state: {
+          timeLeft: state.timeLeft,
+          isRunning: state.isRunning,
+          mode: state.mode,
+        },
+      }),
+    [state.timeLeft, state.isRunning, state.mode]
+  )
+
+  const showNotification = (
+    message: string,
+    type: 'info' | 'success' = 'info'
+  ) => {
+    if (notificationRef.current) {
+      toast.update(notificationRef.current, {
+        render: message,
+        type: type,
+        isLoading: false,
+        autoClose: 2000,
+      })
+    } else {
+      notificationRef.current = toast[type](message, {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        onClose: () => {
+          notificationRef.current = null
+        },
+      })
+    }
+  }
+
+  useEffect(
+    () =>
+      installTimerKeyboard({
+        state: {
+          isRunning: state.isRunning,
+          timeLeft: state.timeLeft,
+          mode: state.mode,
+          focusDuration: state.focusDuration,
+          breakDuration: state.breakDuration,
+        },
+        pauseTimer,
+        startTimer,
+        resetTimer,
+        skipTimer,
+        setFocusDuration,
+        setBreakDuration,
+        showNotification,
+      }),
+    [
+      state.isRunning,
+      state.timeLeft,
+      state.mode,
+      state.focusDuration,
+      state.breakDuration,
+      startTimer,
+      pauseTimer,
+      resetTimer,
+      skipTimer,
+      setFocusDuration,
+      setBreakDuration,
+    ]
+  )
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+
+    if (state.isRunning && state.timeLeft > 0) {
+      interval = setInterval(() => {
+        dispatch({ type: 'TICK' })
+      }, 1000)
+    } else if (state.timeLeft === 0 && state.isRunning) {
+      dispatch({ type: 'SWITCH' })
+
+      if (audioRef.current) {
+        audioRef.current.play().catch(logger.error)
+      }
+
+      const message =
+        state.mode === 'focus'
+          ? '🎯 Tempo de foco concluído! Hora da pausa.'
+          : '☕ Pausa concluída! Hora de focar novamente.'
+
+      toast.success(message, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const notificationTitle =
+          state.mode === 'focus' ? 'Hora da Pausa!' : 'Hora de Focar!'
+        const notificationBody =
+          state.mode === 'focus'
+            ? 'Parabéns! Você completou um ciclo de foco. Agora é hora de descansar.'
+            : 'Pausa concluída! Vamos voltar ao foco e continuar produtivo.'
+
+        new Notification(notificationTitle, {
+          body: notificationBody,
+          icon: '/favicon.ico',
+          badge: '/favicon.ico',
+          tag: 'pomodoro-notification',
+          requireInteraction: false,
+          silent: false,
+        })
+      }
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [state.isRunning, state.timeLeft, state.mode, dispatch])
+
+  const handleStart = () => {
+    if (state.timeLeft > 0) {
+      startTimer()
+    }
+  }
+
+  const handlePause = () => {
+    pauseTimer()
+  }
+
+  const handleReset = () => {
+    resetTimer()
+  }
+
+  const handleSkip = () => {
+    skipTimer()
+  }
+
+  return renderTimerButtons({
+    state,
+    handleStart,
+    handlePause,
+    handleReset,
+    handleSkip,
+    audioRef,
+  })
 }
 
 export default TimerControls

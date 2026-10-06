@@ -28,7 +28,7 @@ const HomeButton: React.FC<HomeButtonProps> = ({ className = '', label }) => {
   const getButtonLabel = () => label ?? (lang === 'pt' ? 'Início' : 'Home')
 
   const handleClick = () => {
-    navigate('/')
+    void navigate('/')
   }
 
   const pageTheme = getPageTheme()

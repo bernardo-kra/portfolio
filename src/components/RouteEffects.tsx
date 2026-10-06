@@ -3,6 +3,27 @@ import { useLocation } from 'react-router-dom'
 import { useI18n } from '@src/i18n'
 import { useScrollToTop } from '@hooks/useScrollToTop'
 
+function setMetadataAttribute(
+  selector: string,
+  attribute: string,
+  value: string
+) {
+  document.querySelector(selector)?.setAttribute(attribute, value)
+}
+function routeFallbackTitle(route: string, lang: 'pt' | 'en') {
+  return route === '/admin/chat' || route === '/chat'
+    ? route === '/admin/chat'
+      ? lang === 'pt'
+        ? 'Caixa de entrada'
+        : 'Inbox'
+      : lang === 'pt'
+        ? 'Conversa com Bernardo'
+        : 'Conversation with Bernardo'
+    : lang === 'pt'
+      ? 'Página não encontrada'
+      : 'Page not found'
+}
+
 const RouteEffects = () => {
   const { pathname } = useLocation()
   const { t, lang } = useI18n()
@@ -21,49 +42,35 @@ const RouteEffects = () => {
     }
     const route = pathname.replace(/\/$/, '') || '/'
     const isPublicRoute = Object.hasOwn(titles, route)
-    const fallbackTitle =
-      route === '/admin/chat' || route === '/chat'
-        ? route === '/admin/chat'
-          ? lang === 'pt'
-            ? 'Caixa de entrada'
-            : 'Inbox'
-          : lang === 'pt'
-            ? 'Conversa com Bernardo'
-            : 'Conversation with Bernardo'
-        : lang === 'pt'
-          ? 'Página não encontrada'
-          : 'Page not found'
+    const fallbackTitle = routeFallbackTitle(route, lang)
     const title = `${t.name} — ${titles[route] ?? fallbackTitle}`
     const description =
       route === '/agency'
         ? 'Forma — estúdio criativo conceitual. Um estudo de design editorial, interfaces responsivas e desenvolvimento com React e TypeScript.'
         : t.recruiter.summary
-    document
-      .querySelector('meta[name="robots"]')
-      ?.setAttribute(
-        'content',
-        isPublicRoute ? 'index, follow' : 'noindex, follow'
-      )
+    setMetadataAttribute(
+      'meta[name="robots"]',
+      'content',
+      isPublicRoute ? 'index, follow' : 'noindex, follow'
+    )
     const url = `https://bernardo-kra.github.io${route === '/' ? '/' : route}`
     document.title = title
     document.documentElement.lang =
       route === '/agency' || lang === 'pt' ? 'pt-BR' : 'en'
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', url)
-    document
-      .querySelector('meta[property="og:url"]')
-      ?.setAttribute('content', url)
+    setMetadataAttribute('link[rel="canonical"]', 'href', url)
+    setMetadataAttribute('meta[property="og:url"]', 'content', url)
     for (const selector of [
       'meta[property="og:title"]',
       'meta[name="twitter:title"]',
     ]) {
-      document.querySelector(selector)?.setAttribute('content', title)
+      setMetadataAttribute(selector, 'content', title)
     }
     for (const selector of [
       'meta[name="description"]',
       'meta[property="og:description"]',
       'meta[name="twitter:description"]',
     ]) {
-      document.querySelector(selector)?.setAttribute('content', description)
+      setMetadataAttribute(selector, 'content', description)
     }
   }, [pathname, lang, t])
 

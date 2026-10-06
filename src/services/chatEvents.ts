@@ -1,3 +1,77 @@
+function isUnauthorized(response: Response) {
+  return response.status === 401 || response.status === 403
+}
+
+function streamWatchdog(current: AbortController) {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return {
+    touch: () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => current.abort(), 45_000)
+    },
+    stop: () => clearTimeout(timer),
+  }
+}
+
+function isStreamResponse(
+  response: Response
+): response is Response & { body: ReadableStream<Uint8Array> } {
+  return (
+    response.ok &&
+    !!response.body &&
+    !!response.headers.get('content-type')?.includes('text/event-stream')
+  )
+}
+
+function drainChatFrames(
+  buffer: string,
+  current: AbortController,
+  refresh: () => void
+) {
+  let boundary: number
+  while ((boundary = buffer.indexOf('\n\n')) >= 0) {
+    const frame = buffer.slice(0, boundary)
+    buffer = buffer.slice(boundary + 2)
+    const payload = frame
+      .split('\n')
+      .filter((line) => line.startsWith('data:'))
+      .map((line) => line.slice(5).trim())
+      .join('\n')
+    if (!payload) continue
+    if (
+      (JSON.parse(payload) as { type?: string }).type === 'refresh' &&
+      !current.signal.aborted
+    ) {
+      refresh()
+    }
+  }
+  return buffer
+}
+
+async function consumeChatStream(
+  body: ReadableStream<Uint8Array>,
+  current: AbortController,
+  touch: () => void,
+  refresh: () => void
+) {
+  const reader = body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+  try {
+    while (!current.signal.aborted) {
+      const result = await reader.read()
+      if (result.done) break
+      touch()
+      buffer += decoder.decode(result.value, { stream: true })
+      buffer = buffer.replace(/\r\n/g, '\n')
+      if (buffer.length > 64 * 1024) throw new Error('CHAT_EVENTS_INVALID')
+      buffer = drainChatFrames(buffer, current, refresh)
+    }
+  } finally {
+    await reader.cancel().catch(() => {})
+  }
+}
+
 type FeedOptions = {
   url: string
   getToken: () => string | null
@@ -19,23 +93,24 @@ export function createChatEventFeed(options: FeedOptions) {
     controller = undefined
     previous?.abort()
   }
-  const connect = async () => {
-    const token = options.getToken()
-    if (
+  const shouldConnect = (token: string | null) =>
+    !(
       controller ||
       !subscribers.size ||
       (document.hidden && !options.keepAliveWhenHidden) ||
       !token
     )
-      return
+  const shouldRetry = () =>
+    subscribers.size &&
+    (!document.hidden || options.keepAliveWhenHidden) &&
+    options.getToken()
+  const connect = async () => {
+    const token = options.getToken()
+    if (!shouldConnect(token)) return
     const current = new AbortController()
     controller = current
-    let watchdog: ReturnType<typeof setTimeout> | undefined
-    const touch = () => {
-      clearTimeout(watchdog)
-      watchdog = setTimeout(() => current.abort(), 45_000)
-    }
-    touch()
+    const watchdog = streamWatchdog(current)
+    watchdog.touch()
     try {
       const response = await fetch(options.url, {
         headers: {
@@ -46,60 +121,23 @@ export function createChatEventFeed(options: FeedOptions) {
         cache: 'no-store',
       })
       if (current.signal.aborted) return
-      if (response.status === 401 || response.status === 403) {
+      if (isUnauthorized(response)) {
         options.onUnauthorized()
         return
       }
-      if (
-        !response.ok ||
-        !response.body ||
-        !response.headers.get('content-type')?.includes('text/event-stream')
-      )
+      if (!isStreamResponse(response))
         throw new Error('CHAT_EVENTS_UNAVAILABLE')
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-      try {
-        while (!current.signal.aborted) {
-          const result = await reader.read()
-          if (result.done) break
-          touch()
-          buffer += decoder.decode(result.value, { stream: true })
-          buffer = buffer.replace(/\r\n/g, '\n')
-          if (buffer.length > 64 * 1024) throw new Error('CHAT_EVENTS_INVALID')
-          let boundary: number
-          while ((boundary = buffer.indexOf('\n\n')) >= 0) {
-            const frame = buffer.slice(0, boundary)
-            buffer = buffer.slice(boundary + 2)
-            const payload = frame
-              .split('\n')
-              .filter((line) => line.startsWith('data:'))
-              .map((line) => line.slice(5).trim())
-              .join('\n')
-            if (!payload) continue
-            if (
-              JSON.parse(payload).type === 'refresh' &&
-              !current.signal.aborted
-            ) {
-              delay = 2000
-              for (const callback of subscribers) callback()
-            }
-          }
-        }
-      } finally {
-        await reader.cancel().catch(() => {})
-      }
+      await consumeChatStream(response.body, current, watchdog.touch, () => {
+        delay = 2000
+        for (const callback of subscribers) callback()
+      })
     } catch {
       // Existing polling remains available during network/provider failures.
     } finally {
-      clearTimeout(watchdog)
+      watchdog.stop()
       if (controller === current) {
         controller = undefined
-        if (
-          subscribers.size &&
-          (!document.hidden || options.keepAliveWhenHidden) &&
-          options.getToken()
-        ) {
+        if (shouldRetry()) {
           retry = setTimeout(() => {
             retry = undefined
             void connect()
