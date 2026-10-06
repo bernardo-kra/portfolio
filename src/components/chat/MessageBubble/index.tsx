@@ -56,7 +56,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
               : message.senderName}
           </strong>
           <span>{formatTime(message.timestamp)}</span>
-          {isOwnMessage && (
+          {message.isAdmin && (
             <span className={styles.authorLabel}>
               {lang === 'pt' ? 'PROPRIETÁRIO' : 'OWNER'}
             </span>

@@ -48,6 +48,11 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const chatUserId = selectedUserId || userEmail || ''
+  const contactName = isAdmin
+    ? selectedName ||
+      selectedUserId ||
+      (pt ? 'Conversa privada' : 'Private conversation')
+    : 'Bernardo Kraczkowski'
 
   useEffect(() => {
     if (!chatUserId) return
@@ -144,7 +149,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
         )}
         {workspace && (
           <div className={styles.avatar}>
-            {(selectedName || selectedUserId || '?')
+            {contactName
               .split(/\s+/)
               .slice(0, 2)
               .map((part) => part.charAt(0))
@@ -155,7 +160,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
         <div className={styles.chatInfo}>
           <h3 className={styles.chatTitle}>
             {workspace
-              ? selectedName
+              ? contactName
               : isAdmin
                 ? pt
                   ? 'Conversa privada'

@@ -156,8 +156,45 @@ const ModernChat: React.FC<{ workspace?: boolean }> = ({
           </div>
         )
       ) : (
-        <div className={styles.userLayout}>
-          <WhatsAppChat />
+        <div
+          className={`${styles.userLayout} ${workspace ? styles.visitorLayout : ''}`}
+        >
+          {workspace && (
+            <aside
+              className={styles.visitorSidebar}
+              aria-label={
+                pt ? 'Sua conversa direta' : 'Your direct conversation'
+              }
+            >
+              <span className={styles.visitorKicker}>
+                {pt ? 'MENSAGENS DIRETAS' : 'DIRECT MESSAGES'}
+              </span>
+              <h3>
+                {pt ? 'Conversas' : 'Conversations'} <span>1</span>
+              </h3>
+              <div className={styles.visitorContact}>
+                <div>BK</div>
+                <p>
+                  <strong>Bernardo Kraczkowski</strong>
+                  <span>
+                    {pt ? 'Sua conversa privada' : 'Your private conversation'}
+                  </span>
+                </p>
+              </div>
+              <div className={styles.visitorPrivacy}>
+                <LockKeyhole size={17} />
+                <p>
+                  {pt
+                    ? 'Este espaço é só seu e do Bernardo. Seu histórico não aparece para outros visitantes.'
+                    : 'This space is just for you and Bernardo. Your history is not visible to other visitors.'}
+                </p>
+                <Link to="/privacy">
+                  {pt ? 'Privacidade e seus dados' : 'Privacy and your data'}
+                </Link>
+              </div>
+            </aside>
+          )}
+          <WhatsAppChat workspace={workspace} />
         </div>
       )}
     </div>

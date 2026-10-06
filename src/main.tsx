@@ -24,6 +24,7 @@ const Pomodoro = lazy(() => import('@pages/Pomodoro'))
 const GenerativeArt = lazy(() => import('@pages/GenerativeArt'))
 const Experimental3D = lazy(() => import('@pages/Experimental3D'))
 const AdminChat = lazy(() => import('@pages/AdminChat'))
+const Chat = lazy(() => import('@pages/Chat'))
 const NotFound = lazy(() => import('@pages/NotFound'))
 const AgencyStudio = lazy(() => import('@pages/AgencyStudio'))
 const Privacy = lazy(() => import('@pages/Privacy'))
@@ -49,6 +50,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="/generative" element={<GenerativeArt />} />
                   <Route path="/experimental3d" element={<Experimental3D />} />
                   <Route path="/admin/chat" element={<AdminChat />} />
+                  <Route path="/chat" element={<Chat />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

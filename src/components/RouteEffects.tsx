@@ -22,8 +22,14 @@ const RouteEffects = () => {
     const route = pathname.replace(/\/$/, '') || '/'
     const isPublicRoute = Object.hasOwn(titles, route)
     const fallbackTitle =
-      route === '/admin/chat'
-        ? 'Admin Chat'
+      route === '/admin/chat' || route === '/chat'
+        ? route === '/admin/chat'
+          ? lang === 'pt'
+            ? 'Caixa de entrada'
+            : 'Inbox'
+          : lang === 'pt'
+            ? 'Conversa com Bernardo'
+            : 'Conversation with Bernardo'
         : lang === 'pt'
           ? 'Página não encontrada'
           : 'Page not found'

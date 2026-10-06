@@ -1,6 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, Inbox, LogIn, LogOut, UserRound } from 'lucide-react'
+import {
+  ChevronDown,
+  Inbox,
+  LogIn,
+  LogOut,
+  UserRound,
+  MessageCircle,
+} from 'lucide-react'
 import { useAuth } from '@hooks/useAuth'
 import { useAppConfig } from '@context'
 import { useI18n } from '@src/i18n'
@@ -78,6 +85,12 @@ export default function AccountControl() {
                 <Link to="/admin/chat" onClick={() => setAccountOpen(false)}>
                   <Inbox size={16} />
                   {pt ? 'Caixa de entrada' : 'Inbox'}
+                </Link>
+              )}
+              {!user?.isChatOwner && isFeatureEnabled('chat') && (
+                <Link to="/chat" onClick={() => setAccountOpen(false)}>
+                  <MessageCircle size={16} />
+                  {pt ? 'Minha conversa' : 'My conversation'}
                 </Link>
               )}
               <button

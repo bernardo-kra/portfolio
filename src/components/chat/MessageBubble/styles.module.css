@@ -39,7 +39,7 @@
 
 .ownBubble {
   background: var(--chat-accent);
-  color: white;
+  color: var(--chat-on-accent);
   border-bottom-right-radius: 6px;
   box-shadow: 0 4px 15px rgba(35, 91, 72, 0.3);
 }

@@ -7,7 +7,8 @@ import { useI18n } from '@src/i18n'
 import { usePreviewFit } from '@hooks/usePreviewFit'
 import styles from './styles.module.css'
 import { profile } from '@src/config/profile'
-import { Download } from 'lucide-react'
+import { Download, MessageCircle } from 'lucide-react'
+import { useAppConfig } from '@context'
 import Ribbon from '@components/common/Ribbon'
 import AccountControl from '@components/auth/AccountControl'
 
@@ -121,6 +122,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 const ModernHomePage: React.FC = () => {
   const navigate = useNavigate()
   const { lang, setLang, t } = useI18n()
+  const { isFeatureEnabled, config } = useAppConfig()
+  const showConversation = isFeatureEnabled('chat') && config.ui.showChatButton
   const homeRef = useRef<HTMLDivElement>(null)
   const projectsRef = useRef<HTMLElement>(null)
   const [lightEnabled, setLightEnabled] = useState(false)
@@ -325,6 +328,14 @@ const ModernHomePage: React.FC = () => {
                 </Typography>
 
                 <div className={styles.heroPrompt}>
+                  {showConversation && (
+                    <Link to="/chat" className={styles.conversationLink}>
+                      <MessageCircle size={17} aria-hidden="true" />
+                      {lang === 'pt'
+                        ? 'Conversar com Bernardo'
+                        : 'Talk to Bernardo'}
+                    </Link>
+                  )}
                   <button
                     className={styles.heroExplore}
                     onClick={() =>
