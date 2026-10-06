@@ -28,8 +28,25 @@
   color: #182b23;
 }
 .chatIcon {
+  position: relative;
   display: flex;
   flex-shrink: 0;
+}
+.unreadBadge {
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  min-width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+  background: #233247;
+  color: #fff;
+  border: 2px solid var(--brand-orange);
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
 }
 .chatText {
   white-space: nowrap;

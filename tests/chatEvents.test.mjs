@@ -80,3 +80,60 @@ test('chat SSE shares a connection, decodes split frames and reconnects on visib
     Object.assign(globalThis, original)
   }
 })
+
+test('notification feed keeps receiving while hidden and releases its connection after logout', async () => {
+  const original = {
+    window: globalThis.window,
+    document: globalThis.document,
+    fetch: globalThis.fetch,
+  }
+  globalThis.window = new EventTarget()
+  globalThis.document = new EventTarget()
+  document.hidden = true
+  let writer,
+    signal,
+    updates = 0,
+    token = 'notification-session'
+  globalThis.fetch = async (_url, options) => {
+    signal = options.signal
+    const stream = new ReadableStream({
+      start(controller) {
+        writer = controller
+      },
+    })
+    signal.addEventListener('abort', () => writer.error(new Error('aborted')), {
+      once: true,
+    })
+    return new Response(stream, {
+      headers: { 'content-type': 'text/event-stream' },
+    })
+  }
+  const feed = createChatEventFeed({
+    url: 'https://backend.example/api/chat/events',
+    getToken: () => token,
+    onUnauthorized: () => {
+      token = null
+    },
+    keepAliveWhenHidden: true,
+  })
+  const stop = feed.subscribe(() => updates++)
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    assert.ok(
+      writer,
+      'Connection starts even if subscription begins in background'
+    )
+    document.dispatchEvent(new Event('visibilitychange'))
+    assert.equal(signal.aborted, false)
+    writer.enqueue(new TextEncoder().encode('data: {"type":"refresh"}\n\n'))
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    assert.equal(updates, 1)
+    token = null
+    window.dispatchEvent(new Event('portfolio:auth'))
+    assert.equal(signal.aborted, true)
+  } finally {
+    stop()
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    Object.assign(globalThis, original)
+  }
+})

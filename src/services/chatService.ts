@@ -25,6 +25,10 @@ export interface ChatConversation {
   isOnline: boolean
 }
 
+export interface ChatNotification extends ChatMessage {
+  conversationUserEmail: string
+}
+
 interface StoredUser {
   email?: string
 }
@@ -46,11 +50,62 @@ const events = createChatEventFeed({
   url: `${appConfig.backend.baseUrl}/api/chat/events`,
   getToken: getAuthToken,
   onUnauthorized: clearAuthSession,
+  keepAliveWhenHidden: true,
 })
 
 class ChatService {
   subscribeToUpdates(callback: () => void) {
     return events.subscribe(callback)
+  }
+  async getNotifications(): Promise<ChatNotification[]> {
+    const headers = this.getAuthHeaders()
+    if (!headers) throw new Error('CHAT_AUTH_REQUIRED')
+    const response = await fetch(
+      `${appConfig.backend.baseUrl}/api/chat/notifications`,
+      {
+        headers,
+        signal: AbortSignal.timeout(15000),
+      }
+    )
+    if (response.status === 401 || response.status === 403) clearAuthSession()
+    if (!response.ok) throw new Error('CHAT_LOAD_FAILED')
+    const data = await response.json()
+    return (data.data as ChatApiMessage[]).map((message) => ({
+      ...message,
+      isRead: Boolean(message.read),
+      conversationUserEmail: message.conversationUserEmail || '',
+    }))
+  }
+  async markMessagesRead(
+    userId: string,
+    messageIds: string[]
+  ): Promise<boolean> {
+    const headers = this.getAuthHeaders()
+    const token = getAuthToken()
+    if (!headers || !messageIds.length) return false
+    try {
+      const response = await fetch(
+        `${appConfig.backend.baseUrl}/api/chat/read/${encodeURIComponent(userId)}`,
+        {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messageIds }),
+          signal: AbortSignal.timeout(15000),
+        }
+      )
+      if (response.ok && token === getAuthToken()) {
+        window.dispatchEvent(
+          new CustomEvent('portfolio:chat-read', {
+            detail: { userId, messageIds },
+          })
+        )
+        window.dispatchEvent(new Event('portfolio:chat-refresh'))
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
   }
   private readonly messageLimit = 500
   private readonly cooldownTime = 3_000
@@ -276,20 +331,6 @@ class ChatService {
       if (!response.ok) return null
 
       const data = await response.json()
-      if (
-        getAuthUser()?.isChatOwner &&
-        ((data.data ?? []) as ChatApiMessage[]).some(
-          (message) => !message.isAdmin && !message.read
-        )
-      ) {
-        void fetch(
-          `${appConfig.backend.baseUrl}/api/chat/read/${encodeURIComponent(userId)}`,
-          {
-            method: 'POST',
-            headers,
-          }
-        ).catch(() => {})
-      }
       return ((data.data ?? []) as ChatApiMessage[]).map((message) => ({
         id: message.id,
         message: message.message,

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useI18n } from '@src/i18n'
 import { Inbox, ArrowLeft, ShieldCheck } from 'lucide-react'
 import ThemeToggleButton from '@components/theme/ThemeToggleButton'
+import { NotificationCenter } from '@components/notifications'
 import styles from './styles.module.css'
 export default function AdminChat() {
   const { user, isAuthenticated } = useAuth()
@@ -16,7 +17,9 @@ export default function AdminChat() {
   const allowed = isAuthenticated && user?.isChatOwner === true
   const available = isBackendEnabled && isFeatureEnabled('chat')
   return (
-    <main className={`${styles.container} ${themeStyles.chatTheme} ${workspaceStyles.workspaceTheme}`}>
+    <main
+      className={`${styles.container} ${themeStyles.chatTheme} ${workspaceStyles.workspaceTheme}`}
+    >
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerText}>
@@ -32,6 +35,7 @@ export default function AdminChat() {
             </p>
           </div>
           <div className={styles.headerActions}>
+            <NotificationCenter />
             <button
               className={styles.languageButton}
               onClick={() => setLang(pt ? 'en' : 'pt')}

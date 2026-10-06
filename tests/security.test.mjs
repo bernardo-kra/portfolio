@@ -170,6 +170,7 @@ test('anonymous visitors cannot read contact messages, edit them or alter projec
     ['/api/portfolio/projects/private', 'PUT'],
     ['/api/portfolio/projects/private', 'DELETE'],
     ['/api/chat/all', 'GET'],
+    ['/api/chat/notifications', 'GET'],
     ['/api/security/logs', 'GET'],
     ['/api/analytics/stats', 'GET'],
   ]) {
@@ -405,7 +406,7 @@ test('private chat routes every visitor to the owner and isolates replies by con
     assert.equal(inbox['bernardokrac@gmail.com'], undefined)
     assert.equal(
       (await request('/api/chat/read/alice@example.com', alice, 'POST')).status,
-      403
+      400
     )
     assert.equal(
       (await request('/api/chat/read/alice@example.com', owner, 'POST')).status,

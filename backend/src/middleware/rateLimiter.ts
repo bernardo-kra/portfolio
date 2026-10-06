@@ -1,5 +1,25 @@
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
+import type { AuthenticatedRequest } from './auth.js';
+
+// Used after verifyToken. Background notices and receipts do not consume the
+// conversation history quota, and clients cannot choose their account key.
+export const chatNotificationRateLimit = rateLimit({
+  windowMs: 60_000,
+  max: 60,
+  keyGenerator: (req) => (req as AuthenticatedRequest).user!.email,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: { code: 'CHAT_NOTIFICATION_LIMIT' } },
+});
+export const chatReadRateLimit = rateLimit({
+  windowMs: 60_000,
+  max: 60,
+  keyGenerator: (req) => (req as AuthenticatedRequest).user!.email,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: { code: 'CHAT_READ_LIMIT' } },
+});
 
 // Rate limiter para envio de mensagens
 export const messageRateLimit = rateLimit({

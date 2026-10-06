@@ -14,6 +14,7 @@ import { useI18n } from '@src/i18n'
 import { WhatsAppChat } from '@components/chat'
 import { SimpleAuthModal } from '@components/auth/SimpleAuthModal'
 import ThemeToggleButton from '@components/theme/ThemeToggleButton'
+import { NotificationCenter } from '@components/notifications'
 import themeStyles from '@components/chat/chatTheme.module.css'
 import workspaceStyles from '@components/chat/workspaceTheme.module.css'
 import shellStyles from '../AdminChat/styles.module.css'
@@ -53,6 +54,7 @@ export default function Chat() {
             </p>
           </div>
           <div className={shellStyles.headerActions}>
+            <NotificationCenter />
             <button
               className={shellStyles.languageButton}
               onClick={() => setLang(pt ? 'en' : 'pt')}

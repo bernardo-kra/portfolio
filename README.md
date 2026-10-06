@@ -53,7 +53,13 @@ src/hooks/            Hooks compartilhados
 src/services/         Clientes de serviços
 ```
 
-As rotas principais são `/`, `/portfolio`, `/agency`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d` e `/admin/chat`.
+As rotas principais são `/`, `/portfolio`, `/agency`, `/landing`, `/pomodoro`, `/generative`, `/experimental3d`, `/chat` e `/admin/chat`.
+
+O chat acompanha mensagens recebidas mesmo com a conversa fechada: o sino e
+o botão flutuante mostram avisos pendentes. A leitura é confirmada apenas para
+mensagens visíveis com a aba em foco, ou pela ação explícita no sino. Os avisos
+do navegador são opcionais e precisam ser ativados pelo usuário. O site deve
+permanecer aberto e conectado; ainda não há Web Push com o site fechado.
 
 O estudo Forma (`/agency`) é uma agência conceitual inspirada em referências de design editorial. As fotografias são servidas localmente; os créditos estão em [public/images/forma/CREDITS.md](./public/images/forma/CREDITS.md). Consulte [UX_REVIEW.md](./UX_REVIEW.md) para a revisão de interface e os testes manuais pendentes.
 

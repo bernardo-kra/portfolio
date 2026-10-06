@@ -29,6 +29,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   const nearBottom = useRef(true)
   const previousLast = useRef<string | undefined>(undefined)
   const scrollContainer = useRef<HTMLDivElement>(null)
+  const acknowledged = useRef(new Set<string>())
   const { isAdmin, userEmail } = useChatPermissions()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(true)
@@ -72,6 +73,72 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
 
     return () => unsubscribe()
   }, [chatUserId, isAdmin, userEmail])
+
+  useEffect(() => {
+    const root = scrollContainer.current
+    if (!root || !chatUserId) return
+    let stopped = false
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const pending = new Set<string>()
+    const unread = new Set(
+      messages
+        .filter(
+          (message) =>
+            message.senderEmail !== userEmail &&
+            !message.isRead &&
+            !acknowledged.current.has(message.id)
+        )
+        .map((message) => message.id)
+    )
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (document.hidden || !document.hasFocus()) return
+        for (const entry of entries) {
+          const id = (entry.target as HTMLElement).closest<HTMLElement>(
+            '[data-chat-message]'
+          )!.dataset.chatMessage!
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRect.height >=
+              Math.min(24, entry.boundingClientRect.height)
+          )
+            pending.add(id)
+          else pending.delete(id)
+        }
+        clearTimeout(timer)
+        timer = setTimeout(async () => {
+          if (stopped || document.hidden || !document.hasFocus()) return
+          const ids = [...pending].slice(0, 100)
+          if (!ids.length) return
+          if (await chatService.markMessagesRead(chatUserId, ids))
+            ids.forEach((id) => acknowledged.current.add(id))
+        }, 200)
+      },
+      { root, threshold: [0, 0.1, 0.5, 1] }
+    )
+    const observe = () => {
+      observer.disconnect()
+      root
+        .querySelectorAll<HTMLElement>('[data-chat-message]')
+        .forEach((element) => {
+          if (unread.has(element.dataset.chatMessage!))
+            observer.observe(
+              element.querySelector<HTMLElement>('[data-chat-message-text]') ||
+                element
+            )
+        })
+    }
+    observe()
+    document.addEventListener('visibilitychange', observe)
+    window.addEventListener('focus', observe)
+    return () => {
+      stopped = true
+      clearTimeout(timer)
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', observe)
+      window.removeEventListener('focus', observe)
+    }
+  }, [messages, search, chatUserId, userEmail])
 
   useEffect(() => {
     if (cooldownRemaining > 0) {

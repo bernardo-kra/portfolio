@@ -34,6 +34,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   return (
     <div
+      data-chat-message={message.id}
       className={`${styles.messageContainer} ${isOwnMessage ? styles.ownMessage : styles.otherMessage} ${workspace ? styles.workspace : ''}`}
     >
       {workspace && (
@@ -70,7 +71,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       <div
         className={`${styles.messageBubble} ${isOwnMessage ? styles.ownBubble : styles.otherBubble}`}
       >
-        <div className={styles.messageText}>{message.message}</div>
+        <div className={styles.messageText} data-chat-message-text>
+          {message.message}
+        </div>
         <div className={styles.messageTime}>
           {formatTime(message.timestamp)}
         </div>

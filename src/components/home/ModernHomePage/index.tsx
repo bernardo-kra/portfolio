@@ -11,6 +11,7 @@ import { Download, MessageCircle } from 'lucide-react'
 import { useAppConfig } from '@context'
 import Ribbon from '@components/common/Ribbon'
 import AccountControl from '@components/auth/AccountControl'
+import { NotificationCenter } from '@components/notifications'
 
 type Project = {
   id: string
@@ -293,6 +294,7 @@ const ModernHomePage: React.FC = () => {
       <div className={styles.cursorLight} aria-hidden="true" />
       <div className={styles.themeControls}>
         <AccountControl />
+        <NotificationCenter />
         <ThemeToggleButton />
         <button
           className={styles.languageToggle}

@@ -2,6 +2,7 @@ type FeedOptions = {
   url: string
   getToken: () => string | null
   onUnauthorized: () => void
+  keepAliveWhenHidden?: boolean
 }
 
 // One authenticated connection shared by the inbox and open conversation.
@@ -20,7 +21,13 @@ export function createChatEventFeed(options: FeedOptions) {
   }
   const connect = async () => {
     const token = options.getToken()
-    if (controller || !subscribers.size || document.hidden || !token) return
+    if (
+      controller ||
+      !subscribers.size ||
+      (document.hidden && !options.keepAliveWhenHidden) ||
+      !token
+    )
+      return
     const current = new AbortController()
     controller = current
     let watchdog: ReturnType<typeof setTimeout> | undefined
@@ -88,7 +95,11 @@ export function createChatEventFeed(options: FeedOptions) {
       clearTimeout(watchdog)
       if (controller === current) {
         controller = undefined
-        if (subscribers.size && !document.hidden && options.getToken()) {
+        if (
+          subscribers.size &&
+          (!document.hidden || options.keepAliveWhenHidden) &&
+          options.getToken()
+        ) {
           retry = setTimeout(() => {
             retry = undefined
             void connect()
@@ -104,7 +115,9 @@ export function createChatEventFeed(options: FeedOptions) {
     void connect()
   }
   const visibility = () => {
-    if (document.hidden) stop()
+    if (options.keepAliveWhenHidden) {
+      if (!document.hidden) void connect()
+    } else if (document.hidden) stop()
     else restart()
   }
   return {

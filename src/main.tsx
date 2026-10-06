@@ -17,6 +17,7 @@ import Analytics from '@components/Analytics'
 import PrivacyControls from '@components/PrivacyControls'
 import RouteEffects from '@components/RouteEffects'
 import RouteLoading from '@components/common/RouteLoading'
+import ChatNotifications from '@components/notifications/ChatNotifications'
 
 const Portfolio = lazy(() => import('@pages/Portfolio'))
 const LandingPage = lazy(() => import('@pages/LandingPage'))
@@ -37,24 +38,29 @@ createRoot(document.getElementById('root')!).render(
           <TransitionThemeEffect />
           <I18nProvider>
             <BrowserRouter>
-              <Analytics />
-              <PrivacyControls />
-              <Suspense fallback={<RouteLoading />}>
-                <RouteEffects />
-                <Routes>
-                  <Route path="/" element={<App />} />
-                  <Route path="/portfolio" element={<Portfolio />} />
-                  <Route path="/landing" element={<LandingPage />} />
-                  <Route path="/agency" element={<AgencyStudio />} />
-                  <Route path="/pomodoro" element={<Pomodoro />} />
-                  <Route path="/generative" element={<GenerativeArt />} />
-                  <Route path="/experimental3d" element={<Experimental3D />} />
-                  <Route path="/admin/chat" element={<AdminChat />} />
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
+              <ChatNotifications>
+                <Analytics />
+                <PrivacyControls />
+                <Suspense fallback={<RouteLoading />}>
+                  <RouteEffects />
+                  <Routes>
+                    <Route path="/" element={<App />} />
+                    <Route path="/portfolio" element={<Portfolio />} />
+                    <Route path="/landing" element={<LandingPage />} />
+                    <Route path="/agency" element={<AgencyStudio />} />
+                    <Route path="/pomodoro" element={<Pomodoro />} />
+                    <Route path="/generative" element={<GenerativeArt />} />
+                    <Route
+                      path="/experimental3d"
+                      element={<Experimental3D />}
+                    />
+                    <Route path="/admin/chat" element={<AdminChat />} />
+                    <Route path="/chat" element={<Chat />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </ChatNotifications>
             </BrowserRouter>
           </I18nProvider>
         </BackgroundTransparencyProvider>

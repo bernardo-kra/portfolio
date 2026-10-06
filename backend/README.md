@@ -29,6 +29,12 @@ Todas as rotas usam o prefixo `/api`.
 - `/health`: status do serviço.
 - `/auth`: registro, login e dados de autenticação.
 - `/chat`: mensagens, respostas, leitura e estatísticas.
+  `GET /chat/notifications` retorna até 100 mensagens recebidas e não lidas,
+  limitadas à conta autenticada. `POST /chat/read/:email` aceita
+  `{ "messageIds": ["id"] }`: visitantes confirmam somente respostas recebidas
+  na própria conversa, e o proprietário confirma mensagens dos visitantes.
+  Consultar o histórico ou os avisos não confirma leitura. Avisos e recibos têm
+  limites separados por conta para não consumir a cota do histórico.
 - `/contact`: mensagens do formulário de contato.
 - `/analytics`: visualizações e estatísticas.
 - `/portfolio`: CRUD de projetos.

@@ -4,6 +4,7 @@ import { useAuth } from '@hooks/useAuth'
 import { useAppConfig } from '@context'
 import { useI18n } from '@src/i18n'
 import { useScrollLock } from '@hooks/useScrollLock'
+import { useNotifications } from '@hooks/useNotifications'
 import { SimpleAuthModal } from '@components/auth/SimpleAuthModal'
 import { MessageCircle, X, ArrowUpRight } from 'lucide-react'
 import ModernChat from '../ModernChat'
@@ -13,6 +14,7 @@ import styles from './styles.module.css'
 
 export default function FloatingChatButton() {
   const { user, isAuthenticated, login } = useAuth()
+  const { unreadCount } = useNotifications()
   const { isFeatureEnabled, config } = useAppConfig()
   const { lang } = useI18n()
   const navigate = useNavigate()
@@ -62,6 +64,18 @@ export default function FloatingChatButton() {
       >
         <span className={styles.chatIcon}>
           <MessageCircle size={22} aria-hidden="true" />
+          {unreadCount > 0 && (
+            <span
+              className={styles.unreadBadge}
+              aria-label={
+                pt
+                  ? `${unreadCount} mensagens não lidas`
+                  : `${unreadCount} unread messages`
+              }
+            >
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
         </span>
         <span className={styles.chatText}>{label}</span>
       </button>

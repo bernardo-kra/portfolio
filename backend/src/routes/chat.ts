@@ -6,6 +6,8 @@ import { requireChatOwner } from '../middleware/chatOwnerAuth.js';
 import {
   messageRateLimit,
   loadMessagesRateLimit,
+  chatNotificationRateLimit,
+  chatReadRateLimit,
 } from '../middleware/rateLimiter.js';
 import { chatOwnerEmail, conversationEmail } from '../services/chatPolicy.js';
 import type { DocumentData } from 'firebase-admin/firestore';
@@ -43,6 +45,46 @@ async function readConversation(email: string) {
     (a, b) => time(a.timestamp) - time(b.timestamp)
   );
 }
+
+router.get(
+  '/notifications',
+  verifyToken,
+  chatNotificationRateLimit,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      const user = req.user!;
+      const messages = user.isChatOwner
+        ? ((
+            await db.collection('chats').where('isAdmin', '==', false).get()
+          ).docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          })) as DocumentData[])
+        : await readConversation(user.email);
+      const incoming = messages.filter(
+        (message) =>
+          !message.read &&
+          (user.isChatOwner
+            ? !message.isAdmin &&
+              !!conversationEmail(message) &&
+              conversationEmail(message) !== chatOwnerEmail()
+            : message.isAdmin === true)
+      );
+      return res.json({
+        success: true,
+        data: incoming
+          .sort((a, b) => time(b.timestamp) - time(a.timestamp))
+          .slice(0, 100)
+          .map((message) => ({
+            ...message,
+            conversationUserEmail: conversationEmail(message),
+          })),
+      });
+    } catch {
+      return res.status(500).json({ success: false });
+    }
+  }
+);
 async function send(
   user: NonNullable<AuthenticatedRequest['user']>,
   message: string,
@@ -224,28 +266,55 @@ router.put('/mark-read/:messageId', requireChatOwner, async (req, res) => {
   }
 });
 
-router.post('/read/:email', requireChatOwner, async (req, res) => {
-  try {
-    const email = String(req.params.email).trim().toLowerCase();
-    if (!validEmail(email)) return res.status(400).json({ success: false });
-    const unread = (await readConversation(email)).filter(
-      (message) => !message.isAdmin && !message.read
-    );
-    for (let start = 0; start < unread.length; start += 400) {
-      const batch = db.batch();
-      for (const message of unread.slice(start, start + 400)) {
-        batch.update(db.collection('chats').doc(message.id), {
-          read: true,
-          readAt: new Date(),
-        });
+router.post(
+  '/read/:email',
+  verifyToken,
+  chatReadRateLimit,
+  async (req: AuthenticatedRequest, res) => {
+    try {
+      const user = req.user!;
+      const email = String(req.params.email).trim().toLowerCase();
+      if (!validEmail(email)) return res.status(400).json({ success: false });
+      if (!user.isChatOwner && email !== user.email)
+        return res.status(403).json({ success: false });
+      const ids = req.body?.messageIds;
+      // Keep older owner clients compatible; visitors must identify messages they saw.
+      if (
+        (!user.isChatOwner && ids === undefined) ||
+        (ids !== undefined &&
+          (!Array.isArray(ids) ||
+            ids.length > 100 ||
+            ids.some(
+              (id) =>
+                typeof id !== 'string' ||
+                !id ||
+                id.length > 200 ||
+                id.includes('/')
+            )))
+      )
+        return res.status(400).json({ success: false });
+      const unread = (await readConversation(email)).filter(
+        (message) =>
+          !message.read &&
+          (user.isChatOwner ? !message.isAdmin : message.isAdmin === true) &&
+          (ids === undefined || ids.includes(message.id))
+      );
+      for (let start = 0; start < unread.length; start += 400) {
+        const batch = db.batch();
+        for (const message of unread.slice(start, start + 400)) {
+          batch.update(db.collection('chats').doc(message.id), {
+            read: true,
+            readAt: new Date(),
+          });
+        }
+        await batch.commit();
       }
-      await batch.commit();
+      return res.json({ success: true });
+    } catch {
+      return res.status(500).json({ success: false });
     }
-    return res.json({ success: true });
-  } catch {
-    return res.status(500).json({ success: false });
   }
-});
+);
 
 router.post(
   '/reply',
