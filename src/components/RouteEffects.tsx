@@ -24,6 +24,18 @@ function routeFallbackTitle(route: string, lang: 'pt' | 'en') {
       : 'Page not found'
 }
 
+function routeDescription(route: string, lang: 'pt' | 'en', fallback: string) {
+  const descriptions: Record<string, string> = {
+    '/agency':
+      'Forma — estúdio criativo conceitual. Um estudo de design editorial, interfaces responsivas e desenvolvimento com React e TypeScript.',
+    '/learning':
+      lang === 'pt'
+        ? 'Bastidores de uma interface: crie ícones em pixel art, teste animações, resolva desafios visuais e experimente as decisões por trás de uma tela.'
+        : 'Behind the interface: create pixel art icons, test animations, solve visual challenges and explore the decisions behind a screen.',
+  }
+  return descriptions[route] ?? fallback
+}
+
 const RouteEffects = () => {
   const { pathname } = useLocation()
   const { t, lang } = useI18n()
@@ -39,15 +51,14 @@ const RouteEffects = () => {
       '/experimental3d': 'Neon Bay — Intelligence Bureau',
       '/agency': 'Forma — Creative Studio',
       '/privacy': lang === 'pt' ? 'Privacidade' : 'Privacy',
+      '/learning':
+        lang === 'pt' ? 'Bastidores de uma interface' : 'Behind the interface',
     }
     const route = pathname.replace(/\/$/, '') || '/'
     const isPublicRoute = Object.hasOwn(titles, route)
     const fallbackTitle = routeFallbackTitle(route, lang)
     const title = `${t.name} — ${titles[route] ?? fallbackTitle}`
-    const description =
-      route === '/agency'
-        ? 'Forma — estúdio criativo conceitual. Um estudo de design editorial, interfaces responsivas e desenvolvimento com React e TypeScript.'
-        : t.recruiter.summary
+    const description = routeDescription(route, lang, t.recruiter.summary)
     setMetadataAttribute(
       'meta[name="robots"]',
       'content',

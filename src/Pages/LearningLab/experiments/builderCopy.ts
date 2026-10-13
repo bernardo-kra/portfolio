@@ -1,0 +1,76 @@
+const pt = {
+  tag: '06 / SUA PRIMEIRA PÁGINA',
+  title: 'Agora junte tudo. E leve com você.',
+  text: 'Seu ícone e seu fundo encontram uma página de verdade. Edite o texto, organize os blocos e baixe um HTML que abre no navegador, sem instalar nada.',
+  fields: ['Título da página', 'Apresentação', 'Texto do link'],
+  defaults: [
+    'Minha próxima grande ideia.',
+    'Um espaço para transformar curiosidade em projetos. Feito de descobertas, tentativas e escolhas que têm a minha cara.',
+    'Voltar ao começo',
+  ],
+  palette: 'Paleta da página',
+  palettes: ['Solar', 'Oceano', 'Editorial'],
+  blocks: 'Organização dos blocos',
+  sections: {
+    hero: 'Abertura',
+    story: 'Manifesto',
+    features: 'Destaques',
+    action: 'Convite',
+  },
+  up: 'Mover para cima',
+  down: 'Mover para baixo',
+  remove: 'Remover',
+  add: 'Adicionar',
+  hint: 'Arraste os blocos para reorganizar ou use os botões de subir e descer. Seu texto fica só nesta visita.',
+  viewport: 'Largura da prévia',
+  export: 'Baixar minha página HTML',
+  reset: 'Restaurar página',
+  preview: 'Prévia da página construída',
+  empty: 'Adicione um bloco para começar sua composição.',
+  exported:
+    'Sua página foi baixada! Abra minha-interface.html no navegador para ver o resultado.',
+  reordered: 'Ordem dos blocos atualizada.',
+  edited: 'Página atualizada.',
+  restored: 'Página inicial restaurada.',
+  exportHint:
+    'Um HTML independente, com o ícone e o fundo incorporados. Sem formulários, contas ou serviços conectados.',
+}
+const en: typeof pt = {
+  tag: '06 / YOUR FIRST PAGE',
+  title: 'Now put it together. And take it with you.',
+  text: 'Your icon and background meet a real page. Edit the text, arrange blocks and download HTML that opens in your browser, with nothing to install.',
+  fields: ['Page heading', 'Introduction', 'Link text'],
+  defaults: [
+    'My next big idea.',
+    'A space to turn curiosity into projects. Made of discoveries, attempts and choices that feel like me.',
+    'Back to the beginning',
+  ],
+  palette: 'Page palette',
+  palettes: ['Solar', 'Ocean', 'Editorial'],
+  blocks: 'Block order',
+  sections: {
+    hero: 'Opening',
+    story: 'Manifesto',
+    features: 'Highlights',
+    action: 'Invitation',
+  },
+  up: 'Move up',
+  down: 'Move down',
+  remove: 'Remove',
+  add: 'Add',
+  hint: 'Drag blocks to reorder them or use the up and down buttons. Your text stays in this visit only.',
+  viewport: 'Preview width',
+  export: 'Download my HTML page',
+  reset: 'Restore page',
+  preview: 'Preview of your built page',
+  empty: 'Add a block to start your composition.',
+  exported:
+    'Your page was downloaded! Open minha-interface.html in your browser to see it.',
+  reordered: 'Block order updated.',
+  edited: 'Page updated.',
+  restored: 'Original page restored.',
+  exportHint:
+    'Standalone HTML with the icon and background embedded. No forms, accounts or connected services.',
+}
+export const builderCopy = { pt, en }
+export type BuilderCopy = typeof pt

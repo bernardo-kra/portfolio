@@ -28,6 +28,7 @@ const AdminChat = lazy(() => import('@pages/AdminChat'))
 const Chat = lazy(() => import('@pages/Chat'))
 const NotFound = lazy(() => import('@pages/NotFound'))
 const AgencyStudio = lazy(() => import('@pages/AgencyStudio'))
+const LearningLab = lazy(() => import('@pages/LearningLab'))
 const Privacy = lazy(() => import('@pages/Privacy'))
 
 createRoot(document.getElementById('root')!).render(
@@ -48,6 +49,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path="/portfolio" element={<Portfolio />} />
                     <Route path="/landing" element={<LandingPage />} />
                     <Route path="/agency" element={<AgencyStudio />} />
+                    <Route path="/learning" element={<LearningLab />} />
                     <Route path="/pomodoro" element={<Pomodoro />} />
                     <Route path="/generative" element={<GenerativeArt />} />
                     <Route

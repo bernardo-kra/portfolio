@@ -1,0 +1,201 @@
+.previewShell {
+  border: 3px solid var(--ink);
+  border-radius: 23px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 7px 8px 0 var(--ink);
+}
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 15px 19px;
+  border-bottom: 3px solid var(--ink);
+  background: #201b28;
+  color: #fff9e9;
+}
+.chrome > span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+.chrome strong {
+  margin-left: auto;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+}
+.preview {
+  padding: var(--preview-space);
+  background: var(--preview-background);
+  color: var(--preview-ink);
+}
+.visual {
+  position: relative;
+  height: 160px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 2px solid var(--preview-ink);
+  border-radius: var(--preview-radius);
+  background: var(--preview-decoration);
+}
+.orbit {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border: 2px solid var(--preview-ink);
+  border-radius: 50%;
+  transform: rotate(-25deg) scaleY(0.5);
+}
+.orbitInner {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid var(--preview-ink);
+  border-radius: 50%;
+  transform: rotate(40deg) scaleY(0.6);
+}
+.visual > svg {
+  position: relative;
+  padding: 12px;
+  width: 78px;
+  height: 78px;
+  background: var(--preview-background);
+  border: 2px solid var(--preview-ink);
+  border-radius: 50%;
+}
+.visualLabel {
+  position: absolute;
+  left: 15px;
+  bottom: 10px;
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+.customIcon {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border: 2px solid var(--preview-ink);
+  border-radius: 15px;
+  background: #fff;
+}
+.content {
+  padding-top: var(--preview-space);
+}
+.preview .eyebrow {
+  color: var(--preview-ink);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+}
+.preview h3 {
+  font-family: var(--preview-font);
+  color: var(--preview-ink);
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+  font-weight: 400;
+  line-height: 1.12;
+  margin-block: 15px;
+}
+.preview .description {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--preview-ink);
+}
+.preview ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin-block: var(--preview-space);
+}
+.preview li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--preview-ink);
+  border-radius: var(--preview-radius);
+  padding: 5px 8px;
+  font-size: 0.65rem;
+}
+.preview li svg {
+  flex-shrink: 0;
+}
+.action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 2px solid var(--preview-ink);
+  border-radius: var(--preview-radius);
+  padding: 14px 17px;
+  background: var(--preview-accent);
+  color: var(--preview-label) !important;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+.action:hover {
+  box-shadow: 3px 3px 0 var(--preview-ink);
+}
+.action:disabled {
+  cursor: default;
+  opacity: 1;
+}
+.action:focus-visible {
+  outline: 3px solid var(--preview-ink);
+  outline-offset: 4px;
+}
+.feedback {
+  min-height: 28px;
+  margin-top: 12px;
+}
+.feedback p {
+  color: var(--preview-ink);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.feedback button {
+  background: transparent;
+  border: 0;
+  padding: 10px 0 0;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.preview[data-wireframe='true'] {
+  --preview-accent: #fff;
+  --preview-label: var(--preview-ink);
+  background: #fff;
+}
+.preview[data-wireframe='true'] .visual {
+  background: #fff;
+  border-style: dashed;
+}
+.preview[data-wireframe='true'] .visual > :not(.visualLabel) {
+  visibility: hidden;
+}
+.preview[data-wireframe='true'] .content {
+  outline: 1px dashed var(--preview-ink);
+  outline-offset: 8px;
+}
+.previewShell .structureNote {
+  padding: 16px 20px;
+  border-top: 2px dashed var(--ink);
+  color: var(--ink);
+  font-size: 0.75rem;
+}
+@media (max-width: 400px) {
+  .preview {
+    padding: min(var(--preview-space), 22px);
+  }
+  .visual {
+    height: 135px;
+  }
+  .preview h3 {
+    font-size: 1.85rem;
+  }
+}

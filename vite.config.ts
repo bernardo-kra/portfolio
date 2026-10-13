@@ -23,12 +23,14 @@ export default defineConfig(({ mode }) => ({
       apply: 'build',
       async writeBundle(options) {
         const outputDirectory = resolve(options.dir || 'dist')
-        const routeDirectory = resolve(outputDirectory, 'portfolio')
-        await mkdir(routeDirectory, { recursive: true })
-        await copyFile(
-          resolve(outputDirectory, 'index.html'),
-          resolve(routeDirectory, 'index.html')
-        )
+        for (const route of ['portfolio', 'learning']) {
+          const routeDirectory = resolve(outputDirectory, route)
+          await mkdir(routeDirectory, { recursive: true })
+          await copyFile(
+            resolve(outputDirectory, 'index.html'),
+            resolve(routeDirectory, 'index.html')
+          )
+        }
       },
     },
   ],

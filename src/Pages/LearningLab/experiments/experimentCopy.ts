@@ -1,0 +1,68 @@
+const pt = {
+  tag: 'UM UNIVERSO PARA CRIAR / SEIS ESTÚDIOS',
+  title: 'Entre com uma ideia. Saia com uma página.',
+  text: 'Desenhe sua identidade, gere um fundo, investigue as camadas e monte uma página de verdade. Cada estúdio revela um bastidor e deixa uma peça para o próximo.',
+  tabs: [
+    'Pixel studio',
+    'Movimento',
+    'Olhar de designer',
+    'Fábrica de fundos',
+    'Camadas em 3D',
+    'Construtor de páginas',
+  ],
+  descriptions: [
+    'Crie seu ícone',
+    'Dê ritmo às ações',
+    'Treine sua percepção',
+    'Invente uma identidade',
+    'Investigue a composição',
+    'Combine e exporte',
+  ],
+  progress: 'estúdios explorados nesta visita',
+  reset: 'Recomeçar experiências',
+  tabsLabel: 'Escolher um estúdio',
+  done: 'Explorado',
+  complete:
+    'Você percorreu os seis estúdios. Sua próxima criação já tem ícone, identidade, movimento e intenção.',
+  project: 'SEU PROJETO EM CONSTRUÇÃO',
+  iconReady: 'Ícone criado',
+  iconEmpty: 'Seu ícone começa no pixel studio',
+  backgroundReady: 'Fundo criado',
+  backgroundEmpty: 'Seu fundo começa na fábrica',
+  build: 'Montar minha página',
+}
+const en: typeof pt = {
+  tag: 'A UNIVERSE TO CREATE / SIX STUDIOS',
+  title: 'Enter with an idea. Leave with a page.',
+  text: 'Draw your identity, generate a background, investigate layers and build a real page. Each studio reveals a detail and leaves a piece for the next.',
+  tabs: [
+    'Pixel studio',
+    'Motion',
+    'Designer’s eye',
+    'Background factory',
+    'Layers in 3D',
+    'Page builder',
+  ],
+  descriptions: [
+    'Create your icon',
+    'Give actions a rhythm',
+    'Train your perception',
+    'Invent an identity',
+    'Investigate the composition',
+    'Combine and export',
+  ],
+  progress: 'studios explored this visit',
+  reset: 'Restart experiences',
+  tabsLabel: 'Choose a studio',
+  done: 'Explored',
+  complete:
+    'You explored all six studios. Your next creation already has an icon, identity, movement and purpose.',
+  project: 'YOUR PROJECT IN PROGRESS',
+  iconReady: 'Icon created',
+  iconEmpty: 'Start your icon in the pixel studio',
+  backgroundReady: 'Background created',
+  backgroundEmpty: 'Start your background in the factory',
+  build: 'Build my page',
+}
+export const experimentCopy = { pt, en }
+export type ExperimentCopy = typeof pt

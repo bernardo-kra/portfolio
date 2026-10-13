@@ -1,0 +1,201 @@
+.paths {
+  padding-block: 17px 75px;
+}
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 33px 0 39px;
+}
+.filters button {
+  padding: 9px 19px;
+  border: 3px solid var(--ink);
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 3px 4px 0 var(--ink);
+  font-weight: 900;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.filters button[aria-pressed='true'] {
+  background: var(--yellow);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 2px 0 var(--ink);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  align-items: start;
+}
+.card {
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 6px 7px 0 var(--ink);
+}
+.cardVisual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 175px;
+  border-bottom: 3px solid var(--ink);
+  overflow: hidden;
+  background: var(--blue);
+}
+.cardVisual[data-color='yellow'] {
+  background: var(--yellow);
+}
+.cardVisual[data-color='coral'] {
+  background: #fb8d7e;
+}
+.cardVisual[data-color='mint'] {
+  background: var(--mint);
+}
+.cardVisual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(#201b282e 1px, transparent 1px) 0 0 / 12px 12px;
+}
+.number {
+  position: absolute;
+  top: 14px;
+  left: 17px;
+  font-family: var(--display);
+  font-size: 1.05rem;
+}
+.trackIcon {
+  position: relative;
+  z-index: 1;
+  width: 97px;
+  height: 97px;
+  background: #fff9e9;
+  padding: 17px;
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: 5px 6px 0 var(--ink);
+  transform: rotate(-7deg);
+}
+.card:nth-child(even) .trackIcon {
+  transform: rotate(7deg);
+}
+.visualStar {
+  position: absolute;
+  right: 23px;
+  top: 15px;
+  font-size: 42px;
+  line-height: 1;
+}
+.visualCircle {
+  position: absolute;
+  width: 105px;
+  height: 105px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  left: -24px;
+  bottom: -36px;
+}
+.cardBody {
+  padding: 24px 23px 22px;
+}
+.cardBody .category {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.cardBody h3 {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+.cardBody > p:not(.category) {
+  font-size: 0.94rem;
+  min-height: 79px;
+  line-height: 1.7;
+}
+.trackTags {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  gap: 6px;
+  margin-top: 20px !important;
+}
+.trackTags li {
+  background: #f5f1e8;
+  border: 1.5px solid #d1c9bb;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  line-height: 1.5;
+  font-weight: 900;
+}
+.cardAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 15px 0 0;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+  margin-top: 23px;
+  background: transparent;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+.cardAction[aria-expanded='true'] svg {
+  transform: rotate(90deg);
+}
+.challenge {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 2px dashed #d1c9bb;
+}
+.challenge strong {
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+}
+.challenge p {
+  font-size: 0.88rem;
+  margin-top: 9px;
+}
+@media (max-width: 1000px) {
+  .grid {
+    gap: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cardBody > p:not(.category) {
+    min-height: 53px;
+  }
+}
+@media (max-width: 600px) {
+  .paths {
+    padding-block: 5px 50px;
+  }
+  .filters {
+    gap: 11px;
+    margin-block: 27px 32px;
+  }
+  .filters button {
+    font-size: 0.78rem;
+    padding: 8px 12px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .cardVisual {
+    height: 165px;
+  }
+  .cardBody {
+    padding: 23px;
+  }
+  .cardBody > p:not(.category) {
+    min-height: 0;
+  }
+}

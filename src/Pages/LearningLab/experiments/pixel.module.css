@@ -1,0 +1,233 @@
+.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 38px;
+  align-items: start;
+}
+.kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+}
+.instructions h3 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin: 16px 0;
+}
+.instructions > p {
+  font-size: 0.92rem;
+}
+.tools,
+.presets {
+  margin: 23px 0 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.tools legend,
+.presets legend {
+  margin-bottom: 11px;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+.tools button,
+.presets button {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 50px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+.tools button[aria-pressed='true'] {
+  background: var(--yellow);
+  box-shadow: 2px 3px 0 var(--ink);
+}
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin-block: 24px;
+}
+.palette button {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  padding: 0;
+}
+.palette button[aria-pressed='true'] {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.symmetry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.symmetry input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--ink);
+}
+.symmetry input:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.instructions .hint {
+  margin: 23px 0;
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+.editor {
+  min-width: 0;
+  padding: 0 20px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 5px 6px 0 var(--ink);
+  overflow: hidden;
+}
+.editorBar {
+  width: calc(100% + 40px);
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 -20px 20px;
+  padding: 13px 18px;
+  background: var(--yellow);
+  border-bottom: 3px solid var(--ink);
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+.canvas {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  touch-action: none;
+  user-select: none;
+}
+.canvas button {
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  border-right: 1px solid #201b2825;
+  border-bottom: 1px solid #201b2825;
+  border-radius: 0;
+  padding: 0;
+  transition: none;
+}
+.canvas button:hover {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.canvas button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -3px;
+  position: relative;
+  z-index: 1;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 15px;
+  margin-top: 18px;
+}
+.actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 0;
+  padding: 5px 0;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+.actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.status {
+  min-height: 24px;
+  margin-top: 13px !important;
+  font-size: 0.69rem;
+}
+@media (max-width: 850px) {
+  .studio {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .instructions {
+    display: contents;
+  }
+  .kicker {
+    order: 0;
+  }
+  .instructions h3 {
+    order: 1;
+  }
+  .instructions > p:not(.hint) {
+    order: 2;
+  }
+  .tools {
+    order: 3;
+  }
+  .palette {
+    order: 4;
+  }
+  .symmetry {
+    order: 5;
+  }
+  .presets {
+    order: 7;
+  }
+  .hint {
+    order: 8;
+  }
+  .instructions > button {
+    order: 9;
+    align-self: flex-start;
+  }
+  .editor {
+    order: 6;
+    margin-block: 25px 0;
+  }
+  .palette {
+    position: sticky;
+    top: 95px;
+    z-index: 5;
+    background: #fff9e9;
+    padding-block: 12px;
+    margin-block: 12px;
+  }
+  .editor {
+    max-width: 450px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}
+@media (max-width: 400px) {
+  .editor {
+    padding-inline: 12px;
+  }
+  .editorBar {
+    width: calc(100% + 24px);
+    margin-inline: -12px;
+    padding-inline: 12px;
+    font-size: 0.57rem;
+  }
+  .palette {
+    gap: 11px;
+  }
+  .palette button {
+    width: 27px;
+    height: 27px;
+  }
+}

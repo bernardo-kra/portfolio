@@ -1,0 +1,120 @@
+.twoColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 38px;
+  align-items: start;
+}
+.kicker {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+.controls h3 {
+  margin: 16px 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+.controls > p {
+  font-size: 0.92rem;
+}
+.controls fieldset {
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.controls legend {
+  margin-bottom: 10px;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+.controls fieldset button {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 50px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+.controls fieldset button[aria-pressed='true'] {
+  background: var(--yellow);
+  box-shadow: 2px 3px 0 var(--ink);
+}
+.slider {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  margin-block: 25px;
+}
+.slider output {
+  margin-left: auto;
+}
+.slider input {
+  width: 100%;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+.slider input:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 4px;
+}
+.textButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+.controls .hint,
+.hint {
+  margin-block: 20px;
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+.status {
+  margin-top: 15px !important;
+  font-size: 0.75rem;
+  min-height: 25px;
+}
+.artboard {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: 6px 7px 0 var(--ink);
+  background: #fff;
+}
+.artboard img {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  object-fit: cover;
+}
+.artboard span {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 40px;
+  padding: 5px 12px;
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+@media (max-width: 850px) {
+  .twoColumns {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .artboard {
+    max-width: 450px;
+    margin-inline: auto;
+  }
+}

@@ -36,8 +36,43 @@ type HomeProjectsProps = {
   t: import('../../../i18n/index').PortfolioI18n
 }
 
+function learningProject(lang: HomeProjectsProps['lang']): Project {
+  return {
+    id: 'learning',
+    title:
+      lang === 'pt' ? 'Bastidores de uma interface' : 'Behind the interface',
+    subtitle: lang === 'pt' ? 'Design em construção' : 'Design in progress',
+    description:
+      lang === 'pt'
+        ? 'Seis estúdios conectados: pixel art, fundos generativos, animações, camadas em 3D e sua própria página para baixar.'
+        : 'Six connected studios: pixel art, generative backgrounds, motion, 3D layers and your own downloadable page.',
+    icon: 'UI',
+    color: '#e5b500',
+    route: '/learning',
+    features: ['Pixel art', 'Motion', 'React', 'UX'],
+    previewImage: '/learning-preview.svg',
+  }
+}
+
 function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
   return [
+    {
+      id: 'portfolio',
+      title: t.portfolioTitle,
+      subtitle: t.portfolioSubtitle,
+      description: t.portfolioDescription,
+      icon: 'DEV',
+      color: 'var(--brand-orange)',
+      route: '/portfolio',
+      features:
+        lang === 'pt'
+          ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
+          : ['Projects', 'Experience', 'Skills', 'Contact'],
+      previewImage: '/preview-fullpage-portfolio.png',
+      isFeatured: true,
+      featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
+    },
+    learningProject(lang),
     {
       id: 'agency',
       title: 'Forma — Creative Studio',
@@ -56,22 +91,6 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
         'UX',
       ],
       previewImage: '/images/forma/studio.webp',
-    },
-    {
-      id: 'portfolio',
-      title: t.portfolioTitle,
-      subtitle: t.portfolioSubtitle,
-      description: t.portfolioDescription,
-      icon: 'DEV',
-      color: 'var(--brand-orange)',
-      route: '/portfolio',
-      features:
-        lang === 'pt'
-          ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
-          : ['Projects', 'Experience', 'Skills', 'Contact'],
-      previewImage: '/preview-fullpage-portfolio.png',
-      isFeatured: true,
-      featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
     },
     {
       id: 'pomodoro',

@@ -1,0 +1,278 @@
+.hero {
+  position: relative;
+  padding: 113px 0 66px;
+  background:
+    repeating-conic-gradient(
+      from 3deg at 68% 50%,
+      transparent 0deg 12deg,
+      #79baa4aa 12deg 23deg
+    ),
+    var(--blue);
+  border-bottom: 4px solid var(--ink);
+}
+.hero > div {
+  position: relative;
+}
+.hero .breadcrumb {
+  color: #112d43;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+.heroTitle {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 28px 0 17px !important;
+  color: var(--yellow) !important;
+  font-size: clamp(3.3rem, 6.5vw, 5.5rem);
+  line-height: 0.99;
+  letter-spacing: 0.005em;
+  -webkit-text-stroke: 1.6px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 4px 5px 0 var(--ink);
+}
+.hero .heroText {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  color: #142d3c;
+  font-size: 1.13rem;
+  font-weight: 900;
+  line-height: 1.8;
+  margin-bottom: 27px;
+}
+.heroSpark {
+  position: absolute;
+  right: 38px;
+  bottom: 22px;
+  color: var(--yellow);
+  font-family: var(--display);
+  font-size: 132px;
+  line-height: 1;
+  -webkit-text-stroke: 2px var(--ink);
+  text-shadow: 5px 5px 0 var(--ink);
+  transform: rotate(12deg);
+}
+.heroOrbit {
+  position: absolute;
+  right: 130px;
+  top: 36px;
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 9px var(--yellow);
+  opacity: 0.9;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 68px;
+  padding-block: 92px 85px;
+}
+.about p + p {
+  margin-top: 13px;
+}
+.benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin-top: 28px !important;
+}
+.benefits li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border: 3px solid var(--ink);
+  border-radius: 50px;
+  box-shadow: 3px 3px 0 var(--ink);
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+.benefits svg {
+  color: #197959;
+  flex-shrink: 0;
+}
+.aboutAside {
+  display: grid;
+  gap: 23px;
+  align-content: start;
+}
+.projectPreview {
+  position: relative;
+  overflow: hidden;
+  border: 4px solid var(--ink);
+  border-radius: 25px;
+  box-shadow: 10px 11px 0 var(--ink);
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 15px, #ffffff24 15px 17px),
+    var(--yellow);
+  padding: 23px 22px 28px;
+}
+.previewLabel {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.blocks {
+  margin: 31px 0 28px;
+  display: grid;
+  gap: 5px;
+  transform: rotate(-4deg);
+}
+.blocks span {
+  position: relative;
+  display: block;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.blocks span::before {
+  content: '';
+  width: 30px;
+  height: 7px;
+  position: absolute;
+  left: 19px;
+  top: -7px;
+  background: inherit;
+  border: 2px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+.blocks span[data-index='1'] {
+  background: var(--blue);
+  margin-left: 15px;
+}
+.blocks span[data-index='2'] {
+  background: #f99a89;
+  margin-left: 15px;
+}
+.projectPreview .previewTitle {
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 2.25rem;
+  line-height: 1.1;
+  max-width: 270px;
+}
+.previewSpark {
+  position: absolute;
+  right: 18px;
+  bottom: 22px;
+  transform: rotate(12deg);
+}
+.aboutNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 21px;
+  border: 3px solid var(--ink);
+  border-radius: 23px;
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.aboutNote h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+.aboutNote p {
+  font-size: 0.87rem;
+  line-height: 1.65;
+}
+.aboutNote > svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1050px) {
+  .about {
+    gap: 35px;
+    grid-template-columns: 1.3fr 1fr;
+  }
+  .heroSpark {
+    right: 15px;
+    bottom: 0;
+    font-size: 105px;
+  }
+  .heroOrbit {
+    right: 30px;
+  }
+}
+@media (max-width: 800px) {
+  .hero {
+    padding: 110px 0 55px;
+  }
+  .heroTitle {
+    font-size: clamp(3.1rem, 8.5vw, 4.5rem);
+  }
+  .heroSpark,
+  .heroOrbit {
+    display: none;
+  }
+  .hero .heroText {
+    max-width: 600px;
+  }
+  .about {
+    grid-template-columns: 1fr;
+    padding-block: 65px;
+  }
+  .aboutAside {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    align-items: center;
+  }
+  .projectPreview {
+    padding-inline: 18px;
+  }
+  .projectPreview .previewTitle {
+    font-size: 1.8rem;
+  }
+  .previewSpark {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .heroTitle {
+    font-size: clamp(2.8rem, 10vw, 3.4rem);
+    text-shadow: 3px 4px 0 var(--ink);
+  }
+  .hero .heroText {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .hero .breadcrumb {
+    font-size: 0.64rem;
+  }
+  .aboutAside {
+    grid-template-columns: 1fr;
+  }
+  .about {
+    gap: 32px;
+  }
+  .projectPreview {
+    padding: 23px;
+  }
+  .projectPreview .previewTitle {
+    max-width: none;
+    font-size: 2rem;
+  }
+  .benefits {
+    gap: 10px;
+  }
+  .benefits li {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}

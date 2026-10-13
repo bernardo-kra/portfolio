@@ -1,0 +1,121 @@
+.header {
+  position: sticky;
+  top: 16px;
+  z-index: 30;
+  width: min(1200px, calc(100% - 40px));
+  min-height: 70px;
+  margin: 16px auto -86px;
+  padding: 10px 18px 10px 26px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border: 3px solid var(--ink);
+  border-radius: 25px;
+  background: var(--yellow);
+  box-shadow: 6px 7px 0 var(--ink);
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 1.25rem;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-left: auto;
+}
+.nav a {
+  font-weight: 900;
+  font-size: 0.86rem;
+  text-transform: uppercase;
+}
+.nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.language {
+  padding: 6px 11px;
+  border: 2px solid var(--ink);
+  border-radius: 50px;
+  background: #fff;
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+.header .headerCta {
+  padding: 12px 17px 9px;
+  font-size: 0.88rem;
+  box-shadow: 3px 4px 0 var(--ink);
+  white-space: nowrap;
+}
+.menuButton {
+  display: none;
+}
+
+@media (max-width: 1050px) {
+  .header {
+    gap: 16px;
+    padding-inline: 18px;
+  }
+  .nav {
+    gap: 20px;
+  }
+  .nav a {
+    font-size: 0.78rem;
+  }
+}
+@media (max-width: 800px) {
+  .header {
+    top: 12px;
+    min-height: 66px;
+    margin: 12px auto -78px;
+    gap: 14px;
+  }
+  .menuButton {
+    display: inline-flex;
+    order: 4;
+    padding: 6px;
+    border: 2px solid var(--ink);
+    background: transparent;
+  }
+  .language {
+    margin-left: auto;
+  }
+  .nav {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: -3px;
+    right: -3px;
+    padding: 23px;
+    border: 3px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 5px 5px 0 var(--ink);
+    background: var(--yellow);
+  }
+  .nav[data-open='true'] {
+    display: grid;
+    gap: 20px;
+  }
+  .nav a {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 500px) {
+  .header {
+    width: calc(100% - 28px);
+    padding: 10px 13px;
+    border-radius: 19px;
+    gap: 12px;
+  }
+  .back {
+    font-size: 1rem;
+    gap: 5px;
+  }
+  .header .headerCta {
+    display: none;
+  }
+}
