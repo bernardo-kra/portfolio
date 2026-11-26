@@ -12,7 +12,7 @@
   font-family: 'Space Grotesk', system-ui, sans-serif;
   overflow: hidden;
 }
-.numeral {
+.page .numeral {
   margin: 0 0 1.5rem;
   font-size: clamp(7rem, 26vw, 15rem);
   font-weight: 700;
