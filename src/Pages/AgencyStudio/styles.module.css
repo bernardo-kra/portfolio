@@ -401,25 +401,139 @@
   font-size: 0.8rem;
 }
 .filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  --filter-w: 7rem;
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--filter-w);
+  padding: 4px;
   margin-bottom: 2rem;
+  border: 1px solid #d1dbd1;
+  border-radius: 999px;
+  isolation: isolate;
+}
+.filterIndicator {
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: var(--filter-w);
+  border-radius: 999px;
+  background: var(--ink);
+  transition: translate 380ms var(--ease-out);
+}
+.filters[data-active='1'] .filterIndicator {
+  translate: 100% 0;
+}
+.filters[data-active='2'] .filterIndicator {
+  translate: 200% 0;
 }
 .filters button {
   background: transparent;
-  border: 1px solid #d1dbd1;
-  border-radius: 30px;
-  padding: 0.55rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.55rem 0.5rem;
   color: var(--ink);
-  min-height: 44px;
+  min-height: 40px;
   font-size: 0.8rem;
+  transition:
+    color 240ms ease,
+    scale var(--dur-press) var(--ease-out);
 }
 .filters button[aria-pressed='true'] {
   color: white;
-  background: var(--ink);
-  border-color: var(--ink);
 }
+.workGrid > * {
+  animation: formaSwap 420ms var(--ease-out) both;
+}
+.workGrid > :nth-child(2) {
+  animation-delay: 50ms;
+}
+.workGrid > :nth-child(3) {
+  animation-delay: 90ms;
+}
+.workGrid > :nth-child(4) {
+  animation-delay: 120ms;
+}
+@keyframes formaSwap {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+}
+[data-reveal] {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 900ms var(--ease-in-out);
+}
+[data-reveal] > img {
+  scale: 1.08;
+  transition:
+    scale 1200ms var(--ease-out),
+    transform 0.35s var(--ease-out);
+}
+[data-reveal][data-revealed='true'] {
+  clip-path: inset(0 0 0 0);
+}
+[data-reveal][data-revealed='true'] > img {
+  scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    clip-path: none;
+  }
+  [data-reveal] > img {
+    scale: 1;
+  }
+}
+.noteArt {
+  position: relative;
+  aspect-ratio: 1.7;
+  margin-bottom: 1.4rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.noteArt[data-kind='space'] {
+  background: #f3f1ea;
+}
+.noteArt[data-kind='space'] span {
+  position: absolute;
+  right: 9%;
+  bottom: 12%;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--green);
+}
+.noteArt[data-kind='space'] i {
+  position: absolute;
+  left: 9%;
+  top: 14%;
+  width: 22%;
+  height: 2px;
+  background: var(--ink);
+}
+.noteArt[data-kind='layout'] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6%;
+  padding: 10% 9%;
+  background: var(--mint);
+}
+.noteArt[data-kind='layout'] i {
+  border-radius: 3px;
+  background: #ffffffb3;
+  border: 1px solid #26774822;
+}
+.noteArt[data-kind='layout'] i:nth-child(2) {
+  background: #4fa26733;
+}
+.noteArt[data-kind='layout'] i:nth-child(3) {
+  background: var(--green);
+}
+
 .workGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1081,4 +1195,19 @@
     animation: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* The closing invitation is darker so it doesn't repeat the mint callout. */
+.contact {
+  background: var(--ink);
+  color: #e9f1e7;
+}
+.contact h2 {
+  color: #f6faf3;
+}
+.contact p {
+  color: #c2cfc5;
+}
+.contact .contactMark {
+  color: #7cc48d;
 }
