@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './styles.module.css'
 import ThemeToggleButton from '@theme/ThemeToggleButton'
@@ -251,11 +251,11 @@ function renderPortfolioMobileMenu({
 }
 
 const navItems: Array<{ id: string; labelKey: NavLabelKey; icon: string }> = [
-  { id: 'experiencia', labelKey: 'experienceTitle', icon: '💼' },
-  { id: 'projetos', labelKey: 'projectsTitle', icon: '↗' },
-  { id: 'sobre', labelKey: 'aboutTitle', icon: '👤' },
-  { id: 'educacao', labelKey: 'educationTitle', icon: '🎓' },
-  { id: 'contato', labelKey: 'contactTitle', icon: '📧' },
+  { id: 'experiencia', labelKey: 'experienceTitle', icon: '01' },
+  { id: 'projetos', labelKey: 'projectsTitle', icon: '02' },
+  { id: 'sobre', labelKey: 'aboutTitle', icon: '03' },
+  { id: 'educacao', labelKey: 'educationTitle', icon: '04' },
+  { id: 'contato', labelKey: 'contactTitle', icon: '05' },
 ]
 
 const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
@@ -267,6 +267,22 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const { user, login, logout, isAuthenticated } = useAuth()
   const { isFeatureEnabled, config } = useAppConfig()
+  const navListRef = useRef<HTMLUListElement>(null)
+
+  // Slides a single indicator to the active link instead of recoloring each link.
+  useLayoutEffect(() => {
+    const list = navListRef.current
+    if (!list) return
+    const place = () => {
+      const target = list.querySelector<HTMLElement>('[data-active="true"]')
+      list.style.setProperty('--indicator-x', `${target?.offsetLeft ?? 0}px`)
+      list.style.setProperty('--indicator-w', `${target?.offsetWidth ?? 0}px`)
+      list.dataset.hasActive = String(Boolean(target))
+    }
+    place()
+    window.addEventListener('resize', place)
+    return () => window.removeEventListener('resize', place)
+  }, [active, lang])
 
   useEffect(
     () =>
@@ -324,10 +340,13 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
           >
             BK<span>/ LAB</span>
           </Link>
-          <ul className={styles.portfolioNavList}>
+          <ul className={styles.portfolioNavList} ref={navListRef}>
+            <li className={styles.navIndicator} aria-hidden="true" />
             {navItems.map((item) => (
               <li key={item.id}>
                 <button
+                  data-active={active === item.id}
+                  aria-current={active === item.id ? 'true' : undefined}
                   className={`${styles.portfolioNavLink} ${active === item.id ? styles.active : ''}`}
                   onClick={() => scrollToSection(item.id)}
                 >

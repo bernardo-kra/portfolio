@@ -6,7 +6,7 @@ import {
   MessageCircle,
   ArrowUpRight,
 } from 'lucide-react'
-import { Typography, Section } from '@components/common'
+import { Typography, Section, SectionHeading } from '@components/common'
 import { useI18n } from '@src/i18n'
 import { useAppConfig } from '@context/AppConfigContext'
 import { trackEvent } from '@hooks/useAnalytics'
@@ -62,21 +62,12 @@ const Contact: React.FC = () => {
     <Section id="contato" spacing="lg">
       <div className={styles.contactWrapper}>
         <div className={styles.contactHeader}>
-          <Typography
-            variant="h3"
-            align="center"
-            className={styles.contactTitle}
-          >
-            {t.contactTitle}
-          </Typography>
-          <Typography
-            variant="body1"
-            color="muted"
-            align="center"
-            className={styles.contactSubtitle}
-          >
-            {t.contactSubtitle}
-          </Typography>
+          <SectionHeading
+            index="05"
+            eyebrow={t.contactTitle}
+            title={`${t.contactSubtitle.split(/[!.]/)[0]}.`}
+            description={t.contactSubtitle.split(/[!.]/).slice(1).join('.').trim()}
+          />
         </div>
 
         <div className={styles.contactGrid}>

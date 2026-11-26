@@ -308,3 +308,58 @@
   color: var(--portfolio-accent);
   box-shadow: none;
 }
+
+/* ── Editorial refinement: contact channels as a list ─────────── */
+.contactHeader {
+  text-align: left;
+  margin-bottom: 0;
+}
+.contactGrid,
+.contactGrid.contactGrid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border-default);
+}
+.contactCard.contactCard,
+:root[data-theme='dark'] .contactCard.contactCard {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem) 0.25rem;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+.contactCard.contactCard .contactCardContent {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+.contactCard.contactCard .contactCardValue {
+  font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  transition: translate var(--dur-base) var(--ease-out);
+}
+.contactCard.contactCard .contactCardArrow {
+  transition:
+    translate var(--dur-base) var(--ease-out),
+    color var(--dur-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contactCard.contactCard:hover .contactCardValue {
+    translate: 6px 0;
+    color: var(--brand-orange);
+  }
+  .contactCard.contactCard:hover .contactCardArrow {
+    translate: 3px -3px;
+    color: var(--brand-orange);
+  }
+}

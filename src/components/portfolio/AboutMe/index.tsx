@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Card } from '@components/common'
+import { Typography, Card, SectionHeading } from '@components/common'
 import { useI18n } from '@src/i18n'
 import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
@@ -182,16 +182,16 @@ const AboutMe: React.FC = () => {
   return (
     <div className={styles.aboutmeSection}>
       <div className={styles.aboutmeHeader}>
-        <Typography variant="h2" className={styles.aboutmeTitle}>
-          {t.aboutTitle}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="muted"
-          className={styles.aboutmeSubtitle}
-        >
-          {t.aboutDescription}
-        </Typography>
+        <SectionHeading
+          index="03"
+          eyebrow={t.aboutTitle}
+          title={
+            lang === 'pt'
+              ? 'Interfaces com atenção aos detalhes.'
+              : 'Interfaces with attention to detail.'
+          }
+          description={t.aboutDescription}
+        />
         <div className={styles.aboutmeLocation}>
           <MapPin size={16} />
           <span>
