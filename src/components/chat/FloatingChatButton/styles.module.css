@@ -1,31 +1,57 @@
 .floatingButton.floatingButton {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 20px;
+  right: 20px;
   background: var(--brand-orange);
   color: #182b23;
   border: none;
-  border-radius: 50px;
-  padding: 16px 20px;
+  border-radius: 999px;
+  padding: 11px 18px 11px 14px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
-  box-shadow: 0 8px 32px #00000026;
+  box-shadow:
+    0 1px 0 #ffffff59 inset,
+    0 10px 30px -8px #00000059;
   transition:
-    transform 0.2s,
-    background 0.2s;
+    transform var(--dur-slow) var(--ease-drawer),
+    opacity var(--dur-base) var(--ease-out),
+    scale var(--dur-press) var(--ease-out),
+    background-color var(--dur-fast) ease;
   z-index: 1000;
   font-weight: 600;
-  font-size: var(--font-size-sm);
-  max-width: 240px;
+  font-size: 0.875rem;
+  letter-spacing: -0.005em;
   font-family: 'Space Grotesk', system-ui, sans-serif;
   text-decoration: none;
 }
-.floatingButton.floatingButton:hover {
-  transform: translateY(-2px);
-  background: #ffd699;
-  color: #182b23;
+/* Gets out of the way while the visitor reads downwards; returns on scroll up. */
+.floatingButton.floatingButton[data-hidden='true'] {
+  transform: translateY(calc(100% + 28px));
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .floatingButton.floatingButton:hover {
+    background: #ffc266;
+    color: #182b23;
+  }
+}
+@media (max-width: 600px) {
+  .floatingButton.floatingButton {
+    padding: 13px;
+    bottom: 16px;
+    right: 16px;
+  }
+  .floatingButton.floatingButton .chatText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 .chatIcon {
   position: relative;

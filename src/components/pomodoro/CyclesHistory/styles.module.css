@@ -6,9 +6,11 @@
   margin-right: auto;
 }
 
-.historyTitle {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
+.historyTitle.historyTitle {
+  text-align: left;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
   color: var(--text-default);
 }
 
@@ -52,7 +54,14 @@
 }
 
 .cycleCard {
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   width: 100%;
 }
 
@@ -143,20 +152,20 @@
   .cyclesHistory {
     margin-top: var(--spacing-xl);
   }
-  
+
   .historyTitle {
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .emptyState {
     padding: var(--spacing-xl);
   }
-  
+
   .cycleHeader {
     gap: var(--spacing-sm);
     padding: var(--spacing-xs);
   }
-  
+
   .cycleIcon {
     width: 32px;
     height: 32px;
@@ -167,14 +176,14 @@
   .cyclesList {
     gap: var(--spacing-sm);
   }
-  
+
   .cycleHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-sm);
     text-align: left;
   }
-  
+
   .cycleDuration {
     align-self: flex-end;
   }
@@ -184,13 +193,44 @@
   .emptyState {
     padding: var(--spacing-lg);
   }
-  
+
   .emptyIcon {
     width: 36px;
     height: 36px;
   }
-  
+
   .cycleCard {
     padding: var(--spacing-sm);
   }
+}
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.cyclesHistory.cyclesHistory {
+  margin-top: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.emptyState.emptyState {
+  border: 0;
+  background: none;
+  padding: 1.5rem 0;
+  text-align: left;
+  align-items: flex-start;
+}
+.emptyIcon.emptyIcon {
+  opacity: 0.4;
+  width: 28px;
+  height: 28px;
+}
+.emptyText.emptyText {
+  font-size: 0.95rem;
+}
+.cycleCard.cycleCard {
+  background: color-mix(in srgb, var(--text-default) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  border-radius: 12px;
+  box-shadow: none;
+  transform: none;
 }

@@ -1,0 +1,43 @@
+/*
+ * Shared motion foundation.
+ * Strong custom curves instead of the browser defaults, short UI durations,
+ * press feedback on everything pressable and a collapsed reduced-motion mode.
+ */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 160ms;
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --dur-reveal: 640ms;
+}
+
+/*
+ * Press feedback. Uses the independent `scale` property so it composes with
+ * any `transform` a component already sets (centering, hover lifts, …).
+ */
+:where(button, a[href], [role='button'], summary, label:has(input)) {
+  transition-property: scale;
+  transition-duration: var(--dur-press);
+  transition-timing-function: var(--ease-out);
+}
+:where(button, a[href], [role='button'], summary):not(:disabled):not(
+    [aria-disabled='true']
+  ):active {
+  scale: 0.97;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,40 +1,101 @@
 .page {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  max-width: 800px;
+  max-width: 880px;
   margin: auto;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   color: var(--text-default);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  overflow: hidden;
+}
+.page .numeral {
+  margin: 0 0 1.5rem;
+  font-size: clamp(7rem, 26vw, 15rem);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px
+    color-mix(in srgb, var(--text-default) 35%, transparent);
+  animation: notFoundRise 800ms var(--ease-out) both;
+}
+.numeral span {
+  display: inline-block;
+  color: var(--brand-orange);
+  -webkit-text-stroke: 0;
+  animation: notFoundTilt 900ms var(--ease-out) 200ms both;
 }
 .page h1 {
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1;
   letter-spacing: -0.04em;
   margin: 1rem 0;
+  text-wrap: balance;
+  animation: notFoundRise 700ms var(--ease-out) 90ms both;
 }
 .page p {
   line-height: 1.7;
+  color: var(--text-muted);
 }
 .code {
-  font-family: monospace;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
   color: var(--brand-orange);
 }
 .page nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
-.page a {
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--brand-orange);
-  border-radius: 10px;
+.primary {
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  background: var(--brand-orange);
+  color: #0c0f14;
+  font-weight: 700;
+  transition:
+    background-color var(--dur-fast) ease,
+    scale var(--dur-press) var(--ease-out);
+}
+.secondary {
   color: var(--text-default);
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--text-default) 30%,
+    transparent
+  );
+  text-underline-offset: 5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .primary:hover {
+    background: #ffc266;
+  }
+  .secondary:hover {
+    text-decoration-color: var(--brand-orange);
+  }
 }
 .page a:focus-visible {
   outline: 2px solid var(--brand-orange);
   outline-offset: 4px;
+}
+@keyframes notFoundRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes notFoundTilt {
+  from {
+    transform: rotate(-24deg) translateY(10%);
+  }
 }

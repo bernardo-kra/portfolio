@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Typography, Section, Button } from '@components/common'
+import { Typography, Section, SectionHeading } from '@components/common'
 import { useI18n } from '@src/i18n'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import styles from './styles.module.css'
 
 interface Experience {
@@ -34,144 +34,85 @@ const WorkExperienceTimeline: React.FC = () => {
 
   return (
     <Section id="experiencia" spacing="lg">
-      <Typography variant="h2" className={styles.timelineTitle}>
-        {t.workExperience.title.split(' ').map((word, index) =>
-          index === 1 ? (
-            <Typography
-              key={index}
-              as="span"
-              color="brand"
-              className={styles.highlight}
+      <SectionHeading
+        index="01"
+        eyebrow={t.experienceTitle}
+        title={t.workExperience.title}
+      />
+
+      <ol className={styles.timeline}>
+        {experiences.map((exp) => {
+          const expanded = expandedId === exp.id
+          const panelId = `experience-${exp.id}`
+          return (
+            <li
+              key={exp.id}
+              className={styles.row}
+              data-expanded={expanded}
+              data-current={exp.isCurrent}
             >
-              {word}
-            </Typography>
-          ) : (
-            <span key={index}>{word} </span>
-          )
-        )}
-      </Typography>
-
-      <div className={styles.timelineContainer}>
-        {experiences.map((exp, idx) => (
-          <div
-            className={`${styles.timelineRow} ${expandedId === exp.id ? styles.expanded : ''}`}
-            key={exp.id}
-            style={{ animationDelay: `${idx * 0.2}s` }}
-          >
-            <div className={styles.timelineLeft}>
-              <Typography
-                variant="h4"
-                weight="semibold"
-                className={styles.timelineCompany}
-              >
-                {exp.company}, {exp.location}
-              </Typography>
-              <Typography
-                variant="caption"
-                color="muted"
-                className={styles.timelinePeriod}
-              >
-                {exp.period}
-              </Typography>
-            </div>
-
-            <div className={styles.timelineCenter}>
-              <button
-                type="button"
-                aria-expanded={expandedId === exp.id}
-                aria-label={`${exp.company}: ${exp.role}`}
-                className={`${styles.timelineDot} ${idx % 2 === 0 ? styles.timelineDotOrange : styles.timelineDotDark}`}
-                onClick={() => toggleExpanded(exp.id)}
-              >
-                {exp.isCurrent && <span className={styles.currentIndicator} />}
-              </button>
-              {idx < experiences.length - 1 && (
-                <div className={styles.timelineLine} />
-              )}
-            </div>
-
-            <div className={styles.timelineRight}>
-              <Typography
-                variant="h5"
-                weight="semibold"
-                className={styles.timelineRole}
-              >
-                {exp.role}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="muted"
-                className={styles.timelineDesc}
-              >
-                {exp.shortDescription}
-              </Typography>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleExpanded(exp.id)}
-                className={styles.expandButton}
-              >
-                {expandedId === exp.id ? (
-                  <>
-                    <ChevronUp size={16} />
-                    {t.workExperience.collapseButton}
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown size={16} />
-                    {t.workExperience.expandButton}
-                  </>
+              <div className={styles.period}>
+                {exp.isCurrent && (
+                  <span className={styles.currentDot} aria-hidden="true" />
                 )}
-              </Button>
-            </div>
-
-            <div
-              className={`${styles.expandedContent} ${expandedId === exp.id ? styles.expanded : ''}`}
-            >
-              <Typography variant="body1" className={styles.fullDescription}>
-                {exp.fullDescription}
-              </Typography>
-
-              <div className={styles.expandedGrid}>
-                <div className={styles.technologiesSection}>
-                  <Typography
-                    variant="overline"
-                    color="brand"
-                    className={styles.sectionTitle}
-                  >
-                    {t.workExperience.technologiesTitle}
-                  </Typography>
-                  <div className={styles.technologiesList}>
-                    {exp.technologies.map((tech) => (
-                      <span key={tech} className={styles.technologyTag}>
-                        {tech}
-                      </span>
-                    ))}
+                {exp.period}
+              </div>
+              <div className={styles.main}>
+                <Typography variant="h3" className={styles.role}>
+                  {exp.role}
+                </Typography>
+                <p className={styles.company}>
+                  {exp.company} · {exp.location}
+                </p>
+                <p className={styles.summary}>{exp.shortDescription}</p>
+                <div className={styles.panel} id={panelId}>
+                  <div className={styles.panelInner}>
+                    <p className={styles.fullDescription}>
+                      {exp.fullDescription}
+                    </p>
+                    <div className={styles.details}>
+                      <div>
+                        <p className={styles.detailTitle}>
+                          {t.workExperience.technologiesTitle}
+                        </p>
+                        <div className={styles.technologies}>
+                          {exp.technologies.map((tech) => (
+                            <span key={tech}>{tech}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className={styles.detailTitle}>
+                          {t.workExperience.achievementsTitle}
+                        </p>
+                        <ul className={styles.achievements}>
+                          {exp.achievements.map((achievement) => (
+                            <li key={achievement}>{achievement}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className={styles.achievementsSection}>
-                  <Typography
-                    variant="overline"
-                    color="brand"
-                    className={styles.sectionTitle}
-                  >
-                    {t.workExperience.achievementsTitle}
-                  </Typography>
-                  <ul className={styles.achievementsList}>
-                    {exp.achievements.map((achievement, index) => (
-                      <li key={index} className={styles.achievementItem}>
-                        <Typography variant="body2">{achievement}</Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+              <button
+                type="button"
+                className={styles.toggle}
+                aria-expanded={expanded}
+                aria-controls={panelId}
+                onClick={() => toggleExpanded(exp.id)}
+              >
+                <span>
+                  {expanded
+                    ? t.workExperience.collapseButton
+                    : t.workExperience.expandButton}
+                </span>
+                <Plus size={16} aria-hidden="true" />
+              </button>
+            </li>
+          )
+        })}
+      </ol>
     </Section>
   )
 }

@@ -1,5 +1,6 @@
 import { useState, useSyncExternalStore } from 'react'
 import { Link } from 'react-router-dom'
+import { Cookie } from 'lucide-react'
 import { useI18n } from '@src/i18n'
 import {
   clearAnalyticsCookies,
@@ -119,8 +120,13 @@ export default function PrivacyControls() {
       {consent === 'unset' || open ? (
         renderPrivacyBanner({ pt, consent, choose, setOpen, error })
       ) : (
-        <button className={styles.reopen} onClick={() => setOpen(true)}>
-          {pt ? 'Privacidade e cookies' : 'Privacy & cookies'}
+        <button
+          className={styles.reopen}
+          onClick={() => setOpen(true)}
+          aria-label={pt ? 'Privacidade e cookies' : 'Privacy & cookies'}
+          title={pt ? 'Privacidade e cookies' : 'Privacy & cookies'}
+        >
+          <Cookie size={16} aria-hidden="true" />
         </button>
       )}
     </>

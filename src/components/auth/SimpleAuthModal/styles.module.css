@@ -178,7 +178,14 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .closeButton:hover {
@@ -238,7 +245,14 @@
   border: 1px solid var(--border-default, #d1d5db);
   border-radius: 8px;
   font-size: 0.875rem;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   background: var(--input-background, #ffffff);
   color: var(--text-primary, #111827);
 }
@@ -274,7 +288,14 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   margin-top: 0.5rem;
 }
 

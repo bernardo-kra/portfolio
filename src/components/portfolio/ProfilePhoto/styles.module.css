@@ -10,7 +10,14 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 .photoFrame {
@@ -20,18 +27,32 @@
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid var(--brand-orange);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.1),
     0 8px 32px rgba(255, 153, 0, 0.3),
     0 0 0 1px rgba(255, 153, 0, 0.1);
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 .photoImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   opacity: 1;
   transform: scale(1);
 }
@@ -163,7 +184,7 @@
 
 .hero .photoFrame {
   border-width: 4px;
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.1),
     0 12px 40px rgba(255, 153, 0, 0.4),
     0 0 0 1px rgba(255, 153, 0, 0.2);
@@ -175,7 +196,7 @@
 
 .hero:hover .photoFrame {
   transform: scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.2),
     0 16px 48px rgba(255, 153, 0, 0.5),
     0 0 0 1px rgba(255, 153, 0, 0.3);
@@ -191,14 +212,14 @@
 
 .card .photoFrame {
   border-width: 2px;
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(255, 153, 0, 0.2),
     0 0 0 1px rgba(255, 153, 0, 0.1);
 }
 
 .card:hover .photoFrame {
   transform: scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 6px 20px rgba(255, 153, 0, 0.3),
     0 0 0 1px rgba(255, 153, 0, 0.2);
 }
@@ -216,7 +237,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(1);
   }
@@ -227,7 +249,8 @@
 }
 
 @keyframes particleFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(0) scale(0);
   }
@@ -240,21 +263,21 @@
 /* Dark theme adjustments */
 :root[data-theme='dark'] .photoFrame {
   border-color: var(--brand-orange);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.05),
     0 8px 32px rgba(255, 153, 0, 0.4),
     0 0 0 1px rgba(255, 153, 0, 0.2);
 }
 
 :root[data-theme='dark'] .hero .photoFrame {
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.05),
     0 12px 40px rgba(255, 153, 0, 0.5),
     0 0 0 1px rgba(255, 153, 0, 0.3);
 }
 
 :root[data-theme='dark'] .hero:hover .photoFrame {
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.1),
     0 16px 48px rgba(255, 153, 0, 0.6),
     0 0 0 1px rgba(255, 153, 0, 0.4);
@@ -266,12 +289,12 @@
     width: 100px;
     height: 100px;
   }
-  
+
   .xl {
     width: 120px;
     height: 120px;
   }
-  
+
   .hero .photoFrame {
     border-width: 3px;
   }
@@ -282,16 +305,16 @@
     width: 80px;
     height: 80px;
   }
-  
+
   .xl {
     width: 100px;
     height: 100px;
   }
-  
+
   .hero .photoFrame {
     border-width: 2px;
   }
-  
+
   .particle {
     width: 3px;
     height: 3px;
@@ -302,11 +325,11 @@
 @media (prefers-contrast: high) {
   .photoFrame {
     border-width: 3px;
-    box-shadow: 
+    box-shadow:
       0 0 0 2px var(--text-default),
       0 4px 16px rgba(0, 0, 0, 0.3);
   }
-  
+
   .hero .photoFrame {
     border-width: 4px;
   }
@@ -322,7 +345,7 @@
     animation: none;
     transition: none;
   }
-  
+
   .hero:hover .photoFrame {
     transform: none;
   }

@@ -51,7 +51,10 @@ export default function InterfacePreview({
           )}
           <span className={styles.visualLabel}>01 / 03</span>
         </div>
-        <div className={styles.content}>
+        <div
+          className={styles.content}
+          key={`${settings.font}-${settings.density}`}
+        >
           <p className={styles.eyebrow}>{copy.previewTag}</p>
           <h3>{copy.previewTitle}</h3>
           <p className={styles.description}>{copy.previewText}</p>

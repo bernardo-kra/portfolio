@@ -33,36 +33,55 @@ function renderChatSignInWelcome({
   setSignInOpen,
 }: RenderChatSignInWelcomeProps) {
   return (
-    <div className={styles.welcome}>
-      <div className={styles.welcomeIcon}>
-        <MessageCircle size={38} strokeWidth={1.4} />
+    <div className={`${styles.welcome} ${styles.welcomeEditorial}`}>
+      <div className={styles.preview} aria-hidden="true">
+        <p className={styles.previewDay}>{pt ? 'Hoje' : 'Today'}</p>
+        <span className={styles.bubbleIn}>
+          {pt
+            ? 'Oi! Vi o laboratório de estudos e queria conversar sobre uma vaga.'
+            : 'Hi! I saw the learning lab and wanted to talk about a role.'}
+        </span>
+        <span className={styles.bubbleOut}>
+          {pt
+            ? 'Que bom! Me conta mais sobre o time e o produto.'
+            : 'Great! Tell me more about the team and the product.'}
+        </span>
+        <span className={styles.typing}>
+          <i />
+          <i />
+          <i />
+        </span>
       </div>
-      <span className={styles.kicker}>
-        {pt ? 'VAMOS CONVERSAR?' : 'LET’S TALK?'}
-      </span>
-      <h2>
-        {pt
-          ? 'Uma boa ideia começa com um olá.'
-          : 'A good idea starts with hello.'}
-      </h2>
-      <p>
-        {pt
-          ? 'Entre para enviar sua mensagem e acompanhar a resposta de Bernardo neste espaço.'
-          : 'Sign in to send your message and follow Bernardo’s reply here.'}
-      </p>
-      <button
-        ref={trigger}
-        className={styles.signIn}
-        onClick={() => setSignInOpen(true)}
-      >
-        <LogIn size={17} />
-        {pt ? 'Entrar para conversar' : 'Sign in to chat'}
-      </button>
-      <span className={styles.signInNote}>
-        {pt
-          ? 'Google ou sua conta existente'
-          : 'Google or your existing account'}
-      </span>
+      <div className={styles.welcomeCopy}>
+        <span className={styles.kicker}>
+          {pt ? 'Vamos conversar?' : 'Let’s talk?'}
+        </span>
+        <h2>
+          {pt
+            ? 'Uma boa ideia começa com um olá.'
+            : 'A good idea starts with hello.'}
+        </h2>
+        <p>
+          {pt
+            ? 'Entre para enviar sua mensagem e acompanhar a resposta de Bernardo neste espaço.'
+            : 'Sign in to send your message and follow Bernardo’s reply here.'}
+        </p>
+        <div className={styles.signInRow}>
+          <button
+            ref={trigger}
+            className={styles.signIn}
+            onClick={() => setSignInOpen(true)}
+          >
+            <LogIn size={17} />
+            {pt ? 'Entrar para conversar' : 'Sign in to chat'}
+          </button>
+          <span className={styles.signInNote}>
+            {pt
+              ? 'Google ou sua conta existente'
+              : 'Google or your existing account'}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -77,11 +96,10 @@ function renderChatPageHeader({ pt, setLang }: RenderChatPageHeaderProps) {
     <header className={shellStyles.header}>
       <div className={shellStyles.headerContent}>
         <div className={shellStyles.headerText}>
-          <span className={shellStyles.eyebrow}>BERNARDO / MESSAGES</span>
-          <h1>
-            <MessageCircle size={26} aria-hidden="true" />
-            {pt ? 'Sua conversa' : 'Your conversation'}
-          </h1>
+          <span className={shellStyles.eyebrow}>
+            {pt ? 'BERNARDO / MENSAGENS' : 'BERNARDO / MESSAGES'}
+          </span>
+          <h1>{pt ? 'Sua conversa' : 'Your conversation'}</h1>
           <p>
             {pt
               ? 'Um espaço para trocar ideias, falar de projetos e criar conexões.'

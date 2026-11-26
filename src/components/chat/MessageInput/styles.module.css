@@ -75,7 +75,14 @@
   border: 1px solid var(--border-default);
   border-radius: 14px;
   padding: 12px 16px;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
@@ -123,7 +130,14 @@
   background: var(--chat-accent);
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   flex-shrink: 0;
   box-shadow: 0 4px 15px rgba(35, 91, 72, 0.3);
   font-size: 1.1rem;

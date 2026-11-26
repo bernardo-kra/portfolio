@@ -386,7 +386,7 @@ const TaskList: React.FC = () => {
           </Typography>
         </div>
         <Button
-          variant="primary"
+          variant="outline"
           size="sm"
           onClick={() => setIsAddingTask(!isAddingTask)}
           icon={<Plus size={16} />}

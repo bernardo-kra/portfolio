@@ -55,11 +55,26 @@
 }
 .reopen {
   position: fixed;
-  bottom: 0.65rem;
-  left: 0.65rem;
+  bottom: 0.75rem;
+  left: 0.75rem;
   z-index: 1000;
-  font-size: 0.7rem;
-  box-shadow: 0 2px 8px #0002;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 999px;
+  border-color: #78938c66;
+  opacity: 0.55;
+  box-shadow: 0 2px 10px #0003;
+  transition:
+    opacity var(--dur-fast) ease,
+    scale var(--dur-press) var(--ease-out);
+}
+.reopen:hover,
+.reopen:focus-visible {
+  opacity: 1;
 }
 .banner button:focus-visible,
 .reopen:focus-visible {

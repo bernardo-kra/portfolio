@@ -296,8 +296,13 @@ export default function Experimental3D() {
                     </small>
                   </div>
                   <p className={styles.eyebrow}>{copy.fileKinds[fileIndex]}</p>
-                  <h3>{selectedFile.name}</h3>
-                  <p className={styles.documentText}>
+                  <h3 key={`title-${fileIndex}`} className={styles.printed}>
+                    {selectedFile.name}
+                  </h3>
+                  <p
+                    key={`text-${fileIndex}`}
+                    className={`${styles.documentText} ${styles.printed}`}
+                  >
                     {copy.fileText[fileIndex]}
                   </p>
                   {mission.file === 'blacktide' ? (
@@ -339,6 +344,10 @@ export default function Experimental3D() {
                       <Check size={12} />
                     </li>
                   ))}
+                <li className={styles.promptLine} aria-hidden="true">
+                  <span>nb@asterion:~$</span>
+                  <i className={styles.caret} />
+                </li>
               </ol>
             </section>
             <details className={styles.help}>

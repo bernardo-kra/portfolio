@@ -1,7 +1,14 @@
 .card {
   background: var(--gray-100);
   border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   position: relative;
   overflow: hidden;
 }
@@ -105,11 +112,11 @@
   .card--padding {
     padding: var(--spacing-md);
   }
-  
+
   .card--lg.card--padding {
     padding: var(--spacing-lg);
   }
-  
+
   .card--sm.card--padding {
     padding: var(--spacing-sm);
   }
@@ -119,12 +126,12 @@
   .card--padding {
     padding: var(--spacing-sm);
   }
-  
+
   .card--lg.card--padding {
     padding: var(--spacing-md);
   }
-  
+
   .card--sm.card--padding {
     padding: var(--spacing-xs);
   }
-} 
+}

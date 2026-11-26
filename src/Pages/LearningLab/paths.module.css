@@ -102,7 +102,7 @@
   padding: 24px 23px 22px;
 }
 .cardBody .category {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   font-weight: 900;
@@ -130,7 +130,7 @@
   border: 1.5px solid #d1c9bb;
   padding: 3px 8px;
   border-radius: 20px;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   line-height: 1.5;
   font-weight: 900;
 }
@@ -157,7 +157,7 @@
   border-top: 2px dashed #d1c9bb;
 }
 .challenge strong {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   letter-spacing: 0.03em;
 }
 .challenge p {

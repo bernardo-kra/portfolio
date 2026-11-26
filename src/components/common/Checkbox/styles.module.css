@@ -22,7 +22,14 @@
   border: 2px solid var(--gray-400);
   border-radius: 4px;
   background: var(--card-bg);
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,12 +94,12 @@
     font-size: var(--font-size-xs);
     gap: var(--spacing-xs);
   }
-  
+
   .checkbox {
     width: 16px;
     height: 16px;
   }
-  
+
   .checkIcon {
     width: 10px;
     height: 10px;
@@ -103,12 +110,12 @@
   .checkboxContainer {
     gap: var(--spacing-xs);
   }
-  
+
   .checkbox {
     width: 14px;
     height: 14px;
   }
-  
+
   .checkIcon {
     width: 8px;
     height: 8px;

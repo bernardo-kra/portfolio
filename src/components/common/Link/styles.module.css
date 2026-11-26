@@ -3,7 +3,14 @@
   align-items: center;
   gap: var(--spacing-xs);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   cursor: pointer;
 }
 
@@ -75,7 +82,7 @@
   .link {
     gap: 0.25rem;
   }
-  
+
   .link__text {
     font-size: var(--font-size-sm);
   }
@@ -85,12 +92,12 @@
   .link {
     gap: 0.125rem;
   }
-  
+
   .link__text {
     font-size: var(--font-size-xs);
   }
-  
+
   .link__external {
     font-size: 0.625em;
   }
-} 
+}

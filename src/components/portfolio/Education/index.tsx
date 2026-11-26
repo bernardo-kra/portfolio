@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useI18n } from '@src/i18n'
-import { Typography, Section, Card } from '@components/common'
+import { Typography, Section, Card, SectionHeading } from '@components/common'
 import styles from './styles.module.css'
 
 const Education: React.FC = () => {
@@ -9,12 +9,11 @@ const Education: React.FC = () => {
   const education = t.education
   return (
     <Section id="educacao" spacing="lg">
-      <Typography variant="h2" className={styles.educationTitle}>
-        {education.title}{' '}
-        <Typography as="span" color="brand" className={styles.highlight}>
-          {education.highlight}
-        </Typography>
-      </Typography>
+      <SectionHeading
+        index="04"
+        eyebrow={t.educationTitle}
+        title={`${education.title} ${education.highlight.toLowerCase()}`}
+      />
 
       <div className={styles.educationContainer}>
         <div className={styles.academicSection}>

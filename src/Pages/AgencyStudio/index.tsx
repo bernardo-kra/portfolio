@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { profile } from '@src/config/profile'
 import CopyEmailButton from '@components/common/CopyEmailButton'
+import { LayoutNoteArt, SpaceNoteArt } from './NoteArt'
 import styles from './styles.module.css'
 type RenderAgencyHeroProps = {
   menuButtonRef: import('react').RefObject<HTMLButtonElement | null>
@@ -251,7 +252,9 @@ function renderAgencyWorks({
           className={styles.filters}
           role="group"
           aria-label="Filtrar estudos visuais"
+          data-active={['Todos', 'Identidade', 'Digital'].indexOf(filter)}
         >
+          <span className={styles.filterIndicator} aria-hidden="true" />
           {['Todos', 'Identidade', 'Digital'].map((category) => (
             <button
               key={category}
@@ -265,7 +268,7 @@ function renderAgencyWorks({
         <p className={styles.srOnly} role="status">
           {visibleWorks.length} estudos exibidos
         </p>
-        <div className={styles.workGrid}>
+        <div className={styles.workGrid} key={filter}>
           {visibleWorks.map((work) => (
             <button
               className={styles.workCard}
@@ -276,7 +279,11 @@ function renderAgencyWorks({
               }}
               aria-haspopup="dialog"
             >
-              <div className={styles.workVisual} data-kind={work.type}>
+              <div
+                className={styles.workVisual}
+                data-kind={work.type}
+                data-reveal
+              >
                 {work.type === 'plant' || work.type === 'team' ? (
                   <img
                     src={'/images/forma/' + work.type + '.webp'}
@@ -339,7 +346,7 @@ function renderAgencyStudio() {
       aria-labelledby="studio-title"
     >
       <div className={styles.split}>
-        <div className={styles.studioPhoto}>
+        <div className={styles.studioPhoto} data-reveal>
           <img
             src="/images/forma/team.webp"
             width="960"
@@ -447,14 +454,14 @@ function renderAgencyNotes() {
         </div>
         <div className={styles.notesGrid}>
           <article>
-            <img
-              src="/images/forma/plant.webp"
-              width="720"
-              height="480"
-              loading="lazy"
-              decoding="async"
-              alt="Composição minimalista com planta e espaço em branco"
-            />
+            <div
+              className={styles.noteArt}
+              data-kind="space"
+              data-reveal
+              aria-hidden="true"
+            >
+              <SpaceNoteArt />
+            </div>
             <p className={styles.eyebrow}>DESIGN / COMPOSIÇÃO</p>
             <h3>Espaço em branco também comunica.</h3>
             <details>
@@ -469,14 +476,14 @@ function renderAgencyNotes() {
             </details>
           </article>
           <article>
-            <img
-              src="/images/forma/team.webp"
-              width="960"
-              height="640"
-              loading="lazy"
-              decoding="async"
-              alt="Mesa com pessoas trabalhando e trocando ideias"
-            />
+            <div
+              className={styles.noteArt}
+              data-kind="layout"
+              data-reveal
+              aria-hidden="true"
+            >
+              <LayoutNoteArt />
+            </div>
             <p className={styles.eyebrow}>FRONTEND / EXPERIÊNCIA</p>
             <h3>O layout muda. A intenção continua.</h3>
             <details>
@@ -687,6 +694,25 @@ const AgencyStudio = () => {
   useEffect(() => {
     if (selected && !dialogRef.current?.open) dialogRef.current?.showModal()
   }, [selected])
+
+  // Images reveal once from the bottom edge as they enter the viewport.
+  useEffect(() => {
+    const targets = document.querySelectorAll<HTMLElement>(
+      '[data-reveal]:not([data-revealed])'
+    )
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          ;(entry.target as HTMLElement).dataset.revealed = 'true'
+          observer.unobserve(entry.target)
+        }
+      },
+      { rootMargin: '0px 0px -12% 0px' }
+    )
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [filter])
 
   useEffect(() => {
     if (!menuOpen) return

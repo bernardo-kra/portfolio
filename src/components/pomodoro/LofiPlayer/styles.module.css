@@ -276,3 +276,35 @@
 .trackInfo {
   flex-basis: 100px;
 }
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.lofiPlayer.lofiPlayer {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.playerTitle.playerTitle,
+.playerTitle.playerTitle :global(h4) {
+  font-size: 1rem;
+}
+.youtubeContainer.youtubeContainer {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  background: #0c1018;
+  border-radius: 14px;
+  clip-path: inset(0 0 0 0 round 14px);
+}
+.playerHeader.playerHeader {
+  margin-bottom: 1rem;
+}
+.playerActions.playerActions :is(button, a) {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+}
+.compactPlayer.compactPlayer {
+  padding: 0.25rem 0 1rem;
+  background: none;
+  border: 0;
+}
