@@ -6,6 +6,9 @@ const NotFound = () => {
   const { lang } = useI18n()
   return (
     <main className={styles.page}>
+      <p className={styles.numeral} aria-hidden="true">
+        4<span>0</span>4
+      </p>
       <p className={styles.code}>404 / LAB</p>
       <h1>
         {lang === 'pt'
@@ -20,10 +23,10 @@ const NotFound = () => {
       <nav
         aria-label={lang === 'pt' ? 'Continuar navegando' : 'Continue browsing'}
       >
-        <Link to="/">
+        <Link to="/" className={styles.primary}>
           {lang === 'pt' ? 'Explorar estudos' : 'Explore studies'} →
         </Link>
-        <Link to="/portfolio">
+        <Link to="/portfolio" className={styles.secondary}>
           {lang === 'pt' ? 'Conhecer o portfólio' : 'View portfolio'} →
         </Link>
       </nav>

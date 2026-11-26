@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '@src/i18n'
 import { profile } from '@src/config/profile'
@@ -59,49 +60,111 @@ export default function Privacy() {
           'Account and conversation data is retained as needed to provide features and handle requests, subject to applicable legal obligations. This version has no general automatic account or message deletion. You may request confirmation of processing, access, correction, sharing information, portability where applicable, anonymization, blocking or deletion, and withdraw consent. Send a request using the contact below; identity verification may be needed before fulfilling it.',
         ],
       ]
+  const allSections: [string, string][] = [
+    ...(sections as [string, string][]),
+    [pt ? 'Exercer seus direitos' : 'Exercise your rights', ''],
+  ]
+  const [active, setActive] = useState(0)
+
+  // Highlights the section being read in the index.
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting)
+        if (visible[0]) setActive(Number(visible[0].target.getAttribute('data-index')))
+      },
+      { rootMargin: '-20% 0px -65% 0px' }
+    )
+    document
+      .querySelectorAll('[data-privacy-section]')
+      .forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [lang])
+
   return (
     <main className={styles.page}>
-      <nav>
+      <nav className={styles.topbar}>
         <Link to="/portfolio">← {pt ? 'Portfólio' : 'Portfolio'}</Link>
         <button onClick={() => setLang(pt ? 'en' : 'pt')}>
           {pt ? 'English' : 'Português'}
         </button>
       </nav>
-      <h1>{pt ? 'Privacidade e seus dados' : 'Privacy and your data'}</h1>
-      <p>
-        {pt
-          ? 'Você pode explorar os estudos sem criar uma conta e sem aceitar análise.'
-          : 'You can explore the studies without an account or analytics consent.'}
-      </p>
-      {sections.map(([title, text]) => (
-        <section key={title}>
-          <h2>{title}</h2>
-          <p>{text}</p>
-        </section>
-      ))}
-      <section>
-        <h2>{pt ? 'Exercer seus direitos' : 'Exercise your rights'}</h2>
-        <a
-          href={`mailto:${profile.email}?subject=${encodeURIComponent(pt ? 'Solicitação de privacidade — portfólio' : 'Portfolio privacy request')}`}
-        >
-          {profile.email}
-        </a>
-        <p>
+      <header className={styles.header}>
+        <p className={styles.eyebrow}>{pt ? 'Documento' : 'Document'} / LGPD</p>
+        <h1>{pt ? 'Privacidade e seus dados' : 'Privacy and your data'}</h1>
+        <p className={styles.lead}>
           {pt
-            ? 'Descreva sua solicitação. Não envie senhas ou documentos sensíveis no primeiro contato.'
-            : 'Describe your request. Do not send passwords or sensitive documents in your first message.'}
+            ? 'Você pode explorar os estudos sem criar uma conta e sem aceitar análise.'
+            : 'You can explore the studies without an account or analytics consent.'}
         </p>
-        <a
-          href="https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados-1/direito-dos-titulares"
-          target="_blank"
-          rel="noreferrer"
+      </header>
+      <div className={styles.layout}>
+        <nav
+          className={styles.toc}
+          aria-label={pt ? 'Nesta página' : 'On this page'}
         >
-          {pt
-            ? 'Conheça seus direitos na ANPD'
-            : 'Learn about your rights at ANPD'}{' '}
-          ↗
-        </a>
-      </section>
+          <ol>
+            {allSections.map(([title], index) => (
+              <li key={title}>
+                <a
+                  href={`#privacy-${index}`}
+                  aria-current={active === index ? 'true' : undefined}
+                >
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <div className={styles.content}>
+          {sections.map(([title, text], index) => (
+            <section
+              key={title}
+              id={`privacy-${index}`}
+              data-privacy-section
+              data-index={index}
+            >
+              <h2>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                {title}
+              </h2>
+              <p>{text}</p>
+            </section>
+          ))}
+          <section
+            id={`privacy-${sections.length}`}
+            data-privacy-section
+            data-index={sections.length}
+          >
+            <h2>
+              <span>{String(sections.length + 1).padStart(2, '0')}</span>
+              {pt ? 'Exercer seus direitos' : 'Exercise your rights'}
+            </h2>
+            <a
+              className={styles.email}
+              href={`mailto:${profile.email}?subject=${encodeURIComponent(pt ? 'Solicitação de privacidade — portfólio' : 'Portfolio privacy request')}`}
+            >
+              {profile.email}
+            </a>
+            <p>
+              {pt
+                ? 'Descreva sua solicitação. Não envie senhas ou documentos sensíveis no primeiro contato.'
+                : 'Describe your request. Do not send passwords or sensitive documents in your first message.'}
+            </p>
+            <a
+              href="https://www.gov.br/anpd/pt-br/assuntos/titular-de-dados-1/direito-dos-titulares"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {pt
+                ? 'Conheça seus direitos na ANPD'
+                : 'Learn about your rights at ANPD'}{' '}
+              ↗
+            </a>
+          </section>
+        </div>
+      </div>
     </main>
   )
 }

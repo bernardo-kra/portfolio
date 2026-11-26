@@ -8,12 +8,12 @@
   --bg-default: #f7f9fc;
   --border-default: #c7d2e0;
   --border-light: #e6ebf2;
-  --chat-accent: #3c60ca;
-  --chat-accent-hover: #3054be;
+  --chat-accent: #b45309;
+  --chat-accent-hover: #92400e;
   --chat-on-accent: #ffffff;
   --workspace-rail: #edf1f8;
-  --workspace-selection: #eaf0ff;
-  --workspace-avatar: #e3eafa;
+  --workspace-selection: #fdf1e3;
+  --workspace-avatar: #f6e6d3;
   font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 :global([data-theme='dark']) .workspaceTheme.workspaceTheme {
@@ -26,10 +26,10 @@
   --bg-default: #1d2738;
   --border-default: #43526b;
   --border-light: #2c374a;
-  --chat-accent: #91acff;
-  --chat-accent-hover: #b0c4ff;
-  --chat-on-accent: #17243f;
+  --chat-accent: #ffa149;
+  --chat-accent-hover: #ffc27f;
+  --chat-on-accent: #1d1306;
   --workspace-rail: #111a29;
-  --workspace-selection: #2b3a56;
-  --workspace-avatar: #2b3b5a;
+  --workspace-selection: #3a2f27;
+  --workspace-avatar: #3b3027;
 }

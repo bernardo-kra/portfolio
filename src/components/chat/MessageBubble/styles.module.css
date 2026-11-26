@@ -172,3 +172,28 @@
     font-size: 0.95rem;
   }
 }
+
+/* Messages grow out of the sender's side of the conversation. */
+.messageBubble:hover {
+  transform: none;
+}
+.ownBubble {
+  transform-origin: bottom right;
+}
+.otherBubble {
+  transform-origin: bottom left;
+}
+.messageBubble {
+  @starting-style {
+    opacity: 0;
+    scale: 0.94;
+  }
+  transition:
+    opacity 240ms var(--ease-out),
+    scale 280ms var(--ease-out),
+    background-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
+}
+.ownBubble {
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--chat-accent) 30%, transparent);
+}
