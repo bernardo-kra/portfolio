@@ -165,12 +165,8 @@
   font-weight: 500;
   cursor: pointer;
   transition:
-    transform 160ms var(--ease-out),
+    scale 160ms var(--ease-out),
     background-color 200ms ease;
-}
-
-.contact__submit:active {
-  transform: scale(0.97);
 }
 
 .contact__submit svg {
@@ -207,9 +203,5 @@
 @media (prefers-reduced-motion: reduce) {
   .contact__field::after {
     transition: none;
-  }
-
-  .contact__submit:active {
-    transform: none;
   }
 }

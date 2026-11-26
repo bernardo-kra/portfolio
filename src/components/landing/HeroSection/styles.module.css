@@ -104,12 +104,8 @@
   letter-spacing: -0.01em;
   text-decoration: none;
   transition:
-    transform 160ms var(--ease-out),
+    scale 160ms var(--ease-out),
     background-color 200ms ease;
-}
-
-.hero__primary:active {
-  transform: scale(0.97);
 }
 
 .hero__primary svg {
@@ -205,9 +201,5 @@
     animation-name: hero-fade;
     animation-duration: 400ms;
     animation-delay: 0ms;
-  }
-
-  .hero__primary:active {
-    transform: none;
   }
 }

@@ -86,15 +86,6 @@
   transform: none;
 }
 
-/* Ações pressionáveis respondem ao toque. */
-.pressable {
-  transition: transform 160ms var(--ease-out);
-}
-
-.pressable:active {
-  transform: scale(0.97);
-}
-
 .focusRing:focus-visible {
   outline: 2px solid var(--l-accent);
   outline-offset: 4px;
@@ -104,9 +95,5 @@
   .reveal {
     transform: none;
     transition: opacity 300ms ease var(--reveal-delay, 0ms);
-  }
-
-  .pressable:active {
-    transform: none;
   }
 }

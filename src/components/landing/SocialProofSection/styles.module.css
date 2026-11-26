@@ -20,7 +20,9 @@
   border-top: 1px solid var(--l-line);
   color: var(--l-ink);
   text-decoration: none;
-  transition: color 220ms ease;
+  transition:
+    color 220ms ease,
+    scale 160ms var(--ease-out);
 }
 
 @media (min-width: 900px) {
@@ -40,6 +42,11 @@
   background: var(--l-ink);
   clip-path: inset(100% 0 0 0);
   transition: clip-path 260ms var(--ease-out);
+}
+
+/* Linhas grandes: pressão global de 0.97 ficaria exagerada aqui. */
+.work__link:active {
+  scale: 0.995;
 }
 
 .work__index {
