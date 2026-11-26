@@ -81,7 +81,7 @@ const CyclesHistory: React.FC = () => {
                 </Typography>
                 {cycle.taskName && (
                   <Typography variant="caption" color="brand" className={styles.taskInfo}>
-                    📋 {cycle.taskName}
+                    {cycle.taskName}
                   </Typography>
                 )}
               </div>

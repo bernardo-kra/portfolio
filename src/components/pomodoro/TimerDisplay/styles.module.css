@@ -1,110 +1,95 @@
 .timerDisplay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-lg);
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  border: none;
-  min-height: 200px;
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
   width: 100%;
-  transition:
-    transform var(--dur-base) var(--ease-out),
-    scale var(--dur-base) var(--ease-out),
-    opacity var(--dur-base) var(--ease-out),
-    color var(--dur-base) var(--ease-out),
-    background-color var(--dur-base) var(--ease-out),
-    border-color var(--dur-base) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out);
-  overflow: hidden;
 }
-
 
 .timerMode {
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
-  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.modeLabel {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.modeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--brand-orange);
+  opacity: 0.45;
+  transition: opacity var(--dur-base) ease;
+}
+.modeDot[data-running='true'] {
+  opacity: 1;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-orange) 25%, transparent);
+}
+.timerDisplay[data-mode='break'] .modeDot {
+  background: #6ee7b7;
+  box-shadow: none;
+}
+
+.modeLabel.modeLabel {
   margin: 0;
-  word-break: break-word;
+  font: inherit;
+  color: var(--brand-orange);
+  letter-spacing: inherit;
+}
+.timerDisplay[data-mode='break'] .modeLabel {
+  color: #6ee7b7;
+}
+
+.statusText::before {
+  content: '·';
+  margin-right: 0.7rem;
+  opacity: 0.5;
 }
 
 .timerTime {
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
   width: 100%;
+  text-align: center;
 }
 
-.timeDisplay {
-  font-family: 'Space Grotesk', monospace;
-  font-weight: 900;
-  font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--brand-orange);
-  text-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
+.timeDisplay.timeDisplay {
   margin: 0;
-  line-height: 1;
-  letter-spacing: -1px;
-  word-break: break-word;
-}
-
-.timerStatus {
-  text-align: center;
-  width: 100%;
-}
-
-.statusText {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: clamp(5.5rem, 21vw, 15rem);
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-  word-break: break-word;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  color: var(--text-default);
+}
+.colon {
+  margin: 0 0.02em;
+  translate: 0 -0.06em;
+  color: var(--brand-orange);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .timerDisplay {
-    padding: var(--spacing-md);
-    min-height: 180px;
-  }
-  
-  .timeDisplay {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-  }
+.progressTrack {
+  position: relative;
+  width: min(520px, 80%);
+  height: 2px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text-default) 12%, transparent);
 }
-
-@media (max-width: 600px) {
-  .timerDisplay {
-    padding: var(--spacing-sm);
-    min-height: 160px;
-  }
-  
-  .timeDisplay {
-    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  }
-  
-  .modeLabel {
-    font-size: var(--font-size-lg);
-  }
+.progressFill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: var(--brand-orange);
+  /* One tick per second: linear so the bar never stutters between ticks. */
+  transition: transform 1s linear;
 }
-
-@media (max-width: 400px) {
-  .timerDisplay {
-    padding: var(--spacing-xs);
-    min-height: 140px;
-  }
-  
-  .timeDisplay {
-    font-size: clamp(1.4rem, 3vw, 1.8rem);
-  }
-  
-  .modeLabel {
-    font-size: var(--font-size-base);
-  }
+.timerDisplay[data-mode='break'] .progressFill {
+  background: #6ee7b7;
 }
