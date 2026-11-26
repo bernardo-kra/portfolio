@@ -10,7 +10,14 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-default);
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   pointer-events: auto;
 }
 
@@ -34,7 +41,14 @@
   background: transparent;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   color: var(--text-muted);
   font-size: 0.875rem;
   font-weight: 500;
@@ -50,7 +64,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 153, 0, 0.1),
+    transparent
+  );
   transition: left 0.5s;
 }
 
@@ -85,7 +104,14 @@
 }
 
 .label {
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 .quickNavItem.active .label {
@@ -101,23 +127,23 @@
     flex-direction: row;
     padding: var(--spacing-xs);
   }
-  
+
   .quickNavContent {
     flex-direction: row;
     gap: var(--spacing-xs);
   }
-  
+
   .quickNavItem {
     min-width: auto;
     padding: var(--spacing-xs);
     flex-direction: column;
     gap: var(--spacing-xs);
   }
-  
+
   .label {
     font-size: 0.75rem;
   }
-  
+
   .icon {
     font-size: 1rem;
   }
@@ -129,11 +155,11 @@
     bottom: var(--spacing-md);
     padding: var(--spacing-xs);
   }
-  
+
   .quickNavItem {
     padding: var(--spacing-xs);
   }
-  
+
   .label {
     display: none;
   }

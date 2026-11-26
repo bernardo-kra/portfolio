@@ -114,7 +114,7 @@
   border-radius: 15px;
   text-align: center;
   padding: 11px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .mode {
@@ -127,7 +127,7 @@
   border: 2px solid var(--ink);
   border-radius: 50px;
   padding: 9px 13px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .mode button[aria-pressed='true'] {
@@ -142,7 +142,7 @@
   background: #fff;
 }
 .description span {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
 }

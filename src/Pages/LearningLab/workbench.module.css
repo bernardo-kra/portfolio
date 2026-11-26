@@ -89,7 +89,7 @@
   white-space: nowrap;
 }
 .contrast p {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
   margin-block: 5px 8px;
 }
@@ -102,13 +102,13 @@
 .contrast small {
   display: block;
   color: #5b5366;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   line-height: 1.6;
 }
 .contrast a {
   display: inline-block;
   margin-top: 8px;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -145,14 +145,14 @@
 .tokens summary {
   cursor: pointer;
   padding: 15px 18px;
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   font-weight: 900;
 }
 .tokens pre {
   padding: 0 18px 17px;
   margin: 0;
   overflow-x: auto;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   line-height: 1.7;
 }
 .status {
@@ -181,7 +181,7 @@
     padding: 20px 17px;
   }
   .choiceGroup button {
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     padding: 8px 10px;
   }
   .actions button:last-child {

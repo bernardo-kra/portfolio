@@ -5,7 +5,7 @@
   align-items: start;
 }
 .kicker {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
   font-weight: 900;
 }
@@ -28,7 +28,7 @@
 .tools legend,
 .presets legend {
   margin-bottom: 11px;
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   font-weight: 900;
 }
 .tools button,
@@ -37,7 +37,7 @@
   border: 2px solid var(--ink);
   border-radius: 50px;
   padding: 8px 12px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .tools button[aria-pressed='true'] {
@@ -80,7 +80,7 @@
 }
 .instructions .hint {
   margin: 23px 0;
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   line-height: 1.7;
 }
 .editor {
@@ -103,7 +103,7 @@
   padding: 13px 18px;
   background: var(--yellow);
   border-bottom: 3px solid var(--ink);
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 900;
 }
 .canvas {
@@ -146,7 +146,7 @@
   background: transparent;
   border: 0;
   padding: 5px 0;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 900;
 }
 .actions button:disabled {

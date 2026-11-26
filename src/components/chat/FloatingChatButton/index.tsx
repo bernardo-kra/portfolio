@@ -37,6 +37,33 @@ type RenderFloatingChatTriggerProps = {
   >
   unreadCount: number
   pt: boolean
+  hidden: boolean
+}
+
+function useHideOnScrollDown() {
+  const [hidden, setHidden] = useState(false)
+  useEffect(() => {
+    let last = window.scrollY
+    let frame = 0
+    const onScroll = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const y = window.scrollY
+        const nearBottom =
+          window.innerHeight + y >= document.documentElement.scrollHeight - 80
+        if (Math.abs(y - last) > 6) {
+          setHidden(y > last && y > 240 && !nearBottom)
+          last = y
+        }
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+  return hidden
 }
 
 function renderFloatingChatTrigger({
@@ -49,11 +76,13 @@ function renderFloatingChatTrigger({
   setShowLogin,
   unreadCount,
   pt,
+  hidden,
 }: RenderFloatingChatTriggerProps) {
   return (
     <button
       ref={trigger}
       className={styles.floatingButton}
+      data-hidden={hidden}
       aria-label={label}
       title={label}
       onClick={() => {
@@ -137,6 +166,7 @@ export default function FloatingChatButton() {
   const dialog = useRef<HTMLDialogElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
   const titleId = useId()
+  const hidden = useHideOnScrollDown()
   const available = isFeatureEnabled('chat') && config.ui.showChatButton
   const chatOpen =
     showChat && isAuthenticated && available && !user?.isChatOwner
@@ -168,6 +198,7 @@ export default function FloatingChatButton() {
         setShowLogin,
         unreadCount,
         pt,
+        hidden,
       })}
       <dialog
         ref={dialog}

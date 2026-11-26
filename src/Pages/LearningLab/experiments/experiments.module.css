@@ -24,7 +24,7 @@
   box-shadow: 4px 5px 0 var(--ink);
 }
 .tabNumber {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   opacity: 0.6;
 }
 .tabText {
@@ -38,7 +38,7 @@
 }
 .tabText small {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   margin-top: 4px;
   font-weight: 700;
 }
@@ -55,7 +55,7 @@
   background: #ffffff75;
 }
 .projectLabel {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.06em;
 }
@@ -69,7 +69,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: #5b5366;
 }
 .assets > span[data-ready='true'] {
@@ -92,7 +92,7 @@
   border-radius: 40px;
   background: var(--yellow);
   padding: 10px 14px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .tabs button[aria-selected='true'] {
@@ -132,7 +132,7 @@
   padding: 7px 0;
   background: transparent;
   border: 0;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .complete {
@@ -155,7 +155,7 @@
   .tabs button {
     flex-direction: column;
     padding: 12px 6px;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     gap: 7px;
   }
   .tabNumber {
@@ -166,7 +166,7 @@
     text-align: center;
   }
   .tabText strong {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
   }
   .tabText small {
     font-size: 0.61rem;
@@ -181,6 +181,6 @@
     padding: 18px 14px;
   }
   .tabs button {
-    font-size: 0.65rem;
+    font-size: 0.72rem;
   }
 }

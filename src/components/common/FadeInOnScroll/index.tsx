@@ -14,28 +14,30 @@ const FadeInOnScroll: React.FC<FadeInOnScrollProps> = ({
   delay = 0,
   duration = 0.6,
   className = '',
-  threshold = 0.1
+  threshold = 0.1,
 }) => {
   const elementRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    let timeout = 0
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            setIsVisible(true)
-          }, delay)
+          // Reveal once; re-hiding on scroll back reads as flicker.
+          observer.disconnect()
+          timeout = window.setTimeout(() => setIsVisible(true), delay)
         }
       },
-      { threshold }
+      { threshold, rootMargin: '0px 0px -8% 0px' }
     )
 
     const element = elementRef.current
     if (element) observer.observe(element)
 
     return () => {
-      if (element) observer.unobserve(element)
+      observer.disconnect()
+      window.clearTimeout(timeout)
     }
   }, [delay, threshold])
 

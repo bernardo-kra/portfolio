@@ -128,6 +128,22 @@ const GenerativeArt = () => {
     timeSpeed: 1,
     colorPalette: 'nebula',
   })
+  const [idle, setIdle] = useState(false)
+  // The interface steps back when the visitor stops moving, so the sky leads.
+  useEffect(() => {
+    let timer = window.setTimeout(() => setIdle(true), 3500)
+    const wake = () => {
+      setIdle(false)
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => setIdle(true), 3500)
+    }
+    const events = ['pointermove', 'pointerdown', 'keydown', 'focusin'] as const
+    events.forEach((name) => window.addEventListener(name, wake))
+    return () => {
+      window.clearTimeout(timer)
+      events.forEach((name) => window.removeEventListener(name, wake))
+    }
+  }, [])
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -139,7 +155,7 @@ const GenerativeArt = () => {
     return () => window.removeEventListener('keydown', escape)
   }, [])
   return (
-    <main className={styles.observatory}>
+    <main className={styles.observatory} data-idle={idle && !showControlPanel}>
       <div className={styles.canvas}>
         <PatternCanvas isPaused={paused} settings={settings} />
       </div>

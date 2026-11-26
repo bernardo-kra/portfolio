@@ -1,85 +1,57 @@
 .timerControls {
-  margin-top: var(--spacing-xl);
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
   width: 100%;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
 }
 
 .controlsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--spacing-md);
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
 }
 
-.controlButton {
+.controlButton.controlButton {
   min-height: 48px;
+  padding-inline: 1.4rem;
+  border-radius: 999px;
   font-weight: 600;
-  transition: all 0.3s ease;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition:
+    background-color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    scale var(--dur-press) var(--ease-out);
 }
-
-.controlButton:hover {
-  transform: translateY(-2px);
-}
-
-.controlButton:active {
-  transform: translateY(0);
+.controlButton.controlButton:hover,
+.controlButton.controlButton:active {
+  transform: none;
 }
 
 .keyboardShortcuts {
   text-align: center;
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-sm);
-  background: var(--gray-100);
-  border-radius: 8px;
-  opacity: 0.8;
 }
-
-:root[data-theme='dark'] .keyboardShortcuts {
-  background: var(--gray-700);
-}
-
 .keyboardShortcuts small {
   color: var(--text-muted);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+.keyboardShortcuts strong {
+  font-weight: 600;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .controlsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
   }
-  
-  .controlButton {
-    min-height: 44px;
-    font-size: var(--font-size-sm);
+  .controlsGrid > :first-child {
+    grid-column: 1 / -1;
   }
-}
-
-@media (max-width: 600px) {
-  .controlsGrid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-  }
-  
-  .controlButton {
-    min-height: 40px;
-    font-size: var(--font-size-sm);
-  }
-}
-
-@media (max-width: 400px) {
-  .timerControls {
-    margin-top: var(--spacing-lg);
-  }
-  
-  .controlButton {
-    min-height: 36px;
-    font-size: var(--font-size-xs);
+  .keyboardShortcuts {
+    display: none;
   }
 }

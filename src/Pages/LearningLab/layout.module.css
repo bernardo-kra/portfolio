@@ -97,12 +97,6 @@
 .footer a:focus-visible {
   outline-color: var(--yellow);
 }
-.floatingCta {
-  position: fixed;
-  right: 30px;
-  bottom: 28px;
-  z-index: 20;
-}
 @media (max-width: 800px) {
   .cta {
     padding: 40px 38px 45px;
@@ -116,9 +110,6 @@
   }
 }
 @media (max-width: 500px) {
-  .floatingCta {
-    display: none;
-  }
   .cta {
     padding: 33px 20px 40px;
     box-shadow: 7px 8px 0 var(--ink);
@@ -133,9 +124,5 @@
   .footer > div > div {
     flex-direction: column;
     gap: 16px;
-  }
-  .floatingCta {
-    right: 18px;
-    bottom: max(18px, env(safe-area-inset-bottom));
   }
 }

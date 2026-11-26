@@ -29,7 +29,14 @@
   word-wrap: break-word;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .messageBubble:hover {
@@ -164,4 +171,29 @@
   .messageText {
     font-size: 0.95rem;
   }
+}
+
+/* Messages grow out of the sender's side of the conversation. */
+.messageBubble:hover {
+  transform: none;
+}
+.ownBubble {
+  transform-origin: bottom right;
+}
+.otherBubble {
+  transform-origin: bottom left;
+}
+.messageBubble {
+  @starting-style {
+    opacity: 0;
+    scale: 0.94;
+  }
+  transition:
+    opacity 240ms var(--ease-out),
+    scale 280ms var(--ease-out),
+    background-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
+}
+.ownBubble {
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--chat-accent) 30%, transparent);
 }

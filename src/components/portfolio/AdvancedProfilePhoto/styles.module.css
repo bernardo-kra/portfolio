@@ -23,12 +23,25 @@
   border-radius: 50%;
   overflow: hidden;
   border: 6px solid transparent;
-  background: linear-gradient(45deg, var(--brand-orange), #ffb366, var(--brand-orange)) border-box;
-  box-shadow: 
+  background: linear-gradient(
+      45deg,
+      var(--brand-orange),
+      #ffb366,
+      var(--brand-orange)
+    )
+    border-box;
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.1),
     0 20px 60px rgba(255, 153, 0, 0.4),
     0 0 0 1px rgba(255, 153, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   z-index: 2;
 }
 
@@ -36,7 +49,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.4s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   opacity: 1;
   transform: scale(1);
 }
@@ -113,10 +133,16 @@
     transparent 70%
   );
   pointer-events: none;
-  transition: all 0.1s ease;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    scale var(--dur-press) var(--ease-out),
+    opacity var(--dur-press) var(--ease-out),
+    color var(--dur-press) var(--ease-out),
+    background-color var(--dur-press) var(--ease-out),
+    border-color var(--dur-press) var(--ease-out),
+    box-shadow var(--dur-press) var(--ease-out);
   z-index: 1;
 }
-
 
 .placeholder {
   width: 280px;
@@ -138,7 +164,7 @@
 /* Hover Effects */
 .profileContainer:hover .photoFrame {
   transform: scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.2),
     0 25px 80px rgba(255, 153, 0, 0.5),
     0 0 0 1px rgba(255, 153, 0, 0.3);
@@ -162,7 +188,8 @@
 
 /* Animations */
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -173,12 +200,17 @@
 }
 
 @keyframes ringRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
     opacity: 0.7;
   }
@@ -188,17 +220,16 @@
   }
 }
 
-
 /* Dark theme adjustments */
 :root[data-theme='dark'] .photoFrame {
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.05),
     0 20px 60px rgba(255, 153, 0, 0.5),
     0 0 0 1px rgba(255, 153, 0, 0.3);
 }
 
 :root[data-theme='dark'] .profileContainer:hover .photoFrame {
-  box-shadow: 
+  box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.1),
     0 25px 80px rgba(255, 153, 0, 0.6),
     0 0 0 1px rgba(255, 153, 0, 0.4);
@@ -215,17 +246,17 @@
     width: 220px;
     height: 220px;
   }
-  
+
   .placeholder {
     width: 220px;
     height: 220px;
   }
-  
+
   .floatingElement {
     width: 35px;
     height: 35px;
   }
-  
+
   .floatingElement svg {
     width: 16px;
     height: 16px;
@@ -237,22 +268,21 @@
     width: 180px;
     height: 180px;
   }
-  
+
   .placeholder {
     width: 180px;
     height: 180px;
   }
-  
+
   .floatingElement {
     width: 30px;
     height: 30px;
   }
-  
+
   .floatingElement svg {
     width: 14px;
     height: 14px;
   }
-  
 }
 
 /* Reduced motion */
@@ -262,7 +292,7 @@
   .floatingElement {
     animation: none;
   }
-  
+
   .profileContainer:hover .photoFrame {
     transform: none;
   }
