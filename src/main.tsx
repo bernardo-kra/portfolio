@@ -1,6 +1,7 @@
 import { lazy, StrictMode, Suspense } from 'react'
 import './components/theme/background-transparency.css'
 import './components/theme/animations.css'
+import './components/theme/motion.css'
 import './index.css'
 import './components/theme/interaction-feedback.css'
 import { createRoot } from 'react-dom/client'

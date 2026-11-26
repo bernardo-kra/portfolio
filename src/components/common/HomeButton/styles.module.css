@@ -11,7 +11,14 @@
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   backdrop-filter: blur(10px);
   text-decoration: none;
   font-family: inherit;
@@ -44,7 +51,14 @@
 
 .homeLabel {
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   font-weight: 600;
 }
 

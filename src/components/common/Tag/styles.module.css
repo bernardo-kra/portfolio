@@ -5,7 +5,14 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 2rem;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
   border: 1px solid transparent;
 }
 

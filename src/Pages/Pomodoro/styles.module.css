@@ -52,7 +52,14 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--gray-200);
   padding: var(--spacing-xl);
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 :root[data-theme='dark'] .timerCard {
@@ -66,7 +73,14 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--gray-200);
   padding: var(--spacing-lg);
-  transition: all 0.3s ease;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
   height: calc(100vh - 120px);
   width: 100%;
   display: flex;

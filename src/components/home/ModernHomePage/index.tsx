@@ -4,10 +4,9 @@ import { Typography, Container, FadeInOnScroll } from '@components/common'
 import { FloatingChatButton } from '@components/chat'
 import ThemeToggleButton from '@components/theme/ThemeToggleButton'
 import { useI18n } from '@src/i18n'
-import { usePreviewFit } from '@hooks/usePreviewFit'
 import styles from './styles.module.css'
 import { profile } from '@src/config/profile'
-import { Download, MessageCircle } from 'lucide-react'
+import { ArrowUpRight, Download, MessageCircle } from 'lucide-react'
 import { useAppConfig } from '@context'
 import Ribbon from '@components/common/Ribbon'
 import AccountControl from '@components/auth/AccountControl'
@@ -27,10 +26,6 @@ type Project = {
   featuredLabel?: string
 }
 
-type ProjectCardProps = {
-  project: Project
-  index: number
-}
 type HomeProjectsProps = {
   lang: import('../../../i18n/index').Lang
   t: import('../../../i18n/index').PortfolioI18n
@@ -50,7 +45,7 @@ function learningProject(lang: HomeProjectsProps['lang']): Project {
     color: '#e5b500',
     route: '/learning',
     features: ['Pixel art', 'Motion', 'React', 'UX'],
-    previewImage: '/learning-preview.svg',
+    previewImage: '/previews/learning.webp',
   }
 }
 
@@ -68,7 +63,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
         lang === 'pt'
           ? ['Projetos', 'Experiência', 'Habilidades', 'Contato']
           : ['Projects', 'Experience', 'Skills', 'Contact'],
-      previewImage: '/preview-fullpage-portfolio.png',
+      previewImage: '/previews/portfolio.webp',
       isFeatured: true,
       featuredLabel: lang === 'pt' ? 'Destaque' : 'Featured',
     },
@@ -90,7 +85,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
         lang === 'pt' ? 'Responsivo' : 'Responsive',
         'UX',
       ],
-      previewImage: '/images/forma/studio.webp',
+      previewImage: '/previews/agency.webp',
     },
     {
       id: 'pomodoro',
@@ -104,7 +99,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
         lang === 'pt'
           ? ['Timer', 'Tarefas', 'Estatísticas', 'Música']
           : ['Timer', 'Tasks', 'Statistics', 'Music'],
-      previewImage: '/preview-fullpage-pomodoro.png',
+      previewImage: '/previews/pomodoro.webp',
     },
     {
       id: 'generative',
@@ -118,7 +113,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
         lang === 'pt'
           ? ['Algoritmos', 'Padrões', 'Interatividade', 'Canvas']
           : ['Algorithms', 'Patterns', 'Interactivity', 'Canvas'],
-      previewImage: '/preview-fullpage-generative.png',
+      previewImage: '/previews/generative.webp',
     },
     {
       id: 'landing',
@@ -129,7 +124,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
       color: '#f59e0b',
       route: '/landing',
       features: ['Design', 'Performance', 'SEO', 'Analytics'],
-      previewImage: '/preview-fullpage-landing.png',
+      previewImage: '/previews/landing.webp',
     },
     {
       id: 'experimental3d',
@@ -143,7 +138,7 @@ function homeProjects({ lang, t }: HomeProjectsProps): Project[] {
       color: '#f97316',
       route: '/experimental3d',
       features: ['SVG', 'React', 'TypeScript', 'UX'],
-      previewImage: '/neon-bay-preview.svg',
+      previewImage: '/previews/experimental3d.webp',
     },
   ]
 }
@@ -169,7 +164,7 @@ function renderHomeHero({
     <section className={styles.heroSection}>
       <div className={styles.heroBackground} aria-hidden="true" />
       <Container className={styles.heroContainer}>
-        <FadeInOnScroll delay={100}>
+        <div>
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <div className={styles.greeting}>
@@ -235,21 +230,23 @@ function renderHomeHero({
               </div>
             </div>
 
-            <div className={styles.heroImage}></div>
+            <div className={styles.heroImage} aria-hidden="true"></div>
           </div>
-        </FadeInOnScroll>
+        </div>
       </Container>
     </section>
   )
 }
 
 type RenderHomeStudiesProps = {
+  lang: import('../../../i18n/index').Lang
   projectsRef: React.RefObject<HTMLElement | null>
   t: import('../../../i18n/index').PortfolioI18n
   projects: Project[]
 }
 
 function renderHomeStudies({
+  lang,
   projectsRef,
   t,
   projects,
@@ -257,7 +254,7 @@ function renderHomeStudies({
   return (
     <section id="estudos" className={styles.projectsSection} ref={projectsRef}>
       <Container className={styles.projectsContainer}>
-        <FadeInOnScroll delay={200}>
+        <FadeInOnScroll>
           <div className={styles.sectionHeader}>
             <Typography variant="h2" className={styles.sectionTitle}>
               {t.myProjects}
@@ -270,16 +267,13 @@ function renderHomeStudies({
               {t.projectsSubtitle}
             </Typography>
             <div className={styles.sectionHint}>
-              {t.recruiter.professionalProfile}
+              {lang === 'pt' ? 'Índice' : 'Index'} /{' '}
+              {String(projects.length).padStart(2, '0')}
             </div>
           </div>
         </FadeInOnScroll>
 
-        <div className={styles.projectsGrid}>
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        <StudiesIndex projects={projects} />
       </Container>
     </section>
   )
@@ -294,7 +288,7 @@ function renderHomeContact({ t, navigate }: RenderHomeContactProps) {
   return (
     <section className={styles.ctaSection}>
       <Container className={styles.ctaContainer}>
-        <FadeInOnScroll delay={650}>
+        <FadeInOnScroll>
           <div className={styles.ctaCard}>
             <div className={styles.ctaGlow} aria-hidden="true" />
             <div className={styles.ctaContent}>
@@ -346,91 +340,82 @@ function renderHomeContact({ t, navigate }: RenderHomeContactProps) {
   )
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+function StudiesIndex({ projects }: { projects: Project[] }) {
   const { lang } = useI18n()
-  const previewRef = useRef<HTMLDivElement>(null)
-  const { fit, position } = usePreviewFit(project.previewImage, previewRef)
+  const [active, setActive] = useState(0)
+  const current = projects[active] ?? projects[0]
 
   return (
-    <FadeInOnScroll delay={300 + index * 100}>
-      <Link
-        to={project.route}
-        className={[
-          styles.projectCard,
-          project.isFeatured ? styles.projectCardFeatured : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        style={
-          {
-            '--project-color': project.color,
-            '--preview-image': project.previewImage
-              ? `url(${project.previewImage})`
-              : 'none',
-            '--preview-fit': fit,
-            '--preview-pos': position,
-          } as React.CSSProperties
-        }
-      >
-        <div className={styles.cardHeader}>
-          <div className={styles.cardIcon}>{project.icon}</div>
-          <div className={styles.cardMeta}>
-            {project.isFeatured && (
-              <span className={styles.featuredBadge}>
-                {project.featuredLabel ??
-                  (lang === 'pt' ? 'Recomendado' : 'Recommended')}
+    <div
+      className={styles.studyIndex}
+      style={{ '--project-color': current?.color } as React.CSSProperties}
+    >
+      <ol className={styles.studyList}>
+        {projects.map((project, index) => (
+          <li key={project.id} className={styles.studyItem}>
+            <Link
+              to={project.route}
+              className={styles.studyRow}
+              data-active={index === active}
+              style={{ '--project-color': project.color } as React.CSSProperties}
+              onPointerEnter={() => setActive(index)}
+              onFocus={() => setActive(index)}
+            >
+              <span className={styles.studyNumber}>
+                {String(index + 1).padStart(2, '0')}
               </span>
-            )}
-            <div className={styles.cardBadge}>{project.subtitle}</div>
-          </div>
-        </div>
-
-        <div className={styles.cardContent}>
-          <Typography variant="h3" className={styles.cardTitle}>
-            {project.title}
-          </Typography>
-
-          <Typography
-            variant="body2"
-            color="muted"
-            className={styles.cardDescription}
-          >
-            {project.description}
-          </Typography>
-
-          <div className={styles.cardFeatures}>
-            {project.features.map((feature, idx) => (
-              <span key={idx} className={styles.featureTag}>
-                {feature}
+              <span className={styles.studyMain}>
+                <span className={styles.studyMeta}>{project.subtitle}</span>
+                <span className={styles.studyTitle}>
+                  {project.title}
+                  {project.isFeatured && (
+                    <span className={styles.studyFeatured}>
+                      {project.featuredLabel ??
+                        (lang === 'pt' ? 'Destaque' : 'Featured')}
+                    </span>
+                  )}
+                </span>
+                <span className={styles.studyDescription}>
+                  {project.description}
+                </span>
               </span>
-            ))}
-          </div>
+              <ArrowUpRight
+                className={styles.studyArrow}
+                size={22}
+                aria-hidden="true"
+              />
+              {project.previewImage && (
+                <span className={styles.studyThumb} aria-hidden="true">
+                  <img src={project.previewImage} alt="" loading="lazy" />
+                </span>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ol>
+      <div className={styles.studyPreview} aria-hidden="true">
+        <div className={styles.studyPreviewFrame}>
+          {projects.map((project, index) => (
+            <figure
+              key={project.id}
+              className={styles.studyPreviewFigure}
+              data-active={index === active}
+              style={
+                { '--project-color': project.color } as React.CSSProperties
+              }
+            >
+              {project.previewImage && (
+                <img src={project.previewImage} alt="" loading="lazy" />
+              )}
+            </figure>
+          ))}
         </div>
-
-        <div className={styles.cardFooter}>
-          <div className={styles.cardArrow}>→</div>
-        </div>
-
-        <div className={styles.previewLayer} aria-hidden="true">
-          <div className={styles.previewLoader}>
-            <span className={styles.loaderDot} />
-            <span className={styles.loaderDot} />
-            <span className={styles.loaderDot} />
-            <span className={styles.previewText}>
-              {lang === 'pt' ? 'Carregando preview' : 'Loading preview'}
-            </span>
-          </div>
-          <div className={styles.previewImage} ref={previewRef} />
-          {!project.previewImage && (
-            <div className={styles.previewFallback}>
-              {lang === 'pt' ? 'Preview indisponível' : 'Preview unavailable'}
-            </div>
-          )}
-        </div>
-
-        <div className={styles.cardHoverEffect} />
-      </Link>
-    </FadeInOnScroll>
+        <p className={styles.studyPreviewCaption}>
+          <span>{current?.icon}</span>
+          {current?.features.join(' · ')}
+        </p>
+      </div>
+    </div>
   )
 }
 
@@ -558,13 +543,13 @@ const ModernHomePage: React.FC = () => {
               ]
         }
       />
-      {renderHomeStudies({ projectsRef, t, projects })}
+      {renderHomeStudies({ lang, projectsRef, t, projects })}
 
       {renderHomeContact({ t, navigate })}
 
       <section className={styles.statsSection}>
         <Container className={styles.statsContainer}>
-          <FadeInOnScroll delay={1100}>
+          <FadeInOnScroll>
             <div className={styles.techChips}>
               <span className={styles.featureTag}>React</span>
               <span className={styles.featureTag}>Vite</span>
