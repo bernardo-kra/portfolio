@@ -1,29 +1,29 @@
 import { Link } from 'react-router-dom'
-import { Container, Section } from '@components/common'
 import { profile } from '@src/config/profile'
+import shared from '../shared.module.css'
 import styles from './styles.module.css'
+
+const link = `${styles.footer__link} ${shared.focusRing}`
+
 const Footer = () => (
-  <Section className={styles.footer}>
-    <Container className={styles.footer__container}>
-      <div className={styles.footer__content}>
-        <div className={styles.footer__brand}>
-          <h2 className={styles.footer__logo}>Bernardo Kraczkowski</h2>
-          <p className={styles.footer__description}>
-            Desenvolvimento frontend, experiência profissional e curiosidade em
-            prática.
-          </p>
-        </div>
+  <footer className={styles.footer}>
+    <div className={shared.inner}>
+      <div className={styles.footer__top}>
+        <p className={styles.footer__description}>
+          Desenvolvimento frontend, experiência profissional e curiosidade em
+          prática.
+        </p>
         <nav aria-label="Links do estudo" className={styles.footer__links}>
-          <Link to="/portfolio" className={styles.footer__link}>
+          <Link to="/portfolio" className={link}>
             Portfólio
           </Link>
-          <Link to="/" className={styles.footer__link}>
+          <Link to="/" className={link}>
             Todos os estudos
           </Link>
           <a
             href={profile.resumeUrl}
             download={profile.resumeFilename}
-            className={styles.footer__link}
+            className={link}
           >
             Currículo · PDF
           </a>
@@ -31,7 +31,7 @@ const Footer = () => (
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.footer__link}
+            className={link}
           >
             LinkedIn
           </a>
@@ -39,17 +39,23 @@ const Footer = () => (
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.footer__link}
+            className={link}
           >
             GitHub
           </a>
         </nav>
       </div>
-      <p>
-        © {new Date().getFullYear()} Bernardo Kraczkowski · Estudo de landing
-        page
+
+      <h2 className={styles.footer__wordmark}>
+        Bernardo <span className={shared.serif}>Kraczkowski</span>
+      </h2>
+
+      <p className={styles.footer__legal}>
+        <span>© {new Date().getFullYear()} Bernardo Kraczkowski</span>
+        <span>Estudo de landing page</span>
       </p>
-    </Container>
-  </Section>
+    </div>
+  </footer>
 )
+
 export default Footer

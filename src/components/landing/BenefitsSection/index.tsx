@@ -1,65 +1,69 @@
-import { Container, Section, Typography } from '@components/common'
+import shared from '../shared.module.css'
+import Reveal from '../Reveal'
 import styles from './styles.module.css'
+
 const benefits = [
   {
-    icon: '01',
     title: 'Mensagem com foco',
     description:
       'Título, contexto e ação principal organizados para facilitar a leitura.',
   },
   {
-    icon: '02',
     title: 'Espaço para o conteúdo',
     description:
       'Hierarquia visual e espaçamento que ajudam a comparar informações.',
   },
   {
-    icon: '03',
     title: 'Navegação compreensível',
     description:
       'Links com destinos claros e ações que podem ser alcançadas pelo teclado.',
   },
   {
-    icon: '04',
     title: 'Componentes reutilizáveis',
     description:
       'React, TypeScript e CSS Modules para evoluir a interface com consistência.',
   },
   {
-    icon: '05',
     title: 'Contato sem cadastro',
     description: 'Currículo, LinkedIn e email disponíveis sem criar uma conta.',
   },
   {
-    icon: '06',
     title: 'Código para explorar',
     description:
       'Um projeto aberto a estudo: você pode conferir a implementação no GitHub.',
   },
 ]
+
 const BenefitsSection = () => (
-  <Section className={styles.benefits}>
-    <Container className={styles.benefits__container}>
-      <div className={styles.benefits__header}>
-        <Typography as="h2" variant="h2" className={styles.benefits__title}>
-          O cuidado está nos detalhes.
-        </Typography>
-        <p className={styles.benefits__subtitle}>
-          As escolhas por trás desta experiência.
+  <section className={shared.section} aria-labelledby="benefits-title">
+    <div className={shared.inner}>
+      <header className={shared.head}>
+        <p className={shared.eyebrow} data-index="(03)">
+          Princípios
         </p>
-      </div>
-      <div className={styles.benefits__grid}>
-        {benefits.map((item) => (
-          <article key={item.title} className={styles.benefits__card}>
-            <span className={styles.benefits__icon}>{item.icon}</span>
-            <h3 className={styles.benefits__cardTitle}>{item.title}</h3>
-            <p className={styles.benefits__cardDescription}>
-              {item.description}
-            </p>
-          </article>
+        <div className={styles.benefits__intro}>
+          <h2 id="benefits-title" className={shared.title}>
+            O cuidado está nos <span className={shared.serif}>detalhes</span>.
+          </h2>
+          <p className={shared.lede}>As escolhas por trás desta experiência.</p>
+        </div>
+      </header>
+
+      <ol className={styles.benefits__list}>
+        {benefits.map((item, index) => (
+          <li key={item.title}>
+            <Reveal className={styles.benefits__row}>
+              <span className={styles.benefits__index} aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3 className={styles.benefits__title}>{item.title}</h3>
+              <p className={styles.benefits__text}>{item.description}</p>
+            </Reveal>
+          </li>
         ))}
-      </div>
-    </Container>
-  </Section>
+      </ol>
+    </div>
+  </section>
 )
+
 export default BenefitsSection
