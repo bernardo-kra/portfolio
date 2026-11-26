@@ -417,7 +417,7 @@ const MusicPlaylist: React.FC = () => {
           </Typography>
         </div>
         <Button
-          variant="primary"
+          variant="outline"
           size="sm"
           onClick={() => setIsAddingTrack(!isAddingTrack)}
           icon={<Plus size={16} />}

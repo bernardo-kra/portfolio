@@ -173,3 +173,13 @@
 .statCard {
   min-width: 0;
 }
+
+.timerStats.timerStats {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+.statsTitle.statsTitle {
+  font-size: 1.15rem;
+  text-align: left;
+  margin-bottom: 1rem;
+}

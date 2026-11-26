@@ -203,3 +203,34 @@
     padding: var(--spacing-sm);
   }
 }
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.cyclesHistory.cyclesHistory {
+  margin-top: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.emptyState.emptyState {
+  border: 0;
+  background: none;
+  padding: 1.5rem 0;
+  text-align: left;
+  align-items: flex-start;
+}
+.emptyIcon.emptyIcon {
+  opacity: 0.4;
+  width: 28px;
+  height: 28px;
+}
+.emptyText.emptyText {
+  font-size: 0.95rem;
+}
+.cycleCard.cycleCard {
+  background: color-mix(in srgb, var(--text-default) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  border-radius: 12px;
+  box-shadow: none;
+  transform: none;
+}

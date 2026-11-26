@@ -46,13 +46,15 @@ function renderPomodoroGrid() {
           <ControlsPanel />
         </div>
 
-        <div className={styles.tasksColumn}>
-          <TaskList />
-        </div>
+        <div className={styles.sideColumn}>
+          <div className={styles.tasksColumn}>
+            <TaskList />
+          </div>
 
-        <div className={styles.statsColumn}>
-          <TimerStats />
-          <CyclesHistory />
+          <div className={styles.statsColumn}>
+            <TimerStats />
+            <CyclesHistory />
+          </div>
         </div>
       </div>
     </>

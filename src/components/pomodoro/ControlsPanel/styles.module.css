@@ -157,3 +157,61 @@
     font-size: var(--font-size-lg);
   }
 }
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.controlsPanel.controlsPanel {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.tabs.tabs {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 3px;
+  margin-bottom: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-default) 10%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-default) 4%, transparent);
+}
+.tab.tab {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  min-height: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-muted);
+  background: transparent;
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    scale var(--dur-press) var(--ease-out);
+}
+.tab.tab.active,
+:root[data-theme='dark'] .tab.tab.active {
+  color: var(--text-default);
+  background: color-mix(in srgb, var(--text-default) 10%, transparent);
+  border: 0;
+  box-shadow: none;
+}
+.tab.tab.active::after,
+.tab.tab::after {
+  display: none;
+}
+.tabContent.tabContent {
+  border: 0;
+  background: none;
+  padding: 0;
+  max-height: none;
+}
+.sectionTitle.sectionTitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

@@ -392,3 +392,48 @@
   max-width: 100%;
   min-width: 0;
 }
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.musicPlaylist.musicPlaylist {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.playlistHeader.playlistHeader {
+  margin: 1.5rem 0 0.9rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+}
+.playlistTitle.playlistTitle :global(h4) {
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+.currentTrackCard.currentTrackCard,
+.trackCard.trackCard,
+.activeTrack.activeTrack,
+:root[data-theme='dark'] .activeTrack.activeTrack {
+  background: color-mix(in srgb, var(--text-default) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  border-radius: 14px;
+  box-shadow: none;
+  padding: 0.9rem 1rem;
+  transform: none;
+}
+.activeTrack.activeTrack {
+  border-color: color-mix(in srgb, var(--brand-orange) 45%, transparent);
+}
+.trackCard.trackCard + .trackCard.trackCard {
+  margin-top: 0.5rem;
+}
+.trackName.trackName {
+  font-size: 0.95rem;
+}
+
+.playlistHeader.playlistHeader > button {
+  min-height: 0;
+  padding: 0.45rem 0.9rem;
+  border-width: 1px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}

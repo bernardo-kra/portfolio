@@ -386,3 +386,50 @@
   outline: 2px solid var(--brand-orange);
   outline-offset: 3px;
 }
+
+/* ── Calm panel skin ─────────────────────────────────────────── */
+.taskHeader.taskHeader {
+  padding-bottom: 0.85rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+}
+.taskTitle.taskTitle :global(h4) {
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+.taskIcon.taskIcon {
+  color: var(--brand-orange);
+  width: 16px;
+  height: 16px;
+}
+.emptyTasks.emptyTasks {
+  border: 0;
+  background: none;
+  padding: 2rem 1rem;
+  text-align: left;
+  align-items: flex-start;
+}
+.emptyIcon.emptyIcon {
+  opacity: 0.4;
+  width: 28px;
+  height: 28px;
+}
+.taskCard.taskCard {
+  background: color-mix(in srgb, var(--text-default) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  border-radius: 14px;
+  box-shadow: none;
+  transform: none;
+}
+
+.taskHeader.taskHeader > button {
+  min-height: 0;
+  padding: 0.45rem 0.9rem;
+  border-width: 1px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.emptyTasks.emptyTasks :global(p) {
+  font-size: 0.9rem;
+}
