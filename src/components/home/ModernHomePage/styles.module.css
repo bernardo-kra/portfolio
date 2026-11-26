@@ -155,16 +155,19 @@
 }
 
 .themeControls {
-  position: fixed;
+  /* Lives in the page header and scrolls away with it, so it never sits on content. */
+  position: absolute;
   top: 1rem;
   right: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   z-index: 1000;
-  background: var(--bg-secondary);
-  padding: 0.5rem;
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-secondary) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.4rem;
+  border-radius: 999px;
   border: 1px solid var(--border-color);
 }
 
@@ -761,6 +764,7 @@
   }
 
   .heroImage {
+    flex: none;
     height: 190px;
     background-position: left center;
   }
