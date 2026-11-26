@@ -113,7 +113,11 @@
   color: #c9cfe2;
 }
 .intro p:first-child {
-  font: 0.7rem ui-monospace, SFMono-Regular, Menlo, monospace;
+  font:
+    0.7rem ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
   color: #d9c3ff;
   letter-spacing: 0.15em;
 }

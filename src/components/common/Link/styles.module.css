@@ -82,7 +82,7 @@
   .link {
     gap: 0.25rem;
   }
-  
+
   .link__text {
     font-size: var(--font-size-sm);
   }
@@ -92,12 +92,12 @@
   .link {
     gap: 0.125rem;
   }
-  
+
   .link__text {
     font-size: var(--font-size-xs);
   }
-  
+
   .link__external {
     font-size: 0.625em;
   }
-} 
+}

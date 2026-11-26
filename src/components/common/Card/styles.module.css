@@ -112,11 +112,11 @@
   .card--padding {
     padding: var(--spacing-md);
   }
-  
+
   .card--lg.card--padding {
     padding: var(--spacing-lg);
   }
-  
+
   .card--sm.card--padding {
     padding: var(--spacing-sm);
   }
@@ -126,12 +126,12 @@
   .card--padding {
     padding: var(--spacing-sm);
   }
-  
+
   .card--lg.card--padding {
     padding: var(--spacing-md);
   }
-  
+
   .card--sm.card--padding {
     padding: var(--spacing-xs);
   }
-} 
+}

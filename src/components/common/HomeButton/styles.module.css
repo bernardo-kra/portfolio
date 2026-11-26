@@ -95,14 +95,22 @@
 
 /* Generative Art Theme - Cosmic and futuristic */
 .homeButton--generative {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(6, 182, 212, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.2),
+    rgba(6, 182, 212, 0.2)
+  );
   border-color: rgba(168, 85, 247, 0.4);
   color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 20px rgba(168, 85, 247, 0.1);
 }
 
 .homeButton--generative:hover {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(6, 182, 212, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.3),
+    rgba(6, 182, 212, 0.3)
+  );
   border-color: rgba(168, 85, 247, 0.6);
   box-shadow: 0 8px 30px rgba(168, 85, 247, 0.2);
 }
@@ -180,13 +188,21 @@
 }
 
 .homeButton--light.homeButton--generative {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(6, 182, 212, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.15),
+    rgba(6, 182, 212, 0.15)
+  );
   border-color: rgba(168, 85, 247, 0.3);
   color: rgba(0, 0, 0, 0.8);
 }
 
 .homeButton--light.homeButton--generative:hover {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(6, 182, 212, 0.25));
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.25),
+    rgba(6, 182, 212, 0.25)
+  );
   border-color: rgba(168, 85, 247, 0.5);
 }
 
@@ -201,7 +217,6 @@
   border-color: rgba(0, 0, 0, 0.4);
 }
 
-
 /* Mobile responsive */
 @media (max-width: 768px) {
   .homeButton {
@@ -215,15 +230,15 @@
     justify-content: center;
     z-index: 1001;
   }
-  
+
   .homeLabel {
     display: none;
   }
-  
+
   .arrowIcon {
     display: none;
   }
-  
+
   .homeIcon svg {
     width: 18px;
     height: 18px;
@@ -242,7 +257,7 @@
     top: 0.8rem;
     left: 0.8rem;
   }
-  
+
   .homeIcon {
     font-size: 1rem;
   }

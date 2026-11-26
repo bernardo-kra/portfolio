@@ -152,20 +152,20 @@
   .cyclesHistory {
     margin-top: var(--spacing-xl);
   }
-  
+
   .historyTitle {
     margin-bottom: var(--spacing-lg);
   }
-  
+
   .emptyState {
     padding: var(--spacing-xl);
   }
-  
+
   .cycleHeader {
     gap: var(--spacing-sm);
     padding: var(--spacing-xs);
   }
-  
+
   .cycleIcon {
     width: 32px;
     height: 32px;
@@ -176,14 +176,14 @@
   .cyclesList {
     gap: var(--spacing-sm);
   }
-  
+
   .cycleHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-sm);
     text-align: left;
   }
-  
+
   .cycleDuration {
     align-self: flex-end;
   }
@@ -193,12 +193,12 @@
   .emptyState {
     padding: var(--spacing-lg);
   }
-  
+
   .emptyIcon {
     width: 36px;
     height: 36px;
   }
-  
+
   .cycleCard {
     padding: var(--spacing-sm);
   }

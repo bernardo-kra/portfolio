@@ -250,6 +250,25 @@ function renderPortfolioMobileMenu({
   )
 }
 
+// Slides a single indicator to the active link instead of recoloring each link.
+function useNavIndicator(active: string, lang: Lang) {
+  const navListRef = useRef<HTMLUListElement>(null)
+  useLayoutEffect(() => {
+    const list = navListRef.current
+    if (!list) return
+    const place = () => {
+      const target = list.querySelector<HTMLElement>('[data-active="true"]')
+      list.style.setProperty('--indicator-x', `${target?.offsetLeft ?? 0}px`)
+      list.style.setProperty('--indicator-w', `${target?.offsetWidth ?? 0}px`)
+      list.dataset.hasActive = String(Boolean(target))
+    }
+    place()
+    window.addEventListener('resize', place)
+    return () => window.removeEventListener('resize', place)
+  }, [active, lang])
+  return navListRef
+}
+
 const navItems: Array<{ id: string; labelKey: NavLabelKey; icon: string }> = [
   { id: 'experiencia', labelKey: 'experienceTitle', icon: '01' },
   { id: 'projetos', labelKey: 'projectsTitle', icon: '02' },
@@ -267,22 +286,7 @@ const PortfolioNav: React.FC<PortfolioNavProps> = ({ t, lang, setLang }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const { user, login, logout, isAuthenticated } = useAuth()
   const { isFeatureEnabled, config } = useAppConfig()
-  const navListRef = useRef<HTMLUListElement>(null)
-
-  // Slides a single indicator to the active link instead of recoloring each link.
-  useLayoutEffect(() => {
-    const list = navListRef.current
-    if (!list) return
-    const place = () => {
-      const target = list.querySelector<HTMLElement>('[data-active="true"]')
-      list.style.setProperty('--indicator-x', `${target?.offsetLeft ?? 0}px`)
-      list.style.setProperty('--indicator-w', `${target?.offsetWidth ?? 0}px`)
-      list.dataset.hasActive = String(Boolean(target))
-    }
-    place()
-    window.addEventListener('resize', place)
-    return () => window.removeEventListener('resize', place)
-  }, [active, lang])
+  const navListRef = useNavIndicator(active, lang)
 
   useEffect(
     () =>

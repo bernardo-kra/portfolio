@@ -195,15 +195,15 @@
     bottom: var(--spacing-sm);
     max-width: calc(100vw - 2rem);
   }
-  
+
   .ctaActions {
     flex-direction: column;
   }
-  
+
   .primaryAction {
     width: 100%;
   }
-  
+
   .secondaryAction {
     width: 100%;
     min-width: auto;
@@ -217,17 +217,16 @@
     right: var(--spacing-xs);
     max-width: none;
   }
-  
+
   .ctaText {
     text-align: center;
   }
-  
+
   .ctaTitle {
     font-size: var(--font-size-sm);
   }
-  
+
   .ctaSubtitle {
     font-size: var(--font-size-xs);
   }
 }
-

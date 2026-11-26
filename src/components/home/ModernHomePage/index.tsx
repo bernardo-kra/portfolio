@@ -357,7 +357,9 @@ function StudiesIndex({ projects }: { projects: Project[] }) {
               to={project.route}
               className={styles.studyRow}
               data-active={index === active}
-              style={{ '--project-color': project.color } as React.CSSProperties}
+              style={
+                { '--project-color': project.color } as React.CSSProperties
+              }
               onPointerEnter={() => setActive(index)}
               onFocus={() => setActive(index)}
             >

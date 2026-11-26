@@ -719,7 +719,6 @@
 }
 
 @media (max-width: 1024px) {
-
   .ctaCard {
     grid-template-columns: 1fr;
   }
@@ -769,7 +768,6 @@
   .ctaActions {
     flex-direction: column;
   }
-
 }
 
 @media (max-width: 480px) {
@@ -787,7 +785,6 @@
   .heroImage {
     height: 170px;
   }
-
 }
 
 .profileLink,

@@ -66,7 +66,11 @@ const Contact: React.FC = () => {
             index="05"
             eyebrow={t.contactTitle}
             title={`${t.contactSubtitle.split(/[!.]/)[0]}.`}
-            description={t.contactSubtitle.split(/[!.]/).slice(1).join('.').trim()}
+            description={t.contactSubtitle
+              .split(/[!.]/)
+              .slice(1)
+              .join('.')
+              .trim()}
           />
         </div>
 

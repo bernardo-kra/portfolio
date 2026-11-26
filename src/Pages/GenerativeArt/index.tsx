@@ -155,10 +155,7 @@ const GenerativeArt = () => {
     return () => window.removeEventListener('keydown', escape)
   }, [])
   return (
-    <main
-      className={styles.observatory}
-      data-idle={idle && !showControlPanel}
-    >
+    <main className={styles.observatory} data-idle={idle && !showControlPanel}>
       <div className={styles.canvas}>
         <PatternCanvas isPaused={paused} settings={settings} />
       </div>

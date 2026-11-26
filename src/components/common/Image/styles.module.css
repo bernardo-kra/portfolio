@@ -76,12 +76,12 @@
 }
 
 /* Loading state */
-.image[loading="lazy"] {
+.image[loading='lazy'] {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.image[loading="lazy"].loaded {
+.image[loading='lazy'].loaded {
   opacity: 1;
 }
 
@@ -91,12 +91,12 @@
     width: 80px;
     height: 80px;
   }
-  
+
   .image--lg {
     width: 56px;
     height: 56px;
   }
-  
+
   .image--md {
     width: 40px;
     height: 40px;
@@ -108,19 +108,19 @@
     width: 64px;
     height: 64px;
   }
-  
+
   .image--lg {
     width: 48px;
     height: 48px;
   }
-  
+
   .image--md {
     width: 32px;
     height: 32px;
   }
-  
+
   .image--sm {
     width: 24px;
     height: 24px;
   }
-} 
+}

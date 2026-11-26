@@ -19,7 +19,8 @@
   line-height: 0.8;
   letter-spacing: -0.07em;
   color: transparent;
-  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--text-default) 35%, transparent);
+  -webkit-text-stroke: 1.5px
+    color-mix(in srgb, var(--text-default) 35%, transparent);
   animation: notFoundRise 800ms var(--ease-out) both;
 }
 .numeral span {
@@ -68,7 +69,11 @@
 .secondary {
   color: var(--text-default);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--text-default) 30%, transparent);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--text-default) 30%,
+    transparent
+  );
   text-underline-offset: 5px;
 }
 @media (hover: hover) and (pointer: fine) {

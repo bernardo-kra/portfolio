@@ -17,7 +17,7 @@ const CyclesHistory: React.FC = () => {
       hour: '2-digit',
       minute: '2-digit',
       day: '2-digit',
-      month: '2-digit'
+      month: '2-digit',
     }).format(date)
   }
 
@@ -41,10 +41,18 @@ const CyclesHistory: React.FC = () => {
         </Typography>
         <div className={styles.emptyState}>
           <Clock size={48} className={styles.emptyIcon} />
-          <Typography variant="body1" color="muted" className={styles.emptyText}>
+          <Typography
+            variant="body1"
+            color="muted"
+            className={styles.emptyText}
+          >
             Nenhum ciclo concluído ainda
           </Typography>
-          <Typography variant="body2" color="muted" className={styles.emptySubtext}>
+          <Typography
+            variant="body2"
+            color="muted"
+            className={styles.emptySubtext}
+          >
             Complete seu primeiro ciclo de foco para ver o histórico aqui
           </Typography>
         </div>
@@ -57,30 +65,40 @@ const CyclesHistory: React.FC = () => {
       <Typography variant="h3" className={styles.historyTitle}>
         Histórico de Ciclos
       </Typography>
-      
+
       <div className={styles.cyclesList}>
         {state.cycles.slice(0, 10).map((cycle) => (
           <Card
             key={cycle.id}
             variant="default"
             className={styles.cycleCard}
-            style={{ 
-              borderLeft: `4px solid ${getModeColor(cycle.mode)}` 
+            style={{
+              borderLeft: `4px solid ${getModeColor(cycle.mode)}`,
             }}
           >
             <div className={styles.cycleHeader}>
-              <div className={styles.cycleIcon}>
-                {getModeIcon(cycle.mode)}
-              </div>
+              <div className={styles.cycleIcon}>{getModeIcon(cycle.mode)}</div>
               <div className={styles.cycleInfo}>
-                <Typography variant="h5" weight="semibold" className={styles.cycleMode}>
+                <Typography
+                  variant="h5"
+                  weight="semibold"
+                  className={styles.cycleMode}
+                >
                   {getModeLabel(cycle.mode)} Concluído
                 </Typography>
-                <Typography variant="body2" color="muted" className={styles.cycleTime}>
+                <Typography
+                  variant="body2"
+                  color="muted"
+                  className={styles.cycleTime}
+                >
                   {formatDate(cycle.completedAt)}
                 </Typography>
                 {cycle.taskName && (
-                  <Typography variant="caption" color="brand" className={styles.taskInfo}>
+                  <Typography
+                    variant="caption"
+                    color="brand"
+                    className={styles.taskInfo}
+                  >
                     {cycle.taskName}
                   </Typography>
                 )}
@@ -94,7 +112,7 @@ const CyclesHistory: React.FC = () => {
           </Card>
         ))}
       </div>
-      
+
       {state.cycles.length > 10 && (
         <div className={styles.moreCycles}>
           <Typography variant="body2" color="muted" className={styles.moreText}>

@@ -5,7 +5,7 @@ import styles from './styles.module.css'
 
 const TimerDisplay: React.FC = () => {
   const { state } = usePomodoro()
-  
+
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
@@ -16,7 +16,8 @@ const TimerDisplay: React.FC = () => {
     return mode === 'focus' ? 'Foco' : 'Pausa'
   }
 
-  const total = state.mode === 'focus' ? state.focusDuration : state.breakDuration
+  const total =
+    state.mode === 'focus' ? state.focusDuration : state.breakDuration
   const progress = total > 0 ? 1 - state.timeLeft / total : 0
   const [minutes, seconds] = formatTime(state.timeLeft).split(':')
 

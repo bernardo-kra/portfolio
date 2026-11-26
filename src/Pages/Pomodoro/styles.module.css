@@ -94,7 +94,8 @@
 
 .cardHeader {
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text-default) 9%, transparent);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-default) 9%, transparent);
 }
 
 .cardTitle {
@@ -113,7 +114,6 @@
   font-weight: 400;
   color: var(--brand-orange);
 }
-
 
 @keyframes pomodoroRise {
   from {
