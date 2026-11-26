@@ -12,22 +12,23 @@
   border-right: 1px solid var(--border-light);
 }
 .kicker {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--chat-accent);
 }
 .portrait {
-  width: 70px;
-  height: 70px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  border-radius: 22px;
-  margin: 28px 0 20px;
+  border-radius: 18px;
+  margin: 22px 0 22px;
   border: 1px solid var(--border-light);
 }
 .contact h2 {
-  font-size: 25px;
-  line-height: 1.25;
+  font-size: 30px;
+  line-height: 1.05;
   letter-spacing: -0.05em;
   margin: 0 0 10px;
 }
@@ -36,7 +37,7 @@
 }
 .role {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 13px;
   margin: 0 0 27px;
 }
 .contactNote {
@@ -48,8 +49,8 @@
   color: var(--chat-accent);
 }
 .contactNote p {
-  font-size: 12px;
-  line-height: 1.8;
+  font-size: 14px;
+  line-height: 1.7;
   margin: 8px 0 20px;
 }
 .profileLink {
@@ -59,9 +60,10 @@
   gap: 10px;
   border: 1px solid var(--border-light);
   border-radius: 9px;
-  padding: 12px;
+  padding: 12px 14px;
+  border-radius: 999px;
   color: var(--text-primary);
-  font-size: 11px;
+  font-size: 13px;
 }
 .profileLink:hover {
   border-color: var(--chat-accent);
@@ -71,7 +73,7 @@
   margin-top: auto;
   padding-top: 30px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .accountFooter p {
   line-height: 1.8;
@@ -79,7 +81,7 @@
 }
 .accountFooter a {
   color: var(--chat-accent);
-  font-size: 10px;
+  font-size: 12px;
 }
 .accountFooter button {
   display: flex;
@@ -194,5 +196,157 @@
     padding: 4px 7px;
     font: inherit;
     font-size: 10px;
+  }
+}
+
+/* ── Editorial welcome: a glimpse of the conversation before signing in ── */
+.welcomeEditorial.welcomeEditorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  justify-items: start;
+  gap: clamp(2rem, 5vw, 3rem);
+  text-align: left;
+  hyphens: manual;
+  padding: clamp(28px, 6vw, 64px);
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 80% 0%,
+      color-mix(in srgb, var(--chat-accent) 14%, transparent),
+      transparent 70%
+    ),
+    var(--background-primary);
+}
+.preview {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 460px);
+}
+.previewDay {
+  justify-self: center;
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.bubbleIn,
+.bubbleOut {
+  max-width: 82%;
+  padding: 11px 15px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: bubbleIn 520ms var(--ease-out) both;
+}
+.bubbleIn {
+  justify-self: start;
+  transform-origin: bottom left;
+  background: var(--card-background);
+  border: 1px solid var(--border-light);
+  border-bottom-left-radius: 6px;
+}
+.bubbleOut {
+  justify-self: end;
+  transform-origin: bottom right;
+  color: var(--chat-on-accent);
+  background: var(--chat-accent);
+  border-bottom-right-radius: 6px;
+  animation-delay: 380ms;
+}
+.typing {
+  justify-self: start;
+  display: inline-flex;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border-bottom-left-radius: 6px;
+  background: var(--card-background);
+  border: 1px solid var(--border-light);
+  animation: bubbleIn 420ms var(--ease-out) 900ms both;
+}
+.typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--text-muted);
+  animation: typingDot 1.2s ease-in-out infinite;
+}
+.typing i:nth-child(2) {
+  animation-delay: 150ms;
+}
+.typing i:nth-child(3) {
+  animation-delay: 300ms;
+}
+.welcomeCopy {
+  display: grid;
+  justify-items: start;
+  max-width: 520px;
+}
+.welcomeEditorial h2 {
+  max-width: 14ch;
+  margin: 12px 0 14px;
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.welcomeEditorial p {
+  max-width: 42ch;
+  margin: 0 0 26px;
+  font-size: 15px;
+}
+.signInRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+}
+.welcomeEditorial .signIn {
+  border-radius: 999px;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background-color var(--dur-fast) ease,
+    scale var(--dur-press) var(--ease-out);
+}
+.welcomeEditorial .signInNote {
+  margin: 0;
+  font-size: 12px;
+}
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+@keyframes typingDot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    translate: 0 0;
+  }
+  30% {
+    opacity: 1;
+    translate: 0 -2px;
+  }
+}
+@media (min-width: 1100px) {
+  .welcomeEditorial.welcomeEditorial {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+  .welcomeCopy {
+    order: -1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bubbleIn,
+  .bubbleOut,
+  .typing,
+  .typing i {
+    animation: none;
   }
 }

@@ -344,6 +344,10 @@ export default function Experimental3D() {
                       <Check size={12} />
                     </li>
                   ))}
+                <li className={styles.promptLine} aria-hidden="true">
+                  <span>nb@asterion:~$</span>
+                  <i className={styles.caret} />
+                </li>
               </ol>
             </section>
             <details className={styles.help}>

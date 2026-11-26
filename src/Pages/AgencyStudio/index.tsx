@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { profile } from '@src/config/profile'
 import CopyEmailButton from '@components/common/CopyEmailButton'
+import { LayoutNoteArt, SpaceNoteArt } from './NoteArt'
 import styles from './styles.module.css'
 type RenderAgencyHeroProps = {
   menuButtonRef: import('react').RefObject<HTMLButtonElement | null>
@@ -459,8 +460,7 @@ function renderAgencyNotes() {
               data-reveal
               aria-hidden="true"
             >
-              <span>f.</span>
-              <i />
+              <SpaceNoteArt />
             </div>
             <p className={styles.eyebrow}>DESIGN / COMPOSIÇÃO</p>
             <h3>Espaço em branco também comunica.</h3>
@@ -482,9 +482,7 @@ function renderAgencyNotes() {
               data-reveal
               aria-hidden="true"
             >
-              <i />
-              <i />
-              <i />
+              <LayoutNoteArt />
             </div>
             <p className={styles.eyebrow}>FRONTEND / EXPERIÊNCIA</p>
             <h3>O layout muda. A intenção continua.</h3>
