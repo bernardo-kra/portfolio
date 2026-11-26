@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Container, Section } from '@components/common'
+import { Plus } from 'lucide-react'
+import shared from '../shared.module.css'
 import styles from './styles.module.css'
+
 const faqs = [
   {
     question: 'Esta página representa uma agência?',
@@ -23,49 +25,68 @@ const faqs = [
       'Sim. O repositório do portfólio está disponível no GitHub, com os componentes e estudos apresentados neste site.',
   },
 ]
+
 const FAQSection = () => {
   const [active, setActive] = useState<number | null>(null)
+
   return (
-    <Section className={styles.faq}>
-      <Container className={styles.faq__container}>
-        <div className={styles.faq__header}>
-          <h2 className={styles.faq__title}>Antes de conversar</h2>
-          <p className={styles.faq__subtitle}>
+    <section className={shared.section} aria-labelledby="faq-title">
+      <div className={`${shared.inner} ${styles.faq}`}>
+        <div className={styles.faq__aside}>
+          <p className={shared.eyebrow} data-index="(05)">
+            Perguntas
+          </p>
+          <h2 id="faq-title" className={shared.title}>
+            Antes de <span className={shared.serif}>conversar</span>.
+          </h2>
+          <p className={shared.lede}>
             O que você precisa saber sobre este estudo.
           </p>
         </div>
+
         <div className={styles.faq__list}>
-          {faqs.map((faq, index) => (
-            <div key={faq.question} className={styles.faq__item}>
-              <h3>
-                <button
-                  type="button"
-                  id={`faq-question-${index}`}
-                  className={styles.faq__question}
-                  aria-expanded={active === index}
-                  aria-controls={`faq-answer-${index}`}
-                  onClick={() => setActive(active === index ? null : index)}
-                >
-                  <span className={styles.faq__questionText}>
-                    {faq.question}
-                  </span>
-                  <span aria-hidden="true">{active === index ? '−' : '+'}</span>
-                </button>
-              </h3>
+          {faqs.map((faq, index) => {
+            const open = active === index
+            return (
               <div
-                id={`faq-answer-${index}`}
-                role="region"
-                aria-labelledby={`faq-question-${index}`}
-                hidden={active !== index}
-                className={`${styles.faq__answer} ${active === index ? styles.faq__answerActive : ''}`}
+                key={faq.question}
+                className={styles.faq__item}
+                data-open={open}
               >
-                <p className={styles.faq__answerText}>{faq.answer}</p>
+                <h3 className={styles.faq__heading}>
+                  <button
+                    type="button"
+                    id={`faq-question-${index}`}
+                    className={`${styles.faq__question} ${shared.focusRing}`}
+                    aria-expanded={open}
+                    aria-controls={`faq-answer-${index}`}
+                    onClick={() => setActive(open ? null : index)}
+                  >
+                    <span>{faq.question}</span>
+                    <Plus
+                      size={22}
+                      className={styles.faq__icon}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </h3>
+                <div
+                  id={`faq-answer-${index}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${index}`}
+                  className={styles.faq__panel}
+                >
+                  <div className={styles.faq__panelInner}>
+                    <p className={styles.faq__answer}>{faq.answer}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
-      </Container>
-    </Section>
+      </div>
+    </section>
   )
 }
+
 export default FAQSection

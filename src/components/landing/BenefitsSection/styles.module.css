@@ -1,149 +1,79 @@
-.benefits {
-  padding: 5rem 1rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+.benefits__intro {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.benefits__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--l-line);
+}
+
+.benefits__row {
   position: relative;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--l-line);
 }
 
-.benefits::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
-              radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-  pointer-events: none;
+@media (min-width: 900px) {
+  .benefits__row {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
+    gap: 2rem;
+    align-items: baseline;
+  }
 }
 
-.benefits__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.benefits__header {
-  text-align: center;
-  margin-bottom: 4rem;
+.benefits__index {
+  font-family: var(--l-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--l-faint);
+  transition: color 200ms ease;
 }
 
 .benefits__title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  transition: transform 240ms var(--ease-out);
 }
 
-.benefits__subtitle {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.95);
-  max-width: 600px;
-  margin: 0 auto;
+.benefits__text {
+  grid-column: 2;
+  max-width: 40ch;
+  margin: 0;
   line-height: 1.6;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  color: var(--l-muted);
 }
 
-.benefits__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.benefits__card {
-  background: #ffffff;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.benefits__card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.benefits__card:hover::before {
-  transform: scaleX(1);
-}
-
-.benefits__card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-}
-
-.benefits__icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  color: white;
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-.benefits__cardTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #333333;
-}
-
-.benefits__cardDescription {
-  color: #666666;
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-@media (max-width: 768px) {
-  .benefits {
-    padding: 3rem 1rem;
-  }
-  
-  .benefits__grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .benefits__card {
-    padding: 2rem 1.5rem;
-  }
-  
-  .benefits__icon {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
+@media (min-width: 900px) {
+  .benefits__text {
+    grid-column: auto;
   }
 }
 
-@media (max-width: 480px) {
-  .benefits__card {
-    padding: 1.5rem 1rem;
+@media (hover: hover) and (pointer: fine) {
+  .benefits__row:hover .benefits__index {
+    color: var(--l-accent);
   }
-  
-  .benefits__header {
-    margin-bottom: 2rem;
+
+  .benefits__row:hover .benefits__title {
+    transform: translateX(0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefits__title {
+    transition: none;
+  }
+
+  .benefits__row:hover .benefits__title {
+    transform: none;
   }
 }

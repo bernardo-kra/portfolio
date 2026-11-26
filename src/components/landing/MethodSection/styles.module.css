@@ -1,0 +1,120 @@
+.method {
+  display: grid;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+@media (min-width: 900px) {
+  .method {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+
+  .method__aside {
+    position: sticky;
+    top: 22vh;
+  }
+}
+
+.method__aside {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.method__meter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 22rem;
+  font-family: var(--l-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--l-muted);
+}
+
+.method__track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--l-line-strong);
+}
+
+.method__track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--l-accent);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  transition: transform 600ms var(--ease-in-out);
+}
+
+.method__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.method__step {
+  display: grid;
+  gap: 1rem;
+  padding-block: clamp(2.5rem, 7vh, 4rem);
+  border-top: 1px solid var(--l-line);
+}
+
+.method__step:last-child {
+  border-bottom: 1px solid var(--l-line);
+}
+
+@media (min-width: 900px) {
+  .method__step {
+    min-height: 52vh;
+    align-content: center;
+  }
+}
+
+.method__label {
+  margin: 0;
+  font-family: var(--l-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--l-muted);
+  transition: color 300ms ease;
+}
+
+.method__title {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.method__text {
+  max-width: 44ch;
+  margin: 0;
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.6;
+  color: var(--l-muted);
+}
+
+/* Foco por contraste: o título fora da faixa central recua sem sumir. */
+.method__title {
+  opacity: 0.42;
+  transition: opacity 400ms ease;
+}
+
+.method__step[data-active='true'] .method__label {
+  color: var(--l-accent);
+}
+
+.method__step[data-active='true'] .method__title {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .method__track::after {
+    transition: none;
+  }
+}
