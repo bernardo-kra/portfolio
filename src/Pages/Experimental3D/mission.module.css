@@ -76,7 +76,7 @@
 }
 .wordmark small {
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   color: var(--nb-muted);
   letter-spacing: 0.12em;
@@ -217,7 +217,7 @@
 }
 .objective > span {
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   color: var(--nb-muted);
   letter-spacing: 0.13em;
@@ -232,7 +232,7 @@
 }
 .objective small {
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: #93a9a0;
 }
@@ -275,7 +275,7 @@
 .volume small {
   display: block;
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: var(--nb-muted);
   margin-top: 0.5rem;
@@ -291,12 +291,12 @@
 }
 .volumeMuted small {
   margin-left: auto;
-  font-size: 0.5rem;
+  font-size: 0.58rem;
 }
 .storage {
   padding: 1rem 0 1.75rem;
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   color: var(--nb-muted);
 }
@@ -316,7 +316,7 @@
   background: var(--nb-copper);
 }
 .storage small {
-  font-size: 0.55rem;
+  font-size: 0.62rem;
 }
 .rackHeader {
   display: flex;
@@ -348,10 +348,10 @@
 }
 .rackUnit > small {
   color: #738984;
-  font: 0.5rem monospace;
+  font: 0.58rem monospace;
 }
 .rackUnit > span {
-  font: 0.55rem monospace;
+  font: 0.62rem monospace;
   color: #c7cec0;
   flex: 1;
 }
@@ -396,7 +396,7 @@
   margin-top: 0.5rem;
 }
 .telemetry dd small {
-  font-size: 0.6rem;
+  font-size: 0.66rem;
   color: var(--nb-muted);
 }
 .archivePanel {
@@ -420,7 +420,7 @@
 }
 .panelHeading > span {
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: var(--nb-muted);
   letter-spacing: 0.1em;
@@ -431,7 +431,7 @@
   align-items: center;
   gap: 0.5rem;
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   padding: 1rem 1.3rem;
   color: var(--nb-muted);
@@ -455,12 +455,58 @@
   border: none;
   text-align: left;
   border-left: 2px solid transparent !important;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    scale var(--dur-press) var(--ease-out);
+}
+.fileRow > svg:last-child {
+  transition: translate 200ms var(--ease-out);
 }
 .fileRow + .fileRow {
   border-top: 1px solid var(--nb-line);
 }
-.fileRow:hover {
-  background: #1c2b2b;
+@media (hover: hover) and (pointer: fine) {
+  .fileRow:hover {
+    background: #1c2b2b;
+  }
+  .fileRow:hover > svg:last-child {
+    translate: 3px 0;
+  }
+}
+/* Opened documents print in, line block by line block, like a terminal. */
+.printed {
+  animation: nbPrint 420ms steps(7, end) both;
+}
+.filePreview h3.printed::after {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.3em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: nbCursor 1.1s steps(1) infinite;
+}
+@keyframes nbPrint {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes nbCursor {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .printed,
+  .filePreview h3.printed::after {
+    animation: none;
+  }
 }
 .fileRow[aria-pressed='true'] {
   background: #90e9c00b;
@@ -495,14 +541,14 @@
 }
 .fileSize {
   font:
-    0.62rem ui-monospace,
+    0.68rem ui-monospace,
     monospace;
   text-align: right;
   flex-shrink: 0;
 }
 .fileSize small {
   display: block;
-  font-size: 0.55rem;
+  font-size: 0.62rem;
   margin-top: 0.4rem;
   color: var(--nb-muted);
 }
@@ -524,7 +570,7 @@
   align-items: center;
   justify-content: space-between;
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   color: var(--nb-muted);
   margin-bottom: 1.5rem;
@@ -533,7 +579,7 @@
   border: 1px solid #635640;
   color: var(--nb-copper);
   padding: 0.3rem 0.5rem;
-  font-size: 0.5rem;
+  font-size: 0.58rem;
 }
 .filePreview h3 {
   font:
@@ -613,7 +659,7 @@
   margin-top: 1rem;
   border: 1px solid var(--nb-line);
   font:
-    0.62rem ui-monospace,
+    0.68rem ui-monospace,
     monospace;
   color: var(--nb-muted);
 }
@@ -700,7 +746,7 @@
   top: 1.7rem;
   left: 1.7rem;
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: #a5c9b4;
 }
@@ -711,7 +757,7 @@
   margin-top: 0.6rem;
   color: var(--nb-muted);
   font:
-    0.5rem ui-monospace,
+    0.58rem ui-monospace,
     monospace;
 }
 .gateShutter {
@@ -752,7 +798,7 @@
   display: block;
   padding: 0 1.3rem;
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
 }
 .patchMatrix {
@@ -775,7 +821,7 @@
 }
 .patchMatrix button small {
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: var(--nb-muted);
 }
@@ -790,7 +836,7 @@
 }
 .patchMatrix em {
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
 }
 .wire {
@@ -835,7 +881,7 @@
   display: block;
   color: var(--nb-muted);
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   margin-bottom: 0.4rem;
 }
@@ -845,7 +891,7 @@
 }
 .gateList em {
   font:
-    0.55rem ui-monospace,
+    0.62rem ui-monospace,
     monospace;
   color: var(--nb-muted);
 }
@@ -871,7 +917,7 @@
   padding: 0.6rem 0.7rem;
   background: #081214;
   font:
-    0.62rem ui-monospace,
+    0.68rem ui-monospace,
     monospace;
   border-bottom: 1px solid #243735;
   color: var(--nb-muted);
@@ -917,7 +963,7 @@
 }
 .authorization > div > span {
   font:
-    0.5rem ui-monospace,
+    0.58rem ui-monospace,
     monospace;
   white-space: nowrap;
 }
@@ -980,7 +1026,7 @@
 }
 .completeEmblem span {
   font:
-    0.6rem ui-monospace,
+    0.66rem ui-monospace,
     monospace;
   letter-spacing: 0.15em;
 }
@@ -1033,7 +1079,7 @@
   margin-top: 2rem;
   color: var(--nb-muted);
   font:
-    0.6rem/1.7 ui-monospace,
+    0.66rem/1.7 ui-monospace,
     monospace;
 }
 .footer > span:last-child {
@@ -1136,7 +1182,7 @@
     font-size: 0.65rem;
   }
   .fileSize {
-    font-size: 0.55rem;
+    font-size: 0.62rem;
   }
   .fileRow > svg {
     display: none;
@@ -1154,7 +1200,7 @@
     font-size: 0.72rem;
   }
   .panelHeading > span {
-    font-size: 0.5rem;
+    font-size: 0.58rem;
   }
   .sessionLog {
     flex-wrap: wrap;
@@ -1190,7 +1236,7 @@
     display: none;
   }
   .patchMatrix em {
-    font-size: 0.5rem;
+    font-size: 0.58rem;
   }
   .accessPanel {
     display: block;
@@ -1205,7 +1251,7 @@
     padding: 3rem 0;
   }
   .report span {
-    font-size: 0.62rem;
+    font-size: 0.68rem;
   }
   .primary {
     width: 100%;
