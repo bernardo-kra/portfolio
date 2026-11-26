@@ -2,7 +2,7 @@
   max-width: 740px;
 }
 .heading > span {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
   font-weight: 900;
 }
@@ -19,7 +19,7 @@
   align-items: center;
   gap: 15px;
   margin: 28px 0 15px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 .questionHeader > div {
@@ -138,7 +138,7 @@
   border: 1px solid var(--ink);
   border-radius: 6px;
   padding: 9px;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
 }
 .composition[data-option='1'] .mockForm span {
   margin-bottom: 45px;

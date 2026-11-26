@@ -93,13 +93,6 @@ export default function LearningLab() {
           </div>
         </div>
       </footer>
-      <a
-        className={`${styles.button} ${styles.red} ${layout.floatingCta}`}
-        href="#oficina"
-      >
-        {copy.try}
-        <ArrowUpRight size={20} aria-hidden="true" />
-      </a>
     </div>
   )
 }
