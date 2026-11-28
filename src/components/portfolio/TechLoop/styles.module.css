@@ -13,16 +13,16 @@
 .item {
   display: inline-flex;
   align-items: center;
-  gap: 28px;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  gap: 0.6rem;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   white-space: nowrap;
 }
-.item i {
-  font-style: normal;
-  opacity: 0.55;
+.item svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
 }
 .band > :first-child {
   flex: 1;

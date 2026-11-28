@@ -31,6 +31,8 @@ import type { MissionFile } from './missionState'
 import { missionCopy } from './missionCopy'
 import GateCamera from './components/GateCamera'
 import LetterGlitch from '@components/reactbits/LetterGlitch/LetterGlitch'
+import Crosshair from '@components/reactbits/Crosshair/Crosshair'
+import { useCoarsePointer } from '@hooks/useCoarsePointer'
 import DecryptedText from '@components/reactbits/DecryptedText/DecryptedText'
 import styles from './mission.module.css'
 
@@ -59,6 +61,8 @@ const letters = ['A', 'B', 'C']
 
 export default function Experimental3D() {
   const { lang, setLang } = useI18n()
+  // The crosshair follows a mouse; touch screens keep the plain interface.
+  const touch = useCoarsePointer()
   const copy = missionCopy[lang]
   const [mission, dispatch] = useReducer(
     missionReducer,
@@ -110,6 +114,18 @@ export default function Experimental3D() {
           centerFade={0.2}
         />
       </div>
+      {!touch && (
+        <Crosshair
+          color="#90e9c0"
+          thickness={1}
+          opacity={0.55}
+          lineStyle="dashed"
+          gap={10}
+          fade={0.3}
+          targetEffect="lock"
+          targetSelector="a, button, summary, [data-crosshair-target]"
+        />
+      )}
       <div className={styles.frame}>
         <header className={styles.topbar}>
           <Link to="/" className={styles.back}>
