@@ -1,10 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Typography, Container, FadeInOnScroll } from '@components/common'
 import { FloatingChatButton } from '@components/chat'
 import ThemeToggleButton from '@components/theme/ThemeToggleButton'
 import { useI18n } from '@src/i18n'
 import styles from './styles.module.css'
+
+// Loaded on demand so `motion` stays out of the home's initial bundle.
+const DecryptedText = lazy(
+  () => import('@components/reactbits/DecryptedText/DecryptedText')
+)
 import { profile } from '@src/config/profile'
 import { ArrowUpRight, Download, MessageCircle } from 'lucide-react'
 import { useAppConfig } from '@context'
@@ -177,7 +182,18 @@ function renderHomeHero({
               </Typography>
 
               <Typography variant="h2" className={styles.heroSubtitle}>
-                {t.heroSubtitle}
+                <Suspense fallback={t.heroSubtitle}>
+                  <DecryptedText
+                    key={t.heroSubtitle}
+                    text={t.heroSubtitle}
+                    animateOn="view"
+                    revealDirection="start"
+                    sequential
+                    speed={18}
+                    characters="abcdefghijklmnopqrstuvwxyz<>/{}"
+                    scrambleColor="#8f93a8"
+                  />
+                </Suspense>
               </Typography>
 
               <Typography variant="body1" className={styles.heroDescription}>

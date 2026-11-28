@@ -1,4 +1,6 @@
-import LogoLoop, { type LogoItem } from '@components/reactbits/LogoLoop/LogoLoop'
+import LogoLoop, {
+  type LogoItem,
+} from '@components/reactbits/LogoLoop/LogoLoop'
 import { useI18n } from '@src/i18n'
 import styles from './styles.module.css'
 
