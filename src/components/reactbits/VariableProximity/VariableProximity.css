@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
-
-.variable-proximity {
-  font-family: 'Roboto Flex', sans-serif;
-}
+/* Local change: the font import and family were removed; each page brings its
+   own variable font (Forma loads Inter with a wght axis). */
 
 .sr-only {
   position: absolute;

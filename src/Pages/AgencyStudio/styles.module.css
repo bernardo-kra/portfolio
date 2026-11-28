@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..900&display=swap');
+
 .page {
   --text-selection-background: #b8ddbf;
   --text-selection-color: #173822;
@@ -189,11 +191,10 @@
   position: relative;
   z-index: 1;
 }
-.hero h1 span {
-  text-decoration: underline;
-  text-decoration-thickness: 0.065em;
-  text-underline-offset: 0.11em;
-  text-decoration-color: #4fa267;
+.hero h1 .titleAccent {
+  /* letters are inline-blocks, so draw the underline as a background */
+  background: linear-gradient(#4fa267, #4fa267) left 0 bottom 0.06em / 100%
+    0.065em no-repeat;
 }
 .lead {
   font-size: 1rem;
@@ -1223,4 +1224,9 @@
 }
 .contact .contactMark {
   color: #7cc48d;
+}
+
+/* React Bits VariableProximity: the hero weight swells toward the cursor. */
+.hero h1 {
+  font-weight: 600;
 }

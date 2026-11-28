@@ -45,7 +45,7 @@ export default defineConfig([
     '**/coverage/**',
     '**/*.tsbuildinfo',
     'src/generated/**',
-    // Vendored React Bits sources, kept byte for byte (see its LICENSE.md).
+    // Vendored React Bits sources, kept close to upstream (see its LICENSE.md).
     'src/components/reactbits/**',
   ]),
   {

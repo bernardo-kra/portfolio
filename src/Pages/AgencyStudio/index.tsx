@@ -16,6 +16,7 @@ import {
 import { profile } from '@src/config/profile'
 import CopyEmailButton from '@components/common/CopyEmailButton'
 import { LayoutNoteArt, SpaceNoteArt } from './NoteArt'
+import { FormaTitle } from './FormaTitle'
 import styles from './styles.module.css'
 type RenderAgencyHeroProps = {
   menuButtonRef: import('react').RefObject<HTMLButtonElement | null>
@@ -66,11 +67,7 @@ function renderAgencyHero({
             <span className={styles.statusDot} /> IDEIAS BOAS MERECEM GANHAR
             FORMA
           </p>
-          <h1 id="forma-title">
-            Criatividade que
-            <br />
-            faz <span>sentido.</span>
-          </h1>
+          <FormaTitle accentClassName={styles.titleAccent} />
           <p className={styles.lead}>
             Estratégia, design e experiências digitais.
             <br />
