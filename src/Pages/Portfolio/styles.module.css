@@ -275,3 +275,10 @@
     padding-bottom: 5rem;
   }
 }
+
+/* React Bits GlareHover: a light streak crosses the study cover on hover. */
+.studyGlare.studyGlare {
+  display: grid;
+  place-items: stretch;
+  border: 0;
+}

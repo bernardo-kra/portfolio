@@ -99,3 +99,17 @@
     transform: rotate(-24deg) translateY(10%);
   }
 }
+
+/* React Bits FuzzyText: the numeral flickers like a weak signal. */
+.fuzzy {
+  margin: 0 0 1.5rem;
+  color: var(--text-default);
+  line-height: 0;
+  animation: notFoundRise 800ms var(--ease-out) both;
+}
+.fuzzy canvas {
+  /* the canvas pads the glyphs by fuzzRange + 20px; align ink to the text column */
+  margin-left: -44px;
+  max-width: calc(100% + 44px);
+  height: auto;
+}

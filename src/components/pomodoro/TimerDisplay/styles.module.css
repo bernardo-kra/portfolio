@@ -93,3 +93,10 @@
 .timerDisplay[data-mode='break'] .progressFill {
   background: #6ee7b7;
 }
+
+/* React Bits Counter: digits roll like a mechanical clock. Each digit window
+   clips its glyph, so tracking moves to margins instead of letter-spacing. */
+.timeDisplay.timeDisplay :global(.counter__digit) {
+  letter-spacing: 0;
+  margin-inline: -0.03em;
+}

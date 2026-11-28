@@ -479,7 +479,7 @@
 .printed {
   animation: nbPrint 420ms steps(7, end) both;
 }
-.filePreview h3.printed::after {
+.filePreview h3.cursorTitle::after {
   content: '';
   display: inline-block;
   width: 0.55em;
@@ -504,7 +504,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .printed,
-  .filePreview h3.printed::after {
+  .filePreview h3.cursorTitle::after {
     animation: none;
   }
 }
@@ -1383,5 +1383,22 @@
   .sessionLog li,
   .caret {
     animation: none;
+  }
+}
+
+/* React Bits LetterGlitch: a quiet field of characters behind the console. */
+.glitchField {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.frame {
+  position: relative;
+}
+@media (max-width: 760px) {
+  .glitchField {
+    opacity: 0.45;
   }
 }

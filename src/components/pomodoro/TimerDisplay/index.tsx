@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography } from '@components/common'
 import { usePomodoro } from '@src/context/PomodoroContext'
+import Counter from '@components/reactbits/Counter/Counter'
 import styles from './styles.module.css'
 
 const TimerDisplay: React.FC = () => {
@@ -35,9 +36,25 @@ const TimerDisplay: React.FC = () => {
 
       <div className={styles.timerTime} role="timer" aria-live="off">
         <Typography variant="h1" className={styles.timeDisplay}>
-          <span>{minutes}</span>
-          <span className={styles.colon}>:</span>
-          <span>{seconds}</span>
+          <Counter
+            value={Number(minutes)}
+            minDigits={2}
+            fontSize="1em"
+            direction="down"
+            fade={0.12}
+            intro={false}
+          />
+          <span className={styles.colon} aria-hidden="true">
+            :
+          </span>
+          <Counter
+            value={Number(seconds)}
+            minDigits={2}
+            fontSize="1em"
+            direction="shortest"
+            fade={0.12}
+            intro={false}
+          />
         </Typography>
       </div>
 

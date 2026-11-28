@@ -8,10 +8,10 @@ interface AdvancedProfilePhotoProps {
   className?: string
 }
 
-const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({ 
-  src, 
-  alt, 
-  className = '' 
+const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({
+  src,
+  alt,
+  className = '',
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -30,7 +30,7 @@ const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({
     const rect = e.currentTarget.getBoundingClientRect()
     setMousePosition({
       x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      y: e.clientY - rect.top,
     })
   }
 
@@ -38,7 +38,7 @@ const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({
     { icon: Code, delay: 0, position: { top: '20%', left: '10%' } },
     { icon: Zap, delay: 1, position: { top: '30%', right: '15%' } },
     { icon: Star, delay: 2, position: { bottom: '25%', left: '20%' } },
-    { icon: Award, delay: 3, position: { bottom: '15%', right: '10%' } }
+    { icon: Award, delay: 3, position: { bottom: '15%', right: '10%' } },
   ]
 
   if (hasError) {
@@ -52,7 +52,7 @@ const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({
   }
 
   return (
-    <div 
+    <div
       className={`${styles.profileContainer} ${className}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
@@ -71,33 +71,32 @@ const AdvancedProfilePhoto: React.FC<AdvancedProfilePhotoProps> = ({
           />
           <div className={styles.photoOverlay} />
         </div>
-        
+
         <div className={styles.glowEffect} />
         <div className={styles.ringEffect} />
-        
+
         {floatingElements.map((element, index) => (
           <div
             key={index}
             className={styles.floatingElement}
             style={{
               ...element.position,
-              animationDelay: `${element.delay}s`
+              animationDelay: `${element.delay}s`,
             }}
           >
             <element.icon size={20} />
           </div>
         ))}
-        
-        <div 
+
+        <div
           className={styles.mouseFollower}
           style={{
             left: mousePosition.x,
             top: mousePosition.y,
-            opacity: isHovered ? 1 : 0
+            opacity: isHovered ? 1 : 0,
           }}
         />
       </div>
-      
     </div>
   )
 }

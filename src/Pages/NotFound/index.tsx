@@ -1,14 +1,26 @@
 import { Link } from 'react-router-dom'
 import { useI18n } from '@src/i18n'
+import FuzzyText from '@components/reactbits/FuzzyText/FuzzyText'
 import styles from './styles.module.css'
 
 const NotFound = () => {
   const { lang } = useI18n()
   return (
     <main className={styles.page}>
-      <p className={styles.numeral} aria-hidden="true">
-        4<span>0</span>4
-      </p>
+      <div className={styles.fuzzy} aria-hidden="true">
+        <FuzzyText
+          fontSize="clamp(7rem, 26vw, 15rem)"
+          fontWeight={700}
+          fontFamily="inherit"
+          color="currentColor"
+          baseIntensity={0.1}
+          hoverIntensity={0.45}
+          fuzzRange={24}
+          letterSpacing={-8}
+        >
+          404
+        </FuzzyText>
+      </div>
       <p className={styles.code}>404 / LAB</p>
       <h1>
         {lang === 'pt'

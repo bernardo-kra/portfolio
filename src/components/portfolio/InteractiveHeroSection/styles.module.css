@@ -20,7 +20,7 @@
   color: var(--portfolio-accent);
   margin: 0 0 1.75rem;
 }
-.eyebrow > span {
+.eyebrow > span:first-child {
   width: 2rem;
   height: 2px;
   background: currentColor;
@@ -235,5 +235,18 @@
   .primaryButton,
   .secondaryButton {
     transition: none;
+  }
+}
+
+/* React Bits TiltedCard: the portrait leans toward the cursor. */
+.tilt {
+  aspect-ratio: 6 / 7;
+}
+.tilt img {
+  height: 100%;
+}
+@media (max-width: 800px) {
+  .tilt {
+    aspect-ratio: 1;
   }
 }

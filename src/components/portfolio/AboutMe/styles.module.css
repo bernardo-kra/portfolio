@@ -574,3 +574,13 @@
     border-top: 1px solid var(--border-default);
   }
 }
+
+/* React Bits SpotlightCard: an orange light follows the pointer. The cards keep
+   their own surface; the library draws the 1px border, so ours is removed. */
+.achievementCard.achievementCard,
+.specializationTag.specializationTag {
+  padding: var(--spacing-md);
+  border: 0;
+  border-radius: 12px;
+  background: var(--card-background);
+}

@@ -46,11 +46,12 @@
 }
 
 @keyframes float {
-  0%, 100% { 
-    transform: translateY(0px); 
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-  50% { 
-    transform: translateY(-10px); 
+  50% {
+    transform: translateY(-10px);
   }
 }
 
@@ -58,11 +59,11 @@
   .disabledContainer {
     padding: var(--spacing-xl) var(--spacing-sm);
   }
-  
+
   .icon {
     font-size: 3rem;
   }
-  
+
   .disabledTitle {
     font-size: var(--font-size-xl);
   }

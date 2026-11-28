@@ -30,6 +30,8 @@ import {
 import type { MissionFile } from './missionState'
 import { missionCopy } from './missionCopy'
 import GateCamera from './components/GateCamera'
+import LetterGlitch from '@components/reactbits/LetterGlitch/LetterGlitch'
+import DecryptedText from '@components/reactbits/DecryptedText/DecryptedText'
 import styles from './mission.module.css'
 
 const files: { id: MissionFile; name: string; size: string; date: string }[] = [
@@ -93,6 +95,21 @@ export default function Experimental3D() {
 
   return (
     <div className={styles.mission}>
+      <div className={styles.glitchField} aria-hidden="true">
+        <LetterGlitch
+          glitchColors={['#90e9c0', '#d6b17b']}
+          baseColor="#99aeaa"
+          backgroundColor="#080e11"
+          fontSize={13}
+          baseOpacity={0.2}
+          glitchAmount={0.35}
+          speed={0.6}
+          cursorRadius={160}
+          clickEffect="none"
+          edgeFade={0.3}
+          centerFade={0.2}
+        />
+      </div>
       <div className={styles.frame}>
         <header className={styles.topbar}>
           <Link to="/" className={styles.back}>
@@ -296,8 +313,16 @@ export default function Experimental3D() {
                     </small>
                   </div>
                   <p className={styles.eyebrow}>{copy.fileKinds[fileIndex]}</p>
-                  <h3 key={`title-${fileIndex}`} className={styles.printed}>
-                    {selectedFile.name}
+                  <h3 className={styles.cursorTitle}>
+                    <DecryptedText
+                      key={`title-${fileIndex}`}
+                      text={selectedFile.name}
+                      animateOn="view"
+                      sequential
+                      speed={28}
+                      characters="ABCDEF0123456789_/#$"
+                      scrambleColor="#90e9c0"
+                    />
                   </h3>
                   <p
                     key={`text-${fileIndex}`}
