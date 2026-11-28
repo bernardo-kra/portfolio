@@ -4,6 +4,16 @@ import { useI18n } from '@src/i18n'
 import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
+import CountUp from '@components/reactbits/CountUp/CountUp'
+
+/** Numeric metrics such as "5+" count up when they scroll into view. */
+function renderMetricValue(value: string) {
+  const match = /^(\d+)(\+?)$/.exec(value)
+  if (!match) return value
+  return (
+    <CountUp to={Number(match[1])} suffix={match[2]} duration={1.4} />
+  )
+}
 type RenderAboutDetailsProps = {
   t: import('../../../i18n/index').PortfolioI18n
   showAll: boolean
@@ -208,7 +218,7 @@ const AboutMe: React.FC = () => {
             </div>
             <div className={styles.metricContent}>
               <Typography variant="h3" className={styles.metricValue}>
-                {metric.value}
+                {renderMetricValue(metric.value)}
               </Typography>
               <Typography variant="body2" className={styles.metricLabel}>
                 {metric.label}

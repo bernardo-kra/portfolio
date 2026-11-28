@@ -10,6 +10,7 @@ import {
 import { useAppConfig } from '@context/AppConfigContext'
 import { profile } from '@src/config/profile'
 import type { PortfolioI18n } from '@src/i18n'
+import TiltedCard from '@components/reactbits/TiltedCard/TiltedCard'
 import styles from './styles.module.css'
 
 interface InteractiveHeroSectionProps {
@@ -81,13 +82,30 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
           <span>BK / FRONTEND</span>
           <span>01</span>
         </div>
-        <img
-          src="/bernardo-kra.jpg"
-          alt={t.name}
-          width="480"
-          height="560"
-          fetchPriority="high"
-        />
+        <div className={styles.tilt}>
+          <TiltedCard
+            containerWidth="100%"
+            containerHeight="100%"
+            imageWidth="100%"
+            imageHeight="100%"
+            radius={10}
+            rotateAmplitude={8}
+            scaleOnHover={1.02}
+            glare={0.22}
+            shadow={0.35}
+            gyroscope={false}
+            intro={false}
+            showTooltip={false}
+          >
+            <img
+              src="/bernardo-kra.jpg"
+              alt={t.name}
+              width="480"
+              height="560"
+              fetchPriority="high"
+            />
+          </TiltedCard>
+        </div>
         <figcaption>
           <span className={styles.location}>
             <MapPin size={15} aria-hidden="true" />

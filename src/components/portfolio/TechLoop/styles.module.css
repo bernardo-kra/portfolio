@@ -1,0 +1,25 @@
+.band {
+  --techloop-bg: #142c26;
+  padding: 0.95rem 0;
+  color: #afe6cb;
+  background: var(--techloop-bg);
+  border-block: 1px solid color-mix(in srgb, #afe6cb 20%, transparent);
+}
+:global([data-theme='light']) .band {
+  --techloop-bg: #e4f5ec;
+  color: #205340;
+}
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.item i {
+  font-style: normal;
+  opacity: 0.55;
+}

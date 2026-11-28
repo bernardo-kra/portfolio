@@ -10,7 +10,7 @@ import WorkExperienceTimeline from '@components/portfolio/WorkExperienceTimeline
 import Education from '@components/portfolio/Education'
 import Footer from '@components/portfolio/Footer'
 import styles from './styles.module.css'
-import Ribbon from '@components/common/Ribbon'
+import TechLoop from '@components/portfolio/TechLoop'
 type RenderPortfolioStudiesProps = {
   t: import('../../i18n/index').PortfolioI18n
   studies: {
@@ -159,26 +159,7 @@ const Portfolio = () => {
       <PortfolioNav t={t} lang={lang} setLang={setLang} />
       <main id="conteudo">
         <InteractiveHeroSection t={t} />
-        <Ribbon
-          items={
-            lang === 'pt'
-              ? [
-                  'Frontend com React',
-                  'TypeScript na prática',
-                  'E-commerce & OCC',
-                  'Experiência em QA',
-                  'Código disponível no GitHub',
-                ]
-              : [
-                  'React frontend',
-                  'TypeScript in practice',
-                  'E-commerce & OCC',
-                  'QA experience',
-                  'Code available on GitHub',
-                ]
-          }
-          tone="mint"
-        />
+        <TechLoop />
         <div className={styles.content}>
           <WorkExperienceTimeline />
           {renderPortfolioStudies({ t, studies, lang })}
