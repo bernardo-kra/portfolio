@@ -1,6 +1,7 @@
 .band {
   --techloop-bg: #142c26;
-  padding: 0.95rem 0;
+  display: flex;
+  align-items: center;
   color: #afe6cb;
   background: var(--techloop-bg);
   border-block: 1px solid color-mix(in srgb, #afe6cb 20%, transparent);
@@ -22,4 +23,26 @@
 .item i {
   font-style: normal;
   opacity: 0.55;
+}
+.band > :first-child {
+  flex: 1;
+  min-width: 0;
+  padding: 0.95rem 0;
+}
+.control {
+  align-self: stretch;
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 0;
+  border-left: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  color: inherit;
+  background: var(--techloop-bg);
+  cursor: pointer;
+}
+.control:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
 }
