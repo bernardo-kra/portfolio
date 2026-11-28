@@ -282,7 +282,3 @@
   place-items: stretch;
   border: 0;
 }
-/* full-bleed hero backgrounds use 100vw; never let them add a horizontal scroll */
-.portfolio {
-  overflow-x: clip;
-}

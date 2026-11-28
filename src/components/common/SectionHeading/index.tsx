@@ -40,9 +40,8 @@ export default function SectionHeading({
               text={title}
               animateBy="words"
               direction="bottom"
-              delay={110}
-              stepDuration={0.45}
-              blur={14}
+              delay={90}
+              stepDuration={0.35}
             />
           </Suspense>
         ) : (

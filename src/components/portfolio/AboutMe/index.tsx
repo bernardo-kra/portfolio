@@ -5,15 +5,13 @@ import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
 import CountUp from '@components/reactbits/CountUp/CountUp'
-import { useCoarsePointer } from '@hooks/useCoarsePointer'
 import SpotlightCard from '@components/reactbits/SpotlightCard/SpotlightCard'
 
 /** Shared React Bits SpotlightCard tuning: a warm light that follows the pointer. */
 const SPOTLIGHT = {
-  spotlightColor: 'rgba(255, 153, 0, 0.32)',
-  spotlightSize: 260,
-  intensity: 0.3,
-  borderGlow: 1,
+  spotlightColor: 'rgba(255, 153, 0, 0.16)',
+  spotlightSize: 220,
+  borderGlow: 0.8,
   // The component sets its palette inline, so the theme tokens go in style.
   style: {
     '--spotlight-card-border':
@@ -42,8 +40,6 @@ type RenderAboutDetailsProps = {
         React.RefAttributes<SVGSVGElement>
     >
   }[]
-  /** touch devices: the spotlight drifts on its own instead of following hover */
-  touch: boolean
 }
 
 function renderAboutDetails({
@@ -53,7 +49,6 @@ function renderAboutDetails({
   lang,
   specializations,
   achievements,
-  touch,
 }: RenderAboutDetailsProps) {
   return (
     <div className={styles.aboutmeContent}>
@@ -82,7 +77,6 @@ function renderAboutDetails({
                 key={index}
                 className={styles.specializationTag}
                 {...SPOTLIGHT}
-                ambient={touch}
               >
                 <div
                   className={styles.specializationColor}
@@ -109,7 +103,6 @@ function renderAboutDetails({
               key={index}
               className={styles.achievementCard}
               {...SPOTLIGHT}
-              ambient={touch}
             >
               <div className={styles.achievementIcon}>
                 <achievement.icon size={20} />
@@ -137,7 +130,6 @@ function renderAboutDetails({
 const AboutMe: React.FC = () => {
   const [showAll, setShowAll] = useState(false)
   const { t, lang } = useI18n()
-  const touch = useCoarsePointer()
 
   const metrics = [
     {
@@ -270,7 +262,6 @@ const AboutMe: React.FC = () => {
         lang,
         specializations,
         achievements,
-        touch,
       })}
     </div>
   )

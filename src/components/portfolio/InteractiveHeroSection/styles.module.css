@@ -1,6 +1,4 @@
 .hero {
-  position: relative;
-  isolation: isolate;
   max-width: 1200px;
   margin: 0 auto;
   padding: clamp(3rem, 8vw, 7rem) var(--container-padding) 2rem;
@@ -251,21 +249,4 @@
   .tilt {
     aspect-ratio: 1;
   }
-}
-
-/* React Bits DotGrid: a full-bleed field of dots that lights up around the
-   pointer (and ripples on tap) behind the hero. */
-.dots {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 100vw;
-  translate: -50% 0;
-  mask-image: radial-gradient(
-    ellipse 70% 75% at 50% 45%,
-    #000 35%,
-    transparent 100%
-  );
 }
