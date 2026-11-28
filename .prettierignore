@@ -4,3 +4,4 @@ tests/qualityRules.verify.mjs
 node_modules/
 dist/
 backend/dist/
+src/components/reactbits/
