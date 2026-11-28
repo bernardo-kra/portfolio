@@ -12,6 +12,7 @@ import Footer from '@components/portfolio/Footer'
 import styles from './styles.module.css'
 import TechLoop from '@components/portfolio/TechLoop'
 import GlareHover from '@components/reactbits/GlareHover/GlareHover'
+import { useCoarsePointer } from '@hooks/useCoarsePointer'
 type RenderPortfolioStudiesProps = {
   t: import('../../i18n/index').PortfolioI18n
   studies: {
@@ -24,10 +25,12 @@ type RenderPortfolioStudiesProps = {
     kind: string
   }[]
   lang: import('../../i18n/index').Lang
+  touch: boolean
 }
 
 function renderPortfolioStudies({
   t,
+  touch,
   studies,
   lang,
 }: RenderPortfolioStudiesProps) {
@@ -65,8 +68,10 @@ function renderPortfolioStudies({
               <GlareHover
                 width="100%"
                 borderRadius="0"
-                glareOpacity={0.28}
-                glareSize={40}
+                glareOpacity={0.45}
+                glareSize={45}
+                mode={touch ? 'loop' : 'hover'}
+                interval={4}
                 className={styles.studyGlare}
               >
                 <div
@@ -106,6 +111,7 @@ function renderPortfolioStudies({
 
 const Portfolio = () => {
   const { t, lang, setLang } = useI18n()
+  const touch = useCoarsePointer()
   const studies = [
     {
       context:
@@ -171,7 +177,7 @@ const Portfolio = () => {
         <TechLoop />
         <div className={styles.content}>
           <WorkExperienceTimeline />
-          {renderPortfolioStudies({ t, studies, lang })}
+          {renderPortfolioStudies({ t, studies, lang, touch })}
           <section id="sobre" className={styles.about}>
             <AboutMe />
           </section>

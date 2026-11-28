@@ -14,6 +14,8 @@ import TiltedCard from '@components/reactbits/TiltedCard/TiltedCard'
 import ShinyText from '@components/reactbits/ShinyText/ShinyText'
 import Magnet from '@components/reactbits/Magnet/Magnet'
 import { useTheme } from '@components/theme'
+import DotGrid from '@components/reactbits/DotGrid/DotGrid'
+import { useCoarsePointer } from '@hooks/useCoarsePointer'
 import styles from './styles.module.css'
 
 interface InteractiveHeroSectionProps {
@@ -24,9 +26,22 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
   const { config } = useAppConfig()
   // ShinyText parses concrete colors, so it gets the accent per theme.
   const { theme } = useTheme()
+  const touch = useCoarsePointer()
 
   return (
     <div className={styles.hero}>
+      <div className={styles.dots} aria-hidden="true">
+        <DotGrid
+          dotSize={3.5}
+          gap={22}
+          baseColor={theme === 'dark' ? '#3a4458' : '#cfc6b8'}
+          activeColor={theme === 'dark' ? '#ffb45c' : '#c46a1c'}
+          proximity={150}
+          shockRadius={260}
+          shockStrength={4}
+          glow={0.6}
+        />
+      </div>
       <div className={styles.intro}>
         <p className={styles.eyebrow}>
           <span />{' '}
@@ -34,8 +49,8 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
             text={t.recruiter.eyebrow}
             color={theme === 'dark' ? '#ffb45c' : '#975019'}
             shineColor={theme === 'dark' ? '#fff1dc' : '#e08a2e'}
-            speed={3.2}
-            delay={2.4}
+            speed={2.4}
+            delay={1.2}
           />
         </p>
         <h1 className={styles.title}>
@@ -108,6 +123,7 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
             glare={0.22}
             shadow={0.35}
             gyroscope={false}
+            floating={touch}
             intro={false}
             showTooltip={false}
           >
