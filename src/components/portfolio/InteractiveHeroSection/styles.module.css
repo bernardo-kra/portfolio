@@ -20,7 +20,7 @@
   color: var(--portfolio-accent);
   margin: 0 0 1.75rem;
 }
-.eyebrow > span {
+.eyebrow > span:first-child {
   width: 2rem;
   height: 2px;
   background: currentColor;

@@ -9,16 +9,15 @@ interface ProfilePhotoProps {
   className?: string
 }
 
-const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ 
-  src, 
-  alt, 
-  size = 'lg', 
+const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
+  src,
+  alt,
+  size = 'lg',
   variant = 'default',
-  className = '' 
+  className = '',
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
-
 
   const handleLoad = () => {
     setIsLoaded(true)
@@ -30,7 +29,9 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
 
   if (hasError) {
     return (
-      <div className={`${styles.profilePhoto} ${styles[size]} ${styles[variant]} ${className}`}>
+      <div
+        className={`${styles.profilePhoto} ${styles[size]} ${styles[variant]} ${className}`}
+      >
         <div className={styles.placeholder}>
           <div className={styles.placeholderIcon}>👤</div>
         </div>
@@ -39,7 +40,9 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   }
 
   return (
-    <div className={`${styles.profilePhoto} ${styles[size]} ${styles[variant]} ${className}`}>
+    <div
+      className={`${styles.profilePhoto} ${styles[size]} ${styles[variant]} ${className}`}
+    >
       <div className={styles.photoContainer}>
         <div className={styles.photoFrame}>
           <img
@@ -54,7 +57,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              display: 'block'
+              display: 'block',
             }}
           />
           <div className={styles.photoOverlay} />

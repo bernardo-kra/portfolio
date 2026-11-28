@@ -22,16 +22,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ t }) => {
         <CodeBackground className={styles.codeBackground} />
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
-            <AdvancedProfilePhoto 
-              src={bernardoPhoto} 
-              alt="Bernardo Kraczkowski - Desenvolvedor Frontend" 
+            <AdvancedProfilePhoto
+              src={bernardoPhoto}
+              alt="Bernardo Kraczkowski - Desenvolvedor Frontend"
             />
           </div>
           <div className={styles.heroRight}>
             <Typography variant="h1" className={styles.heroTitle}>
               {t.heroTitle || t.name}
             </Typography>
-            <Typography variant="body1" color="muted" className={styles.heroSubtitle}>
+            <Typography
+              variant="body1"
+              color="muted"
+              className={styles.heroSubtitle}
+            >
               {t.heroSubtitle || t.role}
             </Typography>
           </div>

@@ -12,17 +12,31 @@ const ContactDisabled: React.FC = () => {
         <div className={styles.disabledIcon}>
           <span className={styles.icon}>📧</span>
         </div>
-        
-        <Typography variant="h3" align="center" className={styles.disabledTitle}>
+
+        <Typography
+          variant="h3"
+          align="center"
+          className={styles.disabledTitle}
+        >
           {t.contactDisabledTitle}
         </Typography>
-        
-        <Typography variant="body1" color="muted" align="center" className={styles.disabledMessage}>
+
+        <Typography
+          variant="body1"
+          color="muted"
+          align="center"
+          className={styles.disabledMessage}
+        >
           {t.contactDisabledMessage}
         </Typography>
-        
+
         <div className={styles.disabledNote}>
-          <Typography variant="body2" color="muted" align="center" className={styles.noteText}>
+          <Typography
+            variant="body2"
+            color="muted"
+            align="center"
+            className={styles.noteText}
+          >
             {t.contactDisabledNote}
           </Typography>
         </div>

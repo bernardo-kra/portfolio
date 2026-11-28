@@ -11,6 +11,9 @@ import { useAppConfig } from '@context/AppConfigContext'
 import { profile } from '@src/config/profile'
 import type { PortfolioI18n } from '@src/i18n'
 import TiltedCard from '@components/reactbits/TiltedCard/TiltedCard'
+import ShinyText from '@components/reactbits/ShinyText/ShinyText'
+import Magnet from '@components/reactbits/Magnet/Magnet'
+import { useTheme } from '@components/theme'
 import styles from './styles.module.css'
 
 interface InteractiveHeroSectionProps {
@@ -19,12 +22,21 @@ interface InteractiveHeroSectionProps {
 
 const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
   const { config } = useAppConfig()
+  // ShinyText parses concrete colors, so it gets the accent per theme.
+  const { theme } = useTheme()
 
   return (
     <div className={styles.hero}>
       <div className={styles.intro}>
         <p className={styles.eyebrow}>
-          <span /> {t.recruiter.eyebrow}
+          <span />{' '}
+          <ShinyText
+            text={t.recruiter.eyebrow}
+            color={theme === 'dark' ? '#ffb45c' : '#975019'}
+            shineColor={theme === 'dark' ? '#fff1dc' : '#e08a2e'}
+            speed={3.2}
+            delay={2.4}
+          />
         </p>
         <h1 className={styles.title}>
           Bernardo
@@ -35,10 +47,12 @@ const InteractiveHeroSection = ({ t }: InteractiveHeroSectionProps) => {
         <p className={styles.role}>{t.heroSubtitle}</p>
         <p className={styles.description}>{t.recruiter.summary}</p>
         <div className={styles.actions}>
-          <a href="#projetos" className={styles.primaryButton}>
-            {t.heroCTA}
-            <ArrowDown size={18} aria-hidden="true" />
-          </a>
+          <Magnet padding={40} magnetStrength={4} maxOffset={10}>
+            <a href="#projetos" className={styles.primaryButton}>
+              {t.heroCTA}
+              <ArrowDown size={18} aria-hidden="true" />
+            </a>
+          </Magnet>
           <a
             href={profile.resumeUrl}
             download={profile.resumeFilename}

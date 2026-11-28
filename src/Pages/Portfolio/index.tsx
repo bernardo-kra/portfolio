@@ -11,6 +11,7 @@ import Education from '@components/portfolio/Education'
 import Footer from '@components/portfolio/Footer'
 import styles from './styles.module.css'
 import TechLoop from '@components/portfolio/TechLoop'
+import GlareHover from '@components/reactbits/GlareHover/GlareHover'
 type RenderPortfolioStudiesProps = {
   t: import('../../i18n/index').PortfolioI18n
   studies: {
@@ -61,15 +62,23 @@ function renderPortfolioStudies({
               className={styles.studyCard}
               key={study.route}
             >
-              <div
-                className={styles.studyVisual}
-                data-kind={study.kind}
-                aria-hidden="true"
+              <GlareHover
+                width="100%"
+                borderRadius="0"
+                glareOpacity={0.28}
+                glareSize={40}
+                className={styles.studyGlare}
               >
-                <span className={styles.studyIndex}>0{index + 1}</span>
-                <span className={styles.studyMark}>{study.visual}</span>
-                <span className={styles.studyTag}>{study.tag}</span>
-              </div>
+                <div
+                  className={styles.studyVisual}
+                  data-kind={study.kind}
+                  aria-hidden="true"
+                >
+                  <span className={styles.studyIndex}>0{index + 1}</span>
+                  <span className={styles.studyMark}>{study.visual}</span>
+                  <span className={styles.studyTag}>{study.tag}</span>
+                </div>
+              </GlareHover>
               <div className={styles.studyBody}>
                 <h3>
                   {study.title}

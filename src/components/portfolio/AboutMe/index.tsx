@@ -5,14 +5,26 @@ import { profile } from '@src/config/profile'
 import { Code, Award, Users, Calendar, MapPin, Briefcase } from 'lucide-react'
 import styles from './styles.module.css'
 import CountUp from '@components/reactbits/CountUp/CountUp'
+import SpotlightCard from '@components/reactbits/SpotlightCard/SpotlightCard'
+
+/** Shared React Bits SpotlightCard tuning: a warm light that follows the pointer. */
+const SPOTLIGHT = {
+  spotlightColor: 'rgba(255, 153, 0, 0.16)',
+  spotlightSize: 220,
+  borderGlow: 0.8,
+  // The component sets its palette inline, so the theme tokens go in style.
+  style: {
+    '--spotlight-card-border':
+      'color-mix(in srgb, var(--border-default) 70%, transparent)',
+    '--spotlight-card-shadow': 'none',
+  } as React.CSSProperties,
+}
 
 /** Numeric metrics such as "5+" count up when they scroll into view. */
 function renderMetricValue(value: string) {
   const match = /^(\d+)(\+?)$/.exec(value)
   if (!match) return value
-  return (
-    <CountUp to={Number(match[1])} suffix={match[2]} duration={1.4} />
-  )
+  return <CountUp to={Number(match[1])} suffix={match[2]} duration={1.4} />
 }
 type RenderAboutDetailsProps = {
   t: import('../../../i18n/index').PortfolioI18n
@@ -61,7 +73,11 @@ function renderAboutDetails({
           {specializations
             .slice(0, showAll ? undefined : 6)
             .map((spec, index) => (
-              <div key={index} className={styles.specializationTag}>
+              <SpotlightCard
+                key={index}
+                className={styles.specializationTag}
+                {...SPOTLIGHT}
+              >
                 <div
                   className={styles.specializationColor}
                   style={{ backgroundColor: spec.color }}
@@ -72,7 +88,7 @@ function renderAboutDetails({
                 >
                   {spec.name}
                 </Typography>
-              </div>
+              </SpotlightCard>
             ))}
         </div>
       </div>
@@ -83,7 +99,11 @@ function renderAboutDetails({
         </Typography>
         <div className={styles.achievementsList}>
           {achievements.map((achievement, index) => (
-            <Card key={index} className={styles.achievementCard}>
+            <SpotlightCard
+              key={index}
+              className={styles.achievementCard}
+              {...SPOTLIGHT}
+            >
               <div className={styles.achievementIcon}>
                 <achievement.icon size={20} />
               </div>
@@ -99,7 +119,7 @@ function renderAboutDetails({
                   {achievement.description}
                 </Typography>
               </div>
-            </Card>
+            </SpotlightCard>
           ))}
         </div>
       </div>
