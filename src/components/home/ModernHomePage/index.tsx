@@ -10,6 +10,7 @@ import styles from './styles.module.css'
 const DecryptedText = lazy(
   () => import('@components/reactbits/DecryptedText/DecryptedText')
 )
+const SiteDock = lazy(() => import('@components/common/SiteDock'))
 import { profile } from '@src/config/profile'
 import { ArrowUpRight, Download, MessageCircle } from 'lucide-react'
 import { useAppConfig } from '@context'
@@ -594,6 +595,9 @@ const ModernHomePage: React.FC = () => {
       </div>
 
       <FloatingChatButton />
+      <Suspense fallback={null}>
+        <SiteDock variant="home" />
+      </Suspense>
     </div>
   )
 }

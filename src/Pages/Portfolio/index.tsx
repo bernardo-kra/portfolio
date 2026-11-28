@@ -10,6 +10,7 @@ import WorkExperienceTimeline from '@components/portfolio/WorkExperienceTimeline
 import Education from '@components/portfolio/Education'
 import Footer from '@components/portfolio/Footer'
 import styles from './styles.module.css'
+import SiteDock from '@components/common/SiteDock'
 import TechLoop from '@components/portfolio/TechLoop'
 import GlareHover from '@components/reactbits/GlareHover/GlareHover'
 type RenderPortfolioStudiesProps = {
@@ -180,6 +181,7 @@ const Portfolio = () => {
         </div>
       </main>
       <Footer />
+      <SiteDock variant="portfolio" />
     </div>
   )
 }
