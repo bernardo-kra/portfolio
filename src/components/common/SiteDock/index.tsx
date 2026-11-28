@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowUp,
   Briefcase,
+  ChevronDown,
+  Dock as DockIcon,
   Copy,
   FileDown,
   FlaskConical,
@@ -30,6 +32,41 @@ import { profile } from '@src/config/profile'
 import styles from './styles.module.css'
 
 type Variant = 'home' | 'portfolio'
+
+const STORAGE_KEY = 'site-dock:open'
+const MOBILE = '(max-width: 860px)'
+
+const subscribeMobile = (onChange: () => void) => {
+  const media = window.matchMedia(MOBILE)
+  media.addEventListener('change', onChange)
+  return () => media.removeEventListener('change', onChange)
+}
+const useMobile = () =>
+  useSyncExternalStore(
+    subscribeMobile,
+    () => window.matchMedia(MOBILE).matches,
+    () => false
+  )
+
+/** Desktop visitors choose whether the dock stays open; the choice is remembered. */
+function useDockOpen() {
+  const [open, setOpen] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === '1'
+    } catch {
+      return false
+    }
+  })
+  const update = (next: boolean) => {
+    setOpen(next)
+    try {
+      localStorage.setItem(STORAGE_KEY, next ? '1' : '0')
+    } catch {
+      /* storage unavailable: keep the choice for this visit only */
+    }
+  }
+  return [open, update] as const
+}
 
 const ICON = 20
 const SECTIONS = [
@@ -121,7 +158,8 @@ function contactMenu(pt: boolean): DockMenuItem[] {
 /**
  * A macOS-style dock (React Bits Dock) shared by the lab's hub pages. On the
  * home it launches every study; on the portfolio it jumps between sections.
- * Hidden on small screens, where the pages already have their own menus.
+ * On phones it is always shown (compact, no magnification); on desktop it
+ * starts minimised behind a small button and the visitor decides.
  */
 export default function SiteDock({ variant }: { variant: Variant }) {
   const navigate = useNavigate()
@@ -130,6 +168,9 @@ export default function SiteDock({ variant }: { variant: Variant }) {
   const pt = lang === 'pt'
   const visible = usePastFold()
   const active = useActiveSection(variant === 'portfolio')
+  const mobile = useMobile()
+  const [open, setOpen] = useDockOpen()
+  const expanded = mobile || open
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -186,25 +227,57 @@ export default function SiteDock({ variant }: { variant: Variant }) {
           },
         ]
 
+  // On phones the dock has to fit beside the privacy and chat buttons, so it
+  // keeps only the destinations: no separators, no "top"/"home" shortcuts.
+  const mobileItems = items.filter(
+    (item, index) =>
+      !item.separator &&
+      !(variant === 'home' && (index === 0 || item.onClick === download)) &&
+      !(variant === 'portfolio' && (index === 0 || index === items.length - 1))
+  )
+
+  if (!mobile)
+    items.push({
+      label: pt ? 'Minimizar' : 'Minimise',
+      icon: <ChevronDown size={ICON} />,
+      onClick: () => setOpen(false),
+    })
+
+  const size = mobile
+    ? { baseItemSize: 32, magnification: 32, panelHeight: 44, gap: 5 }
+    : { baseItemSize: 40, magnification: 58, panelHeight: 56, gap: 8 }
+
   return (
     <nav
       className={styles.wrap}
       data-visible={visible}
+      data-mobile={mobile}
+      data-theme={theme === 'dark' ? 'dark' : 'light'}
       aria-label={pt ? 'Atalhos' : 'Shortcuts'}
       aria-hidden={!visible || undefined}
       inert={!visible || undefined}
     >
-      <Dock
-        items={items}
-        theme={theme === 'dark' ? 'dark' : 'light'}
-        baseItemSize={40}
-        magnification={58}
-        distance={150}
-        panelHeight={56}
-        gap={8}
-        accentColor="#ff9900"
-        showBadges={false}
-      />
+      {expanded ? (
+        <Dock
+          key={mobile ? 'mobile' : 'desktop'}
+          items={mobile ? mobileItems : items}
+          theme={theme === 'dark' ? 'dark' : 'light'}
+          {...size}
+          distance={150}
+          accentColor="#ff9900"
+          showBadges={false}
+        />
+      ) : (
+        <button
+          type="button"
+          className={styles.toggle}
+          onClick={() => setOpen(true)}
+          aria-label={pt ? 'Abrir atalhos' : 'Open shortcuts'}
+        >
+          <DockIcon size={16} aria-hidden />
+          <span>{pt ? 'Atalhos' : 'Shortcuts'}</span>
+        </button>
+      )}
     </nav>
   )
 }
